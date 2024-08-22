@@ -8,7 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "eslint .",
-    "lint:fix": "eslint --cache --fix"
+    "lint:fix": "eslint --fix"
   },
   "dependencies": {
     "@react-navigation/native": "^6.1.18",
