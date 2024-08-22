@@ -2,15 +2,14 @@
 module.exports = {
   extends: [
     "expo",
-    "airbnb",
-    "airbnb/hooks",
-    "plugin:@typescript-eslint/recommended",
     "prettier",
+    "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
   ],
   plugins: ["@typescript-eslint", "react", "prettier"],
   parser: "@typescript-eslint/parser",
   rules: {
     "prettier/prettier": 1,
+    "@typescript-eslint/ban-types": 0,
   },
 };

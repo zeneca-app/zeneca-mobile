@@ -8,7 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix"
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@react-navigation/native": "^6.1.18",
@@ -30,6 +30,7 @@
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-expo": "^7.1.2",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-config-universe": "^13.0.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-prettier": "^5.2.1",

@@ -1,5 +1,5 @@
-import { registerRootComponent } from 'expo';
-import AppIndex from './src';
+import { registerRootComponent } from "expo";
+import AppIndex from "./src";
 
 const App = AppIndex;
 
