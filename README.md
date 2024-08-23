@@ -7,6 +7,7 @@
 - [Typescript](https://www.typescriptlang.org/)
 - [EsLint](https://eslint.org/) with [Prettier](https://prettier.io/)
 - [Zustand](https://github.com/pmndrs/zustand) - For State Management
+- [Reactotron](https://docs.infinite.red/reactotron/quick-start/react-native/) - Reactotron
 
 ## Env Variables
 
