@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Login from "./screens/Login";
 import SignUp from "./screens/SignUp";
+import "./i18n";
 
 const Stack = createNativeStackNavigator();
 
