@@ -6,10 +6,17 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
   ],
+  globals: {
+    __dirname: true,
+  },
+  env: {
+    node: true,
+  },
   plugins: ["@typescript-eslint", "react", "prettier"],
   parser: "@typescript-eslint/parser",
   rules: {
     "prettier/prettier": 1,
     "@typescript-eslint/ban-types": 0,
+    "@typescript-eslint/no-require-imports": 0,
   },
 };
