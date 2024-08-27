@@ -13,8 +13,16 @@ const AppIndex = () => {
       <SafeAreaProvider>
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Login">
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="SignUp" component={SignUp} />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="Login"
+              component={Login}
+            />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="SignUp"
+              component={SignUp}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
