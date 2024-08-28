@@ -12,7 +12,7 @@ const Login = () => {
         </View>
         <Text style={styles.title}>Zeneca</Text>
         <View style={styles.descriptionContainer}>
-          <Text>{t("login.description")}</Text>
+          <Text style={styles.description}>{t("login.description")}</Text>
         </View>
       </View>
     </SafeAreaView>
@@ -30,11 +30,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
+    fontSize: 30,
+    fontFamily: "Manrope_700Bold",
   },
   descriptionContainer: {
     marginTop: 10,
+  },
+  description: {
+    fontSize: 20,
+    fontFamily: "Manrope_400Regular",
   },
 });
 
