@@ -26,7 +26,14 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-localization"
+      "expo-localization",
+      ["expo-font", {
+        "fonts": ["node_modules/@expo-google-fonts/manrope/Manrope_400Regular.ttf",
+          "node_modules/@expo-google-fonts/manrope/Manrope_500Medium.ttf",
+          "node_modules/@expo-google-fonts/manrope/Manrope_600SemiBold.ttf",
+          "node_modules/@expo-google-fonts/manrope/Manrope_700Bold.ttf"
+        ]
+      }]
     ]
   }
 }
