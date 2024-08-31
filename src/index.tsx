@@ -9,10 +9,13 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Suspense } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import Login from "./screens/Login";
+import Login from "./screens/Login/Login";
 import SignUp from "./screens/SignUp";
 import "./i18n";
+import { PrivyProvider } from "@privy-io/expo";
 
+const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID ?? "";
+const CLIENT_ID = process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID ?? "";
 const Stack = createNativeStackNavigator();
 
 const AppIndex = () => {
@@ -32,18 +35,20 @@ const AppIndex = () => {
     <Suspense fallback={<></>}>
       <SafeAreaProvider>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Login">
-            <Stack.Screen
-              options={{ headerShown: false }}
-              name="Login"
-              component={Login}
-            />
-            <Stack.Screen
-              options={{ headerShown: false }}
-              name="SignUp"
-              component={SignUp}
-            />
-          </Stack.Navigator>
+          <PrivyProvider appId={APP_ID} clientId={CLIENT_ID}>
+            <Stack.Navigator initialRouteName="Login">
+              <Stack.Screen
+                options={{ headerShown: false }}
+                name="Login"
+                component={Login}
+              />
+              <Stack.Screen
+                options={{ headerShown: false }}
+                name="SignUp"
+                component={SignUp}
+              />
+            </Stack.Navigator>
+          </PrivyProvider>
         </NavigationContainer>
       </SafeAreaProvider>
     </Suspense>

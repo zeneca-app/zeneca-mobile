@@ -13,7 +13,8 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "app.zeneca"
+      "bundleIdentifier": "app.zeneca",
+      "usesAppleSignIn": true
     },
     "android": {
       "adaptiveIcon": {
@@ -27,13 +28,19 @@
     },
     "plugins": [
       "expo-localization",
-      ["expo-font", {
-        "fonts": ["node_modules/@expo-google-fonts/manrope/Manrope_400Regular.ttf",
-          "node_modules/@expo-google-fonts/manrope/Manrope_500Medium.ttf",
-          "node_modules/@expo-google-fonts/manrope/Manrope_600SemiBold.ttf",
-          "node_modules/@expo-google-fonts/manrope/Manrope_700Bold.ttf"
-        ]
-      }]
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "node_modules/@expo-google-fonts/manrope/Manrope_400Regular.ttf",
+            "node_modules/@expo-google-fonts/manrope/Manrope_500Medium.ttf",
+            "node_modules/@expo-google-fonts/manrope/Manrope_600SemiBold.ttf",
+            "node_modules/@expo-google-fonts/manrope/Manrope_700Bold.ttf"
+          ]
+        }
+      ],
+      "expo-secure-store",
+      "expo-apple-authentication"
     ]
   }
 }
