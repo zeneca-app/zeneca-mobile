@@ -4,18 +4,25 @@ import Logo from "../../../assets/logo-light.svg";
 import { useLoginWithOAuth } from "@privy-io/expo";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { colors } from "../../styles/colors";
+import useAuthStore from "../../storage/authStore";
+import { useNavigation } from "@react-navigation/native";
 
 const Login = () => {
   const { t } = useTranslation();
+  const navigation = useNavigation();
   const { login } = useLoginWithOAuth({
-    onError: (err: Error) => console.log("Login With OAuth Fails: ", err),
+    onSuccess: (user, isNewUser) => {
+      update(true);
+      navigation.navigate("Home");
+    },
   });
-  // const {logout} = usePrivy();
+  const { update } = useAuthStore((state) => ({
+    update: state.update,
+  }));
 
   const loginWithGmail = async () => {
     try {
-      const res = await login({ provider: "google" });
-      console.log("Res with gmail: ", res);
+      await login({ provider: "google" });
     } catch (error) {
       console.log("Error: ", error);
     }

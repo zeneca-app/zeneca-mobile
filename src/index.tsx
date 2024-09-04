@@ -13,10 +13,12 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import Login from "./screens/Login/Login";
 import HomeScreen from "./screens/HomeScreen";
 import { PrivyProvider } from "@privy-io/expo";
+import useAuthStore from "./storage/authStore";
+import { RootStackParamList } from "./navigation/types";
 
 const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID ?? "";
 const CLIENT_ID = process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID ?? "";
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const AppIndex = () => {
   const [loaded] = useFonts({
@@ -25,6 +27,8 @@ const AppIndex = () => {
     Manrope_600SemiBold,
     Manrope_700Bold,
   });
+
+  const { logged } = useAuthStore((state) => ({ logged: state.logged }));
 
   // TODO: Implement Splash Screen while loading fonts
   if (!loaded) {
@@ -36,7 +40,7 @@ const AppIndex = () => {
       <SafeAreaProvider>
         <NavigationContainer>
           <PrivyProvider appId={APP_ID} clientId={CLIENT_ID}>
-            <Stack.Navigator initialRouteName="Login">
+            <Stack.Navigator initialRouteName={logged ? "Home" : "Login"}>
               <Stack.Screen
                 options={{ headerShown: false }}
                 name="Login"
