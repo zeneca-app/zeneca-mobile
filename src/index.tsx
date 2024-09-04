@@ -1,3 +1,4 @@
+import "./i18n";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   Manrope_400Regular,
@@ -10,8 +11,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Suspense } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Login from "./screens/Login/Login";
-import SignUp from "./screens/SignUp";
-import "./i18n";
+import HomeScreen from "./screens/HomeScreen";
 import { PrivyProvider } from "@privy-io/expo";
 
 const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID ?? "";
@@ -44,8 +44,8 @@ const AppIndex = () => {
               />
               <Stack.Screen
                 options={{ headerShown: false }}
-                name="SignUp"
-                component={SignUp}
+                name="Home"
+                component={HomeScreen}
               />
             </Stack.Navigator>
           </PrivyProvider>
