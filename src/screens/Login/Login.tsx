@@ -1,22 +1,25 @@
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import Logo from "../../../assets/logo-light.svg";
-// import { useLoginWithEmail } from "@privy-io/expo";
+import { useLoginWithOAuth } from "@privy-io/expo";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { colors } from "../../styles/colors";
 
 const Login = () => {
   const { t } = useTranslation();
-  // const { sendCode } = useLoginWithEmail();
+  const { login } = useLoginWithOAuth({
+    onError: (err: Error) => console.log("Login With OAuth Fails: ", err),
+  });
+  // const {logout} = usePrivy();
 
-  // const sendCodeAsync = async () => {
-  //   try {
-  //     const res = await sendCode({ email: "augusto@zeneca.app" });
-  //     console.log("Res: ", res);
-  //   } catch (error) {
-  //     console.log("Error: ", error);
-  //   }
-  // };
+  const loginWithGmail = async () => {
+    try {
+      const res = await login({ provider: "google" });
+      console.log("Res with gmail: ", res);
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -29,20 +32,21 @@ const Login = () => {
           <Text style={styles.description}>{t("login.description")}</Text>
         </View>
         <View style={styles.buttonsContainer}>
-          <Pressable style={styles.commonButton}>
+          <Pressable style={styles.commonButton} onPress={loginWithGmail}>
             <Ionicons name="logo-google" size={24} color="white" />
-            <View style={styles.gmailTextContainer}>
-              <Text style={styles.gmailText}>Continue with Google</Text>
+            <View style={styles.textContainer}>
+              <Text style={styles.loginText}>Continue with Google</Text>
             </View>
           </Pressable>
-          <View style={styles.buttonEmailContainer}>
-            <Pressable style={styles.commonButton}>
+          {/* TODO: Enable email login without SSO */}
+          {/* <View style={styles.buttonEmailContainer}>
+            <Pressable style={styles.commonButton} onPress={onLogout}>
               <Ionicons name="mail" size={24} color="white" />
-              <View style={styles.gmailTextContainer}>
-                <Text style={styles.gmailText}>Continue with Email</Text>
+              <View style={styles.textContainer}>
+                <Text style={styles.loginText}>Continue with Email</Text>
               </View>
             </Pressable>
-          </View>
+          </View> */}
         </View>
       </View>
     </SafeAreaView>
@@ -87,12 +91,12 @@ const styles = StyleSheet.create({
   buttonEmailContainer: {
     marginTop: 30,
   },
-  gmailText: {
+  loginText: {
     color: "white",
     fontSize: 16,
     fontFamily: "Manrope_600SemiBold",
   },
-  gmailTextContainer: {
+  textContainer: {
     marginLeft: 15,
   },
 });
