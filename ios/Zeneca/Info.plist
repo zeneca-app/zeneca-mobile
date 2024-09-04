@@ -4,10 +4,12 @@
   <dict>
     <key>CADisableMinimumFrameDurationOnPhone</key>
     <true/>
+    <key>CFBundleAllowMixedLocalizations</key>
+    <true/>
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
-    <string>zeneca-mobile</string>
+    <string>Zeneca</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -28,6 +30,7 @@
         <key>CFBundleURLSchemes</key>
         <array>
           <string>app.zeneca</string>
+          <string>app.zeneca</string>
         </array>
       </dict>
     </array>
@@ -42,6 +45,15 @@
       <key>NSAllowsLocalNetworking</key>
       <true/>
     </dict>
+    <key>NSFaceIDUsageDescription</key>
+    <string>Allow $(PRODUCT_NAME) to access your Face ID biometric data.</string>
+    <key>UIAppFonts</key>
+    <array>
+      <string>Manrope_400Regular.ttf</string>
+      <string>Manrope_500Medium.ttf</string>
+      <string>Manrope_600SemiBold.ttf</string>
+      <string>Manrope_700Bold.ttf</string>
+    </array>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>

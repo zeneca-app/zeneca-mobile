@@ -1,5 +1,4 @@
 import "./i18n";
-import { NavigationContainer } from "@react-navigation/native";
 import {
   Manrope_400Regular,
   Manrope_500Medium,
@@ -7,14 +6,15 @@ import {
   Manrope_700Bold,
   useFonts,
 } from "@expo-google-fonts/manrope";
+import { PrivyProvider } from "@privy-io/expo";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Suspense } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import Login from "./screens/Login/Login";
-import HomeScreen from "./screens/HomeScreen";
-import { PrivyProvider } from "@privy-io/expo";
-import useAuthStore from "./storage/authStore";
 import { RootStackParamList } from "./navigation/types";
+import HomeScreen from "./screens/HomeScreen";
+import Login from "./screens/Login/Login";
+import useAuthStore from "./storage/authStore";
 
 const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID ?? "";
 const CLIENT_ID = process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID ?? "";
