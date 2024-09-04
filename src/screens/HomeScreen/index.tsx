@@ -1,8 +1,9 @@
 import { usePrivy } from "@privy-io/expo";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { colors } from "../../styles/colors";
-import useAuthStore from "../../storage/authStore";
 import { useNavigation } from "@react-navigation/native";
+import { toast } from "burnt";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import useAuthStore from "../../storage/authStore";
+import { colors } from "../../styles/colors";
 
 const HomeScreen = () => {
   const { logout } = usePrivy();
@@ -14,8 +15,12 @@ const HomeScreen = () => {
       await logout();
       update(false);
       navigation.navigate("Login");
-    } catch (e) {
-      console.log("Error: ", e);
+    } catch (err) {
+      const e = err as Error;
+      toast({
+        title: e?.message ?? "Login Error",
+        preset: "error",
+      });
       update(true);
     }
   };

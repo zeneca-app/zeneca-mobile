@@ -1,11 +1,12 @@
-import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { useTranslation } from "react-i18next";
-import Logo from "../../../assets/logo-light.svg";
-import { useLoginWithOAuth } from "@privy-io/expo";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { colors } from "../../styles/colors";
-import useAuthStore from "../../storage/authStore";
+import { useLoginWithOAuth } from "@privy-io/expo";
 import { useNavigation } from "@react-navigation/native";
+import { toast } from "burnt";
+import { useTranslation } from "react-i18next";
+import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import Logo from "../../../assets/logo-light.svg";
+import useAuthStore from "../../storage/authStore";
+import { colors } from "../../styles/colors";
 
 const Login = () => {
   const { t } = useTranslation();
@@ -24,7 +25,11 @@ const Login = () => {
     try {
       await login({ provider: "google" });
     } catch (error) {
-      console.log("Error: ", error);
+      const e = error as Error;
+      toast({
+        title: e?.message ?? "Login Error",
+        preset: "error",
+      });
     }
   };
 
