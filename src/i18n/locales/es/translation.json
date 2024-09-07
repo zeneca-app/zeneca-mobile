@@ -1,5 +1,11 @@
 {
     "login": {
-        "description": "Abriendo las fronteras del dinero"
+        "description": "Abriendo las fronteras del dinero",
+        "continue_with_google": "Continua con Google",
+        "welcome_zeneca": "Bienvenido a Zeneca!"
+    },
+    "home": {
+        "deposit": "Depositar",
+        "send": "Enviar"
     }
 }

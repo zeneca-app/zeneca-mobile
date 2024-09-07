@@ -1,5 +1,11 @@
 {
     "login": {
-        "description": "Opening the borders of money"
+        "description": "Opening the borders of money",
+        "continue_with_google": "Continue with Google",
+        "welcome_zeneca": "Welcome to Zeneca!"
+    },
+    "home": {
+        "deposit": "Deposit",
+        "send": "Send"
     }
 }

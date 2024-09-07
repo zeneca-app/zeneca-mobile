@@ -15,6 +15,12 @@ const Login = () => {
     onSuccess: (user, isNewUser) => {
       update(true);
       navigation.navigate("Home");
+      if (isNewUser) {
+        toast({
+          title: t("login.welcome_zeneca"),
+          preset: "done",
+        });
+      }
     },
   });
   const { update } = useAuthStore((state) => ({
@@ -34,10 +40,12 @@ const Login = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={styles.safeAreaContainer}>
       <View style={styles.container}>
         <View style={styles.logoContainer}>
-          <Logo width={100} height={100} />
+          <View style={styles.wrapperLogo}>
+            <Logo width={100} height={100} />
+          </View>
         </View>
         <Text style={styles.title}>Zeneca</Text>
         <View style={styles.descriptionContainer}>
@@ -45,9 +53,15 @@ const Login = () => {
         </View>
         <View style={styles.buttonsContainer}>
           <Pressable style={styles.commonButton} onPress={loginWithGmail}>
-            <Ionicons name="logo-google" size={24} color="white" />
+            <Ionicons
+              name="logo-google"
+              size={24}
+              color={colors.darkHighlight}
+            />
             <View style={styles.textContainer}>
-              <Text style={styles.loginText}>Continue with Google</Text>
+              <Text style={styles.loginText}>
+                {t("login.continue_with_google")}
+              </Text>
             </View>
           </Pressable>
           {/* TODO: Enable email login without SSO */}
@@ -66,19 +80,30 @@ const Login = () => {
 };
 
 const styles = StyleSheet.create({
+  safeAreaContainer: {
+    flex: 1,
+    backgroundColor: colors.darkHighlight,
+  },
   container: {
     flex: 1,
     paddingTop: 10,
     alignItems: "center",
+    backgroundColor: colors.darkHighlight,
   },
   logoContainer: {
     width: "100%",
-    height: 100,
+    height: 150,
     alignItems: "center",
+  },
+  wrapperLogo: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 40,
   },
   title: {
     fontSize: 30,
     fontFamily: "Manrope_700Bold",
+    color: "white",
   },
   descriptionContainer: {
     marginTop: 10,
@@ -86,6 +111,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 20,
     fontFamily: "Manrope_400Regular",
+    color: "white",
   },
   buttonsContainer: {
     paddingTop: 50,
@@ -94,17 +120,17 @@ const styles = StyleSheet.create({
   commonButton: {
     width: 300,
     height: 50,
-    backgroundColor: colors.darkHighlight,
     borderRadius: 50,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "white",
   },
   buttonEmailContainer: {
     marginTop: 30,
   },
   loginText: {
-    color: "white",
+    color: colors.darkHighlight,
     fontSize: 16,
     fontFamily: "Manrope_600SemiBold",
   },
