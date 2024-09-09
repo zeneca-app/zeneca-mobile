@@ -34,6 +34,10 @@ export type Authenticated = {
     session_token: string;
 };
 
+export type Balance = {
+    balance: string;
+};
+
 export type Bank = {
     id?: string;
     name: string;
@@ -139,6 +143,10 @@ export type ExternalAccountLatam = {
     beneficiary: BeneficiaryLatam;
 };
 
+export type ExternalAccountReadSimple = {
+    account_number: (string | null);
+};
+
 export type ExternalAccountUS = {
     bank_name: string;
     account_name: string;
@@ -219,6 +227,7 @@ export type QuoteRequest = {
     destination: (TokenSymbol | Currency);
     amount_in?: (number | string | null);
     amount_out?: (number | string | null);
+    payment_rail?: (string | null);
 };
 
 export type RecipientRead = {
@@ -226,6 +235,14 @@ export type RecipientRead = {
     name: string;
     owner: boolean;
     country?: (Country | null);
+};
+
+export type RecipientReadWithExternalAccount = {
+    id: string;
+    name: string;
+    owner: boolean;
+    country?: (Country | null);
+    external_account: ExternalAccountReadSimple;
 };
 
 export type RecipientRequest = RecipientRequestLatam | RecipientRequestBR | RecipientRequestUS;
@@ -254,7 +271,7 @@ export type RecipientRequestUS = {
     customer_id: string;
 };
 
-export type TokenSymbol = 'usdc.polygon' | 'usdc.base' | 'usdt.ethereum';
+export type TokenSymbol = 'usdc.polygon' | 'usdc.base';
 
 export type TransactionRead = {
     id: string;
@@ -265,7 +282,7 @@ export type TransactionRead = {
     status?: (TransactionStatus);
     customer_id: string;
     quote_id: string;
-    customer_reference_id?: (string | null);
+    reference_id?: (string | null);
     payout_address?: (string | null);
 };
 
@@ -273,7 +290,7 @@ export type TransactionRequest = {
     quote_id: string;
     customer_id: string;
     recipient_id: string;
-    customer_reference_id?: (string | null);
+    reference_id?: (string | null);
 };
 
 export type TransactionStatus = 'WAITING' | 'PAID' | 'PENDING' | 'SUBMITTED' | 'IN_PROGRESS' | 'SENT' | 'REJECTED' | 'INVALID_ACCOUNT_DETAILS' | 'ERROR';
@@ -314,6 +331,10 @@ export type CustomersCreateCustomerResponse = (CustomerRead);
 
 export type CustomersCreateCustomerError = (HTTPValidationError);
 
+export type CustomersGetBalanceResponse = (Balance);
+
+export type CustomersGetBalanceError = unknown;
+
 export type QuotesCreateQuoteData = {
     body: QuoteRequest;
 };
@@ -341,6 +362,10 @@ export type RecipientsGetRecipientData = {
 export type RecipientsGetRecipientResponse = (RecipientRead);
 
 export type RecipientsGetRecipientError = (HTTPValidationError);
+
+export type RecipientsGetRecipientsResponse = (Array<RecipientReadWithExternalAccount>);
+
+export type RecipientsGetRecipientsError = unknown;
 
 export type RecipientsCreateRecipientData = {
     body: RecipientRequest;
