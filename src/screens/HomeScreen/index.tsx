@@ -3,6 +3,7 @@ import { usePrivy } from "@privy-io/expo";
 import { useNavigation } from "@react-navigation/native";
 import { toast } from "burnt";
 import { LinearGradient } from "expo-linear-gradient";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   SafeAreaView,
@@ -11,11 +12,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { customersGetBalance } from "../../client";
 import useAuthStore from "../../storage/authStore";
 
 const HomeScreen = () => {
   const { logout } = usePrivy();
   const { update } = useAuthStore((state) => ({ update: state.update }));
+  const [balance, setBalance] = useState(0);
   const navigation = useNavigation();
   const { t } = useTranslation();
 
@@ -34,6 +37,25 @@ const HomeScreen = () => {
     }
   };
 
+  const getBalance = async () => {
+    try {
+      const currentBalance = await customersGetBalance();
+      if (currentBalance.data?.balance) {
+        setBalance(Number(currentBalance.data.balance));
+      }
+    } catch (err) {
+      const e = err as Error;
+      toast({
+        title: e?.message ?? "Balance Error",
+        preset: "error",
+      });
+    }
+  };
+
+  useEffect(() => {
+    getBalance();
+  }, []);
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#000" }}>
       <View style={styles.container}>
@@ -48,7 +70,7 @@ const HomeScreen = () => {
           end={{ x: 1, y: 1 }}
           style={styles.balanceCard}
         >
-          <Text style={styles.balanceAmount}>100.65</Text>
+          <Text style={styles.balanceAmount}>{balance}</Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.actionButton}>
               <Ionicons name="arrow-down" size={20} color="white" />
