@@ -7,5 +7,9 @@
     "home": {
         "deposit": "Deposit",
         "send": "Send"
+    },
+    "recipients": {
+        "title": "Send money to?",
+        "searchPlaceholder": "Search by name..."
     }
 }
