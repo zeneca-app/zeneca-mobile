@@ -3589,6 +3589,11 @@ cosmiconfig@^8.1.3:
     parse-json "^5.2.0"
     path-type "^4.0.0"
 
+country-code-to-flag-emoji@^1.3.3:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/country-code-to-flag-emoji/-/country-code-to-flag-emoji-1.3.3.tgz#3eabb68fc2fdbe5e1cef5d403b5b7c702662489e"
+  integrity sha512-9LBl79JRjaJ1xICP+Z/18ftIqtYM4UxZshejmKeSBQnkFdjvvW0k+6dV3j/rdn5aEuWdiV6PaHd4nvzB7Z4fsw==
+
 cross-fetch@^3.1.5:
   version "3.1.8"
   resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.8.tgz#0327eba65fd68a7d119f8fb2bf9334a1a7956f82"

@@ -2,7 +2,7 @@ import Feather from "@expo/vector-icons/Feather";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { usePrivy } from "@privy-io/expo";
 import { useNavigation } from "@react-navigation/native";
-// import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { toast } from "burnt";
 import { LinearGradient } from "expo-linear-gradient";
 import { useCallback, useEffect, useState } from "react";
@@ -15,7 +15,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { customersGetBalance } from "../../client";
+import { customersGetBalance, transactionsGetTransactions } from "../../client";
 import useAuthStore from "../../storage/authStore";
 import { colors } from "../../styles/colors";
 
@@ -28,10 +28,11 @@ const HomeScreen = () => {
   const { logout } = usePrivy();
   const { update } = useAuthStore((state) => ({ update: state.update }));
   const [balance, setBalance] = useState(0);
-  // const { data } = useQuery({
-  //   queryKey: ["transactions"],
-  //   queryFn: transactionsGetTransactions,
-  // });
+  const { data } = useQuery({
+    queryKey: ["transactions"],
+    queryFn: transactionsGetTransactions,
+  });
+  console.log("Data: ", data);
   const navigation = useNavigation();
   const { t } = useTranslation();
 
@@ -69,8 +70,13 @@ const HomeScreen = () => {
     getBalance();
   }, []);
 
-  const renderTransaction = useCallback(
-    ({ item }: { item: any }) => (
+  const onSend = useCallback(
+    () => navigation.navigate("Recipients"),
+    [navigation],
+  );
+
+  const renderTransaction = useCallback(({ item }: { item: any }) => {
+    return (
       <View style={styles.transactionItem}>
         <View style={styles.transactionLeft}>
           <View style={styles.transactionIcon}>
@@ -94,9 +100,8 @@ const HomeScreen = () => {
           {item.amount}
         </Text>
       </View>
-    ),
-    [],
-  );
+    );
+  }, []);
 
   const keyExtractor = useCallback((item: any) => item.id, []);
 
@@ -124,7 +129,7 @@ const HomeScreen = () => {
                 <Ionicons name="arrow-down" size={20} color="white" />
                 <Text style={styles.buttonText}>{t("home.deposit")}</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.actionButton}>
+              <TouchableOpacity style={styles.actionButton} onPress={onSend}>
                 <Ionicons name="arrow-up" size={20} color="white" />
                 <Text style={styles.buttonText}>{t("home.send")}</Text>
               </TouchableOpacity>
@@ -204,7 +209,7 @@ const styles = StyleSheet.create({
   transactionsContainer: {
     flex: 1,
     padding: 20,
-    backgroundColor: colors.darkBackground,
+    backgroundColor: colors.darkHighlight,
     borderRadius: 40,
   },
   transactionsHeader: {

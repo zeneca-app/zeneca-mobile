@@ -7,5 +7,9 @@
     "home": {
         "deposit": "Depositar",
         "send": "Enviar"
+    },
+    "recipients": {
+        "title": "¿A quién le vas a enviar dinero?",
+        "searchPlaceholder": "Buscar nombre"
     }
 }

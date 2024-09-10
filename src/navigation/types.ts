@@ -3,6 +3,7 @@
 export type RootStackParamList = {
   Login: undefined;
   Home: undefined;
+  Recipients: undefined;
 };
 
 declare global {

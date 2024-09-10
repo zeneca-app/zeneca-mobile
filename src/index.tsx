@@ -15,6 +15,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { RootStackParamList } from "./navigation/types";
 import HomeScreen from "./screens/HomeScreen";
 import Login from "./screens/Login/Login";
+import RecipientsScreen from "./screens/Recipients";
 import useAuthStore from "./storage/authStore";
 
 const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID ?? "";
@@ -53,6 +54,11 @@ const AppIndex = () => {
                   options={{ headerShown: false }}
                   name="Home"
                   component={HomeScreen}
+                />
+                <Stack.Screen
+                  options={{ headerShown: false }}
+                  name="Recipients"
+                  component={RecipientsScreen}
                 />
               </Stack.Navigator>
             </QueryClientProvider>
