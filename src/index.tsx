@@ -9,6 +9,7 @@ import {
 import { PrivyProvider } from "@privy-io/expo";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Suspense } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { RootStackParamList } from "./navigation/types";
@@ -27,6 +28,7 @@ const AppIndex = () => {
     Manrope_600SemiBold,
     Manrope_700Bold,
   });
+  const queryClient = new QueryClient();
 
   const { logged } = useAuthStore((state) => ({ logged: state.logged }));
 
@@ -40,18 +42,20 @@ const AppIndex = () => {
       <SafeAreaProvider>
         <NavigationContainer>
           <PrivyProvider appId={APP_ID} clientId={CLIENT_ID}>
-            <Stack.Navigator initialRouteName={logged ? "Home" : "Login"}>
-              <Stack.Screen
-                options={{ headerShown: false }}
-                name="Login"
-                component={Login}
-              />
-              <Stack.Screen
-                options={{ headerShown: false }}
-                name="Home"
-                component={HomeScreen}
-              />
-            </Stack.Navigator>
+            <QueryClientProvider client={queryClient}>
+              <Stack.Navigator initialRouteName={logged ? "Home" : "Login"}>
+                <Stack.Screen
+                  options={{ headerShown: false }}
+                  name="Login"
+                  component={Login}
+                />
+                <Stack.Screen
+                  options={{ headerShown: false }}
+                  name="Home"
+                  component={HomeScreen}
+                />
+              </Stack.Navigator>
+            </QueryClientProvider>
           </PrivyProvider>
         </NavigationContainer>
       </SafeAreaProvider>
