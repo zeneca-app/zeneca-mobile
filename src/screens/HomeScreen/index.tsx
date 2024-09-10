@@ -2,9 +2,10 @@ import Feather from "@expo/vector-icons/Feather";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { usePrivy } from "@privy-io/expo";
 import { useNavigation } from "@react-navigation/native";
+// import { useQuery } from "@tanstack/react-query";
 import { toast } from "burnt";
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   FlatList,
@@ -27,6 +28,10 @@ const HomeScreen = () => {
   const { logout } = usePrivy();
   const { update } = useAuthStore((state) => ({ update: state.update }));
   const [balance, setBalance] = useState(0);
+  // const { data } = useQuery({
+  //   queryKey: ["transactions"],
+  //   queryFn: transactionsGetTransactions,
+  // });
   const navigation = useNavigation();
   const { t } = useTranslation();
 
@@ -64,31 +69,36 @@ const HomeScreen = () => {
     getBalance();
   }, []);
 
-  const renderTransaction = ({ item }: { item: any }) => (
-    <View style={styles.transactionItem}>
-      <View style={styles.transactionLeft}>
-        <View style={styles.transactionIcon}>
-          {item.amount.includes("+") ? (
-            <Ionicons name="arrow-down" size={20} color="white" />
-          ) : (
-            <Feather name="arrow-up-right" size={20} color="white" />
-          )}
+  const renderTransaction = useCallback(
+    ({ item }: { item: any }) => (
+      <View style={styles.transactionItem}>
+        <View style={styles.transactionLeft}>
+          <View style={styles.transactionIcon}>
+            {item.amount.includes("+") ? (
+              <Ionicons name="arrow-down" size={20} color="white" />
+            ) : (
+              <Feather name="arrow-up-right" size={20} color="white" />
+            )}
+          </View>
+          <View>
+            <Text style={styles.transactionName}>{item.name}</Text>
+            <Text style={styles.transactionTime}>{item.time}</Text>
+          </View>
         </View>
-        <View>
-          <Text style={styles.transactionName}>{item.name}</Text>
-          <Text style={styles.transactionTime}>{item.time}</Text>
-        </View>
+        <Text
+          style={[
+            styles.transactionAmount,
+            { color: item.amount.includes("+") ? "#4CAF50" : "#FF5252" },
+          ]}
+        >
+          {item.amount}
+        </Text>
       </View>
-      <Text
-        style={[
-          styles.transactionAmount,
-          { color: item.amount.includes("+") ? "#4CAF50" : "#FF5252" },
-        ]}
-      >
-        {item.amount}
-      </Text>
-    </View>
+    ),
+    [],
   );
+
+  const keyExtractor = useCallback((item: any) => item.id, []);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
@@ -126,7 +136,7 @@ const HomeScreen = () => {
           <FlatList
             data={transactions}
             renderItem={renderTransaction}
-            keyExtractor={(item) => item.id}
+            keyExtractor={keyExtractor}
           />
         </View>
       </View>

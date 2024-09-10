@@ -414,6 +414,29 @@
       }
     },
     "/v0/transactions/": {
+      "get": {
+        "tags": [
+          "transactions"
+        ],
+        "summary": "Get Transactions",
+        "operationId": "transactions-get_transactions",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TransactionRead"
+                  },
+                  "type": "array",
+                  "title": "Response Transactions-Get Transactions"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "transactions"

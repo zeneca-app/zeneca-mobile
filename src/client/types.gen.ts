@@ -385,6 +385,10 @@ export type BanksGetBanksResponse = (Array<Bank>);
 
 export type BanksGetBanksError = (HTTPValidationError);
 
+export type TransactionsGetTransactionsResponse = (Array<TransactionRead>);
+
+export type TransactionsGetTransactionsError = unknown;
+
 export type TransactionsCreateTransactionData = {
     body: TransactionRequest;
 };
