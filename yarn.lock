@@ -7795,6 +7795,13 @@ reactotron-core-contract@0.2.3:
   resolved "https://registry.yarnpkg.com/reactotron-core-contract/-/reactotron-core-contract-0.2.3.tgz#4b72bbe2905fda2a7e69f2653fc32bbdaaebb052"
   integrity sha512-GMeulATwiTsAqRnTKLWgM4gG3pUxAuspW412SWutHIW0fZNEOiHg8bWTEQURhm1WZj+u4tmdbkPiIWBfH8fvvQ==
 
+reactotron-plugin-zustand@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/reactotron-plugin-zustand/-/reactotron-plugin-zustand-2.0.3.tgz#354ba9fdcfbe5e32262b249184a59229fcdd9249"
+  integrity sha512-Bx0qFP6WiZR7dx7OBSvkYM+aY4OQ5OyVECzBqddt6u21oE7LAv5nTzsjtaCjUhelGVgiEM/sfa3E0QMNStpDNg==
+  dependencies:
+    deepmerge "^4.3.1"
+
 reactotron-react-native@^5.1.7:
   version "5.1.7"
   resolved "https://registry.yarnpkg.com/reactotron-react-native/-/reactotron-react-native-5.1.7.tgz#eb344d274615f505c0ec716dc622690e2356e7cb"

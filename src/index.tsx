@@ -15,6 +15,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { RootStackParamList } from "./navigation/types";
 import HomeScreen from "./screens/HomeScreen";
 import Login from "./screens/Login/Login";
+import QuoteScreen from "./screens/Quote";
 import RecipientsScreen from "./screens/Recipients";
 import useAuthStore from "./storage/authStore";
 
@@ -59,6 +60,11 @@ const AppIndex = () => {
                   options={{ headerShown: false }}
                   name="Recipients"
                   component={RecipientsScreen}
+                />
+                <Stack.Screen
+                  options={{ headerShown: false }}
+                  name="Quote"
+                  component={QuoteScreen}
                 />
               </Stack.Navigator>
             </QueryClientProvider>

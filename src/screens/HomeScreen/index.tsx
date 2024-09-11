@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "burnt";
 import { LinearGradient } from "expo-linear-gradient";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import {
   FlatList,
@@ -27,7 +27,10 @@ const transactions = [
 const HomeScreen = () => {
   const { logout } = usePrivy();
   const { update } = useAuthStore((state) => ({ update: state.update }));
-  const [balance, setBalance] = useState(0);
+  const { data: balance } = useQuery({
+    queryKey: ["balance"],
+    queryFn: customersGetBalance,
+  });
   const { data } = useQuery({
     queryKey: ["transactions"],
     queryFn: transactionsGetTransactions,
@@ -50,25 +53,6 @@ const HomeScreen = () => {
       update(true);
     }
   };
-
-  const getBalance = async () => {
-    try {
-      const currentBalance = await customersGetBalance();
-      if (currentBalance.data?.balance) {
-        setBalance(Number(currentBalance.data.balance));
-      }
-    } catch (err) {
-      const e = err as Error;
-      toast({
-        title: e?.message ?? "Balance Error",
-        preset: "error",
-      });
-    }
-  };
-
-  useEffect(() => {
-    getBalance();
-  }, []);
 
   const onSend = useCallback(
     () => navigation.navigate("Recipients"),
@@ -121,7 +105,9 @@ const HomeScreen = () => {
             style={styles.balanceCard}
           >
             <View style={styles.balanceContainer}>
-              <Text style={styles.balanceAmount}>{balance.toFixed(2)}</Text>
+              <Text style={styles.balanceAmount}>
+                {Number(balance?.data?.balance)?.toFixed(2)}
+              </Text>
               <Text style={styles.balanceUsd}>USD</Text>
             </View>
             <View style={styles.buttonContainer}>

@@ -17,19 +17,34 @@ import {
   RecipientReadWithExternalAccount,
   recipientsGetRecipients,
 } from "../../client";
+import useTransactionStore from "../../storage/transactionStore";
 
 const RecipientsScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigation = useNavigation();
+  const { setRecipient } = useTransactionStore((state) => ({
+    setRecipient: state.setRecipient,
+  }));
   const { t } = useTranslation();
   const { data } = useQuery({
     queryKey: ["recipients"],
     queryFn: recipientsGetRecipients,
   });
 
+  const onPressItem = useCallback(
+    (item: RecipientReadWithExternalAccount) => {
+      setRecipient(item);
+      navigation.navigate("Quote");
+    },
+    [setRecipient, navigation],
+  );
+
   const renderRecipient = useCallback(
     ({ item }: { item: RecipientReadWithExternalAccount }) => (
-      <TouchableOpacity style={styles.recipientItem}>
+      <TouchableOpacity
+        style={styles.recipientItem}
+        onPress={() => onPressItem(item)}
+      >
         <View style={styles.avatarContainer}>
           <Text style={styles.avatarText}>
             {item.name.substring(0, 2).toUpperCase()}
@@ -46,7 +61,7 @@ const RecipientsScreen = () => {
         </Text>
       </TouchableOpacity>
     ),
-    [],
+    [onPressItem],
   );
 
   const filteredData = useMemo(() => {
