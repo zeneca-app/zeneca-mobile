@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { customersGetBalance } from "../../client";
+import { customersGetBalance, quotesCreateQuote } from "../../client";
 import useTransactionStore from "../../storage/transactionStore";
 
 const QuoteScreen = () => {
@@ -25,14 +25,25 @@ const QuoteScreen = () => {
   const { recipient } = useTransactionStore((state) => ({
     recipient: state.recipient,
   }));
-  const copRate = 4183.13;
+  const mutation = useMutation({
+    mutationFn: () =>
+      quotesCreateQuote({
+        body: {
+          recipient_id: recipient.id,
+          source: "usdc.polygon",
+          destination: "cop",
+          amount_in: amount,
+        },
+      }),
+  });
+  const copRate = 4200;
 
   const copAmount = useMemo(() => {
     const usdcAmount = parseFloat(amount) || 0;
     return (usdcAmount * copRate).toFixed(2);
   }, [amount, copRate]);
 
-  const handleAmountChange = (text) => {
+  const handleAmountChange = async (text: string) => {
     // Remove any non-numeric characters except for the decimal point
     const cleanedText = text.replace(/[^0-9.]/g, "");
     // Ensure only one decimal point
@@ -42,6 +53,7 @@ const QuoteScreen = () => {
     }
     const formattedAmount = parts.join(".");
     setAmount(formattedAmount);
+    await mutation.mutate();
   };
 
   return (

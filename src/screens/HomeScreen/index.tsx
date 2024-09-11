@@ -35,7 +35,7 @@ const HomeScreen = () => {
     queryKey: ["transactions"],
     queryFn: transactionsGetTransactions,
   });
-  console.log("Data: ", data);
+  console.log("Transactions Data: ", data);
   const navigation = useNavigation();
   const { t } = useTranslation();
 
