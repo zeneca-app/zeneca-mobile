@@ -11,5 +11,9 @@
     "recipients": {
         "title": "¿A quién le vas a enviar dinero?",
         "searchPlaceholder": "Buscar nombre"
+    },
+    "quote": {
+        "available": "Disponible",
+        "continue": "Continuar"
     }
 }
