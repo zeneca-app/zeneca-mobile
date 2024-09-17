@@ -19,10 +19,17 @@ import QuoteScreen from "./screens/Quote";
 import RecipientsScreen from "./screens/Recipients";
 import QuoteConfirmationScreen from "./screens/QuoteConfirmation";
 import useAuthStore from "./storage/authStore";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from "@expo/vector-icons";
+import StockDetailScreen from "./screens/StockDetail";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID ?? "";
 const CLIENT_ID = process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID ?? "";
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
+const Tab = createBottomTabNavigator();
+const HomeStack = createNativeStackNavigator();
 
 const AppIndex = () => {
   const [loaded] = useFonts({
@@ -40,7 +47,35 @@ const AppIndex = () => {
     return null;
   }
 
+  const TabNavigator = () => (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarStyle: {
+          backgroundColor: 'black',
+          borderTopWidth: 0,
+          tabBarActiveTintColor: 'white',
+          tabBarInactiveTintColor: 'gray',
+        },
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          if (route.name === 'HomeTab') {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'StockDetail') {
+            iconName = focused ? 'bar-chart' : 'bar-chart-outline';
+          }
+          return <Ionicons name={iconName as any} size={size} color={color} />;
+        },
+        headerShown: false,
+      })}
+    >
+      <Tab.Screen name="HomeTab" component={HomeScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="StockDetail" component={StockDetailScreen} options={{ headerShown: false }} />
+
+    </Tab.Navigator>
+  );
+
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
     <Suspense fallback={<></>}>
       <SafeAreaProvider>
         <NavigationContainer>
@@ -55,7 +90,7 @@ const AppIndex = () => {
                 <Stack.Screen
                   options={{ headerShown: false }}
                   name="Home"
-                  component={HomeScreen}
+                  component={TabNavigator}
                 />
                 <Stack.Screen
                   options={{ headerShown: false }}
@@ -78,6 +113,7 @@ const AppIndex = () => {
         </NavigationContainer>
       </SafeAreaProvider>
     </Suspense>
+    </GestureHandlerRootView>
   );
 };
 
