@@ -57,7 +57,6 @@ const QuoteScreen = () => {
   };
   const fee = parseFloat(amount) * 0.1;
 
-
   const handleContinue = () => {
     navigation.navigate("QuoteConfirmation", {
       amount_in: amount,
