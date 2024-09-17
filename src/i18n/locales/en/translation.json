@@ -14,7 +14,8 @@
     },
     "quote": {
         "available": "Available",
-        "continue": "Continue"
+        "continue": "Continue",
+        "arrival": "will arrive in approx 20 min"
     },
     "quoteConfirmation": {
         "title": "You are about to send",

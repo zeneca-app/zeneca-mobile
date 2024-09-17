@@ -14,7 +14,8 @@
     },
     "quote": {
         "available": "Disponible",
-        "continue": "Continuar"
+        "continue": "Continuar",
+        "arrival": "Puede llegar en aprox 20 min"
     },
     "quoteConfirmation": {
         "title": "Vas a enviar",
