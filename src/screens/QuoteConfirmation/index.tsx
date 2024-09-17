@@ -20,6 +20,10 @@ const QuoteConfirmationScreen = ({ route }) => {
     const navigation = useNavigation();
     const { t } = useTranslation();
 
+    const capitalizeFirstLetter = (string: string) => {
+        return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -30,8 +34,12 @@ const QuoteConfirmationScreen = ({ route }) => {
             <View style={styles.content}>
                 <View>
                     <Text style={styles.title}>{t("quoteConfirmation.title")}</Text>
-                    <Text style={styles.amount}>{route.params.amount}COP</Text>
-                    <Text style={styles.recipient}>a {route.params.recipient.name}</Text>
+                    <Text style={styles.amount}>
+                        {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(route.params.amount)} COP
+                    </Text>
+                    <Text style={styles.recipient}>
+                        a <Text style={styles.recipientName}>{capitalizeFirstLetter(route.params.recipient.name)}</Text>
+                    </Text>
                 </View>
 
                 <View style={styles.detailsContainer}>
@@ -87,6 +95,11 @@ const styles = StyleSheet.create({
         fontSize: 24,
         color: "white",
         marginBottom: 16,
+    },
+    recipientName: {
+        fontSize: 28,
+        fontWeight: "bold",
+        color: "white",
     },
     detailsContainer: {
         backgroundColor: "#1C1C1E",
