@@ -32,7 +32,7 @@ const QuoteScreen = () => {
     return (usdcAmount * copRate).toFixed(2);
   }, [amount, copRate]);
 
-  const handleAmountChange = (text) => {
+  const handleAmountChange = (text: string) => {
     // Remove any non-numeric characters except for the decimal point
     const cleanedText = text.replace(/[^0-9.]/g, "");
     // Ensure only one decimal point
@@ -42,6 +42,13 @@ const QuoteScreen = () => {
     }
     const formattedAmount = parts.join(".");
     setAmount(formattedAmount);
+  };
+
+  const handleContinue = () => {
+    navigation.navigate("QuoteConfirmation", {
+      amount: copAmount,
+      recipient: recipient,
+    });
   };
 
   return (
@@ -105,7 +112,8 @@ const QuoteScreen = () => {
           styles.continueButton,
           !amount && styles.continueButtonDisabled,
         ]}
-        disabled={!amount}
+        onPress={handleContinue}
+      //disabled={!amount}
       >
         <Text style={styles.continueButtonText}>{t("quote.continue")}</Text>
       </TouchableOpacity>

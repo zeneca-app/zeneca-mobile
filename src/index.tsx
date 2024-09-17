@@ -17,6 +17,7 @@ import HomeScreen from "./screens/HomeScreen";
 import Login from "./screens/Login/Login";
 import QuoteScreen from "./screens/Quote";
 import RecipientsScreen from "./screens/Recipients";
+import QuoteConfirmationScreen from "./screens/QuoteConfirmation";
 import useAuthStore from "./storage/authStore";
 
 const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID ?? "";
@@ -65,6 +66,11 @@ const AppIndex = () => {
                   options={{ headerShown: false }}
                   name="Quote"
                   component={QuoteScreen}
+                />
+                <Stack.Screen
+                  options={{ headerShown: false }}
+                  name="QuoteConfirmation"
+                  component={QuoteConfirmationScreen}
                 />
               </Stack.Navigator>
             </QueryClientProvider>
