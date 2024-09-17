@@ -15,5 +15,14 @@
     "quote": {
         "available": "Available",
         "continue": "Continue"
+    },
+    "quoteConfirmation": {
+        "title": "You are about to send",
+        "amount": "Amount",
+        "exchangeRate": "Exchange rate",
+        "totalCost": "Total cost",
+        "disclaimer": "By confirming, you will send the funds to the destination account. Make sure the information is correct before continuing.",
+        "fee": "Fee",
+        "confirm": "Confirm"
     }
 }

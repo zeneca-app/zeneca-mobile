@@ -15,5 +15,14 @@
     "quote": {
         "available": "Disponible",
         "continue": "Continuar"
+    },
+    "quoteConfirmation": {
+        "title": "Vas a enviar",
+        "amount": "Cantidad",
+        "exchangeRate": "Tipo de cambio",
+        "totalCost": "Costo total",
+        "disclaimer": "Al confirmar, se enviarán los fondos a la cuenta de destino. Asegúrate de que la información sea correcta antes de continuar.",
+        "fee": "Comisión",
+        "confirm": "Confirmar"
     }
 }
