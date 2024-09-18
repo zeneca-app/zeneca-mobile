@@ -24,6 +24,19 @@ const QuoteConfirmationScreen = ({ route }) => {
         return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
     };
 
+    const handleContinue = () => {
+        navigation.navigate("SentReceipt", {
+            amount_in: route.params.amount_in,
+            amount_out: route.params.amount_out,
+            recipient: route.params.recipient,
+            fee: route.params.fee,
+            total: total,
+        });
+    };
+
+    const total = parseFloat(route.params.amount_in) + parseFloat(route.params.fee)
+
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -35,7 +48,7 @@ const QuoteConfirmationScreen = ({ route }) => {
                 <View>
                     <Text style={styles.title}>{t("quoteConfirmation.title")}</Text>
                     <Text style={styles.amount}>
-                        {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(route.params.amount)} COP
+                        {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(route.params.amount_out)} COP
                     </Text>
                     <Text style={styles.recipient}>
                         a <Text style={styles.recipientName}>{capitalizeFirstLetter(route.params.recipient.name)}</Text>
@@ -45,20 +58,29 @@ const QuoteConfirmationScreen = ({ route }) => {
                 <View style={styles.detailsContainer}>
                     <View style={styles.detailRow}>
                         <Text style={styles.detailLabel}>{t("quoteConfirmation.exchangeRate")}</Text>
-                        <Text style={styles.detailValue}>$ USDC</Text>
+                        <Text style={styles.detailValue}>{route.params.amount_in} USDC</Text>
+                    </View>
+                    <View style={styles.detailRow}>
+                        <Text style={styles.detailLabel}>{t("quoteConfirmation.fee")}</Text>
+                        <Text style={styles.detailValue}>{route.params.fee} USDC</Text>
                     </View>
                     <View style={styles.detailRow}>
                         <Text style={styles.detailLabel}>{t("quoteConfirmation.totalCost")}</Text>
-                        <Text style={styles.detailValue}>$ USDC</Text>
+                        <Text style={styles.detailValue}>{total} USDC</Text>
                     </View>
                 </View>
 
                 <View style={styles.bottomSection}>
                     <Text style={styles.timer}>Tasa se actualizara en {30}seg</Text>
                     <Text style={styles.warning}>{t("quoteConfirmation.disclaimer")}</Text>
-                    <TouchableOpacity style={styles.confirmButton}>
+                    <TouchableOpacity
+                        onPress={handleContinue}
+                        style={styles.confirmButton}>
                         <Ionicons name="scan-outline" size={24} color="black" style={styles.scanIcon} />
-                        <Text style={styles.confirmButtonText}>{t("quoteConfirmation.confirm")}</Text>
+                        <Text
+                            style={styles.confirmButtonText}
+
+                        >{t("quoteConfirmation.confirm")}</Text>
                     </TouchableOpacity>
                 </View>
             </View>

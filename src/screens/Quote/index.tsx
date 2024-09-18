@@ -55,12 +55,15 @@ const QuoteScreen = () => {
     setAmount(formattedAmount);
     await mutation.mutate();
   };
+  const fee = parseFloat(amount) * 0.1;
 
 
   const handleContinue = () => {
     navigation.navigate("QuoteConfirmation", {
-      amount: copAmount,
+      amount_in: amount,
+      amount_out: copAmount,
       recipient: recipient,
+      fee: fee,
     });
   };
 
@@ -115,7 +118,7 @@ const QuoteScreen = () => {
 
       <View style={styles.infoRow}>
         <Text style={styles.infoText}>1 USDC = {copRate.toFixed(2)} COP</Text>
-        <Text style={styles.infoText}>{t("quote.fee")} $USDC</Text>
+        <Text style={styles.infoText}>{fee} USDC</Text>
       </View>
 
       <Text style={styles.arrivalText}>{t("quote.arrival")}</Text>
