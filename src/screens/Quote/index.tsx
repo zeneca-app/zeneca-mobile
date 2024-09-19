@@ -56,6 +56,13 @@ const QuoteScreen = () => {
     await mutation.mutate();
   };
 
+  const handleContinue = () => {
+    navigation.navigate("QuoteConfirmation", {
+      amount: copAmount,
+      recipient: recipient,
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -117,7 +124,8 @@ const QuoteScreen = () => {
           styles.continueButton,
           !amount && styles.continueButtonDisabled,
         ]}
-        disabled={!amount}
+        onPress={handleContinue}
+      //disabled={!amount}
       >
         <Text style={styles.continueButtonText}>{t("quote.continue")}</Text>
       </TouchableOpacity>
