@@ -25,5 +25,11 @@
         "disclaimer": "By confirming, you will send the funds to the destination account. Make sure the information is correct before continuing.",
         "fee": "Fee",
         "confirm": "Confirm"
+    },
+    "sentReceipt": {
+        "headerText": "Sent",
+        "recipient_label": "to",
+        "fee": "Fee",
+        "totalCost": "Total cost"
     }
 }

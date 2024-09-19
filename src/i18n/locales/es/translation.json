@@ -25,5 +25,11 @@
         "disclaimer": "Al confirmar, se enviarán los fondos a la cuenta de destino. Asegúrate de que la información sea correcta antes de continuar.",
         "fee": "Comisión",
         "confirm": "Confirmar"
+    },
+    "sentReceipt": {
+        "headerText": "Enviaste",
+        "recipient_label": "a",
+        "fee": "Comisión",
+        "totalCost": "Costo total"
     }
 }
