@@ -1,35 +1,39 @@
 {
-    "login": {
-        "description": "Abriendo las fronteras del dinero",
-        "continue_with_google": "Continua con Google",
-        "welcome_zeneca": "Bienvenido a Zeneca!"
-    },
-    "home": {
-        "deposit": "Depositar",
-        "send": "Enviar"
-    },
-    "recipients": {
-        "title": "¿A quién le vas a enviar dinero?",
-        "searchPlaceholder": "Buscar nombre"
-    },
-    "quote": {
-        "available": "Disponible",
-        "continue": "Continuar",
-        "arrival": "Puede llegar en aprox 20 min"
-    },
-    "quoteConfirmation": {
-        "title": "Vas a enviar",
-        "amount": "Cantidad",
-        "exchangeRate": "Tipo de cambio",
-        "totalCost": "Costo total",
-        "disclaimer": "Al confirmar, se enviarán los fondos a la cuenta de destino. Asegúrate de que la información sea correcta antes de continuar.",
-        "fee": "Comisión",
-        "confirm": "Confirmar"
-    },
-    "sentReceipt": {
-        "headerText": "Enviaste",
-        "recipient_label": "a",
-        "fee": "Comisión",
-        "totalCost": "Costo total"
-    }
+  "login": {
+    "description": "Abriendo las fronteras del dinero",
+    "continue_with_google": "Continua con Google",
+    "welcome_zeneca": "Bienvenido a Zeneca!"
+  },
+  "home": {
+    "deposit": "Depositar",
+    "send": "Enviar"
+  },
+  "recipients": {
+    "title": "¿A quién le vas a enviar dinero?",
+    "searchPlaceholder": "Buscar nombre"
+  },
+  "quote": {
+    "available": "Disponible",
+    "continue": "Continuar",
+    "arrival": "Puede llegar en aprox 20 min"
+  },
+  "quoteConfirmation": {
+    "title": "Vas a enviar",
+    "amount": "Cantidad",
+    "exchangeRate": "Tipo de cambio",
+    "totalCost": "Costo total",
+    "disclaimer": "Al confirmar, se enviarán los fondos a la cuenta de destino. Asegúrate de que la información sea correcta antes de continuar.",
+    "fee": "Comisión",
+    "confirm": "Confirmar"
+  },
+  "sentReceipt": {
+    "headerText": "Enviaste",
+    "recipient_label": "a",
+    "fee": "Comisión",
+    "totalCost": "Costo total"
+  },
+  "faceId": {
+    "prompt": "Confirma con tu Face ID",
+    "fallback": "Usa tu contraseña"
+  }
 }

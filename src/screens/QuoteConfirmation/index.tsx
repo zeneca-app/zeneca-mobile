@@ -15,6 +15,7 @@ import {
 } from "react-native";
 
 import useTransactionStore from "../../storage/transactionStore";
+import * as LocalAuthentication from 'expo-local-authentication';
 
 const QuoteConfirmationScreen = ({ route }) => {
     const navigation = useNavigation();
@@ -24,14 +25,28 @@ const QuoteConfirmationScreen = ({ route }) => {
         return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
     };
 
-    const handleContinue = () => {
-        navigation.navigate("SentReceipt", {
-            amount_in: route.params.amount_in,
-            amount_out: route.params.amount_out,
-            recipient: route.params.recipient,
-            fee: route.params.fee,
-            total: total,
-        });
+    const handleContinue = async () => {
+        try {
+            const result = await LocalAuthentication.authenticateAsync({
+                promptMessage: t("faceId.prompt"),
+                fallbackLabel: t("faceId.fallback"),
+            });
+
+            if (result.success) {
+                navigation.navigate("SentReceipt", {
+                    amount_in: route.params.amount_in,
+                    amount_out: route.params.amount_out,
+                    recipient: route.params.recipient,
+                    fee: route.params.fee,
+                    total: total,
+                });
+            } else {
+                // Handle authentication failure
+                console.log("Authentication failed");
+            }
+        } catch (error) {
+            console.error("Error during authentication:", error);
+        }
     };
 
     const total = parseFloat(route.params.amount_in) + parseFloat(route.params.fee)
