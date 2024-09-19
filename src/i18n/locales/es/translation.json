@@ -14,6 +14,16 @@
     },
     "quote": {
         "available": "Disponible",
-        "continue": "Continuar"
+        "continue": "Continuar",
+        "arrival": "Puede llegar en aprox 20 min"
+    },
+    "quoteConfirmation": {
+        "title": "Vas a enviar",
+        "amount": "Cantidad",
+        "exchangeRate": "Tipo de cambio",
+        "totalCost": "Costo total",
+        "disclaimer": "Al confirmar, se enviarán los fondos a la cuenta de destino. Asegúrate de que la información sea correcta antes de continuar.",
+        "fee": "Comisión",
+        "confirm": "Confirmar"
     }
 }
