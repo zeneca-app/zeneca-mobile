@@ -16,6 +16,7 @@ import {
 
 import useTransactionStore from "../../storage/transactionStore";
 import * as LocalAuthentication from 'expo-local-authentication';
+import FaceIdIcon from "../../../assets/face-id.svg";
 
 const QuoteConfirmationScreen = ({ route }) => {
     const navigation = useNavigation();
@@ -91,7 +92,7 @@ const QuoteConfirmationScreen = ({ route }) => {
                     <TouchableOpacity
                         onPress={handleContinue}
                         style={styles.confirmButton}>
-                        <Ionicons name="scan-outline" size={24} color="black" style={styles.scanIcon} />
+                        <FaceIdIcon width={24} height={24}/>
                         <Text
                             style={styles.confirmButtonText}
 
@@ -180,6 +181,7 @@ const styles = StyleSheet.create({
         marginRight: 8,
     },
     confirmButtonText: {
+        marginLeft: 8, // Add left margin to create space between icon and text
         color: "black",
         fontWeight: "bold",
     },
