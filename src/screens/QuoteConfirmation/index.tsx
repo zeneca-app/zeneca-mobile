@@ -15,6 +15,8 @@ import {
 } from "react-native";
 
 import useTransactionStore from "../../storage/transactionStore";
+import * as LocalAuthentication from 'expo-local-authentication';
+import FaceIdIcon from "../../../assets/face-id.svg";
 
 const QuoteConfirmationScreen = ({ route }) => {
     const navigation = useNavigation();
@@ -24,14 +26,28 @@ const QuoteConfirmationScreen = ({ route }) => {
         return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
     };
 
-    const handleContinue = () => {
-        navigation.navigate("SentReceipt", {
-            amount_in: route.params.amount_in,
-            amount_out: route.params.amount_out,
-            recipient: route.params.recipient,
-            fee: route.params.fee,
-            total: total,
-        });
+    const handleContinue = async () => {
+        try {
+            const result = await LocalAuthentication.authenticateAsync({
+                promptMessage: t("faceId.prompt"),
+                fallbackLabel: t("faceId.fallback"),
+            });
+
+            if (result.success) {
+                navigation.navigate("SentReceipt", {
+                    amount_in: route.params.amount_in,
+                    amount_out: route.params.amount_out,
+                    recipient: route.params.recipient,
+                    fee: route.params.fee,
+                    total: total,
+                });
+            } else {
+                // Handle authentication failure
+                console.log("Authentication failed");
+            }
+        } catch (error) {
+            console.error("Error during authentication:", error);
+        }
     };
 
     const total = parseFloat(route.params.amount_in) + parseFloat(route.params.fee)
@@ -76,7 +92,7 @@ const QuoteConfirmationScreen = ({ route }) => {
                     <TouchableOpacity
                         onPress={handleContinue}
                         style={styles.confirmButton}>
-                        <Ionicons name="scan-outline" size={24} color="black" style={styles.scanIcon} />
+                        <FaceIdIcon width={24} height={24}/>
                         <Text
                             style={styles.confirmButtonText}
 
@@ -165,6 +181,7 @@ const styles = StyleSheet.create({
         marginRight: 8,
     },
     confirmButtonText: {
+        marginLeft: 8, // Add left margin to create space between icon and text
         color: "black",
         fontWeight: "bold",
     },
