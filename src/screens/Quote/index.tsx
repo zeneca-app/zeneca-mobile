@@ -55,8 +55,7 @@ const QuoteScreen = () => {
     setAmount(formattedAmount);
     await mutation.mutate();
   };
-  const fee = parseFloat(amount) * 0.1;
-
+  const fee = 1;
 
   const handleContinue = () => {
     navigation.navigate("QuoteConfirmation", {
