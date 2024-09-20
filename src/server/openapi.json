@@ -1,23 +1,16 @@
 {
   "openapi": "3.1.0",
-  "info": {
-    "title": "zeneca-sandbox",
-    "version": "0.1.0"
-  },
+  "info": { "title": "zeneca-sandbox", "version": "0.1.0" },
   "paths": {
     "/v0/login_or_create": {
       "post": {
-        "tags": [
-          "login"
-        ],
+        "tags": ["login"],
         "summary": "Login Or Create",
         "operationId": "login-login_or_create",
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoginEmailOtpIn"
-              }
+              "schema": { "$ref": "#/components/schemas/LoginEmailOtpIn" }
             }
           },
           "required": true
@@ -27,9 +20,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LoginEmailOtpOut"
-                }
+                "schema": { "$ref": "#/components/schemas/LoginEmailOtpOut" }
               }
             }
           },
@@ -37,9 +28,7 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
               }
             }
           }
@@ -48,17 +37,13 @@
     },
     "/v0/auth": {
       "post": {
-        "tags": [
-          "login"
-        ],
+        "tags": ["login"],
         "summary": "Authenticate",
         "operationId": "login-authenticate",
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EmailAuthIn"
-              }
+              "schema": { "$ref": "#/components/schemas/EmailAuthIn" }
             }
           },
           "required": true
@@ -68,9 +53,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Authenticated"
-                }
+                "schema": { "$ref": "#/components/schemas/Authenticated" }
               }
             }
           },
@@ -78,9 +61,7 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
               }
             }
           }
@@ -89,9 +70,7 @@
     },
     "/v0/customers/me": {
       "get": {
-        "tags": [
-          "customers"
-        ],
+        "tags": ["customers"],
         "summary": "Get Customer",
         "description": "Get current user.",
         "operationId": "customers-get_customer",
@@ -100,33 +79,23 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomerRead"
-                }
+                "schema": { "$ref": "#/components/schemas/CustomerRead" }
               }
             }
           }
         },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
+        "security": [{ "HTTPBearer": [] }]
       }
     },
     "/v0/customers/": {
       "post": {
-        "tags": [
-          "customers"
-        ],
+        "tags": ["customers"],
         "summary": "Create Customer",
         "operationId": "customers-create_customer",
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CustomerCreateIn"
-              }
+              "schema": { "$ref": "#/components/schemas/CustomerCreateIn" }
             }
           },
           "required": true
@@ -136,9 +105,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomerRead"
-                }
+                "schema": { "$ref": "#/components/schemas/CustomerRead" }
               }
             }
           },
@@ -146,9 +113,7 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
               }
             }
           }
@@ -157,9 +122,7 @@
     },
     "/v0/customers/balance": {
       "get": {
-        "tags": [
-          "customers"
-        ],
+        "tags": ["customers"],
         "summary": "Get Balance",
         "description": "Get current user balance.",
         "operationId": "customers-get_balance",
@@ -168,9 +131,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Balance"
-                }
+                "schema": { "$ref": "#/components/schemas/Balance" }
               }
             }
           }
@@ -179,17 +140,13 @@
     },
     "/v0/quotes/": {
       "post": {
-        "tags": [
-          "quotes"
-        ],
+        "tags": ["quotes"],
         "summary": "Create Quote",
         "operationId": "quotes-create_quote",
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/QuoteRequest"
-              }
+              "schema": { "$ref": "#/components/schemas/QuoteRequest" }
             }
           },
           "required": true
@@ -199,9 +156,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/QuoteRead"
-                }
+                "schema": { "$ref": "#/components/schemas/QuoteRead" }
               }
             }
           },
@@ -209,9 +164,7 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
               }
             }
           }
@@ -220,9 +173,7 @@
     },
     "/v0/quotes/{quote_id}": {
       "get": {
-        "tags": [
-          "quotes"
-        ],
+        "tags": ["quotes"],
         "summary": "Get Quote",
         "operationId": "quotes-get_quote",
         "parameters": [
@@ -242,9 +193,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/QuoteRead"
-                }
+                "schema": { "$ref": "#/components/schemas/QuoteRead" }
               }
             }
           },
@@ -252,9 +201,7 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
               }
             }
           }
@@ -263,9 +210,7 @@
     },
     "/v0/recipients/{recipient_id}": {
       "get": {
-        "tags": [
-          "recipients"
-        ],
+        "tags": ["recipients"],
         "summary": "Get Recipient",
         "operationId": "recipients-get_recipient",
         "parameters": [
@@ -285,9 +230,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RecipientRead"
-                }
+                "schema": { "$ref": "#/components/schemas/RecipientRead" }
               }
             }
           },
@@ -295,9 +238,7 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
               }
             }
           }
@@ -306,9 +247,7 @@
     },
     "/v0/recipients/": {
       "get": {
-        "tags": [
-          "recipients"
-        ],
+        "tags": ["recipients"],
         "summary": "Get Recipients",
         "operationId": "recipients-get_recipients",
         "responses": {
@@ -329,17 +268,13 @@
         }
       },
       "post": {
-        "tags": [
-          "recipients"
-        ],
+        "tags": ["recipients"],
         "summary": "Create Recipient",
         "operationId": "recipients-create_recipient",
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RecipientRequest"
-              }
+              "schema": { "$ref": "#/components/schemas/RecipientRequest" }
             }
           },
           "required": true
@@ -349,9 +284,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RecipientRead"
-                }
+                "schema": { "$ref": "#/components/schemas/RecipientRead" }
               }
             }
           },
@@ -359,9 +292,7 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
               }
             }
           }
@@ -370,9 +301,7 @@
     },
     "/v0/banks/": {
       "get": {
-        "tags": [
-          "banks"
-        ],
+        "tags": ["banks"],
         "summary": "Get Banks",
         "operationId": "banks-get_banks",
         "parameters": [
@@ -380,9 +309,7 @@
             "name": "country",
             "in": "query",
             "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Country"
-            }
+            "schema": { "$ref": "#/components/schemas/Country" }
           }
         ],
         "responses": {
@@ -392,9 +319,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Bank"
-                  },
+                  "items": { "$ref": "#/components/schemas/Bank" },
                   "title": "Response Banks-Get Banks"
                 }
               }
@@ -404,9 +329,7 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
               }
             }
           }
@@ -415,9 +338,7 @@
     },
     "/v0/transactions/": {
       "get": {
-        "tags": [
-          "transactions"
-        ],
+        "tags": ["transactions"],
         "summary": "Get Transactions",
         "operationId": "transactions-get_transactions",
         "responses": {
@@ -426,9 +347,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/TransactionRead"
-                  },
+                  "items": { "$ref": "#/components/schemas/TransactionRead" },
                   "type": "array",
                   "title": "Response Transactions-Get Transactions"
                 }
@@ -438,17 +357,13 @@
         }
       },
       "post": {
-        "tags": [
-          "transactions"
-        ],
+        "tags": ["transactions"],
         "summary": "Create Transaction",
         "operationId": "transactions-create_transaction",
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TransactionRequest"
-              }
+              "schema": { "$ref": "#/components/schemas/TransactionRequest" }
             }
           },
           "required": true
@@ -458,9 +373,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TransactionRead"
-                }
+                "schema": { "$ref": "#/components/schemas/TransactionRead" }
               }
             }
           },
@@ -468,9 +381,7 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
               }
             }
           }
@@ -479,23 +390,15 @@
     },
     "/v0/webhooks/koywe": {
       "post": {
-        "tags": [
-          "webhooks"
-        ],
+        "tags": ["webhooks"],
         "summary": "New Event Received",
         "operationId": "webhooks-new_event_received",
-        "responses": {
-          "204": {
-            "description": "Successful Response"
-          }
-        }
+        "responses": { "204": { "description": "Successful Response" } }
       }
     },
     "/v0/countries/": {
       "get": {
-        "tags": [
-          "countries"
-        ],
+        "tags": ["countries"],
         "summary": "Get Countries",
         "operationId": "countries-get_countries",
         "responses": {
@@ -504,9 +407,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/CountryBase"
-                  },
+                  "items": { "$ref": "#/components/schemas/CountryBase" },
                   "type": "array",
                   "title": "Response Countries-Get Countries"
                 }
@@ -521,36 +422,15 @@
     "schemas": {
       "Address": {
         "properties": {
-          "street_line_1": {
-            "type": "string",
-            "title": "Street Line 1"
-          },
+          "street_line_1": { "type": "string", "title": "Street Line 1" },
           "street_line_2": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Street Line 2"
           },
-          "city": {
-            "type": "string",
-            "title": "City"
-          },
-          "country": {
-            "$ref": "#/components/schemas/CountryIsoCode3"
-          },
-          "state": {
-            "type": "string",
-            "title": "State"
-          },
-          "postal_code": {
-            "type": "string",
-            "title": "Postal Code"
-          }
+          "city": { "type": "string", "title": "City" },
+          "country": { "$ref": "#/components/schemas/CountryIsoCode3" },
+          "state": { "type": "string", "title": "State" },
+          "postal_code": { "type": "string", "title": "Postal Code" }
         },
         "type": "object",
         "required": [
@@ -564,37 +444,15 @@
       },
       "AddressRead": {
         "properties": {
-          "street_line_1": {
-            "type": "string",
-            "title": "Street Line 1"
-          },
+          "street_line_1": { "type": "string", "title": "Street Line 1" },
           "street_line_2": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Street Line 2"
           },
-          "city": {
-            "type": "string",
-            "title": "City"
-          },
-          "country": {
-            "type": "string",
-            "title": "Country"
-          },
-          "state": {
-            "type": "string",
-            "title": "State"
-          },
-          "postal_code": {
-            "type": "string",
-            "title": "Postal Code"
-          }
+          "city": { "type": "string", "title": "City" },
+          "country": { "type": "string", "title": "Country" },
+          "state": { "type": "string", "title": "State" },
+          "postal_code": { "type": "string", "title": "Postal Code" }
         },
         "type": "object",
         "required": [
@@ -608,40 +466,20 @@
       },
       "AddressUS": {
         "properties": {
-          "street_line_1": {
-            "type": "string",
-            "title": "Street Line 1"
-          },
+          "street_line_1": { "type": "string", "title": "Street Line 1" },
           "street_line_2": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Street Line 2"
           },
-          "city": {
-            "type": "string",
-            "title": "City"
-          },
+          "city": { "type": "string", "title": "City" },
           "country": {
             "type": "string",
-            "enum": [
-              "USA"
-            ],
+            "enum": ["USA"],
             "const": "USA",
             "title": "Country"
           },
-          "state": {
-            "$ref": "#/components/schemas/USAState"
-          },
-          "postal_code": {
-            "type": "string",
-            "title": "Postal Code"
-          }
+          "state": { "$ref": "#/components/schemas/USAState" },
+          "postal_code": { "type": "string", "title": "Postal Code" }
         },
         "type": "object",
         "required": [
@@ -655,89 +493,36 @@
       },
       "Authenticated": {
         "properties": {
-          "session_jwt": {
-            "type": "string",
-            "title": "Session Jwt"
-          },
-          "session_token": {
-            "type": "string",
-            "title": "Session Token"
-          }
+          "session_jwt": { "type": "string", "title": "Session Jwt" },
+          "session_token": { "type": "string", "title": "Session Token" }
         },
         "type": "object",
-        "required": [
-          "session_jwt",
-          "session_token"
-        ],
+        "required": ["session_jwt", "session_token"],
         "title": "Authenticated"
       },
       "Balance": {
-        "properties": {
-          "balance": {
-            "type": "string",
-            "title": "Balance"
-          }
-        },
+        "properties": { "balance": { "type": "string", "title": "Balance" } },
         "type": "object",
-        "required": [
-          "balance"
-        ],
+        "required": ["balance"],
         "title": "Balance"
       },
       "Bank": {
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          },
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "institution_name": {
-            "type": "string",
-            "title": "Institution Name"
-          },
-          "country": {
-            "type": "string",
-            "title": "Country"
-          },
-          "currency": {
-            "type": "string",
-            "title": "Currency"
-          },
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "name": { "type": "string", "title": "Name" },
+          "institution_name": { "type": "string", "title": "Institution Name" },
+          "country": { "type": "string", "title": "Country" },
+          "currency": { "type": "string", "title": "Currency" },
           "bank_code": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Bank Code"
           },
           "transfer_code": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Transfer Code"
           },
           "payout_method_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Payout Method Id"
           },
           "created_at": {
@@ -752,20 +537,12 @@
           }
         },
         "type": "object",
-        "required": [
-          "name",
-          "institution_name",
-          "country",
-          "currency"
-        ],
+        "required": ["name", "institution_name", "country", "currency"],
         "title": "Bank"
       },
       "BankAccountType": {
         "type": "string",
-        "enum": [
-          "savings",
-          "checking"
-        ],
+        "enum": ["savings", "checking"],
         "title": "BankAccountType"
       },
       "BankCodeCO": {
@@ -785,58 +562,31 @@
       },
       "BeneficiaryLatam": {
         "properties": {
-          "person_type": {
-            "$ref": "#/components/schemas/PersonType"
-          },
+          "person_type": { "$ref": "#/components/schemas/PersonType" },
           "tax_identification": {
             "type": "string",
             "title": "Tax Identification"
           },
-          "email": {
-            "type": "string",
-            "title": "Email"
-          }
+          "email": { "type": "string", "title": "Email" }
         },
         "type": "object",
-        "required": [
-          "person_type",
-          "tax_identification",
-          "email"
-        ],
+        "required": ["person_type", "tax_identification", "email"],
         "title": "BeneficiaryLatam"
       },
       "BeneficiaryUS": {
         "properties": {
-          "person_type": {
-            "$ref": "#/components/schemas/PersonType"
-          },
-          "first_name": {
-            "type": "string",
-            "title": "First Name"
-          },
-          "last_name": {
-            "type": "string",
-            "title": "Last Name"
-          }
+          "person_type": { "$ref": "#/components/schemas/PersonType" },
+          "first_name": { "type": "string", "title": "First Name" },
+          "last_name": { "type": "string", "title": "Last Name" }
         },
         "type": "object",
-        "required": [
-          "person_type",
-          "first_name",
-          "last_name"
-        ],
+        "required": ["person_type", "first_name", "last_name"],
         "title": "BeneficiaryUS"
       },
       "BusinessCreate": {
         "properties": {
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "description": {
-            "type": "string",
-            "title": "Description"
-          },
+          "name": { "type": "string", "title": "Name" },
+          "description": { "type": "string", "title": "Description" },
           "tax_identification": {
             "type": "string",
             "title": "Tax Identification"
@@ -844,21 +594,14 @@
           "identification_type": {
             "$ref": "#/components/schemas/BusinessIdentificationType"
           },
-          "country": {
-            "$ref": "#/components/schemas/KYCCountry"
-          },
-          "source_of_funds": {
-            "type": "string",
-            "title": "Source Of Funds"
-          },
+          "country": { "$ref": "#/components/schemas/KYCCountry" },
+          "source_of_funds": { "type": "string", "title": "Source Of Funds" },
           "incorporation_date": {
             "type": "string",
             "format": "date-time",
             "title": "Incorporation Date"
           },
-          "business_type": {
-            "$ref": "#/components/schemas/BusinessType"
-          },
+          "business_type": { "$ref": "#/components/schemas/BusinessType" },
           "website": {
             "anyOf": [
               {
@@ -867,9 +610,7 @@
                 "minLength": 1,
                 "format": "uri"
               },
-              {
-                "type": "null"
-              }
+              { "type": "null" }
             ],
             "title": "Website"
           }
@@ -902,14 +643,8 @@
       },
       "BusinessRead": {
         "properties": {
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "description": {
-            "type": "string",
-            "title": "Description"
-          },
+          "name": { "type": "string", "title": "Name" },
+          "description": { "type": "string", "title": "Description" },
           "tax_identification": {
             "type": "string",
             "title": "Tax Identification"
@@ -919,24 +654,11 @@
             "title": "Identification Type"
           },
           "website": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Website"
           },
-          "source_of_funds": {
-            "type": "string",
-            "title": "Source Of Funds"
-          },
-          "business_type": {
-            "type": "string",
-            "title": "Business Type"
-          },
+          "source_of_funds": { "type": "string", "title": "Source Of Funds" },
+          "business_type": { "type": "string", "title": "Business Type" },
           "incorporation_date": {
             "type": "string",
             "format": "date-time",
@@ -971,37 +693,16 @@
       },
       "Country": {
         "type": "string",
-        "enum": [
-          "us",
-          "col",
-          "mex",
-          "br",
-          "ar"
-        ],
+        "enum": ["us", "col", "mex", "br", "ar"],
         "title": "Country"
       },
       "CountryBase": {
         "properties": {
-          "name_iso": {
-            "type": "string",
-            "title": "Name Iso"
-          },
-          "code_2": {
-            "type": "string",
-            "title": "Code 2"
-          },
-          "code_3": {
-            "type": "string",
-            "title": "Code 3"
-          },
-          "currency": {
-            "type": "string",
-            "title": "Currency"
-          },
-          "is_supported": {
-            "type": "boolean",
-            "title": "Is Supported"
-          }
+          "name_iso": { "type": "string", "title": "Name Iso" },
+          "code_2": { "type": "string", "title": "Code 2" },
+          "code_3": { "type": "string", "title": "Code 3" },
+          "currency": { "type": "string", "title": "Currency" },
+          "is_supported": { "type": "boolean", "title": "Is Supported" }
         },
         "type": "object",
         "required": [
@@ -1015,171 +716,84 @@
       },
       "CountryIsoCode3": {
         "type": "string",
-        "enum": [
-          "USA",
-          "COL",
-          "MEX",
-          "BRA",
-          "ARG"
-        ],
+        "enum": ["USA", "COL", "MEX", "BRA", "ARG"],
         "title": "CountryIsoCode3"
       },
       "Currency": {
         "type": "string",
-        "enum": [
-          "eur",
-          "usd",
-          "cop",
-          "mxn",
-          "brl",
-          "ars"
-        ],
+        "enum": ["eur", "usd", "cop", "mxn", "brl", "ars"],
         "title": "Currency"
       },
       "CustomerCreateIn": {
         "properties": {
-          "email": {
-            "type": "string",
-            "format": "email",
-            "title": "Email"
-          },
-          "person_type": {
-            "$ref": "#/components/schemas/PersonType"
-          },
-          "address": {
-            "$ref": "#/components/schemas/Address"
-          },
+          "email": { "type": "string", "format": "email", "title": "Email" },
+          "person_type": { "$ref": "#/components/schemas/PersonType" },
+          "address": { "$ref": "#/components/schemas/Address" },
           "individual": {
             "anyOf": [
-              {
-                "$ref": "#/components/schemas/IndividualCreate"
-              },
-              {
-                "type": "null"
-              }
+              { "$ref": "#/components/schemas/IndividualCreate" },
+              { "type": "null" }
             ]
           },
           "business": {
             "anyOf": [
-              {
-                "$ref": "#/components/schemas/BusinessCreate"
-              },
-              {
-                "type": "null"
-              }
+              { "$ref": "#/components/schemas/BusinessCreate" },
+              { "type": "null" }
             ]
           }
         },
         "type": "object",
-        "required": [
-          "email",
-          "person_type",
-          "address"
-        ],
+        "required": ["email", "person_type", "address"],
         "title": "CustomerCreateIn"
       },
       "CustomerRead": {
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          },
-          "email": {
-            "type": "string",
-            "title": "Email"
-          },
-          "person_type": {
-            "$ref": "#/components/schemas/PersonType"
-          },
-          "address": {
-            "$ref": "#/components/schemas/AddressRead"
-          },
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "email": { "type": "string", "title": "Email" },
+          "person_type": { "$ref": "#/components/schemas/PersonType" },
+          "address": { "$ref": "#/components/schemas/AddressRead" },
           "individual": {
             "anyOf": [
-              {
-                "$ref": "#/components/schemas/IndividualRead"
-              },
-              {
-                "type": "null"
-              }
+              { "$ref": "#/components/schemas/IndividualRead" },
+              { "type": "null" }
             ]
           },
           "business": {
             "anyOf": [
-              {
-                "$ref": "#/components/schemas/BusinessRead"
-              },
-              {
-                "type": "null"
-              }
+              { "$ref": "#/components/schemas/BusinessRead" },
+              { "type": "null" }
             ]
           }
         },
         "type": "object",
-        "required": [
-          "id",
-          "email",
-          "person_type",
-          "address"
-        ],
+        "required": ["id", "email", "person_type", "address"],
         "title": "CustomerRead"
       },
       "EmailAuthIn": {
         "properties": {
-          "code": {
-            "type": "string",
-            "title": "Code"
-          },
-          "email_id": {
-            "type": "string",
-            "title": "Email Id"
-          }
+          "code": { "type": "string", "title": "Code" },
+          "email_id": { "type": "string", "title": "Email Id" }
         },
         "type": "object",
-        "required": [
-          "code",
-          "email_id"
-        ],
+        "required": ["code", "email_id"],
         "title": "EmailAuthIn"
       },
       "ExternalAccountBR": {
         "properties": {
-          "account_name": {
-            "type": "string",
-            "title": "Account Name"
-          },
-          "pix_key": {
-            "type": "string",
-            "title": "Pix Key"
-          }
+          "account_name": { "type": "string", "title": "Account Name" },
+          "pix_key": { "type": "string", "title": "Pix Key" }
         },
         "type": "object",
-        "required": [
-          "account_name",
-          "pix_key"
-        ],
+        "required": ["account_name", "pix_key"],
         "title": "ExternalAccountBR"
       },
       "ExternalAccountLatam": {
         "properties": {
-          "account_name": {
-            "type": "string",
-            "title": "Account Name"
-          },
-          "account_number": {
-            "type": "string",
-            "title": "Account Number"
-          },
-          "account_type": {
-            "$ref": "#/components/schemas/BankAccountType"
-          },
-          "bank_code": {
-            "$ref": "#/components/schemas/BankCodeCO"
-          },
-          "beneficiary": {
-            "$ref": "#/components/schemas/BeneficiaryLatam"
-          }
+          "account_name": { "type": "string", "title": "Account Name" },
+          "account_number": { "type": "string", "title": "Account Number" },
+          "account_type": { "$ref": "#/components/schemas/BankAccountType" },
+          "bank_code": { "$ref": "#/components/schemas/BankCodeCO" },
+          "beneficiary": { "$ref": "#/components/schemas/BeneficiaryLatam" }
         },
         "type": "object",
         "required": [
@@ -1194,50 +808,23 @@
       "ExternalAccountReadSimple": {
         "properties": {
           "account_number": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Account Number"
           }
         },
         "type": "object",
-        "required": [
-          "account_number"
-        ],
+        "required": ["account_number"],
         "title": "ExternalAccountReadSimple"
       },
       "ExternalAccountUS": {
         "properties": {
-          "bank_name": {
-            "type": "string",
-            "title": "Bank Name"
-          },
-          "account_name": {
-            "type": "string",
-            "title": "Account Name"
-          },
-          "account_number": {
-            "type": "string",
-            "title": "Account Number"
-          },
-          "routing_number": {
-            "type": "string",
-            "title": "Routing Number"
-          },
-          "account_type": {
-            "$ref": "#/components/schemas/BankAccountType"
-          },
-          "beneficiary": {
-            "$ref": "#/components/schemas/BeneficiaryUS"
-          },
-          "address": {
-            "$ref": "#/components/schemas/AddressUS"
-          },
+          "bank_name": { "type": "string", "title": "Bank Name" },
+          "account_name": { "type": "string", "title": "Account Name" },
+          "account_number": { "type": "string", "title": "Account Number" },
+          "routing_number": { "type": "string", "title": "Routing Number" },
+          "account_type": { "$ref": "#/components/schemas/BankAccountType" },
+          "beneficiary": { "$ref": "#/components/schemas/BeneficiaryUS" },
+          "address": { "$ref": "#/components/schemas/AddressUS" },
           "idempotency_key": {
             "type": "string",
             "format": "uuid",
@@ -1259,9 +846,7 @@
       "HTTPValidationError": {
         "properties": {
           "detail": {
-            "items": {
-              "$ref": "#/components/schemas/ValidationError"
-            },
+            "items": { "$ref": "#/components/schemas/ValidationError" },
             "type": "array",
             "title": "Detail"
           }
@@ -1271,14 +856,8 @@
       },
       "IndividualCreate": {
         "properties": {
-          "first_name": {
-            "type": "string",
-            "title": "First Name"
-          },
-          "last_name": {
-            "type": "string",
-            "title": "Last Name"
-          },
+          "first_name": { "type": "string", "title": "First Name" },
+          "last_name": { "type": "string", "title": "Last Name" },
           "date_of_birth": {
             "type": "string",
             "format": "date-time",
@@ -1291,29 +870,13 @@
           "identification_type": {
             "$ref": "#/components/schemas/IndividualIdentificationType"
           },
-          "country": {
-            "$ref": "#/components/schemas/KYCCountry"
-          },
+          "country": { "$ref": "#/components/schemas/KYCCountry" },
           "middle_name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Middle Name"
           },
           "second_last_name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Second Last Name"
           },
           "phone_number": {
@@ -1324,32 +887,16 @@
                 "minLength": 7,
                 "format": "phone"
               },
-              {
-                "type": "null"
-              }
+              { "type": "null" }
             ],
             "title": "Phone Number"
           },
           "gov_id_image_front": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Gov Id Image Front"
           },
           "gov_id_image_back": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Gov Id Image Back"
           }
         },
@@ -1379,45 +926,18 @@
       },
       "IndividualRead": {
         "properties": {
-          "first_name": {
-            "type": "string",
-            "title": "First Name"
-          },
-          "last_name": {
-            "type": "string",
-            "title": "Last Name"
-          },
+          "first_name": { "type": "string", "title": "First Name" },
+          "last_name": { "type": "string", "title": "Last Name" },
           "middle_name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Middle Name"
           },
           "second_last_name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Second Last Name"
           },
           "phone_number": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Phone Number"
           },
           "date_of_birth": {
@@ -1434,36 +954,15 @@
             "title": "Identification Type"
           },
           "country": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Country"
           },
           "gov_id_image_front": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Gov Id Image Front"
           },
           "gov_id_image_back": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Gov Id Image Back"
           }
         },
@@ -1485,137 +984,64 @@
       },
       "KYCCountry": {
         "type": "string",
-        "enum": [
-          "col",
-          "pe",
-          "pa",
-          "mex",
-          "br",
-          "ar",
-          "cl"
-        ],
+        "enum": ["col", "pe", "pa", "mex", "br", "ar", "cl"],
         "title": "KYCCountry"
       },
       "LoginEmailOtpIn": {
         "properties": {
-          "email": {
-            "type": "string",
-            "format": "email",
-            "title": "Email"
-          }
+          "email": { "type": "string", "format": "email", "title": "Email" }
         },
         "type": "object",
-        "required": [
-          "email"
-        ],
+        "required": ["email"],
         "title": "LoginEmailOtpIn"
       },
       "LoginEmailOtpOut": {
         "properties": {
-          "email_id": {
-            "type": "string",
-            "title": "Email Id"
-          },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "title": "Email"
-          }
+          "email_id": { "type": "string", "title": "Email Id" },
+          "email": { "type": "string", "format": "email", "title": "Email" }
         },
         "type": "object",
-        "required": [
-          "email_id",
-          "email"
-        ],
+        "required": ["email_id", "email"],
         "title": "LoginEmailOtpOut"
+      },
+      "PaymentRail": {
+        "type": "string",
+        "enum": ["ach", "ach_push", "wire", "sepa"],
+        "title": "PaymentRail"
       },
       "PersonType": {
         "type": "string",
-        "enum": [
-          "individual",
-          "business"
-        ],
+        "enum": ["individual", "business"],
         "title": "PersonType"
       },
       "QuoteRead": {
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          },
-          "source": {
-            "type": "string",
-            "title": "Source"
-          },
-          "destination": {
-            "type": "string",
-            "title": "Destination"
-          },
-          "amount_in": {
-            "type": "string",
-            "title": "Amount In"
-          },
-          "amount_out": {
-            "type": "string",
-            "title": "Amount Out"
-          },
-          "exchange_rate": {
-            "type": "string",
-            "title": "Exchange Rate"
-          },
-          "expires_at": {
-            "type": "integer",
-            "title": "Expires At"
-          },
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "source": { "type": "string", "title": "Source" },
+          "destination": { "type": "string", "title": "Destination" },
+          "amount_in": { "type": "integer", "title": "Amount In" },
+          "amount_out": { "type": "integer", "title": "Amount Out" },
+          "exchange_rate": { "type": "integer", "title": "Exchange Rate" },
+          "expires_at": { "type": "integer", "title": "Expires At" },
           "network_fee": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
             "title": "Network Fee"
           },
-          "developer_fee": {
-            "type": "string",
-            "title": "Developer Fee",
-            "default": "0"
-          },
-          "zeneca_fee": {
-            "type": "string",
-            "title": "Zeneca Fee",
-            "default": "0"
-          },
-          "partner_fee": {
-            "type": "string",
-            "title": "Partner Fee"
-          },
+          "developer_fee": { "type": "integer", "title": "Developer Fee" },
+          "zeneca_fee": { "type": "integer", "title": "Zeneca Fee" },
+          "partner_fee": { "type": "integer", "title": "Partner Fee" },
           "external_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "External Id"
           },
           "recipient_id": {
             "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
             ],
             "title": "Recipient Id"
-          }
+          },
+          "fee": { "type": "integer", "title": "Fee", "readOnly": true }
         },
         "type": "object",
         "required": [
@@ -1626,8 +1052,13 @@
           "amount_out",
           "exchange_rate",
           "expires_at",
+          "network_fee",
+          "developer_fee",
+          "zeneca_fee",
           "partner_fee",
-          "external_id"
+          "external_id",
+          "recipient_id",
+          "fee"
         ],
         "title": "QuoteRead"
       },
@@ -1635,143 +1066,77 @@
         "properties": {
           "recipient_id": {
             "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
             ],
             "title": "Recipient Id"
           },
           "source": {
             "anyOf": [
-              {
-                "$ref": "#/components/schemas/TokenSymbol"
-              },
-              {
-                "$ref": "#/components/schemas/Currency"
-              }
+              { "$ref": "#/components/schemas/TokenSymbol" },
+              { "$ref": "#/components/schemas/Currency" }
             ],
             "title": "Source"
           },
           "destination": {
             "anyOf": [
-              {
-                "$ref": "#/components/schemas/TokenSymbol"
-              },
-              {
-                "$ref": "#/components/schemas/Currency"
-              }
+              { "$ref": "#/components/schemas/TokenSymbol" },
+              { "$ref": "#/components/schemas/Currency" }
             ],
             "title": "Destination"
           },
           "amount_in": {
             "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
             ],
             "title": "Amount In"
           },
           "amount_out": {
             "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
             ],
             "title": "Amount Out"
           },
           "payment_rail": {
             "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Payment Rail"
-          }
-        },
-        "type": "object",
-        "required": [
-          "recipient_id",
-          "source",
-          "destination"
-        ],
-        "title": "QuoteRequest"
-      },
-      "RecipientRead": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          },
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "owner": {
-            "type": "boolean",
-            "title": "Owner"
-          },
-          "country": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/Country"
-              },
-              {
-                "type": "null"
-              }
+              { "$ref": "#/components/schemas/PaymentRail" },
+              { "type": "null" }
             ]
           }
         },
         "type": "object",
-        "required": [
-          "id",
-          "name",
-          "owner"
-        ],
+        "required": ["recipient_id", "source", "destination"],
+        "title": "QuoteRequest"
+      },
+      "RecipientRead": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "name": { "type": "string", "title": "Name" },
+          "owner": { "type": "boolean", "title": "Owner" },
+          "country": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/Country" },
+              { "type": "null" }
+            ]
+          }
+        },
+        "type": "object",
+        "required": ["id", "name", "owner"],
         "title": "RecipientRead"
       },
       "RecipientReadWithExternalAccount": {
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          },
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "owner": {
-            "type": "boolean",
-            "title": "Owner"
-          },
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "name": { "type": "string", "title": "Name" },
+          "owner": { "type": "boolean", "title": "Owner" },
           "country": {
             "anyOf": [
-              {
-                "$ref": "#/components/schemas/Country"
-              },
-              {
-                "type": "null"
-              }
+              { "$ref": "#/components/schemas/Country" },
+              { "type": "null" }
             ]
           },
           "external_account": {
@@ -1779,25 +1144,14 @@
           }
         },
         "type": "object",
-        "required": [
-          "id",
-          "name",
-          "owner",
-          "external_account"
-        ],
+        "required": ["id", "name", "owner", "external_account"],
         "title": "RecipientReadWithExternalAccount"
       },
       "RecipientRequest": {
         "oneOf": [
-          {
-            "$ref": "#/components/schemas/RecipientRequestLatam"
-          },
-          {
-            "$ref": "#/components/schemas/RecipientRequestBR"
-          },
-          {
-            "$ref": "#/components/schemas/RecipientRequestUS"
-          }
+          { "$ref": "#/components/schemas/RecipientRequestLatam" },
+          { "$ref": "#/components/schemas/RecipientRequestBR" },
+          { "$ref": "#/components/schemas/RecipientRequestUS" }
         ],
         "title": "RecipientRequest",
         "discriminator": {
@@ -1814,28 +1168,16 @@
       "RecipientRequestBR": {
         "properties": {
           "name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Name"
           },
           "country": {
             "type": "string",
-            "enum": [
-              "br"
-            ],
+            "enum": ["br"],
             "const": "br",
             "title": "Country"
           },
-          "owner": {
-            "type": "boolean",
-            "title": "Owner"
-          },
+          "owner": { "type": "boolean", "title": "Owner" },
           "external_account": {
             "$ref": "#/components/schemas/ExternalAccountBR"
           },
@@ -1858,29 +1200,15 @@
       "RecipientRequestLatam": {
         "properties": {
           "name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Name"
           },
           "country": {
             "type": "string",
-            "enum": [
-              "col",
-              "mex",
-              "ar"
-            ],
+            "enum": ["col", "mex", "ar"],
             "title": "Country"
           },
-          "owner": {
-            "type": "boolean",
-            "title": "Owner"
-          },
+          "owner": { "type": "boolean", "title": "Owner" },
           "external_account": {
             "$ref": "#/components/schemas/ExternalAccountLatam"
           },
@@ -1903,28 +1231,16 @@
       "RecipientRequestUS": {
         "properties": {
           "name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Name"
           },
           "country": {
             "type": "string",
-            "enum": [
-              "us"
-            ],
+            "enum": ["us"],
             "const": "us",
             "title": "Country"
           },
-          "owner": {
-            "type": "boolean",
-            "title": "Owner"
-          },
+          "owner": { "type": "boolean", "title": "Owner" },
           "external_account": {
             "$ref": "#/components/schemas/ExternalAccountUS"
           },
@@ -1946,41 +1262,18 @@
       },
       "TokenSymbol": {
         "type": "string",
-        "enum": [
-          "usdc.polygon",
-          "usdc.base"
-        ],
+        "enum": ["usdc.polygon", "usdc.base"],
         "title": "TokenSymbol"
       },
       "TransactionRead": {
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          },
-          "source": {
-            "type": "string",
-            "title": "Source"
-          },
-          "destination": {
-            "type": "string",
-            "title": "Destination"
-          },
-          "amount_in": {
-            "type": "integer",
-            "title": "Amount In"
-          },
-          "amount_out": {
-            "type": "integer",
-            "title": "Amount Out"
-          },
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "source": { "type": "string", "title": "Source" },
+          "destination": { "type": "string", "title": "Destination" },
+          "amount_in": { "type": "integer", "title": "Amount In" },
+          "amount_out": { "type": "integer", "title": "Amount Out" },
           "status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/TransactionStatus"
-              }
-            ],
+            "allOf": [{ "$ref": "#/components/schemas/TransactionStatus" }],
             "default": "PENDING"
           },
           "customer_id": {
@@ -1994,26 +1287,17 @@
             "title": "Quote Id"
           },
           "reference_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Reference Id"
           },
           "payout_address": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Payout Address"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
           }
         },
         "type": "object",
@@ -2024,7 +1308,8 @@
           "amount_in",
           "amount_out",
           "customer_id",
-          "quote_id"
+          "quote_id",
+          "created_at"
         ],
         "title": "TransactionRead"
       },
@@ -2046,23 +1331,12 @@
             "title": "Recipient Id"
           },
           "reference_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Reference Id"
           }
         },
         "type": "object",
-        "required": [
-          "quote_id",
-          "customer_id",
-          "recipient_id"
-        ],
+        "required": ["quote_id", "customer_id", "recipient_id"],
         "title": "TransactionRequest"
       },
       "TransactionStatus": {
@@ -2139,42 +1413,18 @@
       "ValidationError": {
         "properties": {
           "loc": {
-            "items": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
-            },
+            "items": { "anyOf": [{ "type": "string" }, { "type": "integer" }] },
             "type": "array",
             "title": "Location"
           },
-          "msg": {
-            "type": "string",
-            "title": "Message"
-          },
-          "type": {
-            "type": "string",
-            "title": "Error Type"
-          }
+          "msg": { "type": "string", "title": "Message" },
+          "type": { "type": "string", "title": "Error Type" }
         },
         "type": "object",
-        "required": [
-          "loc",
-          "msg",
-          "type"
-        ],
+        "required": ["loc", "msg", "type"],
         "title": "ValidationError"
       }
     },
-    "securitySchemes": {
-      "HTTPBearer": {
-        "type": "http",
-        "scheme": "bearer"
-      }
-    }
+    "securitySchemes": { "HTTPBearer": { "type": "http", "scheme": "bearer" } }
   }
 }
