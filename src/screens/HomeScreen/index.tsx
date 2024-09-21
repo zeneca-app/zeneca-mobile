@@ -97,9 +97,9 @@ const HomeScreen = () => {
         <View style={styles.transactionLeft}>
           <View style={styles.transactionIcon}>
             {isWithdrawal ? (
-              <Ionicons name="arrow-down" size={20} color="white" />
-            ) : (
               <Feather name="arrow-up-right" size={20} color="white" />
+            ) : (
+              <Ionicons name="arrow-down" size={20} color="white" />
             )}
           </View>
           <View>
