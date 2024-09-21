@@ -39,6 +39,18 @@ const Login = () => {
     }
   };
 
+  const loginWithApple = async () => {
+    try {
+      await login({ provider: "apple" });
+    } catch (error) {
+      const e = error as Error;
+      toast({
+        title: e?.message ?? "Login Error",
+        preset: "error",
+      });
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
       <View style={styles.container}>
@@ -61,6 +73,18 @@ const Login = () => {
             <View style={styles.textContainer}>
               <Text style={styles.loginText}>
                 {t("login.continue_with_google")}
+              </Text>
+            </View>
+          </Pressable>
+          <Pressable style={styles.commonButton} onPress={loginWithApple}>
+            <Ionicons
+              name="logo-apple"
+              size={24}
+              color={colors.darkHighlight}
+            />
+            <View style={styles.textContainer}>
+              <Text style={styles.loginText}>
+                {t("login.continue_with_apple")}
               </Text>
             </View>
           </Pressable>
@@ -118,6 +142,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   commonButton: {
+    marginTop: 15,
     width: 300,
     height: 50,
     borderRadius: 50,

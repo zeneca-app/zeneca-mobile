@@ -2,6 +2,7 @@
   "login": {
     "description": "Opening the borders of money",
     "continue_with_google": "Continue with Google",
+    "continue_with_apple": "Continue with Apple",
     "welcome_zeneca": "Welcome to Zeneca!"
   },
   "home": {
