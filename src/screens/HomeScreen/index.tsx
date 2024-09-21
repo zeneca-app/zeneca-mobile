@@ -18,11 +18,9 @@ import {
 import { customersGetBalance, transactionsGetTransactions } from "../../client";
 import useAuthStore from "../../storage/authStore";
 import { colors } from "../../styles/colors";
+import { format, parseISO } from 'date-fns';
+import { es, enUS } from 'date-fns/locale';
 
-const transactions = [
-  { id: "1", name: "De Gaby Alvarez", amount: "+$2000", time: "1:00 pm" },
-  { id: "2", name: "Retiro a Bancolombia", amount: "-$800", time: "9:30 am" },
-];
 
 const HomeScreen = () => {
   const { logout } = usePrivy();
@@ -31,25 +29,37 @@ const HomeScreen = () => {
     queryKey: ["balance"],
     queryFn: customersGetBalance,
   });
-  const { data } = useQuery({
+  const { data: transactions } = useQuery({
     queryKey: ["transactions"],
     queryFn: transactionsGetTransactions,
   });
-  console.log("Transactions Data: ", data);
+  console.log("Transactions Data: ", transactions);
   const navigation = useNavigation();
   const { t } = useTranslation();
 
-  const formattedAmountOut = (currency: string, amount: string) => {
+  const formattedAmount = (currency: string, amount: string, showCurrency: boolean = false) => {
     const currencies: Record<string, string> = {
       "COP": "es-CO",
       "USD": "en-US",
     }
-    return new Intl.NumberFormat(currencies[currency], {
-      style: 'currency',
-      currency: currency, currencyDisplay: "code"
-    }).format(
-      parseFloat(amount)).replace(currency, '').trim()
+    const locale = currencies[currency]
+    if (showCurrency) {
+      return new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: currency, currencyDisplay: "code"
+      }).format(parseFloat(amount)).trim()
+    } else {
+      return new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: currency, currencyDisplay: "code"
+      }).format(parseFloat(amount)).replace(currency, '').trim()
+    }
   }
+
+  const formatDate = (dateString: string) => {
+    const date = parseISO(dateString);
+    return format(date, t("home.date_format"), { locale: es });
+  };
 
   const onLogout = async () => {
     try {
@@ -72,28 +82,38 @@ const HomeScreen = () => {
   );
 
   const renderTransaction = useCallback(({ item }: { item: any }) => {
+    const currency_out = item.destination;
+    const currency_in = item.source;
+
+    const isWithdrawal = item.source.includes("usdc");
+
+    const formatWithdrawal = (currency: string, amount: string) => {
+      const formatted = formattedAmount(currency, amount, true)
+      return "-" + formatted
+    }
+
     return (
       <View style={styles.transactionItem}>
         <View style={styles.transactionLeft}>
           <View style={styles.transactionIcon}>
-            {item.amount.includes("+") ? (
+            {isWithdrawal ? (
               <Ionicons name="arrow-down" size={20} color="white" />
             ) : (
               <Feather name="arrow-up-right" size={20} color="white" />
             )}
           </View>
           <View>
-            <Text style={styles.transactionName}>{item.name}</Text>
-            <Text style={styles.transactionTime}>{item.time}</Text>
+            <Text style={styles.transactionName}>Retiro</Text>
+            <Text style={styles.transactionTime}>{formatDate(item.created_at)}</Text>
           </View>
         </View>
         <Text
           style={[
             styles.transactionAmount,
-            { color: item.amount.includes("+") ? "#4CAF50" : "#FF5252" },
+            { color: isWithdrawal ? "#FF5252" : "#4CAF50" },
           ]}
         >
-          {item.amount}
+          {isWithdrawal ? formatWithdrawal(item.destination.toUpperCase(), item.amount_out) : formattedAmount("USD", item.amount_in)}
         </Text>
       </View>
     );
@@ -119,9 +139,9 @@ const HomeScreen = () => {
             <View style={styles.balanceContainer}>
               <Text style={styles.currencySign}>$</Text>
               <Text style={styles.balanceAmount}>
-                {formattedAmountOut("USD", balance?.data?.balance ?? "0")}
+                {formattedAmount("USD", balance?.data?.balance ?? "0")}
               </Text>
-              {/* <Text style={styles.balanceUsd}>USD</Text> */}
+              <Text style={styles.balanceUsd}>USD</Text>
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.actionButton}>
@@ -129,7 +149,7 @@ const HomeScreen = () => {
                 <Text style={styles.buttonText}>{t("home.deposit")}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.actionButton} onPress={onSend}>
-                <Ionicons name="arrow-up" size={20} color="white" />
+                <Feather name="arrow-up-right" size={20} color="white" />
                 <Text style={styles.buttonText}>{t("home.send")}</Text>
               </TouchableOpacity>
             </View>
@@ -138,7 +158,7 @@ const HomeScreen = () => {
         <View style={styles.transactionsContainer}>
           <Text style={styles.transactionsHeader}>HOY</Text>
           <FlatList
-            data={transactions}
+            data={transactions?.data}
             renderItem={renderTransaction}
             keyExtractor={keyExtractor}
           />
