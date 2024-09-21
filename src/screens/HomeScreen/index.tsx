@@ -39,6 +39,18 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
+  const formattedAmountOut = (currency: string, amount: string) => {
+    const currencies: Record<string, string> = {
+      "COP": "es-CO",
+      "USD": "en-US",
+    }
+    return new Intl.NumberFormat(currencies[currency], {
+      style: 'currency',
+      currency: currency, currencyDisplay: "code"
+    }).format(
+      parseFloat(amount)).replace(currency, '').trim()
+  }
+
   const onLogout = async () => {
     try {
       await logout();
@@ -105,10 +117,11 @@ const HomeScreen = () => {
             style={styles.balanceCard}
           >
             <View style={styles.balanceContainer}>
+              <Text style={styles.currencySign}>$</Text>
               <Text style={styles.balanceAmount}>
-                {Number(balance?.data?.balance)?.toFixed(2)}
+                {formattedAmountOut("USD", balance?.data?.balance ?? "0")}
               </Text>
-              <Text style={styles.balanceUsd}>USD</Text>
+              {/* <Text style={styles.balanceUsd}>USD</Text> */}
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.actionButton}>
@@ -155,16 +168,26 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   balanceCard: {
-    borderRadius: 40,
+    borderRadius: 30,
     padding: 20,
+    marginBottom: 10,
   },
   balanceContainer: {
     flexDirection: "row",
-    alignItems: "flex-end",
+    alignItems: "flex-start",
     marginBottom: 20,
   },
+  currencySign: {
+    fontSize: 24,
+    fontWeight: "bold",
+    fontFamily: "Manrope_700Bold",
+    color: "white",
+    marginRight: 4,
+    marginTop: 4,
+  },
   balanceAmount: {
-    fontSize: 32,
+    fontSize: 38,
+    fontWeight: "bold",
     fontFamily: "Manrope_700Bold",
     color: "white",
   },
@@ -182,15 +205,18 @@ const styles = StyleSheet.create({
   actionButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#000",
-    borderRadius: 20,
-    paddingVertical: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.15)',
+    borderRadius: 25,
+    paddingVertical: 14,
     paddingHorizontal: 20,
+    flex: 1,
+    marginHorizontal: 5,
   },
   buttonText: {
     color: "white",
-    marginLeft: 10,
-    fontFamily: "Manrope_400Regular",
+    marginLeft: 8,
+    fontFamily: "Manrope_600SemiBold",
+    fontSize: 16,
   },
   transactionsContainer: {
     flex: 1,
