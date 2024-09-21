@@ -861,6 +861,12 @@ export const LoginEmailOtpOutSchema = {
     title: 'LoginEmailOtpOut'
 } as const;
 
+export const PaymentRailSchema = {
+    type: 'string',
+    enum: ['ach', 'ach_push', 'wire', 'sepa'],
+    title: 'PaymentRail'
+} as const;
+
 export const PersonTypeSchema = {
     type: 'string',
     enum: ['individual', 'business'],
@@ -883,15 +889,15 @@ export const QuoteReadSchema = {
             title: 'Destination'
         },
         amount_in: {
-            type: 'string',
+            type: 'integer',
             title: 'Amount In'
         },
         amount_out: {
-            type: 'string',
+            type: 'integer',
             title: 'Amount Out'
         },
         exchange_rate: {
-            type: 'string',
+            type: 'integer',
             title: 'Exchange Rate'
         },
         expires_at: {
@@ -901,7 +907,7 @@ export const QuoteReadSchema = {
         network_fee: {
             anyOf: [
                 {
-                    type: 'string'
+                    type: 'integer'
                 },
                 {
                     type: 'null'
@@ -910,17 +916,15 @@ export const QuoteReadSchema = {
             title: 'Network Fee'
         },
         developer_fee: {
-            type: 'string',
-            title: 'Developer Fee',
-            default: '0'
+            type: 'integer',
+            title: 'Developer Fee'
         },
         zeneca_fee: {
-            type: 'string',
-            title: 'Zeneca Fee',
-            default: '0'
+            type: 'integer',
+            title: 'Zeneca Fee'
         },
         partner_fee: {
-            type: 'string',
+            type: 'integer',
             title: 'Partner Fee'
         },
         external_id: {
@@ -945,10 +949,15 @@ export const QuoteReadSchema = {
                 }
             ],
             title: 'Recipient Id'
+        },
+        fee: {
+            type: 'integer',
+            title: 'Fee',
+            readOnly: true
         }
     },
     type: 'object',
-    required: ['id', 'source', 'destination', 'amount_in', 'amount_out', 'exchange_rate', 'expires_at', 'partner_fee', 'external_id'],
+    required: ['id', 'source', 'destination', 'amount_in', 'amount_out', 'exchange_rate', 'expires_at', 'network_fee', 'developer_fee', 'zeneca_fee', 'partner_fee', 'external_id', 'recipient_id', 'fee'],
     title: 'QuoteRead'
 } as const;
 
@@ -1019,13 +1028,12 @@ export const QuoteRequestSchema = {
         payment_rail: {
             anyOf: [
                 {
-                    type: 'string'
+                    '$ref': '#/components/schemas/PaymentRail'
                 },
                 {
                     type: 'null'
                 }
-            ],
-            title: 'Payment Rail'
+            ]
         }
     },
     type: 'object',
@@ -1301,10 +1309,15 @@ export const TransactionReadSchema = {
                 }
             ],
             title: 'Payout Address'
+        },
+        created_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Created At'
         }
     },
     type: 'object',
-    required: ['id', 'source', 'destination', 'amount_in', 'amount_out', 'customer_id', 'quote_id'],
+    required: ['id', 'source', 'destination', 'amount_in', 'amount_out', 'customer_id', 'quote_id', 'created_at'],
     title: 'TransactionRead'
 } as const;
 
