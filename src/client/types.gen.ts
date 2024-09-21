@@ -203,22 +203,25 @@ export type LoginEmailOtpOut = {
     email: string;
 };
 
+export type PaymentRail = 'ach' | 'ach_push' | 'wire' | 'sepa';
+
 export type PersonType = 'individual' | 'business';
 
 export type QuoteRead = {
     id: string;
     source: string;
     destination: string;
-    amount_in: string;
-    amount_out: string;
-    exchange_rate: string;
+    amount_in: number;
+    amount_out: number;
+    exchange_rate: number;
     expires_at: number;
-    network_fee?: (string | null);
-    developer_fee?: string;
-    zeneca_fee?: string;
-    partner_fee: string;
+    network_fee: (number | null);
+    developer_fee: number;
+    zeneca_fee: number;
+    partner_fee: number;
     external_id: (string | null);
-    recipient_id?: (string | null);
+    recipient_id: (string | null);
+    readonly fee: number;
 };
 
 export type QuoteRequest = {
@@ -227,7 +230,7 @@ export type QuoteRequest = {
     destination: (TokenSymbol | Currency);
     amount_in?: (number | string | null);
     amount_out?: (number | string | null);
-    payment_rail?: (string | null);
+    payment_rail?: (PaymentRail | null);
 };
 
 export type RecipientRead = {
@@ -284,6 +287,7 @@ export type TransactionRead = {
     quote_id: string;
     reference_id?: (string | null);
     payout_address?: (string | null);
+    created_at: string;
 };
 
 export type TransactionRequest = {

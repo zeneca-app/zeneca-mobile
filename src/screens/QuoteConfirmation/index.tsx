@@ -87,7 +87,7 @@ const QuoteConfirmationScreen = ({ route }) => {
                 </View>
 
                 <View style={styles.bottomSection}>
-                    <Text style={styles.timer}>Tasa se actualizara en {30}seg</Text>
+                    <Text style={styles.timer}>{t("quoteConfirmation.timerDescription")} {30}seg</Text>
                     <Text style={styles.warning}>{t("quoteConfirmation.disclaimer")}</Text>
                     <TouchableOpacity
                         onPress={handleContinue}
