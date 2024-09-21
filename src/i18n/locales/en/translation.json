@@ -6,7 +6,8 @@
   },
   "home": {
     "deposit": "Deposit",
-    "send": "Send"
+    "send": "Send",
+    "date_format": "MMM d"
   },
   "recipients": {
     "title": "Send money to?",

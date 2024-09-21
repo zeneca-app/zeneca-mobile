@@ -6,7 +6,8 @@
   },
   "home": {
     "deposit": "Depositar",
-    "send": "Enviar"
+    "send": "Enviar",
+    "date_format": "d 'de' MMMM"
   },
   "recipients": {
     "title": "¿A quién le vas a enviar dinero?",
