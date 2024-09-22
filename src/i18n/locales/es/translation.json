@@ -7,11 +7,12 @@
   "home": {
     "deposit": "Depositar",
     "send": "Enviar",
-    "date_format": "d 'de' MMMM"
+    "date_format": "d 'de' MMMM",
+    "transactions": "Movimientos"
   },
   "recipients": {
-    "title": "¿A quién le vas a enviar dinero?",
-    "searchPlaceholder": "Buscar nombre"
+    "title": "A quién le vas a enviar dinero",
+    "searchPlaceholder": "Buscar por nombre..."
   },
   "quote": {
     "available": "Disponible",

@@ -7,6 +7,9 @@ import {
   useFonts,
 } from "@expo-google-fonts/manrope";
 import { PrivyProvider } from "@privy-io/expo";
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -20,12 +23,68 @@ import RecipientsScreen from "./screens/Recipients";
 import QuoteConfirmationScreen from "./screens/QuoteConfirmation";
 import useAuthStore from "./storage/authStore";
 import SentReceiptScreen from "./screens/SentReceipt";
-
+import InvestmentComingSoonScreen from "./screens/InvestmentComingSoon";
 
 
 const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID ?? "";
 const CLIENT_ID = process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID ?? "";
 const Stack = createNativeStackNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator();
+
+const CustomTabBar = ({ state, descriptors, navigation }) => {
+  return (
+    <View style={styles.tabBar}>
+      {state.routes.map((route, index) => {
+        const { options } = descriptors[route.key];
+        const isFocused = state.index === index;
+
+        const onPress = () => {
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: route.key,
+          });
+
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate(route.name);
+          }
+        };
+
+        let iconName;
+        if (route.name === 'Home') {
+          iconName = 'card';
+        } else if (route.name === 'InvestmentComingSoon') {
+          iconName = 'pie-chart';
+        }
+
+        return (
+          <TouchableOpacity
+            key={index}
+            onPress={onPress}
+            style={styles.tabItem}
+          >
+            <Ionicons name={iconName} size={28} color="white" />
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+};
+
+
+const MainTabs = () => {
+  return (
+    <Tab.Navigator
+      tabBar={(props) => <CustomTabBar {...props} />}
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="InvestmentComingSoon" component={InvestmentComingSoonScreen} />
+     
+    </Tab.Navigator>
+  );
+};
 
 const AppIndex = () => {
   const [loaded] = useFonts({
@@ -49,11 +108,16 @@ const AppIndex = () => {
         <NavigationContainer>
           <PrivyProvider appId={APP_ID} clientId={CLIENT_ID}>
             <QueryClientProvider client={queryClient}>
-              <Stack.Navigator initialRouteName={logged ? "Home" : "Login"}>
+              <Stack.Navigator initialRouteName={logged ? "MainTabs" : "Login"}>
                 <Stack.Screen
                   options={{ headerShown: false }}
                   name="Login"
                   component={Login}
+                />
+                <Stack.Screen
+                  options={{ headerShown: false }}
+                  name="MainTabs"
+                  component={MainTabs}
                 />
                 <Stack.Screen
                   options={{ headerShown: false }}
@@ -90,3 +154,26 @@ const AppIndex = () => {
 };
 
 export default AppIndex;
+
+const styles = StyleSheet.create({
+  tabBar: {
+    flexDirection: 'row',
+    backgroundColor: '#000',
+    height: 95,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    elevation: 0,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    
+  },
+  tabItem: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
