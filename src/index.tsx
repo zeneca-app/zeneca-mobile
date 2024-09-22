@@ -8,7 +8,8 @@ import {
 } from "@expo-google-fonts/manrope";
 import { PrivyProvider } from "@privy-io/expo";
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createBottomTabNavigator, BottomTabBarProps } from "@react-navigation/bottom-tabs";
+import { ParamListBase, TabNavigationState } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -25,13 +26,16 @@ import useAuthStore from "./storage/authStore";
 import SentReceiptScreen from "./screens/SentReceipt";
 import InvestmentComingSoonScreen from "./screens/InvestmentComingSoon";
 
-
 const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID ?? "";
 const CLIENT_ID = process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID ?? "";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
-const CustomTabBar = ({ state, descriptors, navigation }) => {
+type CustomTabBarProps = BottomTabBarProps & {
+  state: TabNavigationState<ParamListBase>;
+};
+
+const CustomTabBar: React.FC<CustomTabBarProps> = ({ state, descriptors, navigation }) => {
   return (
     <View style={styles.tabBar}>
       {state.routes.map((route, index) => {
@@ -42,6 +46,7 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
           const event = navigation.emit({
             type: 'tabPress',
             target: route.key,
+            canPreventDefault: true,
           });
 
           if (!isFocused && !event.defaultPrevented) {
@@ -49,11 +54,13 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
           }
         };
 
-        let iconName;
+        let iconName: keyof typeof Ionicons.glyphMap;
         if (route.name === 'Home') {
-          iconName = 'card';
+          iconName = 'wallet';
         } else if (route.name === 'InvestmentComingSoon') {
-          iconName = 'pie-chart';
+          iconName = 'cash';
+        } else {
+          iconName = 'help-circle'; // Default icon
         }
 
         return (
@@ -81,7 +88,6 @@ const MainTabs = () => {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="InvestmentComingSoon" component={InvestmentComingSoonScreen} />
-     
     </Tab.Navigator>
   );
 };
@@ -169,7 +175,7 @@ const styles = StyleSheet.create({
     elevation: 0,
     justifyContent: 'space-around',
     alignItems: 'center',
-    
+
   },
   tabItem: {
     flex: 1,
