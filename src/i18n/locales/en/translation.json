@@ -7,7 +7,8 @@
   "home": {
     "deposit": "Deposit",
     "send": "Send",
-    "date_format": "MMM d"
+    "date_format": "MMM d",
+    "transactions": "Transactions"
   },
   "recipients": {
     "title": "Send money to?",
@@ -20,7 +21,7 @@
     "fee": "Fee"
   },
   "quoteConfirmation": {
-    "title": "You are about to send",
+    "title": "You are sending",
     "amount": "Amount",
     "exchangeRate": "Exchange rate",
     "totalCost": "Total cost",

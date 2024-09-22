@@ -22,6 +22,9 @@ const Login = () => {
         });
       }
     },
+    onError: (error) => {
+      console.log("error", error);
+    },
   });
   const { update } = useAuthStore((state) => ({
     update: state.update,
@@ -32,6 +35,7 @@ const Login = () => {
       await login({ provider: "google" });
     } catch (error) {
       const e = error as Error;
+      console.log("error", e);
       toast({
         title: e?.message ?? "Login Error",
         preset: "error",
