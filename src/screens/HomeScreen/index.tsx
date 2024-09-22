@@ -156,7 +156,7 @@ const HomeScreen = () => {
           </LinearGradient>
         </View>
         <View style={styles.transactionsContainer}>
-          <Text style={styles.transactionsHeader}>HOY</Text>
+          <Text style={styles.transactionsHeader}>{t("home.transactions")}</Text>
           <FlatList
             data={transactions?.data}
             renderItem={renderTransaction}

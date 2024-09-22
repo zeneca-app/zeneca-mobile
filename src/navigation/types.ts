@@ -7,6 +7,7 @@ export type RootStackParamList = {
   Quote: undefined;
   QuoteConfirmation: undefined;
   SentReceipt: undefined;
+  MainTabs: undefined;
 };
 
 declare global {
