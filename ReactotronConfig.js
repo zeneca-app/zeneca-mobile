@@ -1,7 +1,9 @@
 import { NativeModules } from "react-native";
 import reactotronZustand from "reactotron-plugin-zustand";
 import Reactotron from "reactotron-react-native";
-import useTransactionStore from "./src/storage/transactionStore";
+
+import useQuoteStore from "./src/storage/quoteStore";
+import useRecipientStore from "./src/storage/recipientStore";
 
 // do not allow Reactotron to be used in production and in tests
 if (__DEV__ && process.env.JEST_WORKER_ID === undefined) {
@@ -10,7 +12,10 @@ if (__DEV__ && process.env.JEST_WORKER_ID === undefined) {
     .useReactNative()
     .use(
       reactotronZustand({
-        stores: [{ name: "transaction-storage", zustand: useTransactionStore }],
+        stores: [
+          { name: "recipient-storage", zustand: useRecipientStore },
+          { name: "quote-storage", zustand: useQuoteStore },
+        ],
       }),
     )
     .connect();

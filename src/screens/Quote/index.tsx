@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import React, { useMemo, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { debounce } from 'lodash';
 import { useTranslation } from "react-i18next";
 import {
@@ -14,25 +14,32 @@ import {
   Platform,
   View,
 } from "react-native";
-import { customersGetBalance, quotesCreateQuote } from "../../client";
+import { customersGetBalance, quotesCreateQuote, QuoteRead } from "../../client";
 
-import useTransactionStore from "../../storage/transactionStore";
+import useRecipientStore from "../../storage/recipientStore";
+import useQuoteStore from "../../storage/quoteStore";
+import { formatQuoteToCurrency } from "../../utils/quote";
 
 const QuoteScreen = () => {
-  const [amount, setAmount] = useState("");
-  const [exchangeRate, setExchangeRate] = useState("");
+  const [amount, setAmount] = useState("0");
+  const [exchangeRate, setExchangeRate] = useState("0");
   const [amountOut, setAmountOut] = useState("0");
-  const [fee, setFee] = useState("");
+  const [fee, setFee] = useState("0");
+
+  const { setQuote } = useQuoteStore((state) => ({
+    setQuote: state.setQuote,
+  }));
 
   const { data: balance } = useQuery({
     queryKey: ["balance"],
     queryFn: customersGetBalance,
   });
+  const customerBalance = balance?.data?.balance || 0
 
   const navigation = useNavigation();
   const { t } = useTranslation();
 
-  const { recipient } = useTransactionStore((state) => ({
+  const { recipient } = useRecipientStore((state) => ({
     recipient: state.recipient,
   }));
 
@@ -40,27 +47,29 @@ const QuoteScreen = () => {
     mutationFn: () =>
       quotesCreateQuote({
         body: {
-          recipient_id: recipient.id,
-          amount_in: amount,
           source: "usdc.polygon",
           destination: "cop",
+          amount_in: amount,
+          recipient_id: recipient.id,
         },
       }),
     onSuccess: (data) => {
-      const quote = data.data
-      setExchangeRate(((quote?.exchange_rate || 0) / 10000).toFixed(4));
-      setAmountOut(((quote?.amount_out || 0) / 100).toFixed(2));
-      setFee(((quote?.fee || 0) / 100).toFixed(2));
+      console.log("quote", data)
+      const quote = formatQuoteToCurrency(data.data as QuoteRead)
+      setExchangeRate(quote.exchange_rate);
+      setAmountOut(quote.amount_out);
+      setFee(quote.fee);
+      setQuote(quote);
     },
     onError: (error) => {
-      console.log("error", error)
-      console.log(error);
+      console.log("error quote", error)
+
     },
   });
 
   const debouncedMutation = useCallback(
     debounce((value: string) => {
-      if (Number(value) > 0) {
+      if (Number(value) > 12) {
         mutation.mutate();
       }
     }, 500), // 500ms delay
@@ -85,27 +94,12 @@ const QuoteScreen = () => {
   };
 
   const handleContinue = () => {
-    navigation.navigate("QuoteConfirmation", {
-      amount_in: amount,
-      amount_out: amountOut,
-      recipient: recipient,
-      fee: fee,
-    });
+    if (!canSend) return
+    navigation.navigate("QuoteConfirmation");
   };
 
-  const formattedAmountOut = (currency: string, amount: string) => {
-    const currencies: Record<string, string> = {
-      "COP": "es-CO",
-      "USD": "en-US",
-    }
-    return new Intl.NumberFormat(currencies[currency], {
-      style: 'currency',
-      currency: currency, currencyDisplay: "code"
-    }).format(
-      parseFloat(amount)).replace(currency, '').trim()
-  }
-
-  const canSend = Number(amount) <= Number(balance?.data?.balance)
+  const enoughBalance = Number(amount) <= Number(customerBalance)
+  const canSend = enoughBalance && Number(amount) > 0 && Number(amountOut) > 0
 
   return (
     <KeyboardAvoidingView
@@ -127,7 +121,6 @@ const QuoteScreen = () => {
               <Text style={styles.recipientName}>{recipient.name}</Text>
             </View>
           </View>
-
           <View style={styles.balanceCard}>
             <View style={styles.currencyRow}>
               <View style={styles.currencyIconContainer}>
@@ -147,7 +140,7 @@ const QuoteScreen = () => {
             <View style={styles.availableBalanceContainer}>
               <Text style={styles.availableBalance}>
                 {t("quote.available")}
-                {`: $${Number(balance?.data?.balance).toFixed(2)}`}
+                {`: $${Number(customerBalance).toFixed(2)}`}
               </Text>
             </View>
           </View>
@@ -159,7 +152,7 @@ const QuoteScreen = () => {
               </View>
               <Text style={styles.currencyCode}>COP</Text>
               <Text style={styles.amount}>
-                {formattedAmountOut("COP", amountOut)}
+                {amountOut}
               </Text>
             </View>
           </View>
@@ -180,7 +173,7 @@ const QuoteScreen = () => {
             onPress={handleContinue}
             disabled={!canSend}
           >
-            <Text style={styles.continueButtonText}>{canSend ? t("quote.continue") : "not enough balance"}</Text>
+            <Text style={styles.continueButtonText}>{t("quote.continue")}</Text>
           </TouchableOpacity>
 
         </View>
