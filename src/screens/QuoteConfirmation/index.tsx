@@ -14,17 +14,29 @@ import {
     View,
 } from "react-native";
 
-import useTransactionStore from "../../storage/transactionStore";
+import useRecipientStore from "../../storage/recipientStore";
+import useQuoteStore from "../../storage/quoteStore";
 import * as LocalAuthentication from 'expo-local-authentication';
 import FaceIdIcon from "../../../assets/face-id.svg";
+import { formatCurrency } from "../../utils/currencyUtils";
 
-const QuoteConfirmationScreen = ({ route }) => {
+
+const QuoteConfirmationScreen = () => {
     const navigation = useNavigation();
     const { t } = useTranslation();
 
     const capitalizeFirstLetter = (string: string) => {
         return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
     };
+
+    const { quote } = useQuoteStore((state) => ({
+        quote: state.quote,
+    }));
+
+
+    const { recipient } = useRecipientStore((state) => ({
+        recipient: state.recipient,
+    }));
 
     const handleContinue = async () => {
         try {
@@ -34,13 +46,7 @@ const QuoteConfirmationScreen = ({ route }) => {
             });
 
             if (result.success) {
-                navigation.navigate("SentReceipt", {
-                    amount_in: route.params.amount_in,
-                    amount_out: route.params.amount_out,
-                    recipient: route.params.recipient,
-                    fee: route.params.fee,
-                    total: total,
-                });
+                navigation.navigate("SentReceipt");
             } else {
                 // Handle authentication failure
                 console.log("Authentication failed");
@@ -50,7 +56,6 @@ const QuoteConfirmationScreen = ({ route }) => {
         }
     };
 
-    const total = parseFloat(route.params.amount_in) + parseFloat(route.params.fee)
 
 
     return (
@@ -64,25 +69,25 @@ const QuoteConfirmationScreen = ({ route }) => {
                 <View>
                     <Text style={styles.title}>{t("quoteConfirmation.title")}</Text>
                     <Text style={styles.amount}>
-                        {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(route.params.amount_out)} COP
+                        {formatCurrency(quote.amount_out, "COP", true)}
                     </Text>
                     <Text style={styles.recipient}>
-                        a <Text style={styles.recipientName}>{capitalizeFirstLetter(route.params.recipient.name)}</Text>
+                        a <Text style={styles.recipientName}>{capitalizeFirstLetter(recipient.name)}</Text>
                     </Text>
                 </View>
 
                 <View style={styles.detailsContainer}>
                     <View style={styles.detailRow}>
                         <Text style={styles.detailLabel}>{t("quoteConfirmation.exchangeRate")}</Text>
-                        <Text style={styles.detailValue}>{route.params.amount_in} USDC</Text>
+                        <Text style={styles.detailValue}>{quote.amount_in} USDC</Text>
                     </View>
                     <View style={styles.detailRow}>
                         <Text style={styles.detailLabel}>{t("quoteConfirmation.fee")}</Text>
-                        <Text style={styles.detailValue}>{route.params.fee} USDC</Text>
+                        <Text style={styles.detailValue}>{quote.fee} USDC</Text>
                     </View>
                     <View style={styles.detailRow}>
                         <Text style={styles.detailLabel}>{t("quoteConfirmation.totalCost")}</Text>
-                        <Text style={styles.detailValue}>{total} USDC</Text>
+                        <Text style={styles.detailValue}>{quote.amount_out} USDC</Text>
                     </View>
                 </View>
 
@@ -92,7 +97,7 @@ const QuoteConfirmationScreen = ({ route }) => {
                     <TouchableOpacity
                         onPress={handleContinue}
                         style={styles.confirmButton}>
-                        <FaceIdIcon width={24} height={24}/>
+                        <FaceIdIcon width={24} height={24} />
                         <Text
                             style={styles.confirmButtonText}
 
