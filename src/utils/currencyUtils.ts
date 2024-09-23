@@ -1,3 +1,5 @@
+import { Country, Currency } from "../client";
+
 export type CurrencyCode = "USD" | "COP" | "MXN" | "EUR";
 
 const currencyLocales: Record<CurrencyCode, string> = {
@@ -30,4 +32,21 @@ export const formatCurrency = (
   return showSymbol
     ? formatter.format(numericAmount)
     : formatter.format(numericAmount).replace(currencyCode, "").trim();
+};
+
+const CURRENCY: Record<string, Currency> = {
+  EUR: "eur",
+  USD: "usd",
+  COP: "cop",
+  MXN: "mxn",
+  BRL: "brl",
+  ARS: "ars",
+} as const;
+
+export const CURRENCY_BY_COUNTRY: Record<Country, Currency> = {
+  col: CURRENCY.COP,
+  mex: CURRENCY.MXN,
+  br: CURRENCY.BRL,
+  ar: CURRENCY.ARS,
+  us: CURRENCY.USD,
 };
