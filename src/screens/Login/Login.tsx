@@ -14,7 +14,7 @@ const Login = () => {
   const { login } = useLoginWithOAuth({
     onSuccess: (user, isNewUser) => {
       update(true);
-      navigation.navigate("Home");
+      navigation.navigate("MainTabs");
       if (isNewUser) {
         toast({
           title: t("login.welcome_zeneca"),
