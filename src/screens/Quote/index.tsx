@@ -14,17 +14,18 @@ import {
   Platform,
   View,
 } from "react-native";
-import { customersGetBalance, quotesCreateQuote, QuoteRead } from "../../client";
-
+import { customersGetBalance, quotesCreateQuote, QuoteRead, Country } from "../../client";
 import useRecipientStore from "../../storage/recipientStore";
 import useQuoteStore from "../../storage/quoteStore";
-import { formatQuoteToCurrency } from "../../utils/quote";
+import { formatQuoteToCurrency, formatQuoteToNumber, Quote } from "../../utils/quote";
+import { CURRENCY_BY_COUNTRY } from "../../utils/currencyUtils";
+
 
 const QuoteScreen = () => {
   const [amount, setAmount] = useState("0");
-  const [exchangeRate, setExchangeRate] = useState("0");
   const [amountOut, setAmountOut] = useState("0");
-  const [fee, setFee] = useState("0");
+  const [quoteRaw, setQuoteRaw] = useState<Quote | null>(null);
+  const [quoteFormatted, setQuoteFormatted] = useState<Quote | null>(null);
 
   const { setQuote } = useQuoteStore((state) => ({
     setQuote: state.setQuote,
@@ -43,23 +44,27 @@ const QuoteScreen = () => {
     recipient: state.recipient,
   }));
 
+  const currencySelected = CURRENCY_BY_COUNTRY[recipient.country as Country]
+  const currency = CURRENCY_BY_COUNTRY[recipient.country as Country].toUpperCase()
+
   const mutation = useMutation({
     mutationFn: () =>
       quotesCreateQuote({
         body: {
           source: "usdc.polygon",
-          destination: "cop",
+          destination: currencySelected,
           amount_in: amount,
           recipient_id: recipient.id,
         },
       }),
     onSuccess: (data) => {
-      console.log("quote", data)
-      const quote = formatQuoteToCurrency(data.data as QuoteRead)
-      setExchangeRate(quote.exchange_rate);
-      setAmountOut(quote.amount_out);
-      setFee(quote.fee);
-      setQuote(quote);
+      const quoteRaw = formatQuoteToNumber(data.data as QuoteRead);
+      const quoteFormatted = formatQuoteToCurrency(data.data as QuoteRead);
+
+      setAmountOut(quoteFormatted.amount_out);
+      setQuoteRaw(quoteRaw);
+      setQuoteFormatted(quoteFormatted);
+      setQuote(quoteRaw);
     },
     onError: (error) => {
       console.log("error quote", error)
@@ -99,7 +104,7 @@ const QuoteScreen = () => {
   };
 
   const enoughBalance = Number(amount) <= Number(customerBalance)
-  const canSend = enoughBalance && Number(amount) > 0 && Number(amountOut) > 0
+  const canSend = enoughBalance && Number(amount) > 0 && Number(quoteRaw?.amount_out) > 0
 
   return (
     <KeyboardAvoidingView
@@ -150,7 +155,7 @@ const QuoteScreen = () => {
               <View style={styles.currencyIconContainer}>
                 <Text style={styles.currencyIcon}>🇨🇴</Text>
               </View>
-              <Text style={styles.currencyCode}>COP</Text>
+              <Text style={styles.currencyCode}>{currency}</Text>
               <Text style={styles.amount}>
                 {amountOut}
               </Text>
@@ -158,8 +163,8 @@ const QuoteScreen = () => {
           </View>
 
           <View style={styles.infoRow}>
-            <Text style={styles.infoText}>1 USDC = {exchangeRate} COP</Text>
-            <Text style={styles.infoText}>{fee} USDC {t("quote.fee")}</Text>
+            <Text style={styles.infoText}>1 USDC = {quoteFormatted?.exchange_rate} {currency}</Text>
+            <Text style={styles.infoText}>{quoteFormatted?.fee} USDC {t("quote.fee")}</Text>
           </View>
 
         </View>

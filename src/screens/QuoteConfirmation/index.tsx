@@ -56,8 +56,6 @@ const QuoteConfirmationScreen = () => {
         }
     };
 
-
-
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -69,7 +67,7 @@ const QuoteConfirmationScreen = () => {
                 <View>
                     <Text style={styles.title}>{t("quoteConfirmation.title")}</Text>
                     <Text style={styles.amount}>
-                        {formatCurrency(quote.amount_out, "COP", true)}
+                        {quote.amount_out}
                     </Text>
                     <Text style={styles.recipient}>
                         a <Text style={styles.recipientName}>{capitalizeFirstLetter(recipient.name)}</Text>
@@ -87,7 +85,7 @@ const QuoteConfirmationScreen = () => {
                     </View>
                     <View style={styles.detailRow}>
                         <Text style={styles.detailLabel}>{t("quoteConfirmation.totalCost")}</Text>
-                        <Text style={styles.detailValue}>{quote.amount_out} USDC</Text>
+                        <Text style={styles.detailValue}>{quote.amount_out} COP</Text>
                     </View>
                 </View>
 
