@@ -18,8 +18,8 @@ import useRecipientStore from "../../storage/recipientStore";
 import useQuoteStore from "../../storage/quoteStore";
 import * as LocalAuthentication from 'expo-local-authentication';
 import FaceIdIcon from "../../../assets/face-id.svg";
-import { formatCurrency } from "../../utils/currencyUtils";
-
+import { formatCurrency, CURRENCY_BY_COUNTRY, CurrencyCode } from "../../utils/currencyUtils";
+import { Country } from "../../client";
 
 const QuoteConfirmationScreen = () => {
     const navigation = useNavigation();
@@ -37,6 +37,8 @@ const QuoteConfirmationScreen = () => {
     const { recipient } = useRecipientStore((state) => ({
         recipient: state.recipient,
     }));
+
+    const currency = CURRENCY_BY_COUNTRY[recipient.country as Country].toUpperCase() as CurrencyCode
 
     const handleContinue = async () => {
         try {
@@ -67,7 +69,7 @@ const QuoteConfirmationScreen = () => {
                 <View>
                     <Text style={styles.title}>{t("quoteConfirmation.title")}</Text>
                     <Text style={styles.amount}>
-                        {quote.amount_out}
+                        {formatCurrency(quote.amount_out, currency as CurrencyCode, true)}
                     </Text>
                     <Text style={styles.recipient}>
                         a <Text style={styles.recipientName}>{capitalizeFirstLetter(recipient.name)}</Text>
@@ -77,7 +79,7 @@ const QuoteConfirmationScreen = () => {
                 <View style={styles.detailsContainer}>
                     <View style={styles.detailRow}>
                         <Text style={styles.detailLabel}>{t("quoteConfirmation.exchangeRate")}</Text>
-                        <Text style={styles.detailValue}>{quote.amount_in} USDC</Text>
+                        <Text style={styles.detailValue}>{formatCurrency(quote.amount_out, currency as CurrencyCode)} {currency} </Text>
                     </View>
                     <View style={styles.detailRow}>
                         <Text style={styles.detailLabel}>{t("quoteConfirmation.fee")}</Text>
@@ -85,7 +87,7 @@ const QuoteConfirmationScreen = () => {
                     </View>
                     <View style={styles.detailRow}>
                         <Text style={styles.detailLabel}>{t("quoteConfirmation.totalCost")}</Text>
-                        <Text style={styles.detailValue}>{quote.amount_out} COP</Text>
+                        <Text style={styles.detailValue}>{quote.amount_in} USDC</Text>
                     </View>
                 </View>
 
