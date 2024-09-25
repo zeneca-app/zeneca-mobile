@@ -4,6 +4,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import React, { useState, useCallback } from "react";
 import { debounce } from 'lodash';
 import { useTranslation } from "react-i18next";
+import countryCodeToFlagEmoji from "country-code-to-flag-emoji";
 import {
   SafeAreaView,
   StyleSheet,
@@ -19,6 +20,9 @@ import useRecipientStore from "../../storage/recipientStore";
 import useQuoteStore from "../../storage/quoteStore";
 import { formatQuoteToCurrency, formatQuoteToNumber, Quote } from "../../utils/quote";
 import { CURRENCY_BY_COUNTRY } from "../../utils/currencyUtils";
+import { convertIso3ToIso2, ISO3 } from "@trustedshops-public/js-iso3166-converter";
+import { SvgUri } from 'react-native-svg';
+import USDC_ICON from "../../../assets/usdc.svg";
 
 
 const QuoteScreen = () => {
@@ -55,6 +59,7 @@ const QuoteScreen = () => {
           destination: currencySelected,
           amount_in: amount,
           recipient_id: recipient.id,
+          payment_rail: "wire",
         },
       }),
     onSuccess: (data) => {
@@ -106,6 +111,10 @@ const QuoteScreen = () => {
   const enoughBalance = Number(amount) <= Number(customerBalance)
   const canSend = enoughBalance && Number(amount) > 0 && Number(quoteRaw?.amount_out) > 0
 
+  const flag = countryCodeToFlagEmoji(recipient.country ?? "")
+  const countryCode = convertIso3ToIso2(recipient.country as ISO3)
+  const flagImage = `https://hatscripts.github.io/circle-flags/flags/${countryCode.toLowerCase()}.svg`
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -129,7 +138,7 @@ const QuoteScreen = () => {
           <View style={styles.balanceCard}>
             <View style={styles.currencyRow}>
               <View style={styles.currencyIconContainer}>
-                <Text style={styles.currencyIcon}>$</Text>
+                <USDC_ICON width={30} height={30} />
               </View>
               <Text style={styles.currencyCode}>USDC</Text>
               <TextInput
@@ -153,7 +162,13 @@ const QuoteScreen = () => {
           <View style={styles.balanceCard}>
             <View style={styles.currencyRow}>
               <View style={styles.currencyIconContainer}>
-                <Text style={styles.currencyIcon}>🇨🇴</Text>
+
+                <SvgUri
+                  width={30}
+                  height={30}
+                  uri={flagImage}
+                />
+
               </View>
               <Text style={styles.currencyCode}>{currency}</Text>
               <Text style={styles.amount}>
@@ -243,8 +258,6 @@ const styles = StyleSheet.create({
   currencyIconContainer: {
     width: 40,
     height: 40,
-    borderRadius: 20,
-    backgroundColor: "#007AFF",
     justifyContent: "center",
     alignItems: "center",
     marginRight: 12,

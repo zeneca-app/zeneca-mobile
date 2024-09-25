@@ -15,10 +15,14 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
+import useQuoteStore from "../../storage/quoteStore";
+import { formatCurrency, CURRENCY_BY_COUNTRY, CurrencyCode } from "../../utils/currencyUtils";
+import useRecipientStore from "../../storage/recipientStore";
+import { Country } from "../../client";
 
 
 const DetailRow = ({ label, value, secondaryValue, valueStyle, bold }:
-    { label: string, value: string, secondaryValue: string, valueStyle: any, bold: boolean }) => (
+    { label: string, value: string, secondaryValue: string | null, valueStyle: any, bold: boolean }) => (
     <View style={styles.detailRow}>
         <Text style={styles.detailLabel}>{label}</Text>
         <View>
@@ -28,18 +32,32 @@ const DetailRow = ({ label, value, secondaryValue, valueStyle, bold }:
     </View>
 );
 
-const SentReceiptScreen = ({ route }) => {
+const SentReceiptScreen = () => {
     const navigation = useNavigation();
     const { t } = useTranslation();
+
+    const { quote } = useQuoteStore((state) => ({
+        quote: state.quote,
+    }));
+
+    const { recipient } = useRecipientStore((state) => ({
+        recipient: state.recipient,
+    }));
+
+    const truncateId = (id: string) => {
+        if (id.length <= 8) return id;
+        return `${id.slice(0, 4)}...${id.slice(-4)}`;
+    };
 
     const capitalizeFirstLetter = (string: string) => {
         return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
     };
 
-    // Assume these values are passed through route.params or fetched from an API
-    const { amount_out, amount_in, recipient, date, bankAccount, reference, status, fee, total } = route.params;
-    const currency = "USDC"
-    const fee_cop = amount_out * 4183.13
+    const currency = CURRENCY_BY_COUNTRY[recipient.country as Country].toUpperCase() as CurrencyCode
+
+    const handleDone = () => {
+        navigation.navigate("MainTabs");
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -48,23 +66,35 @@ const SentReceiptScreen = ({ route }) => {
             </TouchableOpacity>
             <Text style={styles.headerText}>{t("sentReceipt.headerText")}</Text>
             <Text style={styles.amountText}>
-                {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(route.params.amount_out)} COP
+                {formatCurrency(quote.amount_out, "COP")}
             </Text>
             <Text style={styles.recipient}>
-                {t("sentReceipt.recipient_label")} <Text style={styles.recipientName}>{capitalizeFirstLetter(route.params.recipient.name)}</Text>
+                {t("sentReceipt.recipient_label")} <Text style={styles.recipientName}>{capitalizeFirstLetter(recipient.name)}</Text>
             </Text>
 
             <View style={styles.detailsContainer}>
-                <DetailRow label={date} value={date} />
-                <DetailRow label={bankAccount} value={bankAccount} />
-                <DetailRow label={reference} value={reference} />
-                <DetailRow label={status} value={status} valueStyle={styles.statusText} />
+                <DetailRow label={t("sentReceipt.date")} value={quote.expires_at} />
+                <DetailRow label={t("sentReceipt.accountNumber")} value={recipient.external_account.account_number ?? ""} />
+                <DetailRow label={t("sentReceipt.reference")} value={truncateId(quote.id)} />
+                <DetailRow label={t("sentReceipt.status")} value={"PENDING"} valueStyle={styles.statusText} />
             </View>
 
             <View style={styles.summaryContainer}>
-                <DetailRow label={`USDC → COP`} value={`${amount_in} ${currency}`} secondaryValue={`${amount_out} COP`} />
-                <DetailRow label={t("sentReceipt.fee")} value={`${fee} ${currency}`} secondaryValue={`${fee_cop} COP`} />
-                <DetailRow label={t("sentReceipt.totalCost")} value={`${total} ${currency}`} bold />
+
+                <DetailRow label={t("sentReceipt.fee")} value={`${quote.fee} ${currency}`} secondaryValue={`${quote.fee} ${currency}`} />
+                <DetailRow label={t("sentReceipt.totalCost")} value={`${quote.amount_in} ${currency}`} bold />
+            </View>
+            <View style={styles.bottomSection}>
+
+                <TouchableOpacity
+                    onPress={handleDone}
+                    style={styles.doneButton}>
+
+                    <Text
+                        style={styles.doneButtonText}
+
+                    >{t("sentReceipt.doneButtonText")}</Text>
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
     );
@@ -143,6 +173,29 @@ const styles = StyleSheet.create({
     },
     boldText: {
         fontWeight: 'bold',
+    },
+    bottomSection: {
+        alignItems: 'center',
+    },
+    warning: {
+        color: "#666",
+        textAlign: 'center',
+        marginBottom: 16,
+        paddingHorizontal: 20,
+    },
+    doneButton: {
+        backgroundColor: "white",
+        borderRadius: 8,
+        padding: 16,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+    },
+    doneButtonText: {
+        marginLeft: 8, // Add left margin to create space between icon and text
+        color: "black",
+        fontWeight: "bold",
     },
 });
 
