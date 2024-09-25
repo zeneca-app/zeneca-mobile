@@ -36,7 +36,7 @@ const SummaryRow = ({ label, value, secondaryValue }: { label: string, value: st
 
 const { height } = Dimensions.get('window');
 
-const SentReceiptScreen = () => {
+const TransactionReceiptScreen = () => {
     const navigation = useNavigation();
     const { t } = useTranslation();
     const { quote } = useQuoteStore((state) => ({ quote: state.quote }));
@@ -184,4 +184,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SentReceiptScreen;
+export default TransactionReceiptScreen;
