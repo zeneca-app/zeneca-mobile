@@ -2,7 +2,7 @@ import { Country, Currency } from "../client";
 
 export type CurrencyCode = "USD" | "COP" | "MXN" | "EUR";
 
-const currencyLocales: Record<CurrencyCode, string> = {
+export const currencyLocales: Record<CurrencyCode, string> = {
   USD: "en-US",
   COP: "es-CO",
   MXN: "es-MX",
@@ -35,18 +35,20 @@ export const formatCurrency = (
 };
 
 const CURRENCY: Record<string, Currency> = {
-  EUR: "eur",
-  USD: "usd",
-  COP: "cop",
-  MXN: "mxn",
-  BRL: "brl",
-  ARS: "ars",
+  EUR: "EUR",
+  USD: "USD",
+  COP: "COP",
+  MXN: "MXN",
+  BRL: "BRL",
+  ARS: "ARS",
+  PAN: "USD",
 } as const;
 
 export const CURRENCY_BY_COUNTRY: Record<Country, Currency> = {
-  col: CURRENCY.COP,
-  mex: CURRENCY.MXN,
-  br: CURRENCY.BRL,
-  ar: CURRENCY.ARS,
-  us: CURRENCY.USD,
+  COL: CURRENCY.COP,
+  MEX: CURRENCY.MXN,
+  BRA: CURRENCY.BRL,
+  ARG: CURRENCY.ARS,
+  USA: CURRENCY.USD,
+  PAN: CURRENCY.USD,
 };

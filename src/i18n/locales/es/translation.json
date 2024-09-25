@@ -33,8 +33,13 @@
   "sentReceipt": {
     "headerText": "Enviaste",
     "recipient_label": "a",
+    "date": "Fecha",
+    "accountNumber": "Número de cuenta",
+    "reference": "Referencia",
+    "status": "Estatus",
     "fee": "Comisión",
-    "totalCost": "Costo total"
+    "totalCost": "Costo total",
+    "doneButtonText": "Listo"
   },
   "faceId": {
     "prompt": "Confirma con tu Face ID",
