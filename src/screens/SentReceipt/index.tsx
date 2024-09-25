@@ -66,7 +66,7 @@ const SentReceiptScreen = () => {
             </TouchableOpacity>
             <Text style={styles.headerText}>{t("sentReceipt.headerText")}</Text>
             <Text style={styles.amountText}>
-                {formatCurrency(quote.amount_out, "COP")}
+                {formatCurrency(quote.amount_out, currency)}
             </Text>
             <Text style={styles.recipient}>
                 {t("sentReceipt.recipient_label")} <Text style={styles.recipientName}>{capitalizeFirstLetter(recipient.name)}</Text>
@@ -80,12 +80,10 @@ const SentReceiptScreen = () => {
             </View>
 
             <View style={styles.summaryContainer}>
-
-                <DetailRow label={t("sentReceipt.fee")} value={`${quote.fee} ${currency}`} secondaryValue={`${quote.fee} ${currency}`} />
-                <DetailRow label={t("sentReceipt.totalCost")} value={`${quote.amount_in} ${currency}`} bold />
+                <DetailRow label={t("sentReceipt.fee")} value={`${quote.fee} USDC`} secondaryValue={`${quote.fee} USDC`} />
+                <DetailRow label={t("sentReceipt.totalCost")} value={`${quote.amount_in} ${quote.source}`} bold />
             </View>
             <View style={styles.bottomSection}>
-
                 <TouchableOpacity
                     onPress={handleDone}
                     style={styles.doneButton}>

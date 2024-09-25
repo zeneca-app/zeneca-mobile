@@ -22,9 +22,9 @@
   },
   "quoteConfirmation": {
     "title": "Vas a enviar",
-    "amount": "Cantidad",
+    "amount": "Monto",
     "exchangeRate": "Tipo de cambio",
-    "totalCost": "Costo total",
+    "total": "Total",
     "disclaimer": "Al confirmar, se enviarán los fondos a la cuenta de destino. Asegúrate de que la información sea correcta antes de continuar.",
     "fee": "Comisión",
     "timerDescription": "Tasa se actualizará en",
@@ -38,7 +38,7 @@
     "reference": "Referencia",
     "status": "Estatus",
     "fee": "Comisión",
-    "totalCost": "Costo total",
+    "total": "Total",
     "doneButtonText": "Listo"
   },
   "faceId": {

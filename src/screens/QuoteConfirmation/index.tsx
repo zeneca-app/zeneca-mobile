@@ -78,16 +78,16 @@ const QuoteConfirmationScreen = () => {
 
                 <View style={styles.detailsContainer}>
                     <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>{t("quoteConfirmation.exchangeRate")}</Text>
-                        <Text style={styles.detailValue}>{formatCurrency(quote.amount_out, currency as CurrencyCode)} {currency} </Text>
+                        <Text style={styles.detailLabel}>{t("quoteConfirmation.amount")}</Text>
+                        <Text style={styles.detailValue}>{quote.amount_in} USDC</Text>
                     </View>
                     <View style={styles.detailRow}>
                         <Text style={styles.detailLabel}>{t("quoteConfirmation.fee")}</Text>
                         <Text style={styles.detailValue}>{quote.fee} USDC</Text>
                     </View>
                     <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>{t("quoteConfirmation.totalCost")}</Text>
-                        <Text style={styles.detailValue}>{quote.amount_in} USDC</Text>
+                        <Text style={styles.detailLabel}>{t("quoteConfirmation.total")}</Text>
+                        <Text style={styles.detailValue}>{formatCurrency(quote.amount_out, currency as CurrencyCode)} {currency} </Text>
                     </View>
                 </View>
 
