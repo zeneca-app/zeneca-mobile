@@ -27,6 +27,7 @@
     "total": "Total",
     "disclaimer": "Verifica que los datos del destinatario sean correctos. Esta transacción no se puede cancelar, recuperar ni reembolsar.",
     "fee": "Comisión",
+    "accountNumber": "Número de cuenta",
     "timerDescription": "Tasa se actualizará en",
     "confirm": "Confirmar y enviar"
   },
