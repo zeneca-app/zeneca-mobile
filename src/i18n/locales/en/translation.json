@@ -25,7 +25,7 @@
     "amount": "Amount",
     "exchangeRate": "Exchange rate",
     "total": "Total",
-    "disclaimer": "By confirming, you will send the funds to the destination account. Make sure the information is correct before continuing.",
+    "disclaimer": "Verify that the recipient's data is correct. This transaction cannot be canceled, recovered, or reimbursed.",
     "fee": "Fee",
     "timerDescription": "Exchange rate will update in",
     "confirm": "Confirm and send"
