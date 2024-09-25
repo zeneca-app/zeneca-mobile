@@ -59,7 +59,7 @@ const QuoteScreen = () => {
           destination: currencySelected,
           amount_in: amount,
           recipient_id: recipient.id,
-          payment_rail: "wire",
+          payment_rail: "ach",
         },
       }),
     onSuccess: (data) => {
