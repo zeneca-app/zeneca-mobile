@@ -27,6 +27,7 @@
     "total": "Total",
     "disclaimer": "Verify that the recipient's data is correct. This transaction cannot be canceled, recovered, or reimbursed.",
     "fee": "Fee",
+    "accountNumber": "Account number",
     "timerDescription": "Exchange rate will update in",
     "confirm": "Confirm and send"
   },
