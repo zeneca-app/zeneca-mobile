@@ -184,7 +184,7 @@ const QuoteScreen = () => {
 
         </View>
         <View style={styles.buttonContainer}>
-          <Text style={styles.arrivalText}>{t("quote.arrival")}</Text>
+         {/*  <Text style={styles.arrivalText}>{t("quote.arrival")}</Text> */}
           <TouchableOpacity
             style={[
               styles.continueButton,
