@@ -54,11 +54,16 @@ const TransactionReceiptScreen = () => {
             <View style={styles.modalOverlay}>
                 <View style={styles.modalContainer}>
                     {/*  <View style={styles.handleBar} /> */}
-                    <Feather name="arrow-up-right" size={20} color="white" />
+                    <View style={styles.iconContainer}>
+                        <Feather name="arrow-up-right" size={24} color="white" />
+                    </View>
                     <Text style={styles.headerText}>{t("sentReceipt.headerText")}</Text>
-                    <Text style={styles.amountText}>
-                        {formatCurrency(quote.amount_out, currency)}
-                    </Text>
+                    <View style={styles.amountContainer}>
+                        <Text style={styles.amountText}>
+                            ${formatCurrency(quote.amount_out, currency)}
+                        </Text>
+                        <Text style={styles.currencySymbol}>{currency}</Text>
+                    </View>
                     <Text style={styles.recipient}>
                         {t("sentReceipt.recipient_label")} <Text style={styles.recipientName}>{recipient.name}</Text>
                     </Text>
@@ -117,16 +122,36 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginBottom: 10,
     },
+    iconContainer: {
+        width: 48,
+        height: 48,
+        borderRadius: 24,
+        backgroundColor: '#000', // Adjust the color as needed
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 24, // Position the icon to overlap the top of the modal
+        marginBottom: 16,
+    },
     headerText: {
         color: '#888',
-        fontSize: 18,
-        marginTop: 60,
+        fontSize: 14,
+        marginTop: 12,
+    },
+    amountContainer: {
+        flexDirection: 'row',
+        alignItems: 'flex-end',
     },
     amountText: {
         color: '#fff',
-        fontSize: 36,
+        fontSize: 38,
         fontWeight: 'bold',
         marginTop: 10,
+        fontFamily: "Manrope_600SemiBold",
+    },
+    currencySymbol: {
+        color: '#888',
+        fontSize: 16,
+        marginLeft: 12,
     },
     recipient: {
         color: '#888',
@@ -138,7 +163,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     detailsContainer: {
-        marginTop: 30,
+        marginTop: 55,
     },
     detailRow: {
         flexDirection: 'row',
@@ -147,7 +172,7 @@ const styles = StyleSheet.create({
     },
     detailLabel: {
         color: '#888',
-        fontSize: 16,
+        fontSize: 14,
     },
     detailValue: {
         color: '#fff',
@@ -170,7 +195,7 @@ const styles = StyleSheet.create({
     },
     summaryLabel: {
         color: '#888',
-        fontSize: 16,
+        fontSize: 14,
     },
     summaryValue: {
         color: '#fff',
