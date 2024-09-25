@@ -6,7 +6,7 @@ export type RootStackParamList = {
   Recipients: undefined;
   Quote: undefined;
   QuoteConfirmation: undefined;
-  SentReceipt: undefined;
+  TransactionReceipt: undefined;
   MainTabs: undefined;
 };
 

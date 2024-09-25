@@ -89,10 +89,14 @@ const QuoteConfirmationScreen = () => {
                         <Text style={styles.detailLabel}>{t("quoteConfirmation.total")}</Text>
                         <Text style={styles.detailValue}>{formatCurrency(quote.amount_out, currency as CurrencyCode)} {currency} </Text>
                     </View>
+
+                </View>
+                <View style={styles.timerContainer}>
+                    <Text style={styles.timer}>{t("quoteConfirmation.timerDescription")} {30}seg</Text>
                 </View>
 
                 <View style={styles.bottomSection}>
-                    <Text style={styles.timer}>{t("quoteConfirmation.timerDescription")} {30}seg</Text>
+
                     <Text style={styles.warning}>{t("quoteConfirmation.disclaimer")}</Text>
                     <TouchableOpacity
                         onPress={handleContinue}
@@ -105,7 +109,7 @@ const QuoteConfirmationScreen = () => {
                     </TouchableOpacity>
                 </View>
             </View>
-        </SafeAreaView>
+        </SafeAreaView >
     );
 };
 
@@ -148,6 +152,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#1C1C1E",
         borderRadius: 8,
         padding: 16,
+        marginBottom: 20,
     },
     detailRow: {
         flexDirection: 'row',
@@ -162,6 +167,10 @@ const styles = StyleSheet.create({
     },
     bottomSection: {
         alignItems: 'center',
+    },
+    timerContainer: {
+        alignItems: 'center',
+        marginBottom: 20, // Add some bottom margin
     },
     timer: {
         color: "#666",
