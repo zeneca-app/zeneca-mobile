@@ -3,7 +3,7 @@ import { createJSONStorage, devtools, persist } from "zustand/middleware";
 import { RecipientReadWithExternalAccount } from "../client";
 import zustandStorage from "./storage";
 
-interface TransactionState {
+interface RecipientState {
   recipient: RecipientReadWithExternalAccount;
   setRecipient: (recipient: RecipientReadWithExternalAccount) => void;
   resetAll: () => void;
@@ -13,7 +13,7 @@ const initialState = {
   recipient: {} as RecipientReadWithExternalAccount,
 };
 
-const useTransactionStore = create<TransactionState>()(
+const useRecipientStore = create<RecipientState>()(
   devtools(
     persist(
       (set) => ({
@@ -22,11 +22,11 @@ const useTransactionStore = create<TransactionState>()(
         resetAll: () => set(() => initialState),
       }),
       {
-        name: "transaction-storage",
+        name: "recipient-storage",
         storage: createJSONStorage(() => zustandStorage),
       },
     ),
   ),
 );
 
-export default useTransactionStore;
+export default useRecipientStore;

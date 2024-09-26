@@ -17,24 +17,30 @@
   "quote": {
     "available": "Available",
     "continue": "Continue",
-    "arrival": "will arrive in approx 20 min",
+    "arrival": "will arrive in approx",
     "fee": "Fee"
   },
   "quoteConfirmation": {
     "title": "You are sending",
     "amount": "Amount",
     "exchangeRate": "Exchange rate",
-    "totalCost": "Total cost",
-    "disclaimer": "By confirming, you will send the funds to the destination account. Make sure the information is correct before continuing.",
+    "total": "Total",
+    "disclaimer": "Verify that the recipient's data is correct. This transaction cannot be canceled, recovered, or reimbursed.",
     "fee": "Fee",
+    "accountNumber": "Account number",
     "timerDescription": "Exchange rate will update in",
     "confirm": "Confirm and send"
   },
   "sentReceipt": {
     "headerText": "Sent",
     "recipient_label": "to",
+    "date": "Date",
+    "accountNumber": "Account number",
+    "reference": "Reference",
+    "status": "Status",
     "fee": "Fee",
-    "totalCost": "Total cost"
+    "total": "Total",
+    "doneButtonText": "Done"
   },
   "faceId": {
     "prompt": "Confirm with your Face ID",
