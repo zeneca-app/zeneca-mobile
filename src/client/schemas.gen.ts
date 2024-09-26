@@ -22,7 +22,7 @@ export const AddressSchema = {
             title: 'City'
         },
         country: {
-            '$ref': '#/components/schemas/CountryIsoCode3'
+            '$ref': '#/components/schemas/Country'
         },
         state: {
             type: 'string',
@@ -381,7 +381,7 @@ export const BusinessTypeSchema = {
 
 export const CountrySchema = {
     type: 'string',
-    enum: ['us', 'col', 'mex', 'br', 'ar'],
+    enum: ['USA', 'COL', 'MEX', 'BRA', 'ARG', 'PAN'],
     title: 'Country'
 } as const;
 
@@ -413,15 +413,9 @@ export const CountryBaseSchema = {
     title: 'CountryBase'
 } as const;
 
-export const CountryIsoCode3Schema = {
-    type: 'string',
-    enum: ['USA', 'COL', 'MEX', 'BRA', 'ARG'],
-    title: 'CountryIsoCode3'
-} as const;
-
 export const CurrencySchema = {
     type: 'string',
-    enum: ['eur', 'usd', 'cop', 'mxn', 'brl', 'ars'],
+    enum: ['USD', 'COP', 'EUR', 'MXN', 'BRL', 'ARS'],
     title: 'Currency'
 } as const;
 
@@ -827,7 +821,7 @@ export const IndividualReadSchema = {
 
 export const KYCCountrySchema = {
     type: 'string',
-    enum: ['col', 'pe', 'pa', 'mex', 'br', 'ar', 'cl'],
+    enum: ['US', 'CO', 'PE', 'PA', 'MX', 'BR', 'AR', 'CL'],
     title: 'KYCCountry'
 } as const;
 
@@ -915,17 +909,13 @@ export const QuoteReadSchema = {
             ],
             title: 'Network Fee'
         },
-        developer_fee: {
-            type: 'integer',
-            title: 'Developer Fee'
-        },
         zeneca_fee: {
             type: 'integer',
             title: 'Zeneca Fee'
         },
-        partner_fee: {
+        fee: {
             type: 'integer',
-            title: 'Partner Fee'
+            title: 'Fee'
         },
         external_id: {
             anyOf: [
@@ -949,15 +939,10 @@ export const QuoteReadSchema = {
                 }
             ],
             title: 'Recipient Id'
-        },
-        fee: {
-            type: 'integer',
-            title: 'Fee',
-            readOnly: true
         }
     },
     type: 'object',
-    required: ['id', 'source', 'destination', 'amount_in', 'amount_out', 'exchange_rate', 'expires_at', 'network_fee', 'developer_fee', 'zeneca_fee', 'partner_fee', 'external_id', 'recipient_id', 'fee'],
+    required: ['id', 'source', 'destination', 'amount_in', 'amount_out', 'exchange_rate', 'expires_at', 'network_fee', 'zeneca_fee', 'fee', 'external_id', 'recipient_id'],
     title: 'QuoteRead'
 } as const;
 
@@ -1122,11 +1107,11 @@ export const RecipientRequestSchema = {
     discriminator: {
         propertyName: 'country',
         mapping: {
-            ar: '#/components/schemas/RecipientRequestLatam',
-            br: '#/components/schemas/RecipientRequestBR',
-            col: '#/components/schemas/RecipientRequestLatam',
-            mex: '#/components/schemas/RecipientRequestLatam',
-            us: '#/components/schemas/RecipientRequestUS'
+            ARG: '#/components/schemas/RecipientRequestLatam',
+            BRA: '#/components/schemas/RecipientRequestBR',
+            COL: '#/components/schemas/RecipientRequestLatam',
+            MEX: '#/components/schemas/RecipientRequestLatam',
+            USA: '#/components/schemas/RecipientRequestUS'
         }
     }
 } as const;
@@ -1146,8 +1131,8 @@ export const RecipientRequestBRSchema = {
         },
         country: {
             type: 'string',
-            enum: ['br'],
-            const: 'br',
+            enum: ['BRA'],
+            const: 'BRA',
             title: 'Country'
         },
         owner: {
@@ -1183,7 +1168,7 @@ export const RecipientRequestLatamSchema = {
         },
         country: {
             type: 'string',
-            enum: ['col', 'mex', 'ar'],
+            enum: ['COL', 'MEX', 'ARG'],
             title: 'Country'
         },
         owner: {
@@ -1219,8 +1204,8 @@ export const RecipientRequestUSSchema = {
         },
         country: {
             type: 'string',
-            enum: ['us'],
-            const: 'us',
+            enum: ['USA'],
+            const: 'USA',
             title: 'Country'
         },
         owner: {
@@ -1243,7 +1228,7 @@ export const RecipientRequestUSSchema = {
 
 export const TokenSymbolSchema = {
     type: 'string',
-    enum: ['usdc.polygon', 'usdc.base'],
+    enum: ['usdc.polygon', 'usdc.base', 'usdc.stellar'],
     title: 'TokenSymbol'
 } as const;
 

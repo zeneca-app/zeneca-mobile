@@ -4,7 +4,7 @@ export type Address = {
     street_line_1: string;
     street_line_2?: (string | null);
     city: string;
-    country: CountryIsoCode3;
+    country: Country;
     state: string;
     postal_code: string;
 };
@@ -94,7 +94,7 @@ export type BusinessRead = {
 
 export type BusinessType = 'cooperative' | 'corporation' | 'llc' | 'solo_prop' | 'partnership' | 'trust' | 'other';
 
-export type Country = 'us' | 'col' | 'mex' | 'br' | 'ar';
+export type Country = 'USA' | 'COL' | 'MEX' | 'BRA' | 'ARG' | 'PAN';
 
 export type CountryBase = {
     name_iso: string;
@@ -104,9 +104,7 @@ export type CountryBase = {
     is_supported: boolean;
 };
 
-export type CountryIsoCode3 = 'USA' | 'COL' | 'MEX' | 'BRA' | 'ARG';
-
-export type Currency = 'eur' | 'usd' | 'cop' | 'mxn' | 'brl' | 'ars';
+export type Currency = 'USD' | 'COP' | 'EUR' | 'MXN' | 'BRL' | 'ARS';
 
 export type CustomerCreateIn = {
     email: string;
@@ -192,7 +190,7 @@ export type IndividualRead = {
     gov_id_image_back: (string | null);
 };
 
-export type KYCCountry = 'col' | 'pe' | 'pa' | 'mex' | 'br' | 'ar' | 'cl';
+export type KYCCountry = 'US' | 'CO' | 'PE' | 'PA' | 'MX' | 'BR' | 'AR' | 'CL';
 
 export type LoginEmailOtpIn = {
     email: string;
@@ -216,12 +214,10 @@ export type QuoteRead = {
     exchange_rate: number;
     expires_at: number;
     network_fee: (number | null);
-    developer_fee: number;
     zeneca_fee: number;
-    partner_fee: number;
+    fee: number;
     external_id: (string | null);
     recipient_id: (string | null);
-    readonly fee: number;
 };
 
 export type QuoteRequest = {
@@ -252,7 +248,7 @@ export type RecipientRequest = RecipientRequestLatam | RecipientRequestBR | Reci
 
 export type RecipientRequestBR = {
     name: (string | null);
-    country: 'br';
+    country: 'BRA';
     owner: boolean;
     external_account: ExternalAccountBR;
     customer_id: string;
@@ -260,7 +256,7 @@ export type RecipientRequestBR = {
 
 export type RecipientRequestLatam = {
     name: (string | null);
-    country: 'mex';
+    country: 'MEX';
     owner: boolean;
     external_account: ExternalAccountLatam;
     customer_id: string;
@@ -268,13 +264,13 @@ export type RecipientRequestLatam = {
 
 export type RecipientRequestUS = {
     name: (string | null);
-    country: 'us';
+    country: 'USA';
     owner: boolean;
     external_account: ExternalAccountUS;
     customer_id: string;
 };
 
-export type TokenSymbol = 'usdc.polygon' | 'usdc.base';
+export type TokenSymbol = 'usdc.polygon' | 'usdc.base' | 'usdc.stellar';
 
 export type TransactionRead = {
     id: string;
