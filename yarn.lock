@@ -2310,6 +2310,11 @@
   dependencies:
     "@tanstack/query-core" "5.55.4"
 
+"@trustedshops-public/js-iso3166-converter@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@trustedshops-public/js-iso3166-converter/-/js-iso3166-converter-1.2.1.tgz#dd34ac3f5a7d7d6c027017adcb65dc1406f139cf"
+  integrity sha512-DFBgS8s7fnSy9GuXgrWbutZcFINMYDFXAsm1rfG+KPwIUTem9MDH1hgTSKlkj9UK0EQtShV75y87o3tkUka+Og==
+
 "@trysound/sax@0.2.0":
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@trysound/sax/-/sax-0.2.0.tgz#cccaab758af56761eb7bf37af6f03f326dd798ad"

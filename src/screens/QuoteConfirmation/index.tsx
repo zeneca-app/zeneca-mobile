@@ -1,6 +1,7 @@
+import { useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import countryCodeToFlagEmoji from "country-code-to-flag-emoji";
 import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -14,17 +15,60 @@ import {
     View,
 } from "react-native";
 
-import useTransactionStore from "../../storage/transactionStore";
+import useRecipientStore from "../../storage/recipientStore";
+import useQuoteStore from "../../storage/quoteStore";
 import * as LocalAuthentication from 'expo-local-authentication';
 import FaceIdIcon from "../../../assets/face-id.svg";
+import { formatCurrency, CURRENCY_BY_COUNTRY, CurrencyCode } from "../../utils/currencyUtils";
+import { Country } from "../../client";
+import { quotesCreateQuote, QuoteRead } from "../../client";
 
-const QuoteConfirmationScreen = ({ route }) => {
+
+const capitalizeFirstLetter = (string: string) => {
+    return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+};
+
+const QuoteConfirmationScreen = () => {
     const navigation = useNavigation();
     const { t } = useTranslation();
 
-    const capitalizeFirstLetter = (string: string) => {
-        return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+    const { recipient } = useRecipientStore((state) => ({
+        recipient: state.recipient,
+    }));
+
+    const { quote } = useQuoteStore((state) => ({
+        quote: state.quote,
+    }));
+
+    const calculateTimeLeft = () => {
+        const now = Math.floor(Date.now() / 1000); // Current time in seconds
+        const timeLeft = quote.expires_at - now;
+        return timeLeft > 0 ? timeLeft : 0;
     };
+
+    const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+    const currency = CURRENCY_BY_COUNTRY[recipient.country as Country].toUpperCase() as CurrencyCode
+
+    const mutation = useMutation({
+        mutationFn: () =>
+            quotesCreateQuote({
+                body: {
+                    source: "usdc.polygon",
+                    destination: currency,
+                    amount_in: quote.amount_in,
+                    recipient_id: recipient.id,
+                    payment_rail: "ach",
+                },
+            }),
+        onSuccess: (data) => {
+
+        },
+        onError: (error) => {
+            console.log("error quote", error)
+
+        },
+    });
 
     const handleContinue = async () => {
         try {
@@ -34,13 +78,7 @@ const QuoteConfirmationScreen = ({ route }) => {
             });
 
             if (result.success) {
-                navigation.navigate("SentReceipt", {
-                    amount_in: route.params.amount_in,
-                    amount_out: route.params.amount_out,
-                    recipient: route.params.recipient,
-                    fee: route.params.fee,
-                    total: total,
-                });
+                navigation.navigate("TransactionReceipt");
             } else {
                 // Handle authentication failure
                 console.log("Authentication failed");
@@ -50,8 +88,21 @@ const QuoteConfirmationScreen = ({ route }) => {
         }
     };
 
-    const total = parseFloat(route.params.amount_in) + parseFloat(route.params.fee)
+    const formatTime = (seconds: number) => {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    };
 
+    useEffect(() => {
+        if (timeLeft <= 0) return;
+
+        const timerId = setInterval(() => {
+            setTimeLeft(calculateTimeLeft());
+        }, 1000);
+
+        return () => clearInterval(timerId);
+    }, [timeLeft]);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -64,35 +115,46 @@ const QuoteConfirmationScreen = ({ route }) => {
                 <View>
                     <Text style={styles.title}>{t("quoteConfirmation.title")}</Text>
                     <Text style={styles.amount}>
-                        {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(route.params.amount_out)} COP
+                        {formatCurrency(quote.amount_out, currency as CurrencyCode, true)}
                     </Text>
                     <Text style={styles.recipient}>
-                        a <Text style={styles.recipientName}>{capitalizeFirstLetter(route.params.recipient.name)}</Text>
+                        a <Text style={styles.recipientName}>{capitalizeFirstLetter(recipient.name)}</Text>
                     </Text>
                 </View>
 
                 <View style={styles.detailsContainer}>
                     <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>{t("quoteConfirmation.exchangeRate")}</Text>
-                        <Text style={styles.detailValue}>{route.params.amount_in} USDC</Text>
-                    </View>
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>{t("quoteConfirmation.fee")}</Text>
-                        <Text style={styles.detailValue}>{route.params.fee} USDC</Text>
-                    </View>
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>{t("quoteConfirmation.totalCost")}</Text>
-                        <Text style={styles.detailValue}>{total} USDC</Text>
+                        <Text style={styles.detailLabel}>{t("quoteConfirmation.accountNumber")}</Text>
+                        <Text style={styles.detailValue}>{recipient.external_account.account_number ?? ""}</Text>
                     </View>
                 </View>
 
+                <View style={styles.detailsContainer}>
+                    <View style={styles.detailRow}>
+                        <Text style={styles.detailLabel}>{t("quoteConfirmation.amount")}</Text>
+                        <Text style={styles.detailValue}>{quote.amount_in} USDC</Text>
+                    </View>
+                    <View style={styles.detailRow}>
+                        <Text style={styles.detailLabel}>{t("quoteConfirmation.fee")}</Text>
+                        <Text style={styles.detailValue}>{quote.fee} USDC</Text>
+                    </View>
+                    <View style={styles.detailRow}>
+                        <Text style={styles.detailLabel}>{t("quoteConfirmation.total")}</Text>
+                        <Text style={styles.detailValue}>{formatCurrency(quote.amount_out, currency as CurrencyCode)} {currency} </Text>
+                    </View>
+                </View>
+
+                <View style={styles.timerContainer}>
+                    <Text style={styles.timer}>{t("quoteConfirmation.timerDescription")} {formatTime(timeLeft)}</Text>
+                </View>
+
                 <View style={styles.bottomSection}>
-                    <Text style={styles.timer}>{t("quoteConfirmation.timerDescription")} {30}seg</Text>
+
                     <Text style={styles.warning}>{t("quoteConfirmation.disclaimer")}</Text>
                     <TouchableOpacity
                         onPress={handleContinue}
                         style={styles.confirmButton}>
-                        <FaceIdIcon width={24} height={24}/>
+                        <FaceIdIcon width={24} height={24} />
                         <Text
                             style={styles.confirmButtonText}
 
@@ -100,7 +162,7 @@ const QuoteConfirmationScreen = ({ route }) => {
                     </TouchableOpacity>
                 </View>
             </View>
-        </SafeAreaView>
+        </SafeAreaView >
     );
 };
 
@@ -143,6 +205,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#1C1C1E",
         borderRadius: 8,
         padding: 16,
+        marginBottom: 20,
     },
     detailRow: {
         flexDirection: 'row',
@@ -157,6 +220,10 @@ const styles = StyleSheet.create({
     },
     bottomSection: {
         alignItems: 'center',
+    },
+    timerContainer: {
+        alignItems: 'center',
+        marginBottom: 20, // Add some bottom margin
     },
     timer: {
         color: "#666",

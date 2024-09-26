@@ -17,12 +17,12 @@ import {
   RecipientReadWithExternalAccount,
   recipientsGetRecipients,
 } from "../../client";
-import useTransactionStore from "../../storage/transactionStore";
+import useRecipientStore from "../../storage/recipientStore";
 
 const RecipientsScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigation = useNavigation();
-  const { setRecipient } = useTransactionStore((state) => ({
+  const { setRecipient } = useRecipientStore((state) => ({
     setRecipient: state.setRecipient,
   }));
   const { t } = useTranslation();

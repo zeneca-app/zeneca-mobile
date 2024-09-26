@@ -17,24 +17,30 @@
   "quote": {
     "available": "Disponible",
     "continue": "Continuar",
-    "arrival": "Puede llegar en aprox 20 min",
+    "arrival": "Puede llegar en aprox",
     "fee": "Comisión"
   },
   "quoteConfirmation": {
     "title": "Vas a enviar",
-    "amount": "Cantidad",
+    "amount": "Monto",
     "exchangeRate": "Tipo de cambio",
-    "totalCost": "Costo total",
-    "disclaimer": "Al confirmar, se enviarán los fondos a la cuenta de destino. Asegúrate de que la información sea correcta antes de continuar.",
+    "total": "Total",
+    "disclaimer": "Verifica que los datos del destinatario sean correctos. Esta transacción no se puede cancelar, recuperar ni reembolsar.",
     "fee": "Comisión",
+    "accountNumber": "Número de cuenta",
     "timerDescription": "Tasa se actualizará en",
     "confirm": "Confirmar y enviar"
   },
   "sentReceipt": {
     "headerText": "Enviaste",
     "recipient_label": "a",
+    "date": "Fecha",
+    "accountNumber": "Número de cuenta",
+    "reference": "Referencia",
+    "status": "Estatus",
     "fee": "Comisión",
-    "totalCost": "Costo total"
+    "total": "Total",
+    "doneButtonText": "Listo"
   },
   "faceId": {
     "prompt": "Confirma con tu Face ID",
