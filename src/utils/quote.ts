@@ -14,6 +14,7 @@ export type Quote = {
   fee: string;
   external_id: string | null;
   recipient_id: string | null;
+  payment_rail: string | null;
 };
 
 export const formatQuoteToNumber = (quote: QuoteRead): Quote => {
