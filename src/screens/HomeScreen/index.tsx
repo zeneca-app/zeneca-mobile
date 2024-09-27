@@ -81,8 +81,12 @@ const HomeScreen = () => {
       return "+" + formatted
     }
 
+    const handlePress = () => {
+      navigation.navigate("TransactionReceipt", { transactionId: item.id });
+    };
+
     return (
-      <View style={styles.transactionItem}>
+      <TouchableOpacity style={styles.transactionItem} onPress={handlePress}>
         <View style={styles.transactionLeft}>
           <View style={styles.transactionIcon}>
             {isWithdrawal ? (
@@ -104,7 +108,7 @@ const HomeScreen = () => {
         >
           {isWithdrawal ? formatWithdrawal(item.destination.toUpperCase(), item.amount_out) : formatDeposit(item.source.toUpperCase(), item.amount_in)}
         </Text>
-      </View>
+      </TouchableOpacity>
     );
   }, []);
 

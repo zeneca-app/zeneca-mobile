@@ -146,11 +146,13 @@ const AppIndex = () => {
                   name="QuoteConfirmation"
                   component={QuoteConfirmationScreen}
                 />
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="TransactionReceipt"
-                  component={TransactionReceiptScreen}
-                />
+                <Stack.Group screenOptions={{ presentation: 'modal'}}>
+                  <Stack.Screen
+                    name="TransactionReceipt"
+                    options={{ headerShown: false }}
+                    component={TransactionReceiptScreen}
+                  />
+                </Stack.Group>
                 <Stack.Screen
                   options={{ headerShown: false }}
                   name="SendSuccess"
