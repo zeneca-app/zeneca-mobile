@@ -202,7 +202,7 @@ const QuoteConfirmationScreen = () => {
                         </TouchableOpacity>)}
                 </View>
             </View>
-            <LoadingScreen isVisible={isTransactionPending} text={"Pending"} />
+            <LoadingScreen isVisible={isTransactionPending} text={t("quoteConfirmation.pending")} />
         </SafeAreaView >
     );
 };

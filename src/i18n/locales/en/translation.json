@@ -29,7 +29,8 @@
     "fee": "Fee",
     "accountNumber": "Account number",
     "timerDescription": "Exchange rate will update in",
-    "confirm": "Confirm and send"
+    "confirm": "Confirm and send",
+    "pending": "Processing..."
   },
   "sentReceipt": {
     "headerText": "Sent",

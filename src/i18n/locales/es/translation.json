@@ -29,7 +29,8 @@
     "fee": "Comisión",
     "accountNumber": "Número de cuenta",
     "timerDescription": "Tasa se actualizará en",
-    "confirm": "Confirmar y enviar"
+    "confirm": "Confirmar y enviar",
+    "pending": "Procesando..."
   },
   "sentReceipt": {
     "headerText": "Enviaste",
