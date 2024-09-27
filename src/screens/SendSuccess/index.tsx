@@ -21,13 +21,13 @@ const SendSuccessScreen = () => {
         <View style={styles.container}>
             <View style={styles.content}>
                 <View style={styles.checkmarkContainer}>
-                    <Feather name="check" size={40} color="#FFFFFF" />
+                    <Feather name="check" size={30} color="#04AE91" />
                 </View>
 
                 <Text style={styles.title}>¡Listo!</Text>
                 <Text style={styles.subtitle}>
                     Estamos procesando tu transacción.{'\n'}
-                    Pronto estará disponible.
+                    Pronto estará disponible
                 </Text>
             </View>
 
@@ -54,30 +54,31 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     content: {
+        marginTop: 100,
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
     },
     checkmarkContainer: {
-        width: 80,
-        height: 80,
+        width: 60,
+        height: 60,
         borderRadius: 40,
         borderWidth: 2,
-        borderColor: '#FFFFFF',
+        borderColor: '#04AE91',
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 20,
     },
     title: {
-        fontSize: 32,
-        fontWeight: 'bold',
+        fontSize: 34,
+        fontFamily: "Manrope_500Medium",
         color: '#FFFFFF',
         marginBottom: 10,
     },
     subtitle: {
         fontSize: 16,
-        color: '#AAAAAA',
-        textAlign: 'center',
+        color: '#95929F',
+        textAlign: 'left',
     },
     buttonContainer: {
         marginTop: 'auto',
@@ -101,6 +102,7 @@ const styles = StyleSheet.create({
     secondaryButtonText: {
         color: '#FFFFFF',
         fontSize: 16,
+        fontFamily: "Manrope_500Medium",
     },
 });
 

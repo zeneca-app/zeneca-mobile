@@ -37,7 +37,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ isVisible, text }) => {
             <View style={styles.container}>
                 <View style={styles.loadingBox}>
                     <Animated.View style={{ transform: [{ rotate: spin }] }}>
-                        <Feather name="clock" size={40} color="black" />
+                        <Feather name="clock" size={40} color="white" />
                     </Animated.View>
                     <Text style={styles.loadingText}>{text}</Text>
                 </View>
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     },
     loadingBox: {
         marginHorizontal: 20,
-        backgroundColor: 'white',
+        backgroundColor: '#18171A',
         paddingVertical: 60,
         paddingHorizontal: 40,
         borderRadius: 20,
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
 
     },
     loadingText: {
-        color: 'black',
+        color: '#fff',
         marginTop: 10,
         fontSize: 24,
         fontWeight: 'bold',
