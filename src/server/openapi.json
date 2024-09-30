@@ -388,6 +388,39 @@
         }
       }
     },
+    "/v0/transactions/{transaction_id}": {
+      "get": {
+        "tags": ["transactions"],
+        "summary": "Get Transaction",
+        "operationId": "transactions-get_transaction",
+        "parameters": [
+          {
+            "name": "transaction_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Transaction Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TransactionRead" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v0/webhooks/koywe": {
       "post": {
         "tags": ["webhooks"],
