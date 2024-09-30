@@ -397,6 +397,16 @@ export type TransactionsCreateTransactionResponse = (TransactionRead);
 
 export type TransactionsCreateTransactionError = (HTTPValidationError);
 
+export type TransactionsGetTransactionData = {
+    path: {
+        transaction_id: string;
+    };
+};
+
+export type TransactionsGetTransactionResponse = (TransactionRead);
+
+export type TransactionsGetTransactionError = (HTTPValidationError);
+
 export type WebhooksNewEventReceivedResponse = (void);
 
 export type WebhooksNewEventReceivedError = unknown;

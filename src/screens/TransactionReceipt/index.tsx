@@ -1,20 +1,18 @@
-import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import {
     SafeAreaView,
     StyleSheet,
     Text,
-    TouchableOpacity,
     Dimensions,
     View,
 } from "react-native";
-import useQuoteStore from "../../storage/quoteStore";
 import { formatCurrency, CURRENCY_BY_COUNTRY, CurrencyCode } from "../../utils/currencyUtils";
 import useRecipientStore from "../../storage/recipientStore";
 import { Country } from "../../client";
 import { Feather } from '@expo/vector-icons';
+import useTransactionStore from "../../storage/transactionStore";
+import { capitalizeFirstLetter } from "../../utils/string_utils";
 
 
 const DetailRow = ({ label, value, valueStyle }: { label: string, value: string, valueStyle?: any }) => (
@@ -37,13 +35,14 @@ const SummaryRow = ({ label, value, secondaryValue }: { label: string, value: st
 const { height } = Dimensions.get('window');
 
 const TransactionReceiptScreen = () => {
-    const navigation = useNavigation();
+
     const { t } = useTranslation();
-    const { quote } = useQuoteStore((state) => ({ quote: state.quote }));
+
     const { recipient } = useRecipientStore((state) => ({ recipient: state.recipient }));
+    const { transaction } = useTransactionStore((state) => ({ transaction: state.transaction }));
 
     const currency = CURRENCY_BY_COUNTRY[recipient.country as Country].toUpperCase() as CurrencyCode;
-
+    
     const truncateId = (id: string) => {
         if (id.length <= 8) return id;
         return `${id.slice(0, 4)}...${id.slice(-4)}`;
@@ -60,36 +59,37 @@ const TransactionReceiptScreen = () => {
                     <Text style={styles.headerText}>{t("sentReceipt.headerText")}</Text>
                     <View style={styles.amountContainer}>
                         <Text style={styles.amountText}>
-                            ${formatCurrency(quote.amount_out, currency)}
+                            ${formatCurrency(transaction.amount_out, currency)}
                         </Text>
                         <Text style={styles.currencySymbol}>{currency}</Text>
                     </View>
                     <Text style={styles.recipient}>
-                        {t("sentReceipt.recipient_label")} <Text style={styles.recipientName}>{recipient.name}</Text>
+                        {t("sentReceipt.recipient_label")} <Text style={styles.recipientName}>{capitalizeFirstLetter(recipient.name)}</Text>
                     </Text>
 
                     <View style={styles.detailsContainer}>
-                        <DetailRow label={t("sentReceipt.date")} value={quote.expires_at} />
+                        <DetailRow label={t("sentReceipt.date")} value={transaction.created_at} />
                         <DetailRow label={t("sentReceipt.accountNumber")} value={recipient.external_account.account_number ?? ""} />
-                        <DetailRow label={t("sentReceipt.reference")} value={truncateId(quote.id)} />
+                        <DetailRow label={t("sentReceipt.reference")} value={truncateId(transaction.id)} />
                         <DetailRow label={t("sentReceipt.status")} value={t("sentReceipt.inProcess")} valueStyle={styles.statusText} />
                     </View>
 
                     <View style={styles.summaryContainer}>
-                        <SummaryRow
-                            label={`${quote.source} → ${currency}`}
-                            value={`${quote.amount_in} ${quote.source}`}
-                            secondaryValue={formatCurrency(quote.amount_out, currency)}
-                        />
-                        <SummaryRow
+                       {/*  <SummaryRow
+                            //label={`${transaction.source} → ${currency}`}
+                            //value={`${transaction.amount_in} ${transaction.source}`}
+                            secondaryValue={formatCurrency(transaction.amount_out, currency)}
+                        /> */}
+
+                        {/* <SummaryRow
                             label={t("sentReceipt.fee")}
-                            value={`${quote.fee} ${quote.source}`}
+                            value={`${transaction.fee} ${transaction.source}`}
                             secondaryValue={formatCurrency(Number(quote.fee) * Number(quote.amount_out) / Number(quote.amount_in), currency)}
                         />
                         <SummaryRow
                             label={t("sentReceipt.total")}
                             value={`${Number(quote.amount_in) + Number(quote.fee)} ${quote.source}`}
-                        />
+                        /> */}
                     </View>
                 </View>
             </View>
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     },
     recipient: {
         color: '#888',
-        fontSize: 16,
+        fontSize: 22,
         marginTop: 5,
     },
     recipientName: {
