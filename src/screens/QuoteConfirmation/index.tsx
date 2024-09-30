@@ -21,10 +21,10 @@ import * as LocalAuthentication from 'expo-local-authentication';
 import FaceIdIcon from "../../../assets/face-id.svg";
 import { formatCurrency, CURRENCY_BY_COUNTRY, CurrencyCode } from "../../utils/currencyUtils";
 import { Country } from "../../client";
-import { quotesCreateQuote, QuoteRead, transactionsCreateTransaction, customersGetCustomer, TransactionRead } from "../../client";
+import { quotesCreateQuote, transfersCreateTransfer, customersGetCustomer, TransferRead, QuoteRead } from "../../client";
 import { formatQuoteToNumber } from "../../utils/quote";
 import LoadingScreen from "../LoadingScreen";
-import useTransactionStore from "../../storage/transactionStore";
+import useTransferStore from "../../storage/transferStore";
 import { capitalizeFirstLetter } from "../../utils/string_utils";
 
 
@@ -42,9 +42,9 @@ const QuoteConfirmationScreen = () => {
         setQuote: state.setQuote,
     }));
 
-    const { setTransaction } = useTransactionStore((state) => ({
-        transaction: state.transaction,
-        setTransaction: state.setTransaction,
+    const { setTransfer } = useTransferStore((state) => ({
+        transfer: state.transfer,
+        setTransfer: state.setTransfer,
     }));
 
     const { data: customer } = useQuery({
@@ -66,7 +66,7 @@ const QuoteConfirmationScreen = () => {
 
     const { mutate: createTransaction, isPending: isTransactionPending } = useMutation({
         mutationFn: () =>
-            transactionsCreateTransaction({
+            transfersCreateTransfer({
                 body: {
                     quote_id: quote.id,
                     customer_id: customerId,
@@ -75,7 +75,7 @@ const QuoteConfirmationScreen = () => {
             }),
         onSuccess: async (data) => {
             console.log("transaction created", data.data)
-            setTransaction(data.data as TransactionRead);
+            setTransfer(data.data as TransferRead);
 
             await new Promise(resolve => setTimeout(resolve, 20000));
             navigation.navigate("SendSuccess")
