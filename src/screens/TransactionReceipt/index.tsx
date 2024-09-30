@@ -8,12 +8,11 @@ import {
     View,
 } from "react-native";
 import { formatCurrency, CURRENCY_BY_COUNTRY, CurrencyCode } from "../../utils/currencyUtils";
-import useRecipientStore from "../../storage/recipientStore";
 import { Country } from "../../client";
 import { Feather } from '@expo/vector-icons';
-import useTransactionStore from "../../storage/transactionStore";
+import useTransferStore from "../../storage/transferStore";
 import { capitalizeFirstLetter } from "../../utils/string_utils";
-
+import { formatQuoteToNumber } from "../../utils/quote";
 
 const DetailRow = ({ label, value, valueStyle }: { label: string, value: string, valueStyle?: any }) => (
     <View style={styles.detailRow}>
@@ -35,14 +34,15 @@ const SummaryRow = ({ label, value, secondaryValue }: { label: string, value: st
 const { height } = Dimensions.get('window');
 
 const TransactionReceiptScreen = () => {
-
     const { t } = useTranslation();
 
-    const { recipient } = useRecipientStore((state) => ({ recipient: state.recipient }));
-    const { transaction } = useTransactionStore((state) => ({ transaction: state.transaction }));
+    const { transfer } = useTransferStore((state) => ({ transfer: state.transfer }));
 
-    const currency = CURRENCY_BY_COUNTRY[recipient.country as Country].toUpperCase() as CurrencyCode;
-    
+    const recipient = transfer.recipient;
+    const quote = formatQuoteToNumber(transfer.quote!);
+
+    const currency = CURRENCY_BY_COUNTRY[recipient?.country as Country].toUpperCase() as CurrencyCode;
+
     const truncateId = (id: string) => {
         if (id.length <= 8) return id;
         return `${id.slice(0, 4)}...${id.slice(-4)}`;
@@ -59,23 +59,23 @@ const TransactionReceiptScreen = () => {
                     <Text style={styles.headerText}>{t("sentReceipt.headerText")}</Text>
                     <View style={styles.amountContainer}>
                         <Text style={styles.amountText}>
-                            ${formatCurrency(transaction.amount_out, currency)}
+                            ${formatCurrency(quote.amount_out, currency)}
                         </Text>
                         <Text style={styles.currencySymbol}>{currency}</Text>
                     </View>
                     <Text style={styles.recipient}>
-                        {t("sentReceipt.recipient_label")} <Text style={styles.recipientName}>{capitalizeFirstLetter(recipient.name)}</Text>
+                        {t("sentReceipt.recipient_label")} <Text style={styles.recipientName}>{capitalizeFirstLetter(recipient?.name ?? "")}</Text>
                     </Text>
 
                     <View style={styles.detailsContainer}>
-                        <DetailRow label={t("sentReceipt.date")} value={transaction.created_at} />
-                        <DetailRow label={t("sentReceipt.accountNumber")} value={recipient.external_account.account_number ?? ""} />
-                        <DetailRow label={t("sentReceipt.reference")} value={truncateId(transaction.id)} />
-                        <DetailRow label={t("sentReceipt.status")} value={t("sentReceipt.inProcess")} valueStyle={styles.statusText} />
+                        <DetailRow label={t("sentReceipt.date")} value={transfer.created_at} />
+                        {/* <DetailRow label={t("sentReceipt.accountNumber")} value={recipient?.external_account?.account_number ?? ""} /> */}
+                        <DetailRow label={t("sentReceipt.reference")} value={truncateId(transfer.id)} />
+                        <DetailRow label={t("sentReceipt.status")} value={transfer.status} valueStyle={styles.statusText} />
                     </View>
 
                     <View style={styles.summaryContainer}>
-                       {/*  <SummaryRow
+                        {/*  <SummaryRow
                             //label={`${transaction.source} → ${currency}`}
                             //value={`${transaction.amount_in} ${transaction.source}`}
                             secondaryValue={formatCurrency(transaction.amount_out, currency)}
