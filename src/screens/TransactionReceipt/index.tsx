@@ -53,7 +53,7 @@ const TransactionReceiptScreen = () => {
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.modalOverlay}>
                 <View style={styles.modalContainer}>
-                    {/*  <View style={styles.handleBar} /> */}
+                    <View style={styles.handleBar} />
                     <View style={styles.iconContainer}>
                         <Feather name="arrow-up-right" size={24} color="white" />
                     </View>
@@ -100,7 +100,7 @@ const TransactionReceiptScreen = () => {
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 1)', // Semi-transparent background
+        backgroundColor: '#000', // Semi-transparent background
     },
     modalOverlay: {
         flex: 1,
@@ -112,7 +112,6 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 30,
         padding: 20,
         minHeight: height * 0.85, // Set minimum height to 75% of screen height
-        maxHeight: height * 0.95, // Limit the height to 90% of the screen
     },
     handleBar: {
         width: 40,

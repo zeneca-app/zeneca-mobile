@@ -26,6 +26,9 @@ import USDC_ICON from "../../../assets/usdc.svg";
 
 
 const QuoteScreen = () => {
+  const navigation = useNavigation();
+  const { t } = useTranslation();
+
   const [amount, setAmount] = useState("0");
   const [amountOut, setAmountOut] = useState("0");
   const [quoteRaw, setQuoteRaw] = useState<Quote | null>(null);
@@ -40,9 +43,6 @@ const QuoteScreen = () => {
     queryFn: customersGetBalance,
   });
   const customerBalance = balance?.data?.balance || 0
-
-  const navigation = useNavigation();
-  const { t } = useTranslation();
 
   const { recipient } = useRecipientStore((state) => ({
     recipient: state.recipient,

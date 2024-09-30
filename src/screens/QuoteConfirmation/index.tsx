@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import countryCodeToFlagEmoji from "country-code-to-flag-emoji";
 import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -21,8 +21,9 @@ import * as LocalAuthentication from 'expo-local-authentication';
 import FaceIdIcon from "../../../assets/face-id.svg";
 import { formatCurrency, CURRENCY_BY_COUNTRY, CurrencyCode } from "../../utils/currencyUtils";
 import { Country } from "../../client";
-import { quotesCreateQuote, QuoteRead } from "../../client";
-
+import { quotesCreateQuote, QuoteRead, transactionsCreateTransaction, customersGetCustomer } from "../../client";
+import { formatQuoteToNumber } from "../../utils/quote";
+import LoadingScreen from "../LoadingScreen";
 
 const capitalizeFirstLetter = (string: string) => {
     return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
@@ -36,9 +37,17 @@ const QuoteConfirmationScreen = () => {
         recipient: state.recipient,
     }));
 
-    const { quote } = useQuoteStore((state) => ({
+    const { quote, setQuote } = useQuoteStore((state) => ({
         quote: state.quote,
+        setQuote: state.setQuote,
     }));
+
+    const { data: customer } = useQuery({
+        queryKey: ["customer"],
+        queryFn: customersGetCustomer,
+    });
+
+    const customerId = "0191ddc1-5791-7383-8647-e8b068c8af65" // TODO: get from customer
 
     const calculateTimeLeft = () => {
         const now = Math.floor(Date.now() / 1000); // Current time in seconds
@@ -50,7 +59,28 @@ const QuoteConfirmationScreen = () => {
 
     const currency = CURRENCY_BY_COUNTRY[recipient.country as Country].toUpperCase() as CurrencyCode
 
-    const mutation = useMutation({
+    const { mutate: createTransaction, isPending: isTransactionPending } = useMutation({
+        mutationFn: () =>
+            transactionsCreateTransaction({
+                body: {
+                    quote_id: quote.id,
+                    customer_id: customerId,
+                    recipient_id: recipient.id,
+                },
+            }),
+        onSuccess: async (data) => {
+            console.log("transaction created", data.data)
+
+            await new Promise(resolve => setTimeout(resolve, 20000));
+            navigation.navigate("SendSuccess")
+
+        },
+        onError: (error) => {
+            console.log("error quote", error)
+        },
+    });
+
+    const { mutate: createQuote, isPending: isQuotePending } = useMutation({
         mutationFn: () =>
             quotesCreateQuote({
                 body: {
@@ -62,15 +92,17 @@ const QuoteConfirmationScreen = () => {
                 },
             }),
         onSuccess: (data) => {
-
+            console.log("quote updated", data.data)
+            const quoteRaw = formatQuoteToNumber(data.data as QuoteRead);
+            setQuote(quoteRaw);
+            setTimeLeft(quoteRaw.expires_at - Math.floor(Date.now() / 1000));
         },
         onError: (error) => {
             console.log("error quote", error)
-
         },
     });
 
-    const handleContinue = async () => {
+    const handleCreateTransaction = async () => {
         try {
             const result = await LocalAuthentication.authenticateAsync({
                 promptMessage: t("faceId.prompt"),
@@ -78,7 +110,8 @@ const QuoteConfirmationScreen = () => {
             });
 
             if (result.success) {
-                navigation.navigate("TransactionReceipt");
+                createTransaction();
+                //navigation.navigate("TransactionReceipt");
             } else {
                 // Handle authentication failure
                 console.log("Authentication failed");
@@ -95,14 +128,18 @@ const QuoteConfirmationScreen = () => {
     };
 
     useEffect(() => {
-        if (timeLeft <= 0) return;
+        if (timeLeft <= 0) {
+            // Fetch new quote when timer reaches zero
+            createQuote();
+            return;
+        }
 
         const timerId = setInterval(() => {
             setTimeLeft(calculateTimeLeft());
         }, 1000);
 
         return () => clearInterval(timerId);
-    }, [timeLeft]);
+    }, [timeLeft, createQuote]);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -145,23 +182,27 @@ const QuoteConfirmationScreen = () => {
                 </View>
 
                 <View style={styles.timerContainer}>
-                    <Text style={styles.timer}>{t("quoteConfirmation.timerDescription")} {formatTime(timeLeft)}</Text>
+                    {!isTransactionPending && (
+                        <Text style={styles.timer}>{t("quoteConfirmation.timerDescription")} {formatTime(timeLeft)}</Text>
+                    )}
                 </View>
 
                 <View style={styles.bottomSection}>
-
                     <Text style={styles.warning}>{t("quoteConfirmation.disclaimer")}</Text>
-                    <TouchableOpacity
-                        onPress={handleContinue}
-                        style={styles.confirmButton}>
-                        <FaceIdIcon width={24} height={24} />
-                        <Text
-                            style={styles.confirmButtonText}
+                    {!isTransactionPending && (
+                        <TouchableOpacity
+                            disabled={isTransactionPending || isQuotePending}
+                            onPress={handleCreateTransaction}
+                            style={styles.confirmButton}>
+                            <FaceIdIcon width={24} height={24} />
+                            <Text
+                                style={styles.confirmButtonText}
 
-                        >{t("quoteConfirmation.confirm")}</Text>
-                    </TouchableOpacity>
+                            >{t("quoteConfirmation.confirm")}</Text>
+                        </TouchableOpacity>)}
                 </View>
             </View>
+            <LoadingScreen isVisible={isTransactionPending} text={t("quoteConfirmation.pending")} />
         </SafeAreaView >
     );
 };

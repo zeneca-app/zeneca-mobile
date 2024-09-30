@@ -20,41 +20,25 @@ import useAuthStore from "../../storage/authStore";
 import { colors } from "../../styles/colors";
 import { format, parseISO } from 'date-fns';
 import { es, enUS } from 'date-fns/locale';
-
+import { formatCurrency, CurrencyCode } from "../../utils/currencyUtils";
 
 const HomeScreen = () => {
+  const navigation = useNavigation();
+  const { t } = useTranslation();
+
   const { logout } = usePrivy();
   const { update } = useAuthStore((state) => ({ update: state.update }));
+
   const { data: balance } = useQuery({
     queryKey: ["balance"],
     queryFn: customersGetBalance,
   });
+
   const { data: transactions } = useQuery({
     queryKey: ["transactions"],
     queryFn: transactionsGetTransactions,
   });
-  console.log("Transactions Data: ", transactions);
-  const navigation = useNavigation();
-  const { t } = useTranslation();
 
-  const formattedAmount = (currency: string, amount: string, showCurrency: boolean = false) => {
-    const currencies: Record<string, string> = {
-      "COP": "es-CO",
-      "USD": "en-US",
-    }
-    const locale = currencies[currency]
-    if (showCurrency) {
-      return new Intl.NumberFormat(locale, {
-        style: 'currency',
-        currency: currency, currencyDisplay: "code"
-      }).format(parseFloat(amount)).trim()
-    } else {
-      return new Intl.NumberFormat(locale, {
-        style: 'currency',
-        currency: currency, currencyDisplay: "code"
-      }).format(parseFloat(amount)).replace(currency, '').trim()
-    }
-  }
 
   const formatDate = (dateString: string) => {
     const date = parseISO(dateString);
@@ -88,12 +72,21 @@ const HomeScreen = () => {
     const isWithdrawal = item.source.includes("usdc");
 
     const formatWithdrawal = (currency: string, amount: string) => {
-      const formatted = formattedAmount(currency, amount, true)
+      const formatted = formatCurrency(amount, currency as CurrencyCode, true)
       return "-" + formatted
     }
 
+    const formatDeposit = (currency: string, amount: string) => {
+      const formatted = formatCurrency(amount, currency as CurrencyCode, true)
+      return "+" + formatted
+    }
+
+    const handlePress = () => {
+      navigation.navigate("TransactionReceipt", { transactionId: item.id });
+    };
+
     return (
-      <View style={styles.transactionItem}>
+      <TouchableOpacity style={styles.transactionItem} onPress={handlePress}>
         <View style={styles.transactionLeft}>
           <View style={styles.transactionIcon}>
             {isWithdrawal ? (
@@ -113,9 +106,9 @@ const HomeScreen = () => {
             { color: isWithdrawal ? "#FF5252" : "#4CAF50" },
           ]}
         >
-          {isWithdrawal ? formatWithdrawal(item.destination.toUpperCase(), item.amount_out) : formattedAmount("USD", item.amount_in)}
+          {isWithdrawal ? formatWithdrawal(item.destination.toUpperCase(), item.amount_out) : formatDeposit(item.source.toUpperCase(), item.amount_in)}
         </Text>
-      </View>
+      </TouchableOpacity>
     );
   }, []);
 
@@ -139,7 +132,7 @@ const HomeScreen = () => {
             <View style={styles.balanceContainer}>
               <Text style={styles.currencySign}>$</Text>
               <Text style={styles.balanceAmount}>
-                {formattedAmount("USD", balance?.data?.balance ?? "0")}
+                {formatCurrency(balance?.data?.balance ?? "0", "USD")}
               </Text>
               <Text style={styles.balanceUsd}>USD</Text>
             </View>
@@ -161,6 +154,7 @@ const HomeScreen = () => {
             data={transactions?.data}
             renderItem={renderTransaction}
             keyExtractor={keyExtractor}
+            showsVerticalScrollIndicator={false}
           />
         </View>
       </View>
