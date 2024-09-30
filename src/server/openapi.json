@@ -336,20 +336,20 @@
         }
       }
     },
-    "/v0/transactions/": {
+    "/v0/transfers/": {
       "get": {
-        "tags": ["transactions"],
-        "summary": "Get Transactions",
-        "operationId": "transactions-get_transactions",
+        "tags": ["transfers"],
+        "summary": "Get Transfers",
+        "operationId": "transfers-get_transfers",
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {
-                  "items": { "$ref": "#/components/schemas/TransactionRead" },
+                  "items": { "$ref": "#/components/schemas/TransferRead" },
                   "type": "array",
-                  "title": "Response Transactions-Get Transactions"
+                  "title": "Response Transfers-Get Transfers"
                 }
               }
             }
@@ -357,13 +357,13 @@
         }
       },
       "post": {
-        "tags": ["transactions"],
-        "summary": "Create Transaction",
-        "operationId": "transactions-create_transaction",
+        "tags": ["transfers"],
+        "summary": "Create Transfer",
+        "operationId": "transfers-create_transfer",
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/TransactionRequest" }
+              "schema": { "$ref": "#/components/schemas/TransferRequest" }
             }
           },
           "required": true
@@ -373,7 +373,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/TransactionRead" }
+                "schema": { "$ref": "#/components/schemas/TransferRead" }
               }
             }
           },
@@ -388,11 +388,11 @@
         }
       }
     },
-    "/v0/transactions/{transaction_id}": {
+    "/v0/transfers/{transaction_id}": {
       "get": {
-        "tags": ["transactions"],
-        "summary": "Get Transaction",
-        "operationId": "transactions-get_transaction",
+        "tags": ["transfers"],
+        "summary": "Get Transfer",
+        "operationId": "transfers-get_transfer",
         "parameters": [
           {
             "name": "transaction_id",
@@ -406,7 +406,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/TransactionRead" }
+                "schema": { "$ref": "#/components/schemas/TransferRead" }
               }
             }
           },
@@ -1289,34 +1289,50 @@
         "enum": ["usdc.polygon", "usdc.base", "usdc.stellar"],
         "title": "TokenSymbol"
       },
-      "TransactionRead": {
+      "TransferRead": {
         "properties": {
           "id": { "type": "string", "format": "uuid", "title": "Id" },
-          "source": { "type": "string", "title": "Source" },
-          "destination": { "type": "string", "title": "Destination" },
-          "amount_in": { "type": "integer", "title": "Amount In" },
-          "amount_out": { "type": "integer", "title": "Amount Out" },
-          "status": {
-            "allOf": [{ "$ref": "#/components/schemas/TransactionStatus" }],
-            "default": "PENDING"
+          "withdrawal": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/WithdrawalRead" },
+              { "type": "null" }
+            ]
           },
+          "recipient": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/RecipientRead" },
+              { "type": "null" }
+            ]
+          },
+          "quote": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/QuoteRead" },
+              { "type": "null" }
+            ]
+          },
+          "deposit_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Deposit Id"
+          },
+          "status": { "$ref": "#/components/schemas/TransferStatus" },
           "customer_id": {
             "type": "string",
             "format": "uuid",
             "title": "Customer Id"
           },
-          "quote_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Quote Id"
-          },
           "reference_id": {
             "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Reference Id"
           },
-          "payout_address": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Payout Address"
+          "recipient_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Recipient Id"
           },
           "created_at": {
             "type": "string",
@@ -1325,19 +1341,10 @@
           }
         },
         "type": "object",
-        "required": [
-          "id",
-          "source",
-          "destination",
-          "amount_in",
-          "amount_out",
-          "customer_id",
-          "quote_id",
-          "created_at"
-        ],
-        "title": "TransactionRead"
+        "required": ["id", "status", "customer_id", "created_at"],
+        "title": "TransferRead"
       },
-      "TransactionRequest": {
+      "TransferRequest": {
         "properties": {
           "quote_id": {
             "type": "string",
@@ -1361,9 +1368,9 @@
         },
         "type": "object",
         "required": ["quote_id", "customer_id", "recipient_id"],
-        "title": "TransactionRequest"
+        "title": "TransferRequest"
       },
-      "TransactionStatus": {
+      "TransferStatus": {
         "type": "string",
         "enum": [
           "WAITING",
@@ -1376,7 +1383,7 @@
           "INVALID_ACCOUNT_DETAILS",
           "ERROR"
         ],
-        "title": "TransactionStatus"
+        "title": "TransferStatus"
       },
       "USAState": {
         "type": "string",
@@ -1447,6 +1454,53 @@
         "type": "object",
         "required": ["loc", "msg", "type"],
         "title": "ValidationError"
+      },
+      "WithdrawalRead": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "status": { "$ref": "#/components/schemas/TransferStatus" },
+          "external_id": { "type": "string", "title": "External Id" },
+          "payout_address": { "type": "string", "title": "Payout Address" },
+          "payout_token": { "type": "string", "title": "Payout Token" },
+          "payout_network_id": {
+            "type": "string",
+            "title": "Payout Network Id"
+          },
+          "tx_hash": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Tx Hash"
+          },
+          "quote_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Quote Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "finished_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Finished At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "external_id",
+          "payout_address",
+          "payout_token",
+          "payout_network_id",
+          "created_at"
+        ],
+        "title": "WithdrawalRead"
       }
     },
     "securitySchemes": { "HTTPBearer": { "type": "http", "scheme": "bearer" } }

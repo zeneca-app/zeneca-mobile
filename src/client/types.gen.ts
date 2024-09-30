@@ -272,28 +272,27 @@ export type RecipientRequestUS = {
 
 export type TokenSymbol = 'usdc.polygon' | 'usdc.base' | 'usdc.stellar';
 
-export type TransactionRead = {
+export type TransferRead = {
     id: string;
-    source: string;
-    destination: string;
-    amount_in: number;
-    amount_out: number;
-    status?: (TransactionStatus);
+    withdrawal?: (WithdrawalRead | null);
+    recipient?: (RecipientRead | null);
+    quote?: (QuoteRead | null);
+    deposit_id?: (string | null);
+    status: TransferStatus;
     customer_id: string;
-    quote_id: string;
     reference_id?: (string | null);
-    payout_address?: (string | null);
+    recipient_id?: (string | null);
     created_at: string;
 };
 
-export type TransactionRequest = {
+export type TransferRequest = {
     quote_id: string;
     customer_id: string;
     recipient_id: string;
     reference_id?: (string | null);
 };
 
-export type TransactionStatus = 'WAITING' | 'PAID' | 'PENDING' | 'SUBMITTED' | 'IN_PROGRESS' | 'SENT' | 'REJECTED' | 'INVALID_ACCOUNT_DETAILS' | 'ERROR';
+export type TransferStatus = 'WAITING' | 'PAID' | 'PENDING' | 'SUBMITTED' | 'IN_PROGRESS' | 'SENT' | 'REJECTED' | 'INVALID_ACCOUNT_DETAILS' | 'ERROR';
 
 export type USAState = 'US-AL' | 'US-AK' | 'US-AZ' | 'US-AR' | 'US-CA' | 'US-CO' | 'US-CT' | 'US-DE' | 'US-FL' | 'US-GA' | 'US-HI' | 'US-ID' | 'US-IL' | 'US-IN' | 'US-IA' | 'US-KS' | 'US-KY' | 'US-LA' | 'US-ME' | 'US-MD' | 'US-MA' | 'US-MI' | 'US-MN' | 'US-MS' | 'US-MO' | 'US-MT' | 'US-NE' | 'US-NV' | 'US-NH' | 'US-NJ' | 'US-NM' | 'US-NY' | 'US-NC' | 'US-ND' | 'US-OH' | 'US-OK' | 'US-OR' | 'US-PA' | 'US-RI' | 'US-SC' | 'US-SD' | 'US-TN' | 'US-TX' | 'US-UT' | 'US-VT' | 'US-VA' | 'US-WA' | 'US-WV' | 'US-WI' | 'US-WY';
 
@@ -301,6 +300,19 @@ export type ValidationError = {
     loc: Array<(string | number)>;
     msg: string;
     type: string;
+};
+
+export type WithdrawalRead = {
+    id: string;
+    status: TransferStatus;
+    external_id: string;
+    payout_address: string;
+    payout_token: string;
+    payout_network_id: string;
+    tx_hash?: (string | null);
+    quote_id?: (string | null);
+    created_at: string;
+    finished_at?: (string | null);
 };
 
 export type LoginLoginOrCreateData = {
@@ -385,27 +397,27 @@ export type BanksGetBanksResponse = (Array<Bank>);
 
 export type BanksGetBanksError = (HTTPValidationError);
 
-export type TransactionsGetTransactionsResponse = (Array<TransactionRead>);
+export type TransfersGetTransfersResponse = (Array<TransferRead>);
 
-export type TransactionsGetTransactionsError = unknown;
+export type TransfersGetTransfersError = unknown;
 
-export type TransactionsCreateTransactionData = {
-    body: TransactionRequest;
+export type TransfersCreateTransferData = {
+    body: TransferRequest;
 };
 
-export type TransactionsCreateTransactionResponse = (TransactionRead);
+export type TransfersCreateTransferResponse = (TransferRead);
 
-export type TransactionsCreateTransactionError = (HTTPValidationError);
+export type TransfersCreateTransferError = (HTTPValidationError);
 
-export type TransactionsGetTransactionData = {
+export type TransfersGetTransferData = {
     path: {
         transaction_id: string;
     };
 };
 
-export type TransactionsGetTransactionResponse = (TransactionRead);
+export type TransfersGetTransferResponse = (TransferRead);
 
-export type TransactionsGetTransactionError = (HTTPValidationError);
+export type TransfersGetTransferError = (HTTPValidationError);
 
 export type WebhooksNewEventReceivedResponse = (void);
 
