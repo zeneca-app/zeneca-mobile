@@ -23,6 +23,8 @@ import { es, enUS } from 'date-fns/locale';
 import { formatCurrency, CurrencyCode } from "../../utils/currencyUtils";
 import { formatQuoteToNumber } from "../../utils/quote";
 import useTransferStore from "../../storage/transferStore";
+import LineHome from '../../../assets/line-home.svg';
+
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -128,6 +130,10 @@ const HomeScreen = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
       <View style={styles.container}>
+        <View style={styles.backgroundContainer}>
+          <LineHome />
+        </View>
+
         <View style={styles.wrapperHeader}>
           <View style={styles.header}>
             <TouchableOpacity style={styles.profileButton} onPress={onLogout}>
@@ -170,6 +176,7 @@ const HomeScreen = () => {
           />
         </View>
       </View>
+
     </SafeAreaView>
   );
 };
@@ -177,6 +184,13 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  backgroundContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   wrapperHeader: {
     paddingTop: 20,
@@ -196,7 +210,7 @@ const styles = StyleSheet.create({
   balanceCard: {
     borderRadius: 30,
     padding: 20,
-    marginBottom: 10,
+    marginBottom: 8,
   },
   balanceContainer: {
     flexDirection: "row",
