@@ -131,7 +131,7 @@ const HomeScreen = () => {
     <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
       <View style={styles.container}>
         <View style={styles.backgroundContainer}>
-          <LineHome />
+          <LineHome style={styles.lineHome} />
         </View>
 
         <View style={styles.wrapperHeader}>
@@ -192,6 +192,11 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
+  lineHome: {
+    position: 'absolute',
+    // Adjust these values to change the position
+    top: -30,  // Moves the component up by 50 units
+  },
   wrapperHeader: {
     paddingTop: 20,
   },
@@ -210,7 +215,7 @@ const styles = StyleSheet.create({
   balanceCard: {
     borderRadius: 30,
     padding: 20,
-    marginBottom: 8,
+    marginBottom: 3,
   },
   balanceContainer: {
     flexDirection: "row",
