@@ -23,6 +23,8 @@ import { es, enUS } from 'date-fns/locale';
 import { formatCurrency, CurrencyCode } from "../../utils/currencyUtils";
 import { formatQuoteToNumber } from "../../utils/quote";
 import useTransferStore from "../../storage/transferStore";
+import LineHome from '../../../assets/line-home.svg';
+
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -115,11 +117,23 @@ const HomeScreen = () => {
     );
   }, []);
 
+  const renderEmptyList = () => (
+    <View style={styles.emptyListContainer}>
+      <Text style={styles.emptyListText}>
+        {t("home.empty_transactions")}
+      </Text>
+    </View>
+  );
+
   const keyExtractor = useCallback((item: any) => item.id, []);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
       <View style={styles.container}>
+        <View style={styles.backgroundContainer}>
+          <LineHome style={styles.lineHome} />
+        </View>
+
         <View style={styles.wrapperHeader}>
           <View style={styles.header}>
             <TouchableOpacity style={styles.profileButton} onPress={onLogout}>
@@ -137,16 +151,16 @@ const HomeScreen = () => {
               <Text style={styles.balanceAmount}>
                 {formatCurrency(balance?.data?.balance ?? "0", "USD")}
               </Text>
-              <Text style={styles.balanceUsd}>USD</Text>
+              <Text style={styles.balanceUsd}>{t("home.currency")}</Text>
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.actionButton}>
                 <Ionicons name="arrow-down" size={20} color="white" />
-                <Text style={styles.buttonText}>{t("home.deposit")}</Text>
+                <Text style={styles.buttonText}>{t("home.depositActionText")}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.actionButton} onPress={onSend}>
                 <Feather name="arrow-up-right" size={20} color="white" />
-                <Text style={styles.buttonText}>{t("home.send")}</Text>
+                <Text style={styles.buttonText}>{t("home.sendActionText")}</Text>
               </TouchableOpacity>
             </View>
           </LinearGradient>
@@ -158,9 +172,11 @@ const HomeScreen = () => {
             renderItem={renderTransaction}
             keyExtractor={keyExtractor}
             showsVerticalScrollIndicator={false}
+            ListEmptyComponent={renderEmptyList}
           />
         </View>
       </View>
+
     </SafeAreaView>
   );
 };
@@ -168,6 +184,18 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  backgroundContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  lineHome: {
+    position: 'absolute',
+    // Adjust these values to change the position
+    top: -30,  // Moves the component up by 50 units
   },
   wrapperHeader: {
     paddingTop: 20,
@@ -187,7 +215,7 @@ const styles = StyleSheet.create({
   balanceCard: {
     borderRadius: 30,
     padding: 20,
-    marginBottom: 10,
+    marginBottom: 3,
   },
   balanceContainer: {
     flexDirection: "row",
@@ -234,6 +262,18 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     fontFamily: "Manrope_600SemiBold",
     fontSize: 16,
+  },
+  emptyListContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  emptyListText: {
+    color: '#999',
+    fontSize: 16,
+    textAlign: 'center',
+    fontFamily: "Manrope_600SemiBold",
   },
   transactionsContainer: {
     flex: 1,
