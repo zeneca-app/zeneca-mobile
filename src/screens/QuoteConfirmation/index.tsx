@@ -21,13 +21,13 @@ import * as LocalAuthentication from 'expo-local-authentication';
 import FaceIdIcon from "../../../assets/face-id.svg";
 import { formatCurrency, CURRENCY_BY_COUNTRY, CurrencyCode } from "../../utils/currencyUtils";
 import { Country } from "../../client";
-import { quotesCreateQuote, QuoteRead, transactionsCreateTransaction, customersGetCustomer } from "../../client";
+import { quotesCreateQuote, transfersCreateTransfer, customersGetCustomer, TransferRead, QuoteRead } from "../../client";
 import { formatQuoteToNumber } from "../../utils/quote";
 import LoadingScreen from "../LoadingScreen";
+import useTransferStore from "../../storage/transferStore";
+import { capitalizeFirstLetter } from "../../utils/string_utils";
 
-const capitalizeFirstLetter = (string: string) => {
-    return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
-};
+
 
 const QuoteConfirmationScreen = () => {
     const navigation = useNavigation();
@@ -40,6 +40,11 @@ const QuoteConfirmationScreen = () => {
     const { quote, setQuote } = useQuoteStore((state) => ({
         quote: state.quote,
         setQuote: state.setQuote,
+    }));
+
+    const { setTransfer } = useTransferStore((state) => ({
+        transfer: state.transfer,
+        setTransfer: state.setTransfer,
     }));
 
     const { data: customer } = useQuery({
@@ -61,7 +66,7 @@ const QuoteConfirmationScreen = () => {
 
     const { mutate: createTransaction, isPending: isTransactionPending } = useMutation({
         mutationFn: () =>
-            transactionsCreateTransaction({
+            transfersCreateTransfer({
                 body: {
                     quote_id: quote.id,
                     customer_id: customerId,
@@ -70,6 +75,7 @@ const QuoteConfirmationScreen = () => {
             }),
         onSuccess: async (data) => {
             console.log("transaction created", data.data)
+            setTransfer(data.data as TransferRead);
 
             await new Promise(resolve => setTimeout(resolve, 20000));
             navigation.navigate("SendSuccess")
@@ -155,7 +161,7 @@ const QuoteConfirmationScreen = () => {
                         {formatCurrency(quote.amount_out, currency as CurrencyCode, true)}
                     </Text>
                     <Text style={styles.recipient}>
-                        a <Text style={styles.recipientName}>{capitalizeFirstLetter(recipient.name)}</Text>
+                        {t("quoteConfirmation.to")} <Text style={styles.recipientName}>{capitalizeFirstLetter(recipient.name)}</Text>
                     </Text>
                 </View>
 
@@ -233,7 +239,7 @@ const styles = StyleSheet.create({
         marginBottom: 4,
     },
     recipient: {
-        fontSize: 24,
+        fontSize: 22,
         color: "white",
         marginBottom: 16,
     },

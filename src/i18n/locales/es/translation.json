@@ -30,6 +30,7 @@
     "accountNumber": "Número de cuenta",
     "timerDescription": "Tasa se actualizará en",
     "confirm": "Confirmar y enviar",
+    "to": "a",
     "pending": "Procesando..."
   },
   "sentReceipt": {
