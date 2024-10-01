@@ -168,7 +168,7 @@ const HomeScreen = () => {
         <View style={styles.transactionsContainer}>
           <Text style={styles.transactionsHeader}>{t("home.transactions")}</Text>
           <FlatList
-            data={transactions?.data}
+            data={[...(transactions?.data || [])].reverse()}
             renderItem={renderTransaction}
             keyExtractor={keyExtractor}
             showsVerticalScrollIndicator={false}
