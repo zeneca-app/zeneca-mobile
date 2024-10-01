@@ -8,6 +8,7 @@
     "depositActionText": "Depositar",
     "sendActionText": "Enviar",
     "currency": "USD",
+    "empty_transactions": "No tienes movimientos",
     "date_format": "d 'de' MMMM",
     "transactions": "Movimientos"
   },

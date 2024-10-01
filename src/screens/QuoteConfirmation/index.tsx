@@ -63,7 +63,7 @@ const QuoteConfirmationScreen = () => {
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
     const currency = CURRENCY_BY_COUNTRY[recipient.country as Country].toUpperCase() as CurrencyCode
-
+    
     const { mutate: createTransaction, isPending: isTransactionPending } = useMutation({
         mutationFn: () =>
             transfersCreateTransfer({
@@ -82,7 +82,7 @@ const QuoteConfirmationScreen = () => {
 
         },
         onError: (error) => {
-            console.log("error quote", error)
+            console.log("error transaction", error)
         },
     });
 
