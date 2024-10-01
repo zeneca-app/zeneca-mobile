@@ -79,7 +79,7 @@ const QuoteScreen = () => {
 
   const debouncedMutation = useCallback(
     debounce((value: string) => {
-      if (Number(value) > 12) {
+      if (Number(value) > 10) {
         mutation.mutate();
       }
     }, 500), // 500ms delay
@@ -184,7 +184,7 @@ const QuoteScreen = () => {
 
         </View>
         <View style={styles.buttonContainer}>
-         {/*  <Text style={styles.arrivalText}>{t("quote.arrival")}</Text> */}
+          {/*  <Text style={styles.arrivalText}>{t("quote.arrival")}</Text> */}
           <TouchableOpacity
             style={[
               styles.continueButton,
