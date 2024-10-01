@@ -15,12 +15,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { customersGetBalance, transactionsGetTransactions } from "../../client";
+import { customersGetBalance, transfersGetTransfers } from "../../client";
 import useAuthStore from "../../storage/authStore";
 import { colors } from "../../styles/colors";
 import { format, parseISO } from 'date-fns';
 import { es, enUS } from 'date-fns/locale';
 import { formatCurrency, CurrencyCode } from "../../utils/currencyUtils";
+import { formatQuoteToNumber } from "../../utils/quote";
+import useTransferStore from "../../storage/transferStore";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -36,9 +38,10 @@ const HomeScreen = () => {
 
   const { data: transactions } = useQuery({
     queryKey: ["transactions"],
-    queryFn: transactionsGetTransactions,
+    queryFn: transfersGetTransfers,
   });
 
+  const { setTransfer } = useTransferStore((state) => ({ setTransfer: state.setTransfer }));
 
   const formatDate = (dateString: string) => {
     const date = parseISO(dateString);
@@ -66,10 +69,8 @@ const HomeScreen = () => {
   );
 
   const renderTransaction = useCallback(({ item }: { item: any }) => {
-    const currency_out = item.destination;
-    const currency_in = item.source;
-
-    const isWithdrawal = item.source.includes("usdc");
+    const isWithdrawal = item.withdrawal !== null;
+    const quote = formatQuoteToNumber(item.quote);
 
     const formatWithdrawal = (currency: string, amount: string) => {
       const formatted = formatCurrency(amount, currency as CurrencyCode, true)
@@ -82,7 +83,8 @@ const HomeScreen = () => {
     }
 
     const handlePress = () => {
-      navigation.navigate("TransactionReceipt", { transactionId: item.id });
+      setTransfer(item);
+      navigation.navigate("TransactionReceipt");
     };
 
     return (
@@ -106,7 +108,8 @@ const HomeScreen = () => {
             { color: isWithdrawal ? "#FF5252" : "#4CAF50" },
           ]}
         >
-          {isWithdrawal ? formatWithdrawal(item.destination.toUpperCase(), item.amount_out) : formatDeposit(item.source.toUpperCase(), item.amount_in)}
+          {isWithdrawal ? formatWithdrawal(quote.destination.toUpperCase(), quote.amount_out) :
+            formatDeposit(quote.source.toUpperCase(), quote.amount_in)}
         </Text>
       </TouchableOpacity>
     );

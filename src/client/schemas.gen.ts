@@ -1232,46 +1232,62 @@ export const TokenSymbolSchema = {
     title: 'TokenSymbol'
 } as const;
 
-export const TransactionReadSchema = {
+export const TransferReadSchema = {
     properties: {
         id: {
             type: 'string',
             format: 'uuid',
             title: 'Id'
         },
-        source: {
-            type: 'string',
-            title: 'Source'
-        },
-        destination: {
-            type: 'string',
-            title: 'Destination'
-        },
-        amount_in: {
-            type: 'integer',
-            title: 'Amount In'
-        },
-        amount_out: {
-            type: 'integer',
-            title: 'Amount Out'
-        },
-        status: {
-            allOf: [
+        withdrawal: {
+            anyOf: [
                 {
-                    '$ref': '#/components/schemas/TransactionStatus'
+                    '$ref': '#/components/schemas/WithdrawalRead'
+                },
+                {
+                    type: 'null'
+                }
+            ]
+        },
+        recipient: {
+            anyOf: [
+                {
+                    '$ref': '#/components/schemas/RecipientRead'
+                },
+                {
+                    type: 'null'
+                }
+            ]
+        },
+        quote: {
+            anyOf: [
+                {
+                    '$ref': '#/components/schemas/QuoteRead'
+                },
+                {
+                    type: 'null'
+                }
+            ]
+        },
+        deposit_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
                 }
             ],
-            default: 'PENDING'
+            title: 'Deposit Id'
+        },
+        status: {
+            '$ref': '#/components/schemas/TransferStatus'
         },
         customer_id: {
             type: 'string',
             format: 'uuid',
             title: 'Customer Id'
-        },
-        quote_id: {
-            type: 'string',
-            format: 'uuid',
-            title: 'Quote Id'
         },
         reference_id: {
             anyOf: [
@@ -1284,16 +1300,17 @@ export const TransactionReadSchema = {
             ],
             title: 'Reference Id'
         },
-        payout_address: {
+        recipient_id: {
             anyOf: [
                 {
-                    type: 'string'
+                    type: 'string',
+                    format: 'uuid'
                 },
                 {
                     type: 'null'
                 }
             ],
-            title: 'Payout Address'
+            title: 'Recipient Id'
         },
         created_at: {
             type: 'string',
@@ -1302,11 +1319,11 @@ export const TransactionReadSchema = {
         }
     },
     type: 'object',
-    required: ['id', 'source', 'destination', 'amount_in', 'amount_out', 'customer_id', 'quote_id', 'created_at'],
-    title: 'TransactionRead'
+    required: ['id', 'status', 'customer_id', 'created_at'],
+    title: 'TransferRead'
 } as const;
 
-export const TransactionRequestSchema = {
+export const TransferRequestSchema = {
     properties: {
         quote_id: {
             type: 'string',
@@ -1337,13 +1354,13 @@ export const TransactionRequestSchema = {
     },
     type: 'object',
     required: ['quote_id', 'customer_id', 'recipient_id'],
-    title: 'TransactionRequest'
+    title: 'TransferRequest'
 } as const;
 
-export const TransactionStatusSchema = {
+export const TransferStatusSchema = {
     type: 'string',
     enum: ['WAITING', 'PAID', 'PENDING', 'SUBMITTED', 'IN_PROGRESS', 'SENT', 'REJECTED', 'INVALID_ACCOUNT_DETAILS', 'ERROR'],
-    title: 'TransactionStatus'
+    title: 'TransferStatus'
 } as const;
 
 export const USAStateSchema = {
@@ -1380,4 +1397,76 @@ export const ValidationErrorSchema = {
     type: 'object',
     required: ['loc', 'msg', 'type'],
     title: 'ValidationError'
+} as const;
+
+export const WithdrawalReadSchema = {
+    properties: {
+        id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Id'
+        },
+        status: {
+            '$ref': '#/components/schemas/TransferStatus'
+        },
+        external_id: {
+            type: 'string',
+            title: 'External Id'
+        },
+        payout_address: {
+            type: 'string',
+            title: 'Payout Address'
+        },
+        payout_token: {
+            type: 'string',
+            title: 'Payout Token'
+        },
+        payout_network_id: {
+            type: 'string',
+            title: 'Payout Network Id'
+        },
+        tx_hash: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Tx Hash'
+        },
+        quote_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Quote Id'
+        },
+        created_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Created At'
+        },
+        finished_at: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Finished At'
+        }
+    },
+    type: 'object',
+    required: ['id', 'status', 'external_id', 'payout_address', 'payout_token', 'payout_network_id', 'created_at'],
+    title: 'WithdrawalRead'
 } as const;
