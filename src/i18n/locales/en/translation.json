@@ -5,8 +5,10 @@
     "welcome_zeneca": "Welcome to Zeneca!"
   },
   "home": {
-    "deposit": "Deposit",
-    "send": "Send",
+    "depositActionText": "Deposit",
+    "sendActionText": "Send",
+    "currency": "USD",
+    "empty_transactions": "No transactions",
     "date_format": "MMM d",
     "transactions": "Transactions"
   },
