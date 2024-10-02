@@ -9,6 +9,7 @@ export type RootStackParamList = {
   TransactionReceipt: undefined;
   MainTabs: undefined;
   SendSuccess: undefined;
+  LoginOptions: undefined;
 };
 
 declare global {
