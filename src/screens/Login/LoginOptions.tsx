@@ -51,6 +51,8 @@ const LoginOptions: React.FC = () => {
 
     const loginWithEmail = () => {
         console.log("loginWithEmail");
+        navigation.goBack(); // Dismiss the modal
+        navigation.navigate("LoginWithEmail");
     };
 
     return (
