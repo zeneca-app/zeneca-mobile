@@ -1,49 +1,19 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { useLoginWithOAuth } from "@privy-io/expo";
 import { useNavigation } from "@react-navigation/native";
-import { toast } from "burnt";
 import { useTranslation } from "react-i18next";
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import Logo from "../../../assets/logo-light.svg";
-import useAuthStore from "../../storage/authStore";
 import { colors } from "../../styles/colors";
 import LogoLetter from "../../../assets/zeneca-logo-letters.svg";
 import GradientCircle from "../../../assets/zeneca-gradient-circle.svg";
 
+
 const Login = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const { login } = useLoginWithOAuth({
-    onSuccess: (user, isNewUser) => {
-      update(true);
-      navigation.navigate("MainTabs");
-      if (isNewUser) {
-        toast({
-          title: t("login.welcome_zeneca"),
-          preset: "done",
-        });
-      }
-    },
-    onError: (error) => {
-      console.log("error", error);
-    },
-  });
-  const { update } = useAuthStore((state) => ({
-    update: state.update,
-  }));
 
-  const loginWithGmail = async () => {
-    try {
-      await login({ provider: "google" });
-    } catch (error) {
-      const e = error as Error;
-      console.log("error", e);
-      toast({
-        title: e?.message ?? "Login Error",
-        preset: "error",
-      });
-    }
-  };
+  const loginOptions = async () => {
+    navigation.navigate("LoginOptions");
+  }
 
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
@@ -63,28 +33,13 @@ const Login = () => {
             </View>
           </View>
           <View style={styles.buttonsContainer}>
-            <Pressable style={styles.commonButton} onPress={loginWithGmail}>
-              <Ionicons
-                name="logo-google"
-                size={24}
-                color={colors.darkHighlight}
-                style={styles.buttonIcon}
-              />
+            <Pressable style={styles.commonButton} onPress={loginOptions}>
               <View style={styles.textContainer}>
                 <Text style={styles.loginText}>
-                  {t("login.continue_with_google")}
+                  {t("login.welcomeActionText")}
                 </Text>
               </View>
             </Pressable>
-            {/* TODO: Enable email login without SSO */}
-            {/* <View style={styles.buttonEmailContainer}>
-            <Pressable style={styles.commonButton} onPress={onLogout}>
-              <Ionicons name="mail" size={24} color="white" />
-              <View style={styles.textContainer}>
-                <Text style={styles.loginText}>Continue with Email</Text>
-              </View>
-            </Pressable>
-          </View> */}
           </View>
         </View>
       </View>
