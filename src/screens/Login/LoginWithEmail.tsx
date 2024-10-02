@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import useAuthStore from "../../storage/authStore";
 
 
 const TEST_EMAIL = "tester@zeneca.app";
@@ -24,6 +25,10 @@ const LoginWithEmail = () => {
     const schema = createSchema(t);
     type FormData = z.infer<typeof schema>;
 
+    const { update } = useAuthStore((state) => ({
+        update: state.update,
+    }));
+
     const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(schema),
         defaultValues: {
@@ -33,6 +38,7 @@ const LoginWithEmail = () => {
 
     const onSubmit = (data: FormData) => {
         if (data.email === TEST_EMAIL) {
+            update(true);
             navigation.navigate("MainTabs");
         } else {
             alert(t("loginWithEmail.errorText"));
@@ -105,6 +111,9 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         marginTop: 20,
+    },
+    inputLineError: {
+        borderColor: 'red',
     },
     label: {
         color: '#95929F',
