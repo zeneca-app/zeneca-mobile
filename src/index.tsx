@@ -26,6 +26,8 @@ import useAuthStore from "./storage/authStore";
 import TransactionReceiptScreen from "./screens/TransactionReceipt";
 import InvestmentComingSoonScreen from "./screens/InvestmentComingSoon";
 import SendSuccessScreen from "./screens/SendSuccess";
+import LoginOptions from "./screens/LoginOptions";
+
 
 const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID ?? "";
 const CLIENT_ID = process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID ?? "";
@@ -146,13 +148,23 @@ const AppIndex = () => {
                   name="QuoteConfirmation"
                   component={QuoteConfirmationScreen}
                 />
-                <Stack.Group screenOptions={{ presentation: 'modal'}}>
+                <Stack.Group screenOptions={{ presentation: 'modal' }}>
                   <Stack.Screen
                     name="TransactionReceipt"
                     options={{ headerShown: false }}
                     component={TransactionReceiptScreen}
                   />
                 </Stack.Group>
+
+                <Stack.Screen
+                  options={{
+                    headerShown: false,
+                    presentation: 'transparentModal',
+                  }}
+                  name="LoginOptions"
+                  component={LoginOptions}
+                />
+
                 <Stack.Screen
                   options={{ headerShown: false }}
                   name="SendSuccess"
