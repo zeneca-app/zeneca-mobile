@@ -2,7 +2,7 @@
   "expo": {
     "name": "Zeneca",
     "slug": "zeneca",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -13,7 +13,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "app.zeneca",
+      "bundleIdentifier": "app.zeneca.prod",
       "usesAppleSignIn": true
     },
     "android": {
@@ -21,22 +21,24 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "app.zeneca"
+      "package": "app.zeneca.prod"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "scheme": "app.zeneca",
+    "scheme": "app.zeneca.prod",
     "plugins": [
       "expo-localization",
       [
         "expo-font",
         {
           "fonts": [
+            "node_modules/@expo-google-fonts/manrope/Manrope_300Light.ttf",
             "node_modules/@expo-google-fonts/manrope/Manrope_400Regular.ttf",
             "node_modules/@expo-google-fonts/manrope/Manrope_500Medium.ttf",
             "node_modules/@expo-google-fonts/manrope/Manrope_600SemiBold.ttf",
-            "node_modules/@expo-google-fonts/manrope/Manrope_700Bold.ttf"
+            "node_modules/@expo-google-fonts/manrope/Manrope_700Bold.ttf",
+            "node_modules/@expo-google-fonts/manrope/Manrope_800ExtraBold.ttf"
           ]
         }
       ],
@@ -55,6 +57,12 @@
           }
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "07db86a6-53e9-40e0-b3f5-84d401b54213"
+      }
+    },
+    "owner": "zeneca"
   }
 }
