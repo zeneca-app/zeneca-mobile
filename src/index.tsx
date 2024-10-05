@@ -1,5 +1,6 @@
 import "./i18n";
 import {
+  Manrope_300Light,
   Manrope_400Regular,
   Manrope_500Medium,
   Manrope_600SemiBold,
@@ -26,7 +27,8 @@ import useAuthStore from "./storage/authStore";
 import TransactionReceiptScreen from "./screens/TransactionReceipt";
 import InvestmentComingSoonScreen from "./screens/InvestmentComingSoon";
 import SendSuccessScreen from "./screens/SendSuccess";
-import LoginOptions from "./screens/LoginOptions";
+import LoginOptions from "./screens/Login/LoginOptions";
+import LoginWithEmail from "./screens/Login/LoginWithEmail";
 
 
 const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID ?? "";
@@ -34,9 +36,12 @@ const CLIENT_ID = process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID ?? "";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
+
 type CustomTabBarProps = BottomTabBarProps & {
   state: TabNavigationState<ParamListBase>;
 };
+
+
 
 const CustomTabBar: React.FC<CustomTabBarProps> = ({ state, descriptors, navigation }) => {
   return (
@@ -97,6 +102,7 @@ const MainTabs = () => {
 
 const AppIndex = () => {
   const [loaded] = useFonts({
+    Manrope_300Light,
     Manrope_400Regular,
     Manrope_500Medium,
     Manrope_600SemiBold,
@@ -163,6 +169,12 @@ const AppIndex = () => {
                   }}
                   name="LoginOptions"
                   component={LoginOptions}
+                />
+
+                <Stack.Screen
+                  options={{ headerShown: false }}
+                  name="LoginWithEmail"
+                  component={LoginWithEmail}
                 />
 
                 <Stack.Screen

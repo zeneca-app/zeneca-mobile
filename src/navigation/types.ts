@@ -10,6 +10,7 @@ export type RootStackParamList = {
   MainTabs: undefined;
   SendSuccess: undefined;
   LoginOptions: undefined;
+  LoginWithEmail: undefined;
 };
 
 declare global {

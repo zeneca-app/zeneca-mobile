@@ -5,6 +5,12 @@
     "continue_with_google": "Continua con Google",
     "welcomeActionText": "¡Abrir mi cuenta!"
   },
+  "loginWithEmail": {
+    "title": "¿Cuál es tu email?",
+    "emailLabel": "Email",
+    "continueButton": "Continuar",
+    "errorText": "Email inválido"
+  },
   "home": {
     "depositActionText": "Depositar",
     "sendActionText": "Enviar",
