@@ -11,6 +11,7 @@ import useAuthStore from "../../storage/authStore";
 
 
 const TEST_EMAIL = "tester@zeneca.app";
+const KYC_SCREEN = "kyc@zeneca.app";
 
 type TranslationFunction = (key: string) => string;
 
@@ -40,6 +41,8 @@ const LoginWithEmail = () => {
         if (data.email === TEST_EMAIL) {
             update(true);
             navigation.navigate("MainTabs");
+        } else if (data.email === KYC_SCREEN) {
+            navigation.navigate("KYCVerification");
         } else {
             alert(t("loginWithEmail.errorText"));
         }

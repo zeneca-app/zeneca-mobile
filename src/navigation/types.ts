@@ -11,6 +11,8 @@ export type RootStackParamList = {
   SendSuccess: undefined;
   LoginOptions: undefined;
   LoginWithEmail: undefined;
+  KYCVerification: undefined;
+  KYCModal: undefined;
 };
 
 declare global {
