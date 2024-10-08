@@ -13,7 +13,7 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-
+import VerifyIcon from "../../../assets/verify-icon.svg";
 
 
 const KYCVerificationScreen = () => {
@@ -29,14 +29,10 @@ const KYCVerificationScreen = () => {
     };
 
     return (<SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Ionicons name="arrow-back" size={24} color="white" />
-            </TouchableOpacity>
-        </View>
+
 
         <View style={styles.content}>
-            <Ionicons name="camera-outline" size={48} color="white" />
+            <VerifyIcon width={40} height={40} />
             <Text style={styles.title}>{t("kycPreview.title")}</Text>
             <Text style={styles.subtitle}>
                 {t("kycPreview.subtitle")}
@@ -67,20 +63,23 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         paddingHorizontal: 32,
     },
     title: {
         fontSize: 28,
-        fontWeight: 'bold',
+        fontFamily: "Manrope_500Medium",
         color: 'white',
         marginTop: 16,
         marginBottom: 8,
+        textAlign: 'left',
+        alignSelf: 'flex-start',
     },
     subtitle: {
         fontSize: 16,
         color: '#888',
         textAlign: 'left',
+        alignSelf: 'flex-start',
     },
     buttonContainer: {
         padding: 16,
@@ -88,7 +87,7 @@ const styles = StyleSheet.create({
     startButton: {
         backgroundColor: 'white',
         borderRadius: 25,
-        paddingVertical: 12,
+        paddingVertical: 16,
         alignItems: 'center',
         marginBottom: 16,
     },

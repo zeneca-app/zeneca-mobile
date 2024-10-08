@@ -31,7 +31,7 @@ const HomeScreen = () => {
   const { t } = useTranslation();
 
   const { logout } = usePrivy();
-  const { update } = useAuthStore((state) => ({ update: state.update }));
+  const { updateLogged } = useAuthStore((state) => ({ updateLogged: state.updateLogged }));
 
   const { data: balance } = useQuery({
     queryKey: ["balance"],
@@ -53,17 +53,21 @@ const HomeScreen = () => {
   const onLogout = async () => {
     try {
       await logout();
-      update(false);
-      navigation.navigate("Login");
+      nextLogout();
     } catch (err) {
       const e = err as Error;
       toast({
         title: e?.message ?? "Login Error",
         preset: "error",
       });
-      update(true);
+      updateLogged(false);
     }
   };
+
+  const nextLogout = () => {
+    updateLogged(false);
+    navigation.navigate("Login");
+  }
 
   const onSend = useCallback(
     () => navigation.navigate("Recipients"),
