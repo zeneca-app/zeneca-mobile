@@ -4,7 +4,7 @@ import zustandStorage from "./storage";
 
 interface AuthState {
   logged: boolean;
-  update: (status: boolean) => void;
+  updateLogged: (status: boolean) => void;
   reset: () => void;
 }
 
@@ -17,7 +17,7 @@ const useAuthStore = create<AuthState>()(
     persist(
       (set) => ({
         logged: false,
-        update: (status) => set(() => ({ logged: status })),
+        updateLogged: (status) => set(() => ({ logged: status })),
         reset: () => set(() => ({ logged: initialState.logged })),
       }),
       {

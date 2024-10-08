@@ -13,11 +13,16 @@ const LoginOptions: React.FC = () => {
     const { t } = useTranslation();
     const navigation = useNavigation();
 
+    const goToNextScreen = () => {
+        navigation.goBack(); // Dismiss the modal
+        navigation.navigate("KYCPreview");
+    };
+
     const { login, state } = useLoginWithOAuth({
         onSuccess: (user, isNewUser) => {
             console.log("user", user);
-            update(true);
-            navigation.navigate("MainTabs");
+            updateLogged(true);
+            goToNextScreen();
             if (isNewUser) {
                 toast({
                     title: t("login.welcome_zeneca"),
@@ -31,13 +36,12 @@ const LoginOptions: React.FC = () => {
     });
     console.log("state", state);
 
-    const { update } = useAuthStore((state) => ({
-        update: state.update,
+    const { updateLogged } = useAuthStore((state) => ({
+        updateLogged: state.updateLogged,
     }));
 
     const loginWithGmail = async () => {
         try {
-
             await login({ provider: "google" });
         } catch (error) {
             const e = error as Error;
@@ -50,7 +54,6 @@ const LoginOptions: React.FC = () => {
     };
 
     const loginWithEmail = () => {
-        console.log("loginWithEmail");
         navigation.goBack(); // Dismiss the modal
         navigation.navigate("LoginWithEmail");
     };

@@ -29,7 +29,7 @@ import InvestmentComingSoonScreen from "./screens/InvestmentComingSoon";
 import SendSuccessScreen from "./screens/SendSuccess";
 import LoginOptions from "./screens/Login/LoginOptions";
 import LoginWithEmail from "./screens/Login/LoginWithEmail";
-import KYCVerificationScreen from "./screens/KYCVerification/KYCPreview";
+import KYCPreview from "./screens/KYCVerification/KYCPreview";
 import KYCModal from "./screens/KYCVerification/KYCModal";
 
 const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID ?? "";
@@ -182,8 +182,8 @@ const AppIndex = () => {
 
                 <Stack.Screen
                   options={{ headerShown: false }}
-                  name="KYCVerification"
-                  component={KYCVerificationScreen}
+                  name="KYCPreview"
+                  component={KYCPreview}
                 />
 
                 <Stack.Screen
