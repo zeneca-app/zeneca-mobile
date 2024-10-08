@@ -11,6 +11,12 @@
     "continueButton": "Continue",
     "errorText": "Invalid email"
   },
+  "kycPreview": {
+    "title": "Almost there!",
+    "subtitle": "To finish, we have to verify your identity. It will only take a few minutes.",
+    "startButton": "Start",
+    "laterButton": "Do it later"
+  },
   "home": {
     "depositActionText": "Deposit",
     "sendActionText": "Send",

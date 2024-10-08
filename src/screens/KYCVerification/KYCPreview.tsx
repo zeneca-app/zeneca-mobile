@@ -15,8 +15,6 @@ import {
 } from "react-native";
 
 
-const TEMPLATE_ID = process.env.EXPO_PUBLIC_AIPRISE_TEMPLATE_ID ?? "";
-console.log(TEMPLATE_ID);
 
 const KYCVerificationScreen = () => {
     const navigation = useNavigation();
@@ -26,28 +24,31 @@ const KYCVerificationScreen = () => {
         navigation.navigate("KYCModal");
     };
 
+    const goHome = () => {
+        navigation.navigate("MainTabs");
+    };
+
     return (<SafeAreaView style={styles.container}>
         <View style={styles.header}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Ionicons name="arrow-back" size={24} color="white" />
             </TouchableOpacity>
-            {/* Remove the title from here */}
         </View>
 
         <View style={styles.content}>
             <Ionicons name="camera-outline" size={48} color="white" />
-            <Text style={styles.title}>¡Ya casi!</Text>
+            <Text style={styles.title}>{t("kycPreview.title")}</Text>
             <Text style={styles.subtitle}>
-                Para terminar, tenemos que verificar tu identidad. Solo te tomará unos minutos.
+                {t("kycPreview.subtitle")}
             </Text>
         </View>
 
         <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.startButton} onPress={launchKYCModal}>
-                <Text style={styles.buttonText}>Comenzar</Text>
+                <Text style={styles.buttonText}>{t("kycPreview.startButton")}</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => {/* Handle later */ }}>
-                <Text style={styles.laterText}>Hacerlo más tarde</Text>
+            <TouchableOpacity onPress={goHome}>
+                <Text style={styles.laterText}>{t("kycPreview.laterButton")}</Text>
             </TouchableOpacity>
         </View>
 
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     subtitle: {
         fontSize: 16,
         color: '#888',
-        textAlign: 'center',
+        textAlign: 'left',
     },
     buttonContainer: {
         padding: 16,

@@ -125,11 +125,22 @@ const AppIndex = () => {
           <PrivyProvider appId={APP_ID} clientId={CLIENT_ID}>
             <QueryClientProvider client={queryClient}>
               <Stack.Navigator initialRouteName={logged ? "MainTabs" : "Login"}>
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="Login"
-                  component={Login}
-                />
+                <Stack.Group>
+                  <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="Login"
+                    component={Login}
+                  />
+                  <Stack.Screen
+                    options={{
+                      headerShown: false,
+                      presentation: 'transparentModal',
+                    }}
+                    name="LoginOptions"
+                    component={LoginOptions}
+                  />
+                </Stack.Group>
+
                 <Stack.Screen
                   options={{ headerShown: false }}
                   name="MainTabs"
@@ -162,15 +173,6 @@ const AppIndex = () => {
                     component={TransactionReceiptScreen}
                   />
                 </Stack.Group>
-
-                <Stack.Screen
-                  options={{
-                    headerShown: false,
-                    presentation: 'transparentModal',
-                  }}
-                  name="LoginOptions"
-                  component={LoginOptions}
-                />
 
                 <Stack.Screen
                   options={{ headerShown: false }}

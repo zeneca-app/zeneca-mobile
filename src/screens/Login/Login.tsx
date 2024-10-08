@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import Logo from "../../../assets/logo-light.svg";
+import Logo from "../../../assets/zeneca-logo-bright.svg";
 import { colors } from "../../styles/colors";
 import LogoLetter from "../../../assets/zeneca-logo-letters.svg";
 import GradientCircle from "../../../assets/zeneca-gradient-circle.svg";
