@@ -1,37 +1,28 @@
 
-import React, { useCallback, useMemo, useState, useEffect } from "react";
+import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { useQuery } from "@tanstack/react-query";
-import { useTranslation } from "react-i18next";
 import {
-    FlatList,
     SafeAreaView,
     StyleSheet,
-    Text,
-    TextInput,
     TouchableOpacity,
     View,
     Dimensions,
 } from "react-native";
 import { useCamera } from "../../hooks/useCamera";
-import { AiPriseButton, AiPriseFrame } from "aiprise-react-native-sdk";
+import { AiPriseFrame } from "aiprise-react-native-sdk";
 
 
-const TEMPLATE_ID = process.env.EXPO_PUBLIC_AIPRISE_TEMPLATE_ID ?? "";
-console.log(TEMPLATE_ID);
+const TEMPLATE_ID = process.env.EXPO_PUBLIC_AIPRISE_TEMPLATE_ID ?? ""; // TODO: Add this api call to the backend
+const MODE = "SANDBOX"; // TODO: Add this api call to the backend
 
 const KYCModal = () => {
     const navigation = useNavigation();
-    const { t } = useTranslation();
-    const { permission, getPermission } = useCamera();
-
-    useEffect(() => {
-        getPermission();
-    }, []);
-
     const { height, width } = Dimensions.get('window');
 
+    const handleOnComplete = () => {
+        navigation.navigate("MainTabs");
+    }
 
     return (<SafeAreaView style={styles.container}>
         <View style={styles.header}>
@@ -46,13 +37,12 @@ const KYCModal = () => {
 
         <AiPriseFrame
             style={{
-                width: width, 
+                width: width,
                 height: height * 0.89,
-
             }}
 
-            mode="SANDBOX"
-            templateID={TEMPLATE_ID ?? ""}
+            mode={MODE}
+            templateID={TEMPLATE_ID}
             theme={{
                 background: "dark",
                 layout_border_radius: "0px",
@@ -61,6 +51,15 @@ const KYCModal = () => {
                 button_font_size: "14px",
                 color_page: "#000000",
                 button_border_radius: "60px"
+            }}
+
+            onSuccess={handleOnComplete}
+            onComplete={handleOnComplete}
+            onError={(errorCode) => {
+                alert("Error: " + errorCode);
+                // SESSION_FAILED is fired when session creation fails (due to incorrect values, internet or server issues, etc)
+                // SESSION_EXPIRED happens when you try to resume a session but the session ID has expired
+                // SESSION_COMPLETED happens when you try to resume a session but the session has already been completed by the user
             }}
         />
     </SafeAreaView>)
