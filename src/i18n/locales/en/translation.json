@@ -11,6 +11,11 @@
     "continueButton": "Continue",
     "errorText": "Invalid email"
   },
+  "emailOtpValidation": {
+    "title": "Enter the verification code",
+    "subtitle": "We sent you one to",
+    "continueButton": "Verify and continue"
+  },
   "kycPreview": {
     "title": "Almost there!",
     "subtitle": "To finish, we have to verify your identity. It will only take a few minutes.",

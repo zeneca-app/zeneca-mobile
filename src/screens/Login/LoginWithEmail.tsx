@@ -45,16 +45,16 @@ const LoginWithEmail = () => {
             updateLogged(true);
             goToNextScreen();
         } else {
-            alert(t("loginWithEmail.errorText"));
+            navigation.navigate("EmailOtpValidation");
         }
     };
 
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles.container}
+            style={styles.mainContainer}
         >
-            <SafeAreaView style={styles.container}>
+            <SafeAreaView style={styles.safeAreaContainer}>
                 <View style={styles.topContent}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
                         <Ionicons name="arrow-back" size={24} color="white" />
@@ -96,10 +96,12 @@ const LoginWithEmail = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
+    mainContainer: {
         flex: 1,
         backgroundColor: '#0D0B0D',
-        justifyContent: 'space-between',
+    },
+    safeAreaContainer: {
+        flex: 1,
     },
     topContent: {
         padding: 20,

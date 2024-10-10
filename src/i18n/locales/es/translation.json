@@ -11,6 +11,11 @@
     "continueButton": "Continuar",
     "errorText": "Email inválido"
   },
+  "emailOtpValidation": {
+    "title": "Ingresa el código de verificación",
+    "subtitle": "Te enviamos uno a ",
+    "continueButton": "Verificar y continuar"
+  },
   "kycPreview": {
     "title": "¡Ya casi!",
     "subtitle": "Para terminar, debemos verificar tu identidad. Solo tomará unos minutos.",
