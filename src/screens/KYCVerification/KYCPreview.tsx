@@ -14,7 +14,7 @@ import {
     View,
 } from "react-native";
 import VerifyIcon from "../../../assets/verify-icon.svg";
-
+import VerifyIlustration from "../../../assets/verify-ilustration.svg";
 
 const KYCVerificationScreen = () => {
     const navigation = useNavigation();
@@ -30,15 +30,18 @@ const KYCVerificationScreen = () => {
 
     return (<SafeAreaView style={styles.container}>
 
-
         <View style={styles.content}>
-            <VerifyIcon width={40} height={40} />
+            <View style={styles.illustrationContainer}>
+                <VerifyIlustration width={200} height={200} />
+            </View>
             <Text style={styles.title}>{t("kycPreview.title")}</Text>
             <Text style={styles.subtitle}>
                 {t("kycPreview.subtitle")}
             </Text>
+            <Text style={styles.terms} >
+                {t("kycPreview.terms")}
+            </Text>
         </View>
-
         <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.startButton} onPress={launchKYCModal}>
                 <Text style={styles.buttonText}>{t("kycPreview.startButton")}</Text>
@@ -66,9 +69,14 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         paddingHorizontal: 32,
     },
+    illustrationContainer: {
+        width: '100%',
+        alignItems: 'center',
+        marginBottom: 24,
+    },
     title: {
-        fontSize: 28,
-        fontFamily: "Manrope_500Medium",
+        fontSize: 30,
+        fontFamily: "Manrope_600SemiBold",
         color: 'white',
         marginTop: 16,
         marginBottom: 8,
@@ -80,6 +88,16 @@ const styles = StyleSheet.create({
         color: '#888',
         textAlign: 'left',
         alignSelf: 'flex-start',
+        fontFamily: "Manrope_400Regular",
+        marginBottom: 16,
+    },
+    terms: {
+        fontSize: 16,
+        color: '#888',
+        fontFamily: "Manrope_400Regular",
+        textAlign: 'left',
+        alignSelf: 'flex-start',
+        marginBottom: 24,   // Add some space between terms and button
     },
     buttonContainer: {
         padding: 16,

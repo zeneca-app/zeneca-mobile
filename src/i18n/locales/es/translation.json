@@ -14,8 +14,9 @@
   "kycPreview": {
     "title": "¡Ya casi!",
     "subtitle": "Para terminar, debemos verificar tu identidad. Solo tomará unos minutos.",
-    "startButton": "Comenzar",
-    "laterButton": "Hacerlo más tarde"
+    "startButton": "Verificar ahora",
+    "laterButton": "Hacerlo más tarde",
+    "terms": "La verificación de identidad se realiza a través del proveedor seguro y regulado AiPrise."
   },
   "home": {
     "depositActionText": "Depositar",
