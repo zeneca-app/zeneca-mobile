@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { OtpInput } from "react-native-otp-entry";
 
+import { useLoginWithEmail } from '@privy-io/expo';
+
 type EmailOtpValidationScreenProps = {
     route: {
         params: {
@@ -18,14 +20,24 @@ const EmailOtpValidationScreen = ({ route }: EmailOtpValidationScreenProps) => {
     const { email } = route.params;
     const [verificationCode, setVerificationCode] = useState('');
     const navigation = useNavigation();
-    const [isLoading, setIsLoading] = useState(false);
+
+    const { loginWithCode } = useLoginWithEmail({
+        onLoginSuccess(user, isNewUser) {
+            console.log("onLoginSuccess user", user);
+            console.log("onLoginSuccess isNewUser", isNewUser);
+            navigation.navigate("MainTabs");
+        },
+        onError: (error) => {
+            console.log("error", error);
+        },
+    });
 
     const handleOtpFilled = (otp: string) => {
         setVerificationCode(otp);
     };
 
     const handleContinue = () => {
-        console.log("Continue button pressed");
+        loginWithCode({ code: verificationCode, email: email });
     };
 
     const isCodeFilled = verificationCode.length === 6;

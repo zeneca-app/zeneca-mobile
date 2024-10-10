@@ -8,6 +8,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { KeyboardAvoidingView, Platform } from "react-native";
 import { zodResolver } from '@hookform/resolvers/zod';
 import useAuthStore from "../../storage/authStore";
+import { useLoginWithEmail } from '@privy-io/expo';
 
 const TEST_EMAIL = "tester@zeneca.app";
 
@@ -45,12 +46,15 @@ const LoginWithEmail = () => {
             updateLogged(true);
             goToNextScreen();
         } else {
+            sendCode({ email });
             navigation.navigate("EmailOtpValidation", { email: email } as any);
         }
     };
 
     const email = watch('email');
     const isContinueButtonDisabled = errors.email !== undefined || email.trim() === '';
+
+    const { sendCode } = useLoginWithEmail();
 
     return (
         <KeyboardAvoidingView
