@@ -69,7 +69,10 @@ const EmailOtpValidationScreen = ({ route }: EmailOtpValidationScreenProps) => {
                         ]}
                         disabled={!isCodeFilled}
                         onPress={handleContinue}>
-                        <Text style={styles.continueButtonText}>{t("emailOtpValidation.continueButton")}</Text>
+                        <Text style={[
+                            styles.continueButtonText,
+                            !isCodeFilled && styles.continueButtonTextDisabled
+                        ]}>{t("emailOtpValidation.continueButton")}</Text>
                     </TouchableOpacity>
                 </View>
             </SafeAreaView>
@@ -121,7 +124,7 @@ const styles = StyleSheet.create({
         height: 50,
         borderWidth: 0,
         borderBottomWidth: 1,
-        borderBottomColor: '#444',
+        borderBottomColor: '#313036',
         backgroundColor: 'transparent',
         borderRadius: 0,
     },
@@ -146,10 +149,15 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     continueButtonDisabled: {
-        backgroundColor: "#333",
+        backgroundColor: "rgba(215, 191, 250, 0.17)",
     },
     continueButtonText: {
         color: "black",
+        fontSize: 18,
+        fontFamily: "Manrope_500Medium",
+    },
+    continueButtonTextDisabled: {
+        color: "rgba(233, 220, 251, 0.45)",
         fontSize: 18,
         fontFamily: "Manrope_500Medium",
     },
