@@ -12,7 +12,7 @@ export type RootStackParamList = {
   LoginOptions: undefined;
   LoginWithEmail: undefined;
   KYCPreview: undefined;
-  KYCModal: undefined;
+  KYCProvider: undefined;
   KYCSuccess: undefined;
 };
 

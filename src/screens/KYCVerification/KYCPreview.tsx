@@ -20,8 +20,8 @@ const KYCVerificationScreen = () => {
     const navigation = useNavigation();
     const { t } = useTranslation();
 
-    const launchKYCModal = () => {
-        navigation.navigate("KYCModal");
+    const launchKYCProvider = () => {
+        navigation.navigate("KYCProvider");
     };
 
     const goHome = () => {
@@ -29,7 +29,6 @@ const KYCVerificationScreen = () => {
     };
 
     return (<SafeAreaView style={styles.container}>
-
         <View style={styles.content}>
             <View style={styles.illustrationContainer}>
                 <VerifyIlustration width={200} height={200} />
@@ -43,15 +42,13 @@ const KYCVerificationScreen = () => {
             </Text>
         </View>
         <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.startButton} onPress={launchKYCModal}>
+            <TouchableOpacity style={styles.startButton} onPress={launchKYCProvider}>
                 <Text style={styles.buttonText}>{t("kycPreview.startButton")}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={goHome}>
                 <Text style={styles.laterText}>{t("kycPreview.laterButton")}</Text>
             </TouchableOpacity>
         </View>
-
-
     </SafeAreaView>)
 };
 

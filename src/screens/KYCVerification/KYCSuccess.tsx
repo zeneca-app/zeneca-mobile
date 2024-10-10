@@ -19,18 +19,14 @@ const KYCSuccess = () => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.content}>
-                <Text style={styles.title}>¡Perfecto!</Text>
-                <Text style={styles.subtitle}>Estamos verificando tu identidad</Text>
-
-                <Text style={styles.footer}>
-                    Te vamos a avisar cuando la verificación esté completada.
+                <Text style={styles.title}>{t("kycSuccess.title")}</Text>
+                <Text style={styles.subtitle}>{t("kycSuccess.subtitle")}</Text>
+                <Text style={styles.wait}>
+                    {t("kycSuccess.wait")}
                 </Text>
             </View>
-            {/* <View style={styles.loaderContainer}>
-                <ActivityIndicator size="large" color="#FFFFFF" />
-            </View> */}
             <TouchableOpacity style={styles.doneButton} onPress={goHome}>
-                <Text style={styles.buttonText}>Terminado</Text>
+                <Text style={styles.buttonText}>{t("kycSuccess.doneButton")}</Text>
             </TouchableOpacity>
         </SafeAreaView>
     );
@@ -69,7 +65,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         fontFamily: "Manrope_300Light",
     },
-    footer: {
+    wait: {
         fontSize: 16,
         color: '#FFFFFF',
         textAlign: 'center',

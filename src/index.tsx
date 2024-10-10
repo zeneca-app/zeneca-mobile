@@ -30,7 +30,7 @@ import SendSuccessScreen from "./screens/SendSuccess";
 import LoginOptions from "./screens/Login/LoginOptions";
 import LoginWithEmail from "./screens/Login/LoginWithEmail";
 import KYCPreview from "./screens/KYCVerification/KYCPreview";
-import KYCModal from "./screens/KYCVerification/KYCModal";
+import KYCProvider from "./screens/KYCVerification/KYCProvider";
 import KYCSuccess from "./screens/KYCVerification/KYCSuccess";
 
 const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID ?? "";
@@ -190,10 +190,9 @@ const AppIndex = () => {
                 <Stack.Screen
                   options={{
                     headerShown: false,
-                    presentation: 'modal',
                   }}
-                  name="KYCModal"
-                  component={KYCModal}
+                  name="KYCProvider"
+                  component={KYCProvider}
                 />
 
                 <Stack.Screen

@@ -16,7 +16,7 @@ import { AiPriseFrame } from "aiprise-react-native-sdk";
 const TEMPLATE_ID = process.env.EXPO_PUBLIC_AIPRISE_TEMPLATE_ID ?? ""; // TODO: Add this api call to the backend
 const MODE = "SANDBOX"; // TODO: Add this api call to the backend
 
-const KYCModal = () => {
+const KYCProvider = () => {
     const navigation = useNavigation();
     const { height, width } = Dimensions.get('window');
 
@@ -124,4 +124,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default KYCModal;
+export default KYCProvider;
