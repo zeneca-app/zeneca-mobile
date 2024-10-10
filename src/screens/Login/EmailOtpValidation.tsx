@@ -5,13 +5,20 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { OtpInput } from "react-native-otp-entry";
 
+type EmailOtpValidationScreenProps = {
+    route: {
+        params: {
+            email: string;
+        }
+    }
+}
 
-const EmailOtpValidationScreen = ({ }) => {
+const EmailOtpValidationScreen = ({ route }: EmailOtpValidationScreenProps) => {
     const { t } = useTranslation();
+    const { email } = route.params;
     const [verificationCode, setVerificationCode] = useState('');
     const navigation = useNavigation();
     const [isLoading, setIsLoading] = useState(false);
-    const email = "example@example.com";
 
     const handleOtpFilled = (otp: string) => {
         setVerificationCode(otp);
@@ -20,6 +27,8 @@ const EmailOtpValidationScreen = ({ }) => {
     const handleContinue = () => {
         console.log("Continue button pressed");
     };
+
+    const isCodeFilled = verificationCode.length === 6;
 
     return (
         <KeyboardAvoidingView
@@ -39,9 +48,8 @@ const EmailOtpValidationScreen = ({ }) => {
                             numberOfDigits={6}
                             focusColor="#5A10EF"
                             focusStickBlinkingDuration={500}
-                            onTextChange={(text) => console.log(text)}
+                            onTextChange={(text) => setVerificationCode(text)}
                             onFilled={handleOtpFilled}
-
                             theme={{
                                 containerStyle: styles.otpContainer,
                                 inputsContainerStyle: styles.otpInputsContainer,
@@ -57,9 +65,9 @@ const EmailOtpValidationScreen = ({ }) => {
                     <TouchableOpacity
                         style={[
                             styles.continueButton,
-                            !verificationCode && styles.continueButtonDisabled
+                            !isCodeFilled && styles.continueButtonDisabled
                         ]}
-                        disabled={!verificationCode}
+                        disabled={!isCodeFilled}
                         onPress={handleContinue}>
                         <Text style={styles.continueButtonText}>{t("emailOtpValidation.continueButton")}</Text>
                     </TouchableOpacity>
@@ -138,7 +146,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     continueButtonDisabled: {
-        backgroundColor: "#D7BFFA",
+        backgroundColor: "#333",
     },
     continueButtonText: {
         color: "black",

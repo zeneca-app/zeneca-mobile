@@ -45,7 +45,7 @@ const LoginWithEmail = () => {
             updateLogged(true);
             goToNextScreen();
         } else {
-            navigation.navigate("EmailOtpValidation");
+            navigation.navigate("EmailOtpValidation", { email: data.email } as any);
         }
     };
 
