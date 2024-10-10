@@ -33,13 +33,16 @@ const Login = () => {
             </View>
           </View>
           <View style={styles.buttonsContainer}>
-            <Pressable style={styles.commonButton} onPress={loginOptions}>
-              <View style={styles.textContainer}>
-                <Text style={styles.loginText}>
-                  {t("login.welcomeActionText")}
-                </Text>
-              </View>
+            <Pressable style={styles.signUpButton} onPress={loginOptions}>
+              <Text style={styles.signUpButtonText}>
+                {t("login.signUpButton")}
+              </Text>
             </Pressable>
+            {/* <Pressable style={styles.signInButton} onPress={loginOptions}>
+              <Text style={styles.signInButtonText}>
+                {t("login.signInButton")}
+              </Text>
+            </Pressable> */}
           </View>
         </View>
       </View>
@@ -106,29 +109,34 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: "center",
   },
-  commonButton: {
+  signUpButton: {
+    marginBottom: 20,
     flexDirection: 'row',
     width: '100%',
-    maxWidth: 300,
-    height: 50,
-    borderRadius: 25,
+    padding: 16,
+    borderRadius: 35,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "white",
   },
-  buttonIcon: {
-    marginRight: 10,
-  },
-  buttonEmailContainer: {
-    marginTop: 30,
-  },
-  loginText: {
+  signUpButtonText: {
     color: colors.darkHighlight,
     fontSize: 16,
     fontFamily: "Manrope_600SemiBold",
   },
-  textContainer: {
-    marginLeft: 15,
+  signInButton: {
+    flexDirection: 'row',
+    width: '100%',
+    padding: 16,
+    borderRadius: 35,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#252328",
+  },
+  signInButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontFamily: "Manrope_500Medium",
   },
 });
 

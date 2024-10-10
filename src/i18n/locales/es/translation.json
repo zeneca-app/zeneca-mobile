@@ -2,8 +2,15 @@
   "login": {
     "description_line_1": "Dinero global",
     "description_line_2": "como un local",
-    "continue_with_google": "Continua con Google",
-    "welcomeActionText": "¡Abrir mi cuenta!"
+    "signUpButton": "¡Abrir mi cuenta!",
+    "signInButton": "Iniciar sesión"
+  },
+  "loginOptions": {
+    "emailOption": "Continue with email",
+    "googleOption": "Continue with Google",
+    "appleOption": "Continue with Apple",
+    "terms": "Al continuar, aceptas los",
+    "termsLink": "Términos de uso"
   },
   "loginWithEmail": {
     "title": "¿Cuál es tu email?",
