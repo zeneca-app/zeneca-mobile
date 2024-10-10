@@ -21,7 +21,8 @@ const KYCModal = () => {
     const { height, width } = Dimensions.get('window');
 
     const handleOnComplete = () => {
-        navigation.navigate("MainTabs");
+        navigation.goBack(); // Dismiss the modal
+        navigation.navigate("KYCSuccess");
     }
 
     return (<SafeAreaView style={styles.container}>
