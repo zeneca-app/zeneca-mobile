@@ -11,6 +11,19 @@
     "continueButton": "Continuar",
     "errorText": "Email inválido"
   },
+  "kycPreview": {
+    "title": "¡Ya casi!",
+    "subtitle": "Para terminar, debemos verificar tu identidad. Solo tomará unos minutos.",
+    "startButton": "Verificar ahora",
+    "laterButton": "Hacerlo más tarde",
+    "terms": "La verificación de identidad se realiza a través del proveedor seguro y regulado AiPrise."
+  },
+  "kycSuccess": {
+    "title": "¡Perfecto!",
+    "subtitle": "Estamos verificando tu identidad",
+    "wait": "Te avisaremos cuando la verificación esté completa.",
+    "doneButton": "Terminado"
+  },
   "home": {
     "depositActionText": "Depositar",
     "sendActionText": "Enviar",

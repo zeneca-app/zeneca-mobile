@@ -1,12 +1,12 @@
 import React from 'react';
+import { z } from 'zod';
+import { useForm, Controller } from 'react-hook-form';
+import { useTranslation } from "react-i18next";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { KeyboardAvoidingView, Platform } from "react-native";
-import { useTranslation } from "react-i18next";
-import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import useAuthStore from "../../storage/authStore";
 
 
@@ -25,8 +25,8 @@ const LoginWithEmail = () => {
     const schema = createSchema(t);
     type FormData = z.infer<typeof schema>;
 
-    const { update } = useAuthStore((state) => ({
-        update: state.update,
+    const { updateLogged } = useAuthStore((state) => ({
+        updateLogged: state.updateLogged,
     }));
 
     const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
@@ -36,10 +36,14 @@ const LoginWithEmail = () => {
         },
     });
 
+    const goToNextScreen = () => {
+        navigation.navigate("KYCPreview");
+    };
+
     const onSubmit = (data: FormData) => {
         if (data.email === TEST_EMAIL) {
-            update(true);
-            navigation.navigate("MainTabs");
+            updateLogged(true);
+            goToNextScreen();
         } else {
             alert(t("loginWithEmail.errorText"));
         }

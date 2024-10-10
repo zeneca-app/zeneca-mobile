@@ -29,7 +29,9 @@ import InvestmentComingSoonScreen from "./screens/InvestmentComingSoon";
 import SendSuccessScreen from "./screens/SendSuccess";
 import LoginOptions from "./screens/Login/LoginOptions";
 import LoginWithEmail from "./screens/Login/LoginWithEmail";
-
+import KYCPreview from "./screens/KYCVerification/KYCPreview";
+import KYCProvider from "./screens/KYCVerification/KYCProvider";
+import KYCSuccess from "./screens/KYCVerification/KYCSuccess";
 
 const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID ?? "";
 const CLIENT_ID = process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID ?? "";
@@ -124,11 +126,22 @@ const AppIndex = () => {
           <PrivyProvider appId={APP_ID} clientId={CLIENT_ID}>
             <QueryClientProvider client={queryClient}>
               <Stack.Navigator initialRouteName={logged ? "MainTabs" : "Login"}>
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="Login"
-                  component={Login}
-                />
+                <Stack.Group>
+                  <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="Login"
+                    component={Login}
+                  />
+                  <Stack.Screen
+                    options={{
+                      headerShown: false,
+                      presentation: 'transparentModal',
+                    }}
+                    name="LoginOptions"
+                    component={LoginOptions}
+                  />
+                </Stack.Group>
+
                 <Stack.Screen
                   options={{ headerShown: false }}
                   name="MainTabs"
@@ -163,18 +176,29 @@ const AppIndex = () => {
                 </Stack.Group>
 
                 <Stack.Screen
-                  options={{
-                    headerShown: false,
-                    presentation: 'transparentModal',
-                  }}
-                  name="LoginOptions"
-                  component={LoginOptions}
+                  options={{ headerShown: false }}
+                  name="LoginWithEmail"
+                  component={LoginWithEmail}
                 />
 
                 <Stack.Screen
                   options={{ headerShown: false }}
-                  name="LoginWithEmail"
-                  component={LoginWithEmail}
+                  name="KYCPreview"
+                  component={KYCPreview}
+                />
+
+                <Stack.Screen
+                  options={{
+                    headerShown: false,
+                  }}
+                  name="KYCProvider"
+                  component={KYCProvider}
+                />
+
+                <Stack.Screen
+                  options={{ headerShown: false }}
+                  name="KYCSuccess"
+                  component={KYCSuccess}
                 />
 
                 <Stack.Screen

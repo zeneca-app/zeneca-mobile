@@ -11,6 +11,19 @@
     "continueButton": "Continue",
     "errorText": "Invalid email"
   },
+  "kycPreview": {
+    "title": "Almost there!",
+    "subtitle": "To finish, we have to verify your identity. It will only take a few minutes.",
+    "startButton": "Verify now",
+    "laterButton": "Do it later",
+    "terms": "Identity verification is done through the secure and regulated provider AiPrise."
+  },
+  "kycSuccess": {
+    "title": "Perfect!",
+    "subtitle": "We are verifying your identity",
+    "wait": "We will notify you when the verification is complete.",
+    "doneButton": "Done"
+  },
   "home": {
     "depositActionText": "Deposit",
     "sendActionText": "Send",

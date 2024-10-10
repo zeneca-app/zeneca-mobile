@@ -1,6 +1,7 @@
 {
   "cli": {
-    "version": ">= 3.13.3"
+    "version": ">= 3.13.3",
+    "appVersionSource": "remote"
   },
   "build": {
     "development": {
@@ -23,6 +24,7 @@
       }
     },
     "production": {
+      "autoIncrement": true,
       "ios": {
         "distribution": "store"
       }
@@ -30,8 +32,9 @@
     "testflight": {
       "env": {
         "EXPO_PUBLIC_PRIVY_APP_ID": "${EXPO_PUBLIC_PRIVY_APP_ID}",
-        "EXPO_PUBLIC_PRIVY_CLIENT_ID": "${EXPO_PUBLIC_PRIVY_CLIENT_ID}"
-      },  
+        "EXPO_PUBLIC_PRIVY_CLIENT_ID": "${EXPO_PUBLIC_PRIVY_CLIENT_ID}",
+        "EXPO_PUBLIC_AIPRISE_TEMPLATE_ID": "${EXPO_PUBLIC_AIPRISE_TEMPLATE_ID}"
+      },
       "extends": "production",
       "distribution": "internal"
     }
