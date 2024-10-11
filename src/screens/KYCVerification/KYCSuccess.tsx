@@ -35,7 +35,7 @@ const KYCSuccess = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#5A10EF', // Replace with your branding color
+        backgroundColor: '#5A10EF',
         justifyContent: 'space-between',
     },
     content: {

@@ -2,14 +2,27 @@
   "login": {
     "description_line_1": "Global money",
     "description_line_2": "like a local",
-    "continue_with_google": "Continue with Google",
-    "welcomeActionText": "Open my account!"
+    "signUpButton": "Open my account!",
+    "signInButton": "Sign in"
+  },
+  "loginOptions": {
+    "emailOption": "Continue with email",
+    "googleOption": "Continue with Google",
+    "appleOption": "Continue with Apple",
+    "terms": "By continuing, you accept the",
+    "termsLink": "Terms of use"
   },
   "loginWithEmail": {
     "title": "What's your email?",
     "emailLabel": "Email",
     "continueButton": "Continue",
     "errorText": "Invalid email"
+  },
+
+  "emailOtpValidation": {
+    "title": "Enter the verification code",
+    "subtitle": "We sent you one to",
+    "continueButton": "Verify and continue"
   },
   "kycPreview": {
     "title": "Almost there!",

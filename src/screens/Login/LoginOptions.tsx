@@ -69,7 +69,6 @@ const LoginOptions: React.FC = () => {
             />
             <View style={styles.modalContent}>
                 <View style={styles.buttonsContainer}>
-                    {/* TODO: Enable email login without SSO */}
                     <Pressable style={styles.commonButtonPrimary} onPress={loginWithEmail}>
                         <Ionicons
                             name="mail"
@@ -79,7 +78,7 @@ const LoginOptions: React.FC = () => {
                         />
                         <View style={styles.textContainer}>
                             <Text style={styles.commonButtonPrimaryText}>
-                                Continue with Email
+                                {t("loginOptions.emailOption")}
                             </Text>
                         </View>
                     </Pressable>
@@ -92,10 +91,13 @@ const LoginOptions: React.FC = () => {
                         />
                         <View style={styles.textContainer}>
                             <Text style={styles.commonButtonSecondaryText}>
-                                {t("login.continue_with_google")}
+                                {t("loginOptions.googleOption")}
                             </Text>
                         </View>
                     </Pressable>
+                    <Text style={styles.termsText}>
+                        {t("loginOptions.terms")} <Text style={styles.termsTextLink}>{t("loginOptions.termsLink")}</Text>.
+                    </Text>
                 </View>
             </View>
 
@@ -112,7 +114,7 @@ const styles = StyleSheet.create({
     },
     modalContent: {
         height: '45%',
-        backgroundColor: '#18171A',
+        backgroundColor: '#19181B',
         borderRadius: 50,
         alignItems: 'center',
     },
@@ -174,6 +176,18 @@ const styles = StyleSheet.create({
     },
     textContainer: {
         marginLeft: 15,
+    },
+    termsText: {
+        color: "white",
+        fontSize: 14,
+        fontFamily: "Manrope_400Regular",
+        marginTop: 40,
+    },
+    termsTextLink: {
+        color: "white",
+        fontSize: 14,
+        fontFamily: "Manrope_500Medium",
+        textDecorationLine: "underline",
     },
 });
 

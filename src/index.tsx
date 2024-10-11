@@ -29,6 +29,7 @@ import InvestmentComingSoonScreen from "./screens/InvestmentComingSoon";
 import SendSuccessScreen from "./screens/SendSuccess";
 import LoginOptions from "./screens/Login/LoginOptions";
 import LoginWithEmail from "./screens/Login/LoginWithEmail";
+import EmailOtpValidationScreen from "./screens/Login/EmailOtpValidation";
 import KYCPreview from "./screens/KYCVerification/KYCPreview";
 import KYCProvider from "./screens/KYCVerification/KYCProvider";
 import KYCSuccess from "./screens/KYCVerification/KYCSuccess";
@@ -179,6 +180,12 @@ const AppIndex = () => {
                   options={{ headerShown: false }}
                   name="LoginWithEmail"
                   component={LoginWithEmail}
+                />
+
+                <Stack.Screen
+                  options={{ headerShown: false }}
+                  name="EmailOtpValidation"
+                  component={EmailOtpValidationScreen}
                 />
 
                 <Stack.Screen

@@ -9,7 +9,6 @@ import { KeyboardAvoidingView, Platform } from "react-native";
 import { zodResolver } from '@hookform/resolvers/zod';
 import useAuthStore from "../../storage/authStore";
 
-
 const TEST_EMAIL = "tester@zeneca.app";
 
 type TranslationFunction = (key: string) => string;
@@ -29,7 +28,7 @@ const LoginWithEmail = () => {
         updateLogged: state.updateLogged,
     }));
 
-    const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
+    const { control, handleSubmit, formState: { errors }, watch } = useForm<FormData>({
         resolver: zodResolver(schema),
         defaultValues: {
             email: '',
@@ -41,20 +40,24 @@ const LoginWithEmail = () => {
     };
 
     const onSubmit = (data: FormData) => {
-        if (data.email === TEST_EMAIL) {
+        const email = data.email;
+        if (email === TEST_EMAIL) {
             updateLogged(true);
             goToNextScreen();
         } else {
-            alert(t("loginWithEmail.errorText"));
+            navigation.navigate("EmailOtpValidation", { email: email } as any);
         }
     };
+
+    const email = watch('email');
+    const isContinueButtonDisabled = errors.email !== undefined || email.trim() === '';
 
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles.container}
+            style={styles.mainContainer}
         >
-            <SafeAreaView style={styles.container}>
+            <SafeAreaView style={styles.safeAreaContainer}>
                 <View style={styles.topContent}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
                         <Ionicons name="arrow-back" size={24} color="white" />
@@ -85,7 +88,8 @@ const LoginWithEmail = () => {
                 </View>
                 <View style={styles.bottomContent}>
                     <TouchableOpacity
-                        style={styles.continueButton}
+                        disabled={isContinueButtonDisabled}
+                        style={[styles.continueButton, isContinueButtonDisabled && styles.continueButtonDisabled]}
                         onPress={handleSubmit(onSubmit)}>
                         <Text style={styles.continueButtonText}>{t("loginWithEmail.continueButton")}</Text>
                     </TouchableOpacity>
@@ -96,10 +100,12 @@ const LoginWithEmail = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
+    mainContainer: {
         flex: 1,
         backgroundColor: '#0D0B0D',
-        justifyContent: 'space-between',
+    },
+    safeAreaContainer: {
+        flex: 1,
     },
     topContent: {
         padding: 20,
@@ -151,10 +157,15 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     continueButtonDisabled: {
-        backgroundColor: "#333",
+        backgroundColor: "rgba(215, 191, 250, 0.17)",
     },
     continueButtonText: {
         color: "black",
+        fontSize: 18,
+        fontFamily: "Manrope_500Medium",
+    },
+    continueButtonTextDisabled: {
+        color: "rgba(233, 220, 251, 0.45)",
         fontSize: 18,
         fontFamily: "Manrope_500Medium",
     },
