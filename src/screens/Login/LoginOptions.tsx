@@ -7,7 +7,7 @@ import { useLoginWithOAuth } from "@privy-io/expo";
 import { toast } from "burnt";
 import useAuthStore from "../../storage/authStore";
 import { colors } from "../../styles/colors";
-
+import { usePrivy } from "@privy-io/expo";
 
 const LoginOptions: React.FC = () => {
     const { t } = useTranslation();
@@ -17,6 +17,7 @@ const LoginOptions: React.FC = () => {
         navigation.goBack(); // Dismiss the modal
         navigation.navigate("KYCPreview");
     };
+    const { logout } = usePrivy();
 
     const { login, state } = useLoginWithOAuth({
         onSuccess: (user, isNewUser) => {
@@ -32,6 +33,7 @@ const LoginOptions: React.FC = () => {
         },
         onError: (error) => {
             console.log("error", error);
+            logout();
         },
     });
     console.log("state", state);

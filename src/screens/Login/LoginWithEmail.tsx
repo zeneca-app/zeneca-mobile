@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { z } from 'zod';
 import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from "react-i18next";
@@ -8,6 +8,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { KeyboardAvoidingView, Platform } from "react-native";
 import { zodResolver } from '@hookform/resolvers/zod';
 import useAuthStore from "../../storage/authStore";
+import { useStytch } from '@stytch/react-native';
 
 const TEST_EMAIL = "tester@zeneca.app";
 
@@ -24,8 +25,10 @@ const LoginWithEmail = () => {
     const schema = createSchema(t);
     type FormData = z.infer<typeof schema>;
 
-    const { updateLogged } = useAuthStore((state) => ({
+    const { updateLogged, updateEmail, updateMethodId } = useAuthStore((state) => ({
         updateLogged: state.updateLogged,
+        updateEmail: state.updateEmail,
+        updateMethodId: state.updateMethodId,
     }));
 
     const { control, handleSubmit, formState: { errors }, watch } = useForm<FormData>({
@@ -45,8 +48,20 @@ const LoginWithEmail = () => {
             updateLogged(true);
             goToNextScreen();
         } else {
-            navigation.navigate("EmailOtpValidation", { email: email } as any);
+            sendPasscode(email);
         }
+    };
+
+    const stytchClient = useStytch();
+
+    const sendPasscode = (email: string) => {
+        stytchClient.otps.email.loginOrCreate(email, {
+            expiration_minutes: 5,
+        }).then((response) => {
+            updateEmail(email);
+            updateMethodId(response.method_id);
+            navigation.navigate("EmailOtpValidation", { email: email } as any);
+        });
     };
 
     const email = watch('email');

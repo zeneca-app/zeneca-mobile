@@ -1,31 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { OtpInput } from "react-native-otp-entry";
+import { useStytch } from '@stytch/react-native';
+import useAuthStore from '../../storage/authStore';
 
-type EmailOtpValidationScreenProps = {
-    route: {
-        params: {
-            email: string;
-        }
-    }
-}
 
-const EmailOtpValidationScreen = ({ route }: EmailOtpValidationScreenProps) => {
+const EmailOtpValidationScreen = () => {
     const { t } = useTranslation();
-    const { email } = route.params;
+
     const [verificationCode, setVerificationCode] = useState('');
     const navigation = useNavigation();
     const [isLoading, setIsLoading] = useState(false);
+
+    const { methodId, email, updateLogged } = useAuthStore((state) => ({
+        methodId: state.methodId,
+        email: state.email,
+        updateLogged: state.updateLogged,
+    }));
 
     const handleOtpFilled = (otp: string) => {
         setVerificationCode(otp);
     };
 
+    const stytchClient = useStytch();
+
+    const authenticate = (code: string, methodId: string) => {
+        stytchClient.otps.authenticate(code, methodId, {
+            session_duration_minutes: 60,
+        }).then((response) => {
+            console.log(response);
+            updateLogged(true);
+            navigation.navigate("KYCPreview");
+        });
+    };
+
     const handleContinue = () => {
-        console.log("Continue button pressed");
+        authenticate(verificationCode, methodId);
     };
 
     const isCodeFilled = verificationCode.length === 6;

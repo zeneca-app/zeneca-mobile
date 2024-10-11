@@ -8,6 +8,7 @@ import {
   useFonts,
 } from "@expo-google-fonts/manrope";
 import { PrivyProvider } from "@privy-io/expo";
+import { StytchClient, StytchProvider } from '@stytch/react-native';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { createBottomTabNavigator, BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { ParamListBase, TabNavigationState } from '@react-navigation/native';
@@ -34,6 +35,8 @@ import KYCPreview from "./screens/KYCVerification/KYCPreview";
 import KYCProvider from "./screens/KYCVerification/KYCProvider";
 import KYCSuccess from "./screens/KYCVerification/KYCSuccess";
 
+
+
 const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID ?? "";
 const CLIENT_ID = process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID ?? "";
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -44,6 +47,9 @@ type CustomTabBarProps = BottomTabBarProps & {
   state: TabNavigationState<ParamListBase>;
 };
 
+
+
+const stytch = new StytchClient('public-token-test-6c347ff1-c645-4ddd-8c31-80c9b91f0907');
 
 
 const CustomTabBar: React.FC<CustomTabBarProps> = ({ state, descriptors, navigation }) => {
@@ -124,6 +130,7 @@ const AppIndex = () => {
     <Suspense fallback={<></>}>
       <SafeAreaProvider>
         <NavigationContainer>
+        <StytchProvider stytch={stytch}>
           <PrivyProvider appId={APP_ID} clientId={CLIENT_ID}>
             <QueryClientProvider client={queryClient}>
               <Stack.Navigator initialRouteName={logged ? "MainTabs" : "Login"}>
@@ -186,6 +193,7 @@ const AppIndex = () => {
                   options={{ headerShown: false }}
                   name="EmailOtpValidation"
                   component={EmailOtpValidationScreen}
+                  
                 />
 
                 <Stack.Screen
@@ -216,6 +224,7 @@ const AppIndex = () => {
               </Stack.Navigator>
             </QueryClientProvider>
           </PrivyProvider>
+          </StytchProvider>
         </NavigationContainer>
       </SafeAreaProvider>
     </Suspense>

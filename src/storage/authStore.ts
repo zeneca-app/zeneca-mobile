@@ -6,10 +6,16 @@ interface AuthState {
   logged: boolean;
   updateLogged: (status: boolean) => void;
   reset: () => void;
+  email: string;
+  updateEmail: (email: string) => void;
+  methodId: string;
+  updateMethodId: (methodId: string) => void;
 }
 
 const initialState = {
   logged: false,
+  email: "",
+  methodId: "",
 };
 
 const useAuthStore = create<AuthState>()(
@@ -17,7 +23,11 @@ const useAuthStore = create<AuthState>()(
     persist(
       (set) => ({
         logged: false,
+        email: "",
+        methodId: "",
         updateLogged: (status) => set(() => ({ logged: status })),
+        updateEmail: (email) => set(() => ({ email: email })),
+        updateMethodId: (methodId) => set(() => ({ methodId: methodId })),
         reset: () => set(() => ({ logged: initialState.logged })),
       }),
       {
