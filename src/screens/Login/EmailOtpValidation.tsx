@@ -4,7 +4,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { OtpInput } from "react-native-otp-entry";
-
+import useAuthStore from "../../storage/authStore";
 import { useLoginWithEmail } from '@privy-io/expo';
 
 type EmailOtpValidationScreenProps = {
@@ -21,10 +21,16 @@ const EmailOtpValidationScreen = ({ route }: EmailOtpValidationScreenProps) => {
     const [verificationCode, setVerificationCode] = useState('');
     const navigation = useNavigation();
 
+    const { updateLogged } = useAuthStore((state) => ({
+        updateLogged: state.updateLogged,
+    }));
+
     const { loginWithCode } = useLoginWithEmail({
         onLoginSuccess(user, isNewUser) {
+
             console.log("onLoginSuccess user", user);
             console.log("onLoginSuccess isNewUser", isNewUser);
+            updateLogged(true);
             navigation.navigate("MainTabs");
         },
         onError: (error) => {
