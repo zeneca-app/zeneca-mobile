@@ -131,6 +131,10 @@ const HomeScreen = () => {
 
   const keyExtractor = useCallback((item: any) => item.id, []);
 
+  const goDepositCrypto = () => {
+    navigation.navigate("DepositCrypto");
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
       <View style={styles.container}>
@@ -158,11 +162,11 @@ const HomeScreen = () => {
               <Text style={styles.balanceUsd}>{t("home.currency")}</Text>
             </View>
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.actionButton}>
+              <TouchableOpacity style={styles.depositButton} onPress={goDepositCrypto}>
                 <Ionicons name="arrow-down" size={20} color="white" />
                 <Text style={styles.buttonText}>{t("home.depositActionText")}</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.actionButton} onPress={onSend}>
+              <TouchableOpacity style={styles.sendButton} onPress={onSend}>
                 <Feather name="arrow-up-right" size={20} color="white" />
                 <Text style={styles.buttonText}>{t("home.sendActionText")}</Text>
               </TouchableOpacity>
@@ -251,7 +255,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  actionButton: {
+  sendButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: 'rgba(0, 0, 0, 0.15)',
+    borderRadius: 25,
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    flex: 1,
+    marginHorizontal: 5,
+  },
+  depositButton: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: 'rgba(0, 0, 0, 0.15)',
