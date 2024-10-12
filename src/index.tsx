@@ -25,7 +25,6 @@ import RecipientsScreen from "./screens/Recipients";
 import QuoteConfirmationScreen from "./screens/QuoteConfirmation";
 import useAuthStore from "./storage/authStore";
 import TransactionReceiptScreen from "./screens/TransactionReceipt";
-import InvestmentComingSoonScreen from "./screens/InvestmentComingSoon";
 import SendSuccessScreen from "./screens/SendSuccess";
 import LoginOptions from "./screens/Login/LoginOptions";
 import LoginWithEmail from "./screens/Login/LoginWithEmail";
@@ -69,8 +68,6 @@ const CustomTabBar: React.FC<CustomTabBarProps> = ({ state, descriptors, navigat
         let iconName: keyof typeof Ionicons.glyphMap;
         if (route.name === 'Home') {
           iconName = 'wallet';
-        } else if (route.name === 'InvestmentComingSoon') {
-          iconName = 'cash';
         } else {
           iconName = 'help-circle'; // Default icon
         }
@@ -99,7 +96,6 @@ const MainTabs = () => {
       }}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="InvestmentComingSoon" component={InvestmentComingSoonScreen} />
     </Tab.Navigator>
   );
 };
