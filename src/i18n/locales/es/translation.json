@@ -44,6 +44,13 @@
     "date_format": "d 'de' MMMM",
     "transactions": "Movimientos"
   },
+  "depositCrypto": {
+    "title": "Depósito con Crypto",
+    "addressLabel": "Dirección de la billetera",
+    "infoText": "Esta dirección solamente puede recibir USDC en Base",
+    "disclaimerText": "Asegúrate de que la red sea la misma que la de la billetera desde la que envías o podrías perder tus fondos.",
+    "addressCopied": "Dirección copiada al portapapeles"
+  },
   "recipients": {
     "title": "A quién le vas a enviar dinero",
     "searchPlaceholder": "Buscar por nombre..."

@@ -15,6 +15,7 @@ export type RootStackParamList = {
   KYCPreview: undefined;
   KYCProvider: undefined;
   KYCSuccess: undefined;
+  DepositCrypto: undefined;
 };
 
 declare global {

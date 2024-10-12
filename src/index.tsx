@@ -33,6 +33,7 @@ import EmailOtpValidationScreen from "./screens/Login/EmailOtpValidation";
 import KYCPreview from "./screens/KYCVerification/KYCPreview";
 import KYCProvider from "./screens/KYCVerification/KYCProvider";
 import KYCSuccess from "./screens/KYCVerification/KYCSuccess";
+import DepositCrypto from "./screens/Deposit/DepositCrypto";
 
 const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID ?? "";
 const CLIENT_ID = process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID ?? "";
@@ -126,6 +127,7 @@ const AppIndex = () => {
         <NavigationContainer>
           <PrivyProvider appId={APP_ID} clientId={CLIENT_ID}>
             <QueryClientProvider client={queryClient}>
+
               <Stack.Navigator initialRouteName={logged ? "MainTabs" : "Login"}>
                 <Stack.Group>
                   <Stack.Screen
@@ -190,6 +192,12 @@ const AppIndex = () => {
 
                 <Stack.Screen
                   options={{ headerShown: false }}
+                  name="DepositCrypto"
+                  component={DepositCrypto}
+                />
+
+                <Stack.Screen
+                  options={{ headerShown: false }}
                   name="KYCPreview"
                   component={KYCPreview}
                 />
@@ -214,6 +222,7 @@ const AppIndex = () => {
                   component={SendSuccessScreen}
                 />
               </Stack.Navigator>
+
             </QueryClientProvider>
           </PrivyProvider>
         </NavigationContainer>
