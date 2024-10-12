@@ -41,16 +41,7 @@ const LoginOptions: React.FC = () => {
     }));
 
     const loginWithGmail = async () => {
-        try {
-            await login({ provider: "google" });
-        } catch (error) {
-            const e = error as Error;
-            console.log("error", e);
-            toast({
-                title: e?.message ?? "Login Error",
-                preset: "error",
-            });
-        }
+        await login({ provider: "google" });
     };
 
     const loginWithEmail = () => {
