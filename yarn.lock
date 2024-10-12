@@ -1726,25 +1726,32 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.1.1.tgz#1ec17e2edbec25c8306d424ecfbf13c7de1aaa31"
   integrity sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==
 
-"@privy-io/api-base@1.2.2", "@privy-io/api-base@^1.2.2":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@privy-io/api-base/-/api-base-1.2.2.tgz#d59429d5ddfe782caf53ef2ccc03dc8d30cff245"
-  integrity sha512-z9G7Kd/Mz/t8Frl6DTIzGHcu0ITF+eG4BHw+XzExuxmTH/iljDJWQwGoiosbu2k2T1p4OEOqZhaxhgRTA6CeaA==
+"@privy-io/api-base@1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@privy-io/api-base/-/api-base-1.2.3.tgz#0fe5e96514b859e9ddf75d3dbba10b25aa04582d"
+  integrity sha512-ycl6L+C/B5BRtJNaeD3nS12SpSh6dMDg95d76jKGT1SBZd5VjaOnZYaEMIiAndu0txqLgVszLwdfai+f028iew==
+  dependencies:
+    zod "^3.21.4"
+
+"@privy-io/api-base@^1.2.3":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@privy-io/api-base/-/api-base-1.3.1.tgz#5affe7db67734d8078a17587054f73eee930e322"
+  integrity sha512-Sp0ZuV46a8xNneXgXixwhvlyoWTRVSN7meji8m5RDw9JpLCidujsRvihclYuy3eg0ikk1BQnP3+l/Mau8X28xQ==
   dependencies:
     zod "^3.21.4"
 
 "@privy-io/expo@^0.22.8":
-  version "0.22.8"
-  resolved "https://registry.yarnpkg.com/@privy-io/expo/-/expo-0.22.8.tgz#34c310af2caf73e02c3ae14a7007633def1fb9e1"
-  integrity sha512-OTaojrlMtKkt/+k1ZhyHm36VjSCyFFSKmam+Qx1chW0ytC5RYIWoTli3xugb9iLi0cTM4smdVVDVSTTxpD8qEg==
+  version "0.22.10"
+  resolved "https://registry.yarnpkg.com/@privy-io/expo/-/expo-0.22.10.tgz#b21ed7e98b0de6d8d5d28ebf92bf5d161457a612"
+  integrity sha512-WzVPZOqk8tddqyrVYjFOdeKHJEwQwzZQEf69VJ6a7TcC4uOWP9xLfAwqwTKX67B7EDSH03nK41t4PPR+B/eyjg==
   dependencies:
-    "@privy-io/js-sdk-core" "0.26.5"
+    "@privy-io/js-sdk-core" "0.26.7"
     react-fast-compare "^3.2.2"
 
-"@privy-io/js-sdk-core@0.26.5":
-  version "0.26.5"
-  resolved "https://registry.yarnpkg.com/@privy-io/js-sdk-core/-/js-sdk-core-0.26.5.tgz#87c291ce2cff79b7a99a4c30d5058b4e1f324c24"
-  integrity sha512-gjcQGYG97NBZWIYZGYfqOEK2Wrb5JDhTnXGkwiP4uWvLlNICZdw5ReJFmZmFP99PjRP4L3eafgskqGB1nNPaFw==
+"@privy-io/js-sdk-core@0.26.7":
+  version "0.26.7"
+  resolved "https://registry.yarnpkg.com/@privy-io/js-sdk-core/-/js-sdk-core-0.26.7.tgz#01262e1fc7f868da1b033f48e1893b4763e77e82"
+  integrity sha512-yJ5gYAzOZ4CPvQWZA8ZIRBcLGIVQGPztVYXUffwkpBHEmfMktXD8P8msx1iPloA2ue7m99j0jCI1X4xODJObFg==
   dependencies:
     "@ethersproject/abstract-signer" "^5.7.0"
     "@ethersproject/bignumber" "^5.7.0"
@@ -1752,8 +1759,8 @@
     "@ethersproject/providers" "^5.7.2"
     "@ethersproject/transactions" "^5.7.0"
     "@ethersproject/units" "^5.7.0"
-    "@privy-io/api-base" "^1.2.2"
-    "@privy-io/public-api" "2.9.1"
+    "@privy-io/api-base" "^1.2.3"
+    "@privy-io/public-api" "2.9.3"
     eventemitter3 "^5.0.1"
     fetch-retry "^5.0.6"
     jose "^4.15.5"
@@ -1761,15 +1768,20 @@
     set-cookie-parser "^2.6.0"
     uuid ">=8 <10"
 
-"@privy-io/public-api@2.9.1":
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/@privy-io/public-api/-/public-api-2.9.1.tgz#e6e862d1753799ca70a3bf8877349e52dd6d4cae"
-  integrity sha512-bf0hG3MDTABkiQyg/VbZHt556TWOtd/23KFw4zf5iV49b7QrR3VZUmGv6npC24V1Oc19o7XyeKab7SO4bLnW/w==
+"@privy-io/public-api@2.9.3":
+  version "2.9.3"
+  resolved "https://registry.yarnpkg.com/@privy-io/public-api/-/public-api-2.9.3.tgz#30971bc71ad8c315ddc1e690030f9b40b95dbce9"
+  integrity sha512-vReIEJDAQtoGfVF3M2t8yUFzqKo3FI903WECPC99DEF0SteBzWyOQ5ma0CndXLFtntbnSGR+S6PUP2odPuvm3Q==
   dependencies:
-    "@privy-io/api-base" "1.2.2"
+    "@privy-io/api-base" "1.2.3"
     ethers "^5.7.2"
     libphonenumber-js "^1.10.31"
     zod "^3.22.4"
+
+"@react-native-clipboard/clipboard@^1.14.2":
+  version "1.14.2"
+  resolved "https://registry.yarnpkg.com/@react-native-clipboard/clipboard/-/clipboard-1.14.2.tgz#d290e9f79799e260ba4ebd9e9948079258826b25"
+  integrity sha512-Mb58f3neB6sM9oOtKYVGLvN8KVByea67OA9ekJ0c9FwdH24INu8RJoA7/fq+PRk+7oxbeamAcEoQPRv0uwbbMw==
 
 "@react-native-community/cli-clean@13.6.9":
   version "13.6.9"

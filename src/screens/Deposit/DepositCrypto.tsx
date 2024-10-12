@@ -3,58 +3,15 @@ import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-na
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { toast } from "burnt";
-import { useEmbeddedWallet, isConnected, needsRecovery, isNotCreated, usePrivy } from '@privy-io/expo';
 import Clipboard from '@react-native-clipboard/clipboard';
 import BaseLogo from '../../../assets/base-logo.svg';
 import { useTranslation } from 'react-i18next';
+import { useEmbeddedWallet, isConnected, needsRecovery, isNotCreated, usePrivy } from '@privy-io/expo';
 
 
 const DepositCrypto = () => {
     const { t } = useTranslation();
     const navigation = useNavigation();
-    /*  const { isReady } = usePrivy();
-     console.log("isReady", isReady)
-     const wallet = useEmbeddedWallet();
-     console.log("wallet", wallet)
-     const [password, setPassword] = useState('');
- 
-     if (isNotCreated(wallet)) {
-         wallet.create({ recoveryMethod: 'privy' });
-     }
- 
-     if (isNotCreated(wallet)) {
-         console.log("Wallet Not Created")
-     }
- 
-     useEffect(() => {
-         createTransaction();
-     }, [wallet])
- 
-     const createTransaction = async () => {
-         if (isConnected(wallet)) {
-             console.log("Wallet Exists")
-             // Get address
-             const accounts = await wallet.provider.request({
-                 method: 'eth_requestAccounts',
-             });
- 
-             console.log("accounts", accounts)
-             // Send transaction (will be signed and populated)
-             const response = await wallet.provider.request({
-                 method: 'eth_sendTransaction',
-                 params: [
-                     {
-                         from: accounts[0],
-                         to: '0x0000000000000000000000000000000000000000',
-                         value: 1,
-                     },
-                 ],
-             }).catch((error) => {
-                 console.log("error sending transaction", error)
-             });
-             console.log("response", response)
-         }
-     } */
 
     const walletAddress = '0x02C48c15...fcC18BA032';
 
