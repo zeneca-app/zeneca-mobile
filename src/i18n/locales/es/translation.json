@@ -53,7 +53,9 @@
   },
   "recipients": {
     "title": "A quién le vas a enviar dinero",
-    "searchPlaceholder": "Buscar por nombre..."
+    "searchResultLabel": "Encontrado",
+    "pasteButtonText": "Pegar",
+    "searchPlaceholder": "BaseName o Dirección"
   },
   "quote": {
     "available": "Disponible",
@@ -73,6 +75,25 @@
     "confirm": "Confirmar y enviar",
     "to": "a",
     "pending": "Procesando..."
+  },
+  "sendCrypto": {
+    "title": "Enviar",
+    "recipientLabel": "A",
+    "availableLabel": "Disponible",
+    "continueButton": "Continuar",
+    "errorText": "No tienes suficiente saldo"
+  },
+  "sendConfirmation": {
+    "title": "Confirmar",
+    "to": "A",
+    "accountNumber": "Dirección",
+    "send": "Enviar",
+    "chain": "Red",
+    "fee": "Comisión",
+    "total": "Total",
+    "disclaimer": "Una vez confirmada, la transacción no se puede deshacer",
+    "confirmButtonText": "Confirmar",
+    "pendingStatus": "Pendiente"
   },
   "sentReceipt": {
     "headerText": "Enviaste",

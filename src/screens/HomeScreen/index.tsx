@@ -24,6 +24,7 @@ import { formatCurrency, CurrencyCode } from "../../utils/currencyUtils";
 import { formatQuoteToNumber } from "../../utils/quote";
 import useTransferStore from "../../storage/transferStore";
 import LineHome from '../../../assets/line-home.svg';
+import Balance from "../../components/Balance";
 
 
 const HomeScreen = () => {
@@ -154,13 +155,7 @@ const HomeScreen = () => {
             end={{ x: 1, y: 1 }}
             style={styles.balanceCard}
           >
-            <View style={styles.balanceContainer}>
-              <Text style={styles.currencySign}>$</Text>
-              <Text style={styles.balanceAmount}>
-                {formatCurrency(balance?.data?.balance ?? "0", "USD")}
-              </Text>
-              <Text style={styles.balanceUsd}>{t("home.currency")}</Text>
-            </View>
+            <Balance />
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.depositButton} onPress={goDepositCrypto}>
                 <Ionicons name="arrow-down" size={20} color="white" />

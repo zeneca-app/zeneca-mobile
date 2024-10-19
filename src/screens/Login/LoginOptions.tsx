@@ -7,11 +7,13 @@ import { useLoginWithOAuth } from "@privy-io/expo";
 import { toast } from "burnt";
 import useAuthStore from "../../storage/authStore";
 import { colors } from "../../styles/colors";
+import { usePrivy } from "@privy-io/expo";
 
 
 const LoginOptions: React.FC = () => {
     const { t } = useTranslation();
     const navigation = useNavigation();
+    const { logout, user } = usePrivy();
 
     const goToNextScreen = () => {
         navigation.goBack(); // Dismiss the modal
@@ -32,6 +34,7 @@ const LoginOptions: React.FC = () => {
         },
         onError: (error) => {
             console.log("error", error);
+            logout();
         },
     });
     console.log("state", state);
