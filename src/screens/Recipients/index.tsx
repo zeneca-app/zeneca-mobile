@@ -1,11 +1,13 @@
-import { useEffect, useCallback, useMemo, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import Clipboard from "@react-native-clipboard/clipboard";
 import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import countryCodeToFlagEmoji from "country-code-to-flag-emoji";
-import { ActivityIndicator } from 'react-native';
+import { debounce } from "lodash";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
+  ActivityIndicator,
   FlatList,
   SafeAreaView,
   StyleSheet,
@@ -14,23 +16,19 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Address, isAddress } from "viem";
 import {
   RecipientReadWithExternalAccount,
   recipientsGetRecipients,
 } from "../../client";
-import { isAddress, Address } from "viem";
-import { debounce } from 'lodash';
-import Clipboard from '@react-native-clipboard/clipboard';
+import { getAddress, getName, isBasename } from "../../lib/basenames";
 import useRecipientStore from "../../storage/recipientStore";
-import { getName, isBasename, getAddress } from "../../lib/basenames";
 import { shortenAddress } from "../../utils/address";
-
 
 type SearchResult = {
   name: string | null;
   address: Address;
-}
-
+};
 
 const RecipientsScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -44,7 +42,6 @@ const RecipientsScreen = () => {
     queryFn: recipientsGetRecipients,
   });
 
-
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
   const [isTyping, setIsTyping] = useState(false);
 
@@ -52,24 +49,32 @@ const RecipientsScreen = () => {
     setRecipientCrypto: state.setRecipientCrypto,
   }));
 
-  const getSearchResults = async (addressOrBasename: string): Promise<SearchResult | null> => {
+  const getSearchResults = async (
+    addressOrBasename: string,
+  ): Promise<SearchResult | null> => {
     if (isBasename(addressOrBasename)) {
       const address = await getAddress({ name: addressOrBasename });
       if (address === null || address === undefined) {
         return null;
       }
 
-      setRecipientCrypto({ name: addressOrBasename, address: address as Address });
+      setRecipientCrypto({
+        name: addressOrBasename,
+        address: address as Address,
+      });
       return { name: addressOrBasename, address: address as Address };
     }
     if (isAddress(addressOrBasename)) {
       const basename = await getName({ address: addressOrBasename as Address });
 
-      setRecipientCrypto({ name: basename as string, address: addressOrBasename });
+      setRecipientCrypto({
+        name: basename as string,
+        address: addressOrBasename,
+      });
       return { name: basename as string, address: addressOrBasename };
     }
     return null;
-  }
+  };
 
   const debouncedSearch = useCallback(
     debounce(async (query: string) => {
@@ -81,9 +86,8 @@ const RecipientsScreen = () => {
       }
       setIsTyping(false);
     }, 300),
-    []
+    [],
   );
-
 
   const handlePaste = async () => {
     const text = await Clipboard.getString();
@@ -147,7 +151,10 @@ const RecipientsScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
           <Ionicons name="chevron-back" size={22} color="white" />
         </TouchableOpacity>
       </View>
@@ -165,32 +172,46 @@ const RecipientsScreen = () => {
           }}
         />
         {isTyping ? (
-          <ActivityIndicator size="small" color="#fff" style={styles.loadingIcon} />
+          <ActivityIndicator
+            size="small"
+            color="#fff"
+            style={styles.loadingIcon}
+          />
         ) : searchQuery ? (
           <TouchableOpacity style={styles.clearButton} onPress={clearSearch}>
             <Ionicons name="close" size={22} color="#fff" />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity style={styles.pasteButton} onPress={handlePaste}>
-            <Text style={styles.pasteButtonText}>{t("recipients.pasteButtonText")}</Text>
+            <Text style={styles.pasteButtonText}>
+              {t("recipients.pasteButtonText")}
+            </Text>
           </TouchableOpacity>
         )}
       </View>
-      
 
       {searchResult && (
         <View style={styles.resultContainer}>
           <View style={styles.resultIconContainer}>
             <Ionicons name="checkmark-circle" size={22} color="#666" />
-            <Text style={styles.resultLabel}>{t("recipients.searchResultLabel")}</Text>
+            <Text style={styles.resultLabel}>
+              {t("recipients.searchResultLabel")}
+            </Text>
           </View>
-          <TouchableOpacity style={styles.resultItem} onPress={() => navigation.navigate("Send")}>
+          <TouchableOpacity
+            style={styles.resultItem}
+            onPress={() => navigation.navigate("Send")}
+          >
             <View style={styles.walletIconContainer}>
               <Ionicons name="wallet-outline" size={24} color="#666" />
             </View>
             <View style={styles.resultItemTextContainer}>
-              <Text style={styles.resultItemTitle}>{searchResult.name ?? shortenAddress(searchResult.address)}</Text>
-              <Text style={styles.resultItemSubtitle}>{shortenAddress(searchResult.address)}</Text>
+              <Text style={styles.resultItemTitle}>
+                {searchResult.name ?? shortenAddress(searchResult.address)}
+              </Text>
+              <Text style={styles.resultItemSubtitle}>
+                {shortenAddress(searchResult.address)}
+              </Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -221,15 +242,14 @@ const styles = StyleSheet.create({
   title: {
     marginLeft: 25,
     fontSize: 32,
-    color: 'white',
+    color: "white",
     marginBottom: 20,
-    fontFamily: "Manrope_500Medium"
+    fontFamily: "Manrope_500Medium",
   },
   loadingIcon: {
     marginRight: 10,
   },
-  backButton: {
-  },
+  backButton: {},
   clearButton: {
     borderRadius: 20,
     backgroundColor: "#262429",

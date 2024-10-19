@@ -1,29 +1,40 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import React, { useState, useCallback } from "react";
-import { debounce } from 'lodash';
-import { useTranslation } from "react-i18next";
-import countryCodeToFlagEmoji from "country-code-to-flag-emoji";
 import {
+  convertIso3ToIso2,
+  ISO3,
+} from "@trustedshops-public/js-iso3166-converter";
+import countryCodeToFlagEmoji from "country-code-to-flag-emoji";
+import { debounce } from "lodash";
+import React, { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  KeyboardAvoidingView,
+  Platform,
   SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
   View,
 } from "react-native";
-import { customersGetBalance, quotesCreateQuote, QuoteRead, Country } from "../../client";
-import useRecipientStore from "../../storage/recipientStore";
-import useQuoteStore from "../../storage/quoteStore";
-import { formatQuoteToCurrency, formatQuoteToNumber, Quote } from "../../utils/quote";
-import { CURRENCY_BY_COUNTRY } from "../../utils/currencyUtils";
-import { convertIso3ToIso2, ISO3 } from "@trustedshops-public/js-iso3166-converter";
-import { SvgUri } from 'react-native-svg';
+import { SvgUri } from "react-native-svg";
 import USDC_ICON from "../../../assets/usdc.svg";
-
+import {
+  Country,
+  customersGetBalance,
+  QuoteRead,
+  quotesCreateQuote,
+} from "../../client";
+import useQuoteStore from "../../storage/quoteStore";
+import useRecipientStore from "../../storage/recipientStore";
+import { CURRENCY_BY_COUNTRY } from "../../utils/currencyUtils";
+import {
+  formatQuoteToCurrency,
+  formatQuoteToNumber,
+  Quote,
+} from "../../utils/quote";
 
 const QuoteScreen = () => {
   const navigation = useNavigation();
@@ -42,14 +53,15 @@ const QuoteScreen = () => {
     queryKey: ["balance"],
     queryFn: customersGetBalance,
   });
-  const customerBalance = balance?.data?.balance || 0
+  const customerBalance = balance?.data?.balance || 0;
 
   const { recipient } = useRecipientStore((state) => ({
     recipient: state.recipient,
   }));
 
-  const currencySelected = CURRENCY_BY_COUNTRY[recipient.country as Country]
-  const currency = CURRENCY_BY_COUNTRY[recipient.country as Country].toUpperCase()
+  const currencySelected = CURRENCY_BY_COUNTRY[recipient.country as Country];
+  const currency =
+    CURRENCY_BY_COUNTRY[recipient.country as Country].toUpperCase();
 
   const mutation = useMutation({
     mutationFn: () =>
@@ -72,8 +84,7 @@ const QuoteScreen = () => {
       setQuote(quoteRaw);
     },
     onError: (error) => {
-      console.log("error quote", error)
-
+      console.log("error quote", error);
     },
   });
 
@@ -83,14 +94,14 @@ const QuoteScreen = () => {
         mutation.mutate();
       }
     }, 500), // 500ms delay
-    [mutation]
+    [mutation],
   );
 
   const handleAmountChange = async (text: string) => {
     // Remove any non-numeric characters except for the decimal point
     const cleanedText = text.replace(/[^0-9.]/g, "");
     // Remove leading zeros
-    const withoutLeadingZeros = cleanedText.replace(/^0+(?=\d)/, '');
+    const withoutLeadingZeros = cleanedText.replace(/^0+(?=\d)/, "");
     // Ensure only one decimal point
     const parts = withoutLeadingZeros.split(".");
     if (parts.length > 2) {
@@ -104,16 +115,17 @@ const QuoteScreen = () => {
   };
 
   const handleContinue = () => {
-    if (!canSend) return
+    if (!canSend) return;
     navigation.navigate("QuoteConfirmation");
   };
 
-  const enoughBalance = Number(amount) <= Number(customerBalance)
-  const canSend = enoughBalance && Number(amount) > 0 && Number(quoteRaw?.amount_out) > 0
+  const enoughBalance = Number(amount) <= Number(customerBalance);
+  const canSend =
+    enoughBalance && Number(amount) > 0 && Number(quoteRaw?.amount_out) > 0;
 
-  const flag = countryCodeToFlagEmoji(recipient.country ?? "")
-  const countryCode = convertIso3ToIso2(recipient.country as ISO3)
-  const flagImage = `https://hatscripts.github.io/circle-flags/flags/${countryCode.toLowerCase()}.svg`
+  const flag = countryCodeToFlagEmoji(recipient.country ?? "");
+  const countryCode = convertIso3ToIso2(recipient.country as ISO3);
+  const flagImage = `https://hatscripts.github.io/circle-flags/flags/${countryCode.toLowerCase()}.svg`;
 
   return (
     <KeyboardAvoidingView
@@ -162,26 +174,21 @@ const QuoteScreen = () => {
           <View style={styles.balanceCard}>
             <View style={styles.currencyRow}>
               <View style={styles.currencyIconContainer}>
-
-                <SvgUri
-                  width={30}
-                  height={30}
-                  uri={flagImage}
-                />
-
+                <SvgUri width={30} height={30} uri={flagImage} />
               </View>
               <Text style={styles.currencyCode}>{currency}</Text>
-              <Text style={styles.amount}>
-                {amountOut}
-              </Text>
+              <Text style={styles.amount}>{amountOut}</Text>
             </View>
           </View>
 
           <View style={styles.infoRow}>
-            <Text style={styles.infoText}>1 USDC = {quoteFormatted?.exchange_rate} {currency}</Text>
-            <Text style={styles.infoText}>{quoteFormatted?.fee} USDC {t("quote.fee")}</Text>
+            <Text style={styles.infoText}>
+              1 USDC = {quoteFormatted?.exchange_rate} {currency}
+            </Text>
+            <Text style={styles.infoText}>
+              {quoteFormatted?.fee} USDC {t("quote.fee")}
+            </Text>
           </View>
-
         </View>
         <View style={styles.buttonContainer}>
           {/*  <Text style={styles.arrivalText}>{t("quote.arrival")}</Text> */}
@@ -195,12 +202,9 @@ const QuoteScreen = () => {
           >
             <Text style={styles.continueButtonText}>{t("quote.continue")}</Text>
           </TouchableOpacity>
-
         </View>
-
       </SafeAreaView>
     </KeyboardAvoidingView>
-
   );
 };
 

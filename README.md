@@ -31,7 +31,6 @@ yarn
 
 ### Run in development mode
 
-
 #### Run for iOS
 
 ```bash

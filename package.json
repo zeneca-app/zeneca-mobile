@@ -6,8 +6,8 @@
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web",
     "lint": "eslint .",
+    "prettier": "prettier --write .",
     "lint:fix": "eslint . --fix",
     "generate-client": "npx @hey-api/openapi-ts -i src/server/openapi.json -o src/client -c @hey-api/client-fetch"
   },

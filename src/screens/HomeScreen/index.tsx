@@ -4,6 +4,8 @@ import { usePrivy } from "@privy-io/expo";
 import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "burnt";
+import { format, parseISO } from "date-fns";
+import { enUS, es } from "date-fns/locale";
 import { LinearGradient } from "expo-linear-gradient";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
@@ -15,24 +17,23 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import LineHome from "../../../assets/line-home.svg";
 import { customersGetBalance, transfersGetTransfers } from "../../client";
-import useAuthStore from "../../storage/authStore";
-import { colors } from "../../styles/colors";
-import { format, parseISO } from 'date-fns';
-import { es, enUS } from 'date-fns/locale';
-import { formatCurrency, CurrencyCode } from "../../utils/currencyUtils";
-import { formatQuoteToNumber } from "../../utils/quote";
-import useTransferStore from "../../storage/transferStore";
-import LineHome from '../../../assets/line-home.svg';
 import Balance from "../../components/Balance";
-
+import useAuthStore from "../../storage/authStore";
+import useTransferStore from "../../storage/transferStore";
+import { colors } from "../../styles/colors";
+import { CurrencyCode, formatCurrency } from "../../utils/currencyUtils";
+import { formatQuoteToNumber } from "../../utils/quote";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
   const { logout } = usePrivy();
-  const { updateLogged } = useAuthStore((state) => ({ updateLogged: state.updateLogged }));
+  const { updateLogged } = useAuthStore((state) => ({
+    updateLogged: state.updateLogged,
+  }));
 
   const { data: balance } = useQuery({
     queryKey: ["balance"],
@@ -44,7 +45,9 @@ const HomeScreen = () => {
     queryFn: transfersGetTransfers,
   });
 
-  const { setTransfer } = useTransferStore((state) => ({ setTransfer: state.setTransfer }));
+  const { setTransfer } = useTransferStore((state) => ({
+    setTransfer: state.setTransfer,
+  }));
 
   const formatDate = (dateString: string) => {
     const date = parseISO(dateString);
@@ -68,7 +71,7 @@ const HomeScreen = () => {
   const nextLogout = () => {
     updateLogged(false);
     navigation.navigate("Login");
-  }
+  };
 
   const onSend = useCallback(
     () => navigation.navigate("Recipients"),
@@ -80,14 +83,14 @@ const HomeScreen = () => {
     const quote = formatQuoteToNumber(item.quote);
 
     const formatWithdrawal = (currency: string, amount: string) => {
-      const formatted = formatCurrency(amount, currency as CurrencyCode, true)
-      return "-" + formatted
-    }
+      const formatted = formatCurrency(amount, currency as CurrencyCode, true);
+      return "-" + formatted;
+    };
 
     const formatDeposit = (currency: string, amount: string) => {
-      const formatted = formatCurrency(amount, currency as CurrencyCode, true)
-      return "+" + formatted
-    }
+      const formatted = formatCurrency(amount, currency as CurrencyCode, true);
+      return "+" + formatted;
+    };
 
     const handlePress = () => {
       setTransfer(item);
@@ -106,7 +109,9 @@ const HomeScreen = () => {
           </View>
           <View>
             <Text style={styles.transactionName}>Retiro</Text>
-            <Text style={styles.transactionTime}>{formatDate(item.created_at)}</Text>
+            <Text style={styles.transactionTime}>
+              {formatDate(item.created_at)}
+            </Text>
           </View>
         </View>
         <Text
@@ -115,8 +120,12 @@ const HomeScreen = () => {
             { color: isWithdrawal ? "#FF5252" : "#4CAF50" },
           ]}
         >
-          {isWithdrawal ? formatWithdrawal(quote.destination.toUpperCase(), quote.amount_out) :
-            formatDeposit(quote.source.toUpperCase(), quote.amount_in)}
+          {isWithdrawal
+            ? formatWithdrawal(
+                quote.destination.toUpperCase(),
+                quote.amount_out,
+              )
+            : formatDeposit(quote.source.toUpperCase(), quote.amount_in)}
         </Text>
       </TouchableOpacity>
     );
@@ -124,9 +133,7 @@ const HomeScreen = () => {
 
   const renderEmptyList = () => (
     <View style={styles.emptyListContainer}>
-      <Text style={styles.emptyListText}>
-        {t("home.empty_transactions")}
-      </Text>
+      <Text style={styles.emptyListText}>{t("home.empty_transactions")}</Text>
     </View>
   );
 
@@ -134,7 +141,7 @@ const HomeScreen = () => {
 
   const goDepositCrypto = () => {
     navigation.navigate("DepositCrypto");
-  }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
@@ -157,19 +164,28 @@ const HomeScreen = () => {
           >
             <Balance />
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.depositButton} onPress={goDepositCrypto}>
+              <TouchableOpacity
+                style={styles.depositButton}
+                onPress={goDepositCrypto}
+              >
                 <Ionicons name="arrow-down" size={20} color="white" />
-                <Text style={styles.buttonText}>{t("home.depositActionText")}</Text>
+                <Text style={styles.buttonText}>
+                  {t("home.depositActionText")}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.sendButton} onPress={onSend}>
                 <Feather name="arrow-up-right" size={20} color="white" />
-                <Text style={styles.buttonText}>{t("home.sendActionText")}</Text>
+                <Text style={styles.buttonText}>
+                  {t("home.sendActionText")}
+                </Text>
               </TouchableOpacity>
             </View>
           </LinearGradient>
         </View>
         <View style={styles.transactionsContainer}>
-          <Text style={styles.transactionsHeader}>{t("home.transactions")}</Text>
+          <Text style={styles.transactionsHeader}>
+            {t("home.transactions")}
+          </Text>
           <FlatList
             data={[...(transactions?.data || [])].reverse()}
             renderItem={renderTransaction}
@@ -179,7 +195,6 @@ const HomeScreen = () => {
           />
         </View>
       </View>
-
     </SafeAreaView>
   );
 };
@@ -189,16 +204,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   backgroundContainer: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
   },
   lineHome: {
-    position: 'absolute',
+    position: "absolute",
     // Adjust these values to change the position
-    top: -30,  // Moves the component up by 50 units
+    top: -30, // Moves the component up by 50 units
   },
   wrapperHeader: {
     paddingTop: 20,
@@ -253,7 +268,7 @@ const styles = StyleSheet.create({
   sendButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: 'rgba(0, 0, 0, 0.15)',
+    backgroundColor: "rgba(0, 0, 0, 0.15)",
     borderRadius: 25,
     paddingVertical: 14,
     paddingHorizontal: 20,
@@ -263,7 +278,7 @@ const styles = StyleSheet.create({
   depositButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: 'rgba(0, 0, 0, 0.15)',
+    backgroundColor: "rgba(0, 0, 0, 0.15)",
     borderRadius: 25,
     paddingVertical: 14,
     paddingHorizontal: 20,
@@ -278,14 +293,14 @@ const styles = StyleSheet.create({
   },
   emptyListContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingVertical: 20,
   },
   emptyListText: {
-    color: '#999',
+    color: "#999",
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: "center",
     fontFamily: "Manrope_600SemiBold",
   },
   transactionsContainer: {

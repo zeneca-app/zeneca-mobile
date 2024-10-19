@@ -1,11 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import Logo from "../../../assets/zeneca-logo-bright.svg";
-import { colors } from "../../styles/colors";
-import LogoLetter from "../../../assets/zeneca-logo-letters.svg";
 import GradientCircle from "../../../assets/zeneca-gradient-circle.svg";
-
+import Logo from "../../../assets/zeneca-logo-bright.svg";
+import LogoLetter from "../../../assets/zeneca-logo-letters.svg";
+import { colors } from "../../styles/colors";
 
 const Login = () => {
   const { t } = useTranslation();
@@ -13,7 +12,7 @@ const Login = () => {
 
   const loginOptions = async () => {
     navigation.navigate("LoginOptions");
-  }
+  };
 
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
@@ -28,8 +27,12 @@ const Login = () => {
           <View style={styles.logoContainer}>
             <LogoLetter style={styles.logoLetters} />
             <View style={styles.descriptionContainer}>
-              <Text style={styles.description}>{t("login.description_line_1")}</Text>
-              <Text style={styles.description}>{t("login.description_line_2")}</Text>
+              <Text style={styles.description}>
+                {t("login.description_line_1")}
+              </Text>
+              <Text style={styles.description}>
+                {t("login.description_line_2")}
+              </Text>
             </View>
           </View>
           <View style={styles.buttonsContainer}>
@@ -60,8 +63,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#0D0B0D",
   },
   backgroundContainer: {
-    position: 'absolute',
-    top: '25%',
+    position: "absolute",
+    top: "25%",
     left: 0,
     right: 0,
     alignItems: "center",
@@ -76,10 +79,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   contentContainer: {
-    marginTop: '60%',
+    marginTop: "60%",
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 20,
   },
   logoContainer: {
@@ -99,20 +102,20 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   description: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 28,
     fontFamily: "Manrope_500Medium",
     color: "white",
   },
   buttonsContainer: {
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
     justifyContent: "center",
   },
   signUpButton: {
     marginBottom: 20,
-    flexDirection: 'row',
-    width: '100%',
+    flexDirection: "row",
+    width: "100%",
     padding: 16,
     borderRadius: 35,
     justifyContent: "center",
@@ -125,8 +128,8 @@ const styles = StyleSheet.create({
     fontFamily: "Manrope_600SemiBold",
   },
   signInButton: {
-    flexDirection: 'row',
-    width: '100%',
+    flexDirection: "row",
+    width: "100%",
     padding: 16,
     borderRadius: 35,
     justifyContent: "center",
