@@ -10,6 +10,7 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
+import { useEmbeddedWallet } from "@privy-io/expo";
 import useRecipientStore from "../../storage/recipientStore";
 import * as LocalAuthentication from 'expo-local-authentication';
 import FaceIdIcon from "../../../assets/face-id.svg";
@@ -24,7 +25,6 @@ import USDCIcon from "../../../assets/usdc.svg";
 import { transferUSDC, getPimlicoSmartAccountClient } from "../../lib/pimlico"
 import { useWalletStore } from "../../storage/walletStore";
 import { useChainStore } from "../../storage/chainStore";
-import { useEmbeddedWallet } from "@privy-io/expo";
 import { useBalance } from "../../context/BalanceContext";
 
 
@@ -38,8 +38,9 @@ const SendConfirmationScreen = () => {
         recipientCrypto: state.recipientCrypto,
     }));
 
-    const { transferCrypto } = useTransferStore((state) => ({
+    const { transferCrypto, setTxHash } = useTransferStore((state) => ({
         transferCrypto: state.transferCrypto,
+        setTxHash: state.setTxHash,
     }));
 
     const { refetchBalance } = useBalance()
@@ -58,6 +59,7 @@ const SendConfirmationScreen = () => {
             const signerAddress = wallet?.account?.address as Address;
             const smartAccountClient = await getPimlicoSmartAccountClient(signerAddress, chain, wallet);
             const tx = await transferUSDC(smartAccountClient, amount, chain, recipientAddress);
+            setTxHash(tx)
             setIsLoadingTransfer(false);
         } catch (error) {
             console.error("Error during transaction:", error);

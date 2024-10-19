@@ -3,18 +3,35 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+import * as Linking from 'expo-linking';
+import { toast } from "burnt";
+import useTransferStore from "../../storage/transferStore";
 
 
 const SendSuccessScreen = () => {
     const navigation = useNavigation();
     const { t } = useTranslation();
+    const { txHash } = useTransferStore((state) => ({
+        txHash: state.txHash,
+    }));
 
     const goHome = () => {
         navigation.navigate("MainTabs");
     };
 
-    const goReceipt = () => {
-        navigation.navigate("TransactionReceipt");
+    const showReceipt = async () => {
+        const url = `https://sepolia.basescan.org/tx/${txHash}`;
+        const supported = await Linking.canOpenURL(url);
+
+        if (supported) {
+            await Linking.openURL(url);
+        } else {
+            console.error("Don't know how to open URI: " + url);
+            toast({
+                title: t("sendSuccess.errorText"),
+                preset: "error",
+            });
+        }
     };
 
     return (
@@ -24,19 +41,18 @@ const SendSuccessScreen = () => {
                     <Feather name="check" size={30} color="#04AE91" />
                 </View>
 
-                <Text style={styles.title}>¡Listo!</Text>
+                <Text style={styles.title}>{t("sendSuccess.title")}</Text>
                 <Text style={styles.subtitle}>
-                    Estamos procesando tu transacción.{'\n'}
-                    Pronto estará disponible
+                    {t("sendSuccess.subtitle")}
                 </Text>
             </View>
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.primaryButton} onPress={goHome}>
-                    <Text style={styles.primaryButtonText}>Entendido</Text>
+                    <Text style={styles.primaryButtonText}>{t("sendSuccess.doneButton")}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.secondaryButton} onPress={goReceipt}>
-                    <Text style={styles.secondaryButtonText}>Ver comprobante</Text>
+                <TouchableOpacity style={styles.secondaryButton} onPress={showReceipt}>
+                    <Text style={styles.secondaryButtonText}>{t("sendSuccess.viewReceiptButton")}</Text>
                 </TouchableOpacity>
             </View>
         </View>
