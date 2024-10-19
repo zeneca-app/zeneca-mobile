@@ -7,14 +7,14 @@ import {
   Manrope_700Bold,
   useFonts,
 } from "@expo-google-fonts/manrope";
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { createBottomTabNavigator, BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { ParamListBase, TabNavigationState } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { QueryClient } from "@tanstack/react-query";
-import { Suspense } from "react";
+import { Suspense, useCallback } from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { RootStackParamList } from "./navigation/types";
 import HomeScreen from "./screens/HomeScreen";
@@ -98,7 +98,10 @@ const MainTabs = () => {
         headerShown: false,
       }}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+      />
     </Tab.Navigator>
   );
 };
