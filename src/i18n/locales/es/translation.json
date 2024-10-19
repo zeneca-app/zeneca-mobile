@@ -6,9 +6,9 @@
     "signInButton": "Iniciar sesión"
   },
   "loginOptions": {
-    "emailOption": "Continue with email",
-    "googleOption": "Continue with Google",
-    "appleOption": "Continue with Apple",
+    "emailOption": "Continuar con email",
+    "googleOption": "Continuar con Google",
+    "appleOption": "Continuar con Apple",
     "terms": "Al continuar, aceptas los",
     "termsLink": "Términos de uso"
   },
@@ -47,7 +47,7 @@
   "depositCrypto": {
     "title": "Depósito con Crypto",
     "addressLabel": "Dirección de la billetera",
-    "infoText": "Esta dirección solamente puede recibir USDC en Base",
+    "infoText": "Esta dirección solamente puede recibir USDC en Base Sepolia",
     "disclaimerText": "Asegúrate de que la red sea la misma que la de la billetera desde la que envías o podrías perder tus fondos.",
     "addressCopied": "Dirección copiada al portapapeles"
   },
