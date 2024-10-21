@@ -23,7 +23,7 @@ import { formatCurrency, CURRENCY_BY_COUNTRY, CurrencyCode } from "../../utils/c
 import { Country } from "../../client";
 import { quotesCreateQuote, transfersCreateTransfer, customersGetCustomer, TransferRead, QuoteRead } from "../../client";
 import { formatQuoteToNumber } from "../../utils/quote";
-import LoadingScreen from "../LoadingScreen";
+import LoadingScreen from "../../components/Loading";
 import useTransferStore from "../../storage/transferStore";
 import { capitalizeFirstLetter } from "../../utils/string_utils";
 

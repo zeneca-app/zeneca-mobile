@@ -1,40 +1,93 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Modal, View, Text, StyleSheet, Pressable } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useLoginWithOAuth } from "@privy-io/expo";
+import { baseSepolia } from "viem/chains";
 import { toast } from "burnt";
+import { usePrivy, useEmbeddedWallet, isNotCreated, getUserEmbeddedWallet } from "@privy-io/expo";
+import { useWalletStore } from "../../storage/walletStore";
+import { useChainStore } from "../../storage/chainStore";
 import useAuthStore from "../../storage/authStore";
 import { colors } from "../../styles/colors";
+import { getPimlicoSmartAccountClient } from "../../lib/pimlico";
 
 
 const LoginOptions: React.FC = () => {
     const { t } = useTranslation();
     const navigation = useNavigation();
+    const { logout, user } = usePrivy();
+    const wallet = useEmbeddedWallet();
+
+    const setAddress = useWalletStore((state) => state.setAddress);
+    const chain = useChainStore((state) => state.chain);
+    const setChain = useChainStore((state) => state.setChain);
 
     const goToNextScreen = () => {
         navigation.goBack(); // Dismiss the modal
-        navigation.navigate("KYCPreview");
+        navigation.navigate("MainTabs");
     };
+
+    type PrivyUser = typeof user;
 
     const { login, state } = useLoginWithOAuth({
         onSuccess: (user, isNewUser) => {
-            console.log("user", user);
-            updateLogged(true);
-            goToNextScreen();
-            if (isNewUser) {
-                toast({
-                    title: t("login.welcome_zeneca"),
-                    preset: "done",
-                });
-            }
+            console.log("onSuccess");
         },
         onError: (error) => {
             console.log("error", error);
+            logout();
         },
     });
-    console.log("state", state);
+
+    const handleConnection = useCallback(
+        async (user: PrivyUser): Promise<void> => {
+            if (isNotCreated(wallet)) {
+                await wallet.create!();
+            }
+
+            const address = getUserEmbeddedWallet(user)?.address;
+
+            const smartAccount = await getPimlicoSmartAccountClient(
+                address as `0x${string}`,
+                chain,
+                wallet
+            );
+
+            setAddress(smartAccount?.account?.address as `0x${string}`);
+            setChain(baseSepolia);
+        },
+        [user]
+    );
+
+    const successLogin = () => {
+        updateLogged(true);
+        goToNextScreen();
+    };
+
+    useEffect(() => {
+        if (state.status === "done" && user) {
+            try {
+                handleConnection(user)
+                    .then(() => {
+
+                        console.log("success");
+                        successLogin();
+                    })
+                    .catch((e) => {
+                        console.error("Error Handling Connection", e);
+
+                        throw new Error(e);
+                    });
+            } catch (e) {
+                console.log("Error Connecting Stuffs", e);
+                throw new Error(e as any);
+            }
+        } else if (state.status === "initial") {
+            //setLoginStatus(LoginStatus.INITIAL);
+        }
+    }, [state, user]);
 
     const { updateLogged } = useAuthStore((state) => ({
         updateLogged: state.updateLogged,

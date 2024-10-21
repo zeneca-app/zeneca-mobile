@@ -6,9 +6,9 @@
     "signInButton": "Iniciar sesión"
   },
   "loginOptions": {
-    "emailOption": "Continue with email",
-    "googleOption": "Continue with Google",
-    "appleOption": "Continue with Apple",
+    "emailOption": "Continuar con email",
+    "googleOption": "Continuar con Google",
+    "appleOption": "Continuar con Apple",
     "terms": "Al continuar, aceptas los",
     "termsLink": "Términos de uso"
   },
@@ -47,13 +47,15 @@
   "depositCrypto": {
     "title": "Depósito con Crypto",
     "addressLabel": "Dirección de la billetera",
-    "infoText": "Esta dirección solamente puede recibir USDC en Base",
+    "infoText": "Esta dirección solamente puede recibir USDC en Base Sepolia",
     "disclaimerText": "Asegúrate de que la red sea la misma que la de la billetera desde la que envías o podrías perder tus fondos.",
     "addressCopied": "Dirección copiada al portapapeles"
   },
   "recipients": {
     "title": "A quién le vas a enviar dinero",
-    "searchPlaceholder": "Buscar por nombre..."
+    "searchResultLabel": "Encontrado",
+    "pasteButtonText": "Pegar",
+    "searchPlaceholder": "BaseName o Dirección"
   },
   "quote": {
     "available": "Disponible",
@@ -73,6 +75,31 @@
     "confirm": "Confirmar y enviar",
     "to": "a",
     "pending": "Procesando..."
+  },
+  "sendCrypto": {
+    "title": "Enviar",
+    "recipientLabel": "A",
+    "availableLabel": "Disponible",
+    "continueButton": "Continuar",
+    "errorText": "No tienes suficiente saldo"
+  },
+  "sendConfirmation": {
+    "title": "Confirmar",
+    "to": "A",
+    "accountNumber": "Dirección",
+    "send": "Enviar",
+    "chain": "Red",
+    "fee": "Comisión",
+    "total": "Total",
+    "disclaimer": "Una vez confirmada, la transacción no se puede deshacer",
+    "confirmButtonText": "Confirmar",
+    "pendingStatus": "Pendiente"
+  },
+  "sendSuccess": {
+    "title": "¡Listo!",
+    "subtitle": "Estamos procesando tu transacción.\nPronto estará disponible",
+    "doneButton": "Entendido",
+    "viewReceiptButton": "Ver comprobante"
   },
   "sentReceipt": {
     "headerText": "Enviaste",

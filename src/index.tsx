@@ -7,15 +7,14 @@ import {
   Manrope_700Bold,
   useFonts,
 } from "@expo-google-fonts/manrope";
-import { PrivyProvider } from "@privy-io/expo";
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { createBottomTabNavigator, BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { ParamListBase, TabNavigationState } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Suspense } from "react";
+import { QueryClient } from "@tanstack/react-query";
+import { Suspense, useCallback } from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { RootStackParamList } from "./navigation/types";
 import HomeScreen from "./screens/HomeScreen";
@@ -33,6 +32,10 @@ import KYCPreview from "./screens/KYCVerification/KYCPreview";
 import KYCProvider from "./screens/KYCVerification/KYCProvider";
 import KYCSuccess from "./screens/KYCVerification/KYCSuccess";
 import DepositCrypto from "./screens/Deposit/DepositCrypto";
+import Send from "./screens/Send";
+import SendConfirmation from "./screens/SendConfirmation";
+import { Providers } from "./components/Providers";
+
 
 const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID ?? "";
 const CLIENT_ID = process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID ?? "";
@@ -95,7 +98,10 @@ const MainTabs = () => {
         headerShown: false,
       }}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+      />
     </Tab.Navigator>
   );
 };
@@ -121,9 +127,8 @@ const AppIndex = () => {
     <Suspense fallback={<></>}>
       <SafeAreaProvider>
         <NavigationContainer>
-          <PrivyProvider appId={APP_ID} clientId={CLIENT_ID}>
-            <QueryClientProvider client={queryClient}>
-
+          <Providers>
+            
               <Stack.Navigator initialRouteName={logged ? "MainTabs" : "Login"}>
                 <Stack.Group>
                   <Stack.Screen
@@ -214,13 +219,25 @@ const AppIndex = () => {
 
                 <Stack.Screen
                   options={{ headerShown: false }}
+                  name="Send"
+                  component={Send}
+                />
+
+
+                <Stack.Screen
+                  options={{ headerShown: false }}
                   name="SendSuccess"
                   component={SendSuccessScreen}
                 />
+
+                <Stack.Screen
+                  options={{ headerShown: false }}
+                  name="SendConfirmation"
+                  component={SendConfirmation}
+                />
               </Stack.Navigator>
 
-            </QueryClientProvider>
-          </PrivyProvider>
+          </Providers>
         </NavigationContainer>
       </SafeAreaProvider>
     </Suspense>

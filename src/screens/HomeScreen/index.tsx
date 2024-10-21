@@ -1,7 +1,8 @@
+import { useEffect } from "react";
 import Feather from "@expo/vector-icons/Feather";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { usePrivy } from "@privy-io/expo";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "burnt";
 import { LinearGradient } from "expo-linear-gradient";
@@ -24,9 +25,11 @@ import { formatCurrency, CurrencyCode } from "../../utils/currencyUtils";
 import { formatQuoteToNumber } from "../../utils/quote";
 import useTransferStore from "../../storage/transferStore";
 import LineHome from '../../../assets/line-home.svg';
+import Balance from "../../components/Balance";
+import { useBalance } from "../../context/BalanceContext";
 
 
-const HomeScreen = () => {
+const HomeScreen = ({ }) => {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
@@ -93,6 +96,7 @@ const HomeScreen = () => {
       navigation.navigate("TransactionReceipt");
     };
 
+
     return (
       <TouchableOpacity style={styles.transactionItem} onPress={handlePress}>
         <View style={styles.transactionLeft}>
@@ -114,8 +118,12 @@ const HomeScreen = () => {
             { color: isWithdrawal ? "#FF5252" : "#4CAF50" },
           ]}
         >
-          {isWithdrawal ? formatWithdrawal(quote.destination.toUpperCase(), quote.amount_out) :
-            formatDeposit(quote.source.toUpperCase(), quote.amount_in)}
+          {isWithdrawal
+            ? formatWithdrawal(
+              quote.destination.toUpperCase(),
+              quote.amount_out,
+            )
+            : formatDeposit(quote.source.toUpperCase(), quote.amount_in)}
         </Text>
       </TouchableOpacity>
     );
@@ -154,13 +162,7 @@ const HomeScreen = () => {
             end={{ x: 1, y: 1 }}
             style={styles.balanceCard}
           >
-            <View style={styles.balanceContainer}>
-              <Text style={styles.currencySign}>$</Text>
-              <Text style={styles.balanceAmount}>
-                {formatCurrency(balance?.data?.balance ?? "0", "USD")}
-              </Text>
-              <Text style={styles.balanceUsd}>{t("home.currency")}</Text>
-            </View>
+            <Balance />
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.depositButton} onPress={goDepositCrypto}>
                 <Ionicons name="arrow-down" size={20} color="white" />

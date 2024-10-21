@@ -21,7 +21,7 @@
   "depositCrypto": {
     "title": "Deposit with Crypto",
     "addressLabel": "Wallet address",
-    "infoText": "This address can only receive USDC on Base",
+    "infoText": "This address can only receive USDC on Base Sepolia",
     "disclaimerText": "Make sure the network is the same as the one from the wallet you are sending from or you could lose your funds.",
     "addressCopied": "Address copied to clipboard"
   },
@@ -53,7 +53,9 @@
   },
   "recipients": {
     "title": "Send money to?",
-    "searchPlaceholder": "Search by name..."
+    "searchPlaceholder": "BaseName or Address",
+    "searchResultLabel": "Found",
+    "pasteButtonText": "Paste"
   },
   "quote": {
     "available": "Available",
@@ -73,6 +75,31 @@
     "timerDescription": "Exchange rate will update in",
     "confirm": "Confirm and send",
     "pending": "Processing..."
+  },
+  "sendCrypto": {
+    "title": "Send",
+    "recipientLabel": "To",
+    "availableLabel": "Available",
+    "continueButton": "Continue",
+    "errorText": "Not enough balance"
+  },
+  "sendSuccess": {
+    "title": "¡Done!",
+    "subtitle": "We are processing your transaction.\nIt will be available soon",
+    "doneButton": "Done",
+    "viewReceiptButton": "View receipt"
+  },
+  "sendConfirmation": {
+    "title": "Confirm",
+    "to": "To",
+    "accountNumber": "Address",
+    "send": "Send",
+    "chain": "Chain",
+    "fee": "Fee",
+    "total": "Total",
+    "disclaimer": "Once confirmed, the transaction cannot be undone",
+    "confirmButtonText": "Confirm",
+    "pendingStatus": "Pending"
   },
   "sentReceipt": {
     "headerText": "Sent",
