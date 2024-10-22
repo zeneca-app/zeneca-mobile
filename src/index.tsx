@@ -7,6 +7,8 @@ import {
   Manrope_700Bold,
   useFonts,
 } from "@expo-google-fonts/manrope";
+import { isRunningInExpoGo } from "expo";
+import * as Sentry from '@sentry/react-native';
 import { createBottomTabNavigator, BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { ParamListBase, TabNavigationState } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -39,6 +41,23 @@ import { Providers } from "./components/Providers";
 
 const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID ?? "";
 const CLIENT_ID = process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID ?? "";
+
+
+const navigationIntegration = Sentry.reactNavigationIntegration({
+  enableTimeToInitialDisplay: true,
+});
+
+
+Sentry.init({
+  dsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
+  debug: false,
+  integrations: [
+    navigationIntegration,
+    Sentry.reactNativeTracingIntegration({
+    }),
+  ],
+});
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
@@ -128,114 +147,114 @@ const AppIndex = () => {
       <SafeAreaProvider>
         <NavigationContainer>
           <Providers>
-            
-              <Stack.Navigator initialRouteName={logged ? "MainTabs" : "Login"}>
-                <Stack.Group>
-                  <Stack.Screen
-                    options={{ headerShown: false }}
-                    name="Login"
-                    component={Login}
-                  />
-                  <Stack.Screen
-                    options={{
-                      headerShown: false,
-                      presentation: 'transparentModal',
-                    }}
-                    name="LoginOptions"
-                    component={LoginOptions}
-                  />
-                </Stack.Group>
 
+            <Stack.Navigator initialRouteName={logged ? "MainTabs" : "Login"}>
+              <Stack.Group>
                 <Stack.Screen
                   options={{ headerShown: false }}
-                  name="MainTabs"
-                  component={MainTabs}
+                  name="Login"
+                  component={Login}
                 />
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="Home"
-                  component={HomeScreen}
-                />
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="Recipients"
-                  component={RecipientsScreen}
-                />
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="Quote"
-                  component={QuoteScreen}
-                />
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="QuoteConfirmation"
-                  component={QuoteConfirmationScreen}
-                />
-                <Stack.Group screenOptions={{ presentation: 'modal' }}>
-                  <Stack.Screen
-                    name="TransactionReceipt"
-                    options={{ headerShown: false }}
-                    component={TransactionReceiptScreen}
-                  />
-                </Stack.Group>
-
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="LoginWithEmail"
-                  component={LoginWithEmail}
-                />
-
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="EmailOtpValidation"
-                  component={EmailOtpValidationScreen}
-                />
-
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="DepositCrypto"
-                  component={DepositCrypto}
-                />
-
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="KYCPreview"
-                  component={KYCPreview}
-                />
-
                 <Stack.Screen
                   options={{
                     headerShown: false,
+                    presentation: 'transparentModal',
                   }}
-                  name="KYCProvider"
-                  component={KYCProvider}
+                  name="LoginOptions"
+                  component={LoginOptions}
                 />
+              </Stack.Group>
 
+              <Stack.Screen
+                options={{ headerShown: false }}
+                name="MainTabs"
+                component={MainTabs}
+              />
+              <Stack.Screen
+                options={{ headerShown: false }}
+                name="Home"
+                component={HomeScreen}
+              />
+              <Stack.Screen
+                options={{ headerShown: false }}
+                name="Recipients"
+                component={RecipientsScreen}
+              />
+              <Stack.Screen
+                options={{ headerShown: false }}
+                name="Quote"
+                component={QuoteScreen}
+              />
+              <Stack.Screen
+                options={{ headerShown: false }}
+                name="QuoteConfirmation"
+                component={QuoteConfirmationScreen}
+              />
+              <Stack.Group screenOptions={{ presentation: 'modal' }}>
                 <Stack.Screen
+                  name="TransactionReceipt"
                   options={{ headerShown: false }}
-                  name="KYCSuccess"
-                  component={KYCSuccess}
+                  component={TransactionReceiptScreen}
                 />
+              </Stack.Group>
 
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="Send"
-                  component={Send}
-                />
+              <Stack.Screen
+                options={{ headerShown: false }}
+                name="LoginWithEmail"
+                component={LoginWithEmail}
+              />
+
+              <Stack.Screen
+                options={{ headerShown: false }}
+                name="EmailOtpValidation"
+                component={EmailOtpValidationScreen}
+              />
+
+              <Stack.Screen
+                options={{ headerShown: false }}
+                name="DepositCrypto"
+                component={DepositCrypto}
+              />
+
+              <Stack.Screen
+                options={{ headerShown: false }}
+                name="KYCPreview"
+                component={KYCPreview}
+              />
+
+              <Stack.Screen
+                options={{
+                  headerShown: false,
+                }}
+                name="KYCProvider"
+                component={KYCProvider}
+              />
+
+              <Stack.Screen
+                options={{ headerShown: false }}
+                name="KYCSuccess"
+                component={KYCSuccess}
+              />
+
+              <Stack.Screen
+                options={{ headerShown: false }}
+                name="Send"
+                component={Send}
+              />
 
 
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="SendSuccess"
-                  component={SendSuccessScreen}
-                />
+              <Stack.Screen
+                options={{ headerShown: false }}
+                name="SendSuccess"
+                component={SendSuccessScreen}
+              />
 
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="SendConfirmation"
-                  component={SendConfirmation}
-                />
-              </Stack.Navigator>
+              <Stack.Screen
+                options={{ headerShown: false }}
+                name="SendConfirmation"
+                component={SendConfirmation}
+              />
+            </Stack.Navigator>
 
           </Providers>
         </NavigationContainer>
@@ -244,7 +263,7 @@ const AppIndex = () => {
   );
 };
 
-export default AppIndex;
+export default Sentry.wrap(AppIndex);
 
 const styles = StyleSheet.create({
   tabBar: {
