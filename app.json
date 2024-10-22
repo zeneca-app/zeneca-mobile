@@ -68,7 +68,8 @@
         {
           "url": "https://sentry.io/",
           "project": "react-native",
-          "organization": "zeneca"
+          "organization": "zeneca",
+          "note": "Use SENTRY_AUTH_TOKEN env to authenticate with Sentry."
         }
       ]
     ],
