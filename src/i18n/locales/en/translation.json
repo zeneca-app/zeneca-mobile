@@ -49,7 +49,8 @@
     "currency": "USD",
     "empty_transactions": "No transactions",
     "date_format": "MMM d",
-    "transactions": "Transactions"
+    "transactions": "Transactions",
+    "withdrawal": "Withdrawal"
   },
   "recipients": {
     "title": "Send money to?",
