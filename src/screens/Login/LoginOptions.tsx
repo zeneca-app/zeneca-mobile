@@ -3,15 +3,16 @@ import { Modal, View, Text, StyleSheet, Pressable } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useLoginWithOAuth } from "@privy-io/expo";
 import { baseSepolia } from "viem/chains";
 import { toast } from "burnt";
-import { usePrivy, useEmbeddedWallet, isNotCreated, getUserEmbeddedWallet } from "@privy-io/expo";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { usePrivy, useEmbeddedWallet, isNotCreated, getUserEmbeddedWallet, useLoginWithOAuth } from "@privy-io/expo";
 import { useWalletStore } from "../../storage/walletStore";
 import { useChainStore } from "../../storage/chainStore";
 import useAuthStore from "../../storage/authStore";
 import { colors } from "../../styles/colors";
 import { getPimlicoSmartAccountClient } from "../../lib/pimlico";
+
 
 
 const LoginOptions: React.FC = () => {
@@ -54,6 +55,10 @@ const LoginOptions: React.FC = () => {
                 chain,
                 wallet
             );
+
+            // Store addresses in AsyncStorage
+            await AsyncStorage.setItem('userAddress', address || '');
+            await AsyncStorage.setItem('smartAccountAddress', smartAccount?.account?.address as `0x${string}`);
 
             setAddress(smartAccount?.account?.address as `0x${string}`);
             setChain(baseSepolia);

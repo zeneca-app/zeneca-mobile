@@ -108,7 +108,7 @@ const HomeScreen = ({ }) => {
             )}
           </View>
           <View>
-            <Text style={styles.transactionName}>Retiro</Text>
+            <Text style={styles.transactionName}>{t("home.withdrawal")}</Text>
             <Text style={styles.transactionTime}>{formatDate(item.created_at)}</Text>
           </View>
         </View>

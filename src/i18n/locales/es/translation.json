@@ -42,7 +42,8 @@
     "currency": "USD",
     "empty_transactions": "No tienes movimientos",
     "date_format": "d 'de' MMMM",
-    "transactions": "Movimientos"
+    "transactions": "Movimientos",
+    "withdrawal": "Retiro"
   },
   "depositCrypto": {
     "title": "Depósito con Crypto",
