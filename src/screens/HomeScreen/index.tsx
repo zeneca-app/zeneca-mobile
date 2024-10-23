@@ -28,7 +28,6 @@ import LineHome from '../../../assets/line-home.svg';
 import Balance from "../../components/Balance";
 import { useBalance } from "../../context/BalanceContext";
 
-
 const HomeScreen = ({ }) => {
   const navigation = useNavigation();
   const { t } = useTranslation();

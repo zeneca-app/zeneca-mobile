@@ -62,6 +62,15 @@
             "deploymentTarget": "13.4"
           }
         }
+      ],
+      [
+        "@sentry/react-native/expo",
+        {
+          "url": "https://sentry.io/",
+          "project": "react-native",
+          "organization": "zeneca",
+          "note": "Use SENTRY_AUTH_TOKEN env to authenticate with Sentry."
+        }
       ]
     ],
     "extra": {
