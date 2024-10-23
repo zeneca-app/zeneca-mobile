@@ -7,12 +7,12 @@ import {
     Dimensions,
     View,
 } from "react-native";
-import { formatCurrency, CURRENCY_BY_COUNTRY, CurrencyCode } from "../../utils/currencyUtils";
-import { Country } from "../../client";
+import { formatCurrency, CURRENCY_BY_COUNTRY, CurrencyCode } from "@/utils/currencyUtils";
+import { Country } from "@/client";
 import { Feather } from '@expo/vector-icons';
-import useTransferStore from "../../storage/transferStore";
-import { capitalizeFirstLetter } from "../../utils/string_utils";
-import { formatQuoteToNumber } from "../../utils/quote";
+import useTransferStore from "@/storage/transferStore";
+import { capitalizeFirstLetter } from "@/utils/string_utils";
+import { formatQuoteToNumber } from "@/utils/quote";
 
 const DetailRow = ({ label, value, valueStyle }: { label: string, value: string, valueStyle?: any }) => (
     <View style={styles.detailRow}>
@@ -37,9 +37,9 @@ const TransactionReceiptScreen = () => {
     const { t } = useTranslation();
 
     const { transfer } = useTransferStore((state) => ({ transfer: state.transfer }));
-
-    const recipient = transfer.recipient;
-    const quote = formatQuoteToNumber(transfer.quote!);
+        
+    const recipient = transfer?.recipient;
+    const quote = formatQuoteToNumber(transfer?.quote!);
 
     const currency = CURRENCY_BY_COUNTRY[recipient?.country as Country].toUpperCase() as CurrencyCode;
 

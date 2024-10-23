@@ -9,10 +9,10 @@ import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { KeyboardAvoidingView, Platform } from "react-native";
 import { zodResolver } from '@hookform/resolvers/zod';
-import useAuthStore from "../../storage/authStore";
-import { getPimlicoSmartAccountClient } from "../../lib/pimlico";
-import { useChainStore } from "../../storage/chainStore";
-import { useWalletStore } from "../../storage/walletStore";
+import useAuthStore from "@/storage/authStore";
+import { getPimlicoSmartAccountClient } from "@/lib/pimlico";
+import { useChainStore } from "@/storage/chainStore";
+import { useWalletStore } from "@/storage/walletStore";
 
 
 const TEST_EMAIL = "tester@zeneca.app";

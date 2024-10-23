@@ -1,4 +1,4 @@
-import { Country, Currency } from "../client";
+import { Country, Currency } from "@/client";
 
 export type CurrencyCode = "USD" | "COP" | "MXN" | "EUR";
 

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
-import { Quote } from "../utils/quote";
-import zustandStorage from "./storage";
+import { Quote } from "@/utils/quote";
+import zustandStorage from "@/storage/storage";
 
 interface QuoteState {
   quote: Quote;

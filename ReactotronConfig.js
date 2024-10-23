@@ -1,9 +1,9 @@
 import { NativeModules } from "react-native";
 import reactotronZustand from "reactotron-plugin-zustand";
 import Reactotron from "reactotron-react-native";
-import useQuoteStore from "./src/storage/quoteStore";
-import useRecipientStore from "./src/storage/recipientStore";
-import useTransferStore from "./src/storage/transferStore";
+import useQuoteStore from "@/storage/quoteStore";
+import useRecipientStore from "@/storage/recipientStore";
+import useTransferStore from "@/storage/transferStore";
 
 // do not allow Reactotron to be used in production and in tests
 if (__DEV__ && process.env.JEST_WORKER_ID === undefined) {

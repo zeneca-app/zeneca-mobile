@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Feather from "@expo/vector-icons/Feather";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { usePrivy } from "@privy-io/expo";
@@ -16,17 +15,17 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { customersGetBalance, transfersGetTransfers } from "../../client";
-import useAuthStore from "../../storage/authStore";
-import { colors } from "../../styles/colors";
+import { customersGetBalance, transfersGetTransfers } from "@/client";
+import useAuthStore from "@/storage/authStore";
+import { colors } from "@/styles/colors";
 import { format, parseISO } from 'date-fns';
 import { es, enUS } from 'date-fns/locale';
-import { formatCurrency, CurrencyCode } from "../../utils/currencyUtils";
-import { formatQuoteToNumber } from "../../utils/quote";
-import useTransferStore from "../../storage/transferStore";
-import LineHome from '../../../assets/line-home.svg';
-import Balance from "../../components/Balance";
-import { useBalance } from "../../context/BalanceContext";
+import { formatCurrency, CurrencyCode } from "@/utils/currencyUtils";
+import { formatQuoteToNumber } from "@/utils/quote";
+import useTransferStore from "@/storage/transferStore";
+import LineHome from "@/assets/line-home.svg";
+import Balance from "@/components/Balance";
+import { useBalance } from "@/context/BalanceContext";
 
 const HomeScreen = ({ }) => {
   const navigation = useNavigation();

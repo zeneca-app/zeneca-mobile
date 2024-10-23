@@ -2,19 +2,16 @@
 import React, { useCallback, useMemo, useState, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import {
-    FlatList,
     SafeAreaView,
     StyleSheet,
     Text,
-    TextInput,
     TouchableOpacity,
     View,
 } from "react-native";
-import VerifyIcon from "../../../assets/verify-icon.svg";
-import VerifyIlustration from "../../../assets/verify-ilustration.svg";
+
+import VerifyIlustration from "@/assets/verify-ilustration.svg";
 
 const KYCVerificationScreen = () => {
     const navigation = useNavigation();

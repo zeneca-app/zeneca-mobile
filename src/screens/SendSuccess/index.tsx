@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import * as Linking from 'expo-linking';
 import { toast } from "burnt";
-import useTransferStore from "../../storage/transferStore";
+import useTransferStore from "@/storage/transferStore";
 
 
 const SendSuccessScreen = () => {

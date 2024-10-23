@@ -15,14 +15,14 @@ import {
   Platform,
   View,
 } from "react-native";
-import { customersGetBalance, quotesCreateQuote, QuoteRead, Country } from "../../client";
-import useRecipientStore from "../../storage/recipientStore";
-import useQuoteStore from "../../storage/quoteStore";
-import { formatQuoteToCurrency, formatQuoteToNumber, Quote } from "../../utils/quote";
-import { CURRENCY_BY_COUNTRY } from "../../utils/currencyUtils";
+import { customersGetBalance, quotesCreateQuote, QuoteRead, Country } from "@/client";
+import useRecipientStore from "@/storage/recipientStore";
+import useQuoteStore from "@/storage/quoteStore";
+import { formatQuoteToCurrency, formatQuoteToNumber, Quote } from "@/utils/quote";
+import { CURRENCY_BY_COUNTRY } from "@/utils/currencyUtils";
 import { convertIso3ToIso2, ISO3 } from "@trustedshops-public/js-iso3166-converter";
 import { SvgUri } from 'react-native-svg';
-import USDC_ICON from "../../../assets/usdc.svg";
+import USDC_ICON from "@/assets/usdc.svg";
 
 
 const QuoteScreen = () => {
@@ -48,8 +48,8 @@ const QuoteScreen = () => {
     recipient: state.recipient,
   }));
 
-  const currencySelected = CURRENCY_BY_COUNTRY[recipient.country as Country]
-  const currency = CURRENCY_BY_COUNTRY[recipient.country as Country].toUpperCase()
+  const currencySelected = CURRENCY_BY_COUNTRY[recipient?.country as Country]
+  const currency = CURRENCY_BY_COUNTRY[recipient?.country as Country].toUpperCase()
 
   const mutation = useMutation({
     mutationFn: () =>
@@ -58,7 +58,7 @@ const QuoteScreen = () => {
           source: "usdc.polygon",
           destination: currencySelected,
           amount_in: amount,
-          recipient_id: recipient.id,
+          recipient_id: recipient?.id,
           payment_rail: "ach",
         },
       }),
@@ -111,8 +111,8 @@ const QuoteScreen = () => {
   const enoughBalance = Number(amount) <= Number(customerBalance)
   const canSend = enoughBalance && Number(amount) > 0 && Number(quoteRaw?.amount_out) > 0
 
-  const flag = countryCodeToFlagEmoji(recipient.country ?? "")
-  const countryCode = convertIso3ToIso2(recipient.country as ISO3)
+  const flag = countryCodeToFlagEmoji(recipient?.country ?? "")
+  const countryCode = convertIso3ToIso2(recipient?.country as ISO3)
   const flagImage = `https://hatscripts.github.io/circle-flags/flags/${countryCode.toLowerCase()}.svg`
 
   return (
@@ -129,10 +129,10 @@ const QuoteScreen = () => {
             <View style={styles.recipientInfo}>
               <View style={styles.recipientInitials}>
                 <Text style={styles.initialsText}>
-                  {recipient.name.substring(0, 2).toUpperCase()}
+                  {recipient?.name.substring(0, 2).toUpperCase()}
                 </Text>
               </View>
-              <Text style={styles.recipientName}>{recipient.name}</Text>
+              <Text style={styles.recipientName}>{recipient?.name}</Text>
             </View>
           </View>
           <View style={styles.balanceCard}>

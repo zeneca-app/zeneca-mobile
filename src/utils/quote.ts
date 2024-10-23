@@ -1,5 +1,5 @@
-import { QuoteRead } from "../client";
-import { CurrencyCode, formatCurrency } from "./currencyUtils";
+import { QuoteRead } from "@/client";
+import { CurrencyCode, formatCurrency } from "@/utils/currencyUtils";
 
 export type Quote = {
   id: string;

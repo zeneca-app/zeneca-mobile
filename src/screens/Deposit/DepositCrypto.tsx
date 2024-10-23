@@ -4,10 +4,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { toast } from "burnt";
 import Clipboard from '@react-native-clipboard/clipboard';
-import BaseLogo from '../../../assets/base-logo.svg';
+import BaseLogo from '@/assets/base-logo.svg';
 import { useTranslation } from 'react-i18next';
-import { useWalletStore } from '../../storage/walletStore';
-import { shortenAddress } from '../../utils/address';
+import { useWalletStore } from '@/storage/walletStore';
+import { shortenAddress } from '@/utils/address';
 
 const DepositCrypto = () => {
     const { t } = useTranslation();

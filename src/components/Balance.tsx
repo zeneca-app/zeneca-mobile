@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text } from "react-native";
 import { useTranslation } from "react-i18next";
-import { formatCurrency } from "../utils/currencyUtils";
-import { useBalance } from "../context/BalanceContext";
+import { formatCurrency } from "@/utils/currencyUtils";
+import { useBalance } from "@/context/BalanceContext";
 
 const Balance = () => {
   const { t } = useTranslation();
