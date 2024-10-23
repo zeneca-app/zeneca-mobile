@@ -17,13 +17,13 @@ import {
 import {
   RecipientReadWithExternalAccount,
   recipientsGetRecipients,
-} from "../../client";
+} from "@/client";
 import { isAddress, Address } from "viem";
 import { debounce } from 'lodash';
 import Clipboard from '@react-native-clipboard/clipboard';
-import useRecipientStore from "../../storage/recipientStore";
-import { getName, isBasename, getAddress } from "../../lib/basenames";
-import { shortenAddress } from "../../utils/address";
+import useRecipientStore from "@/storage/recipientStore";
+import { getName, isBasename, getAddress } from "@/lib/basenames";
+import { shortenAddress } from "@/utils/address";
 
 
 type SearchResult = {
@@ -176,7 +176,7 @@ const RecipientsScreen = () => {
           </TouchableOpacity>
         )}
       </View>
-      
+
 
       {searchResult && (
         <View style={styles.resultContainer}>

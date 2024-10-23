@@ -3,15 +3,15 @@ import { SafeAreaView, View, Text, TouchableOpacity, StyleSheet } from "react-na
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
-import { colors } from "../../styles/colors";
-import Keypad from "../../components/Keypad";
-import useRecipientStore from "../../storage/recipientStore";
-import useTransferStore from "../../storage/transferStore";
-import { useWalletStore } from "../../storage/walletStore";
-import { shortenAddress } from "../../utils/address";
+import { colors } from "@/styles/colors";
+import Keypad from "@/components/Keypad";
+import useRecipientStore from "@/storage/recipientStore";
+import useTransferStore from "@/storage/transferStore";
+import { useWalletStore } from "@/storage/walletStore";
+import { shortenAddress } from "@/utils/address";
 import { Address } from "viem";
-import { formatCurrency } from "../../utils/currencyUtils";
-import { useBalance } from "../../context/BalanceContext";
+import { formatCurrency } from "@/utils/currencyUtils";
+import { useBalance } from "@/context/BalanceContext";
 
 
 const SendScreen = () => {

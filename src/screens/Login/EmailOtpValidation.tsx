@@ -4,7 +4,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { OtpInput } from "react-native-otp-entry";
-import useAuthStore from "../../storage/authStore";
+import useAuthStore from "@/storage/authStore";
 import { useLoginWithEmail } from '@privy-io/expo';
 
 type EmailOtpValidationScreenProps = {

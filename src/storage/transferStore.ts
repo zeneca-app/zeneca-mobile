@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
-import { TransferRead } from "../client";
-import { TransferCrypto } from "../lib/types/transfer";
-import zustandStorage from "./storage";
+import { TransferRead } from "@/client";
+import { TransferCrypto } from "@/lib/types/transfer";
+import zustandStorage from "@/storage/storage";
 
 interface TransferState {
   transfer?: TransferRead;

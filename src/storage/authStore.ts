@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
-import zustandStorage from "./storage";
+import zustandStorage from "@/storage/storage";
 
 interface AuthState {
   logged: boolean;

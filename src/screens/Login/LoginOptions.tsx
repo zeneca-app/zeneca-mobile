@@ -7,11 +7,11 @@ import { baseSepolia } from "viem/chains";
 import { toast } from "burnt";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { usePrivy, useEmbeddedWallet, isNotCreated, getUserEmbeddedWallet, useLoginWithOAuth } from "@privy-io/expo";
-import { useWalletStore } from "../../storage/walletStore";
-import { useChainStore } from "../../storage/chainStore";
-import useAuthStore from "../../storage/authStore";
-import { colors } from "../../styles/colors";
-import { getPimlicoSmartAccountClient } from "../../lib/pimlico";
+import { useWalletStore } from "@/storage/walletStore";
+import { useChainStore } from "@/storage/chainStore";
+import useAuthStore from "@/storage/authStore";
+import { colors } from "@/styles/colors";
+import { getPimlicoSmartAccountClient } from "@/lib/pimlico";
 
 
 

@@ -8,18 +8,18 @@ import {
   namehash,
 } from "viem";
 import { base, mainnet } from "viem/chains";
-import { RESOLVER_ADDRESSES_BY_CHAIN_ID } from "../constants/basenames";
-import L2ResolverAbi from "../lib/abis/L2ResolverAbi";
-import { getChainPublicClient } from "../lib/pimlico";
+import { RESOLVER_ADDRESSES_BY_CHAIN_ID } from "@/constants/basenames";
+import L2ResolverAbi from "@/lib/abis/L2ResolverAbi";
+import { getChainPublicClient } from "@/lib/pimlico";
 import {
   Basename,
   GetAddress,
   GetAddressReturnType,
   GetName,
   GetNameReturnType,
-} from "../lib/types/basenames";
-import { isBase } from "../lib/utils/isBase";
-import { isEthereum } from "../lib/utils/isEthereum";
+} from "@/lib/types/basenames";
+import { isBase } from "@/lib/utils/isBase";
+import { isEthereum } from "@/lib/utils/isEthereum";
 
 export const BASENAME_L2_RESOLVER_ADDRESS =
   "0xC6d566A56A1aFf6508b41f6c90ff131615583BCD";

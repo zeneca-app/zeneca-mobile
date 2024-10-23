@@ -6,7 +6,7 @@ import { PrivyProvider } from "@privy-io/expo";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { WagmiProvider, createConfig, http } from "wagmi";
 import { baseSepolia, base } from 'wagmi/chains';
-import { BalanceProvider } from "../context/BalanceContext";
+import { BalanceProvider } from "@/context/BalanceContext";
 
 
 const queryClient = new QueryClient();

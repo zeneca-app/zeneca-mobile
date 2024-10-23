@@ -10,7 +10,7 @@ import {
 import {
   createPimlicoBundlerClient,
   createPimlicoPaymasterClient,
-} from "permissionless/clients/pimlico";
+} from "@/lib/permissionless/clients/pimlico";
 import {
   Address,
   Chain,
@@ -20,8 +20,8 @@ import {
   http,
 } from "viem";
 import { entryPoint07Address } from "viem/account-abstraction";
-import tokens from "../constants/tokens";
-import { getWalletClient } from "../lib/smart-accounts";
+import tokens from "@/constants/tokens";
+import { getWalletClient } from "@/lib/smart-accounts";
 
 const transportUrl = (chain: Chain) =>
   `https://api.pimlico.io/v2/${chain.id}/rpc?apikey=${process.env.EXPO_PUBLIC_PIMLICO_API_KEY}`;

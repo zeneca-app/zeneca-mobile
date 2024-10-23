@@ -11,21 +11,21 @@ import {
     View,
 } from "react-native";
 import { useEmbeddedWallet } from "@privy-io/expo";
-import useRecipientStore from "../../storage/recipientStore";
+import useRecipientStore from "@/storage/recipientStore";
 import * as LocalAuthentication from 'expo-local-authentication';
-import FaceIdIcon from "../../../assets/face-id.svg";
-import { formatCurrency } from "../../utils/currencyUtils";
-import LoadingScreen from "../../components/Loading";
-import { shortenAddress } from "../../utils/address";
+import FaceIdIcon from "@/assets/face-id.svg";
+import { formatCurrency } from "@/utils/currencyUtils";
+import LoadingScreen from "@/components/Loading";
+import { shortenAddress } from "@/utils/address";
 import { Address } from "viem";
-import { colors } from "../../styles/colors";
-import useTransferStore from "../../storage/transferStore";
-import BaseIcon from "../../../assets/base-logo.svg";
-import USDCIcon from "../../../assets/usdc.svg";
-import { transferUSDC, getPimlicoSmartAccountClient } from "../../lib/pimlico"
-import { useWalletStore } from "../../storage/walletStore";
-import { useChainStore } from "../../storage/chainStore";
-import { useBalance } from "../../context/BalanceContext";
+import { colors } from "@/styles/colors";
+import useTransferStore from "@/storage/transferStore";
+import BaseIcon from "@/assets/base-logo.svg";
+import USDCIcon from "@/assets/usdc.svg";
+import { transferUSDC, getPimlicoSmartAccountClient } from "@/lib/pimlico"
+import { useWalletStore } from "@/storage/walletStore";
+import { useChainStore } from "@/storage/chainStore";
+import { useBalance } from "@/context/BalanceContext";
 
 
 

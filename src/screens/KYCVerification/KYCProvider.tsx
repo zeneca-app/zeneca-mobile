@@ -9,7 +9,7 @@ import {
     View,
     Dimensions,
 } from "react-native";
-import { useCamera } from "../../hooks/useCamera";
+import { useCamera } from "@/hooks/useCamera";
 import { AiPriseFrame } from "aiprise-react-native-sdk";
 
 

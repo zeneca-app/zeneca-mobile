@@ -6,26 +6,24 @@ import countryCodeToFlagEmoji from "country-code-to-flag-emoji";
 import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-    FlatList,
     SafeAreaView,
     StyleSheet,
     Text,
-    TextInput,
     TouchableOpacity,
     View,
 } from "react-native";
 
-import useRecipientStore from "../../storage/recipientStore";
-import useQuoteStore from "../../storage/quoteStore";
+import useRecipientStore from "@/storage/recipientStore";
+import useQuoteStore from "@/storage/quoteStore";
 import * as LocalAuthentication from 'expo-local-authentication';
-import FaceIdIcon from "../../../assets/face-id.svg";
-import { formatCurrency, CURRENCY_BY_COUNTRY, CurrencyCode } from "../../utils/currencyUtils";
-import { Country } from "../../client";
-import { quotesCreateQuote, transfersCreateTransfer, customersGetCustomer, TransferRead, QuoteRead } from "../../client";
-import { formatQuoteToNumber } from "../../utils/quote";
-import LoadingScreen from "../../components/Loading";
-import useTransferStore from "../../storage/transferStore";
-import { capitalizeFirstLetter } from "../../utils/string_utils";
+import FaceIdIcon from "@/assets/face-id.svg";
+import { formatCurrency, CURRENCY_BY_COUNTRY, CurrencyCode } from "@/utils/currencyUtils";
+import { Country } from "@/client";
+import { quotesCreateQuote, transfersCreateTransfer, customersGetCustomer, TransferRead, QuoteRead } from "@/client";
+import { formatQuoteToNumber } from "@/utils/quote";
+import LoadingScreen from "@/components/Loading";
+import useTransferStore from "@/storage/transferStore";
+import { capitalizeFirstLetter } from "@/utils/string_utils";
 
 
 
@@ -63,7 +61,7 @@ const QuoteConfirmationScreen = () => {
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
     const currency = CURRENCY_BY_COUNTRY[recipient.country as Country].toUpperCase() as CurrencyCode
-    
+
     const { mutate: createTransaction, isPending: isTransactionPending } = useMutation({
         mutationFn: () =>
             transfersCreateTransfer({

@@ -1,9 +1,9 @@
 import React, { createContext, useContext, ReactNode, useEffect } from 'react';
 import { useBalance as useWagmiBalance } from 'wagmi';
 import { Address } from 'viem';
-import { useChainStore } from '../storage/chainStore';
-import { useWalletStore } from '../storage/walletStore';
-import tokens from '../constants/tokens';
+import { useChainStore } from "@/storage/chainStore";
+import { useWalletStore } from "@/storage/walletStore";
+import tokens from "@/constants/tokens";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
