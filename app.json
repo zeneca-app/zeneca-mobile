@@ -67,9 +67,9 @@
         "@sentry/react-native/expo",
         {
           "url": "https://sentry.io/",
-          "project": "react-native",
-          "organization": "zeneca",
-          "note": "Use SENTRY_AUTH_TOKEN env to authenticate with Sentry."
+          "note": "Use SENTRY_AUTH_TOKEN env to authenticate with Sentry.",
+          "project": "zeneca-mobile",
+          "organization": "zeneca"
         }
       ]
     ],
