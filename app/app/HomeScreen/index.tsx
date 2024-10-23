@@ -17,7 +17,7 @@ import {
 } from "react-native";
 import { customersGetBalance, transfersGetTransfers } from "@/client";
 import useAuthStore from "@/storage/authStore";
-import { colors } from "@/styles/colors";
+import { colors } from "@/constants/colors";
 import { format, parseISO } from 'date-fns';
 import { es, enUS } from 'date-fns/locale';
 import { formatCurrency, CurrencyCode } from "@/utils/currencyUtils";

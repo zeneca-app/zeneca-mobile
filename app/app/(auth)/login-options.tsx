@@ -10,7 +10,7 @@ import { usePrivy, useEmbeddedWallet, isNotCreated, getUserEmbeddedWallet, useLo
 import { useWalletStore } from "@/storage/walletStore";
 import { useChainStore } from "@/storage/chainStore";
 import useAuthStore from "@/storage/authStore";
-import { colors } from "@/styles/colors";
+import { colors } from "@/constants/colors";
 import { getPimlicoSmartAccountClient } from "@/lib/pimlico";
 
 

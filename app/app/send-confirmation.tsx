@@ -18,7 +18,7 @@ import { formatCurrency } from "@/utils/currencyUtils";
 import LoadingScreen from "@/components/Loading";
 import { shortenAddress } from "@/utils/address";
 import { Address } from "viem";
-import { colors } from "@/styles/colors";
+import { colors } from "@/constants/colors";
 import useTransferStore from "@/storage/transferStore";
 import BaseIcon from "@/assets/base-logo.svg";
 import USDCIcon from "@/assets/usdc.svg";

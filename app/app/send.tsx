@@ -3,7 +3,7 @@ import { SafeAreaView, View, Text, TouchableOpacity, StyleSheet } from "react-na
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
-import { colors } from "@/styles/colors";
+import { colors } from "@/constants/colors";
 import Keypad from "@/components/Keypad";
 import useRecipientStore from "@/storage/recipientStore";
 import useTransferStore from "@/storage/transferStore";
