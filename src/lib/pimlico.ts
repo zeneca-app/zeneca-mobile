@@ -10,7 +10,7 @@ import {
 import {
   createPimlicoBundlerClient,
   createPimlicoPaymasterClient,
-} from "@/lib/permissionless/clients/pimlico";
+} from "permissionless/clients/pimlico";
 import {
   Address,
   Chain,
