@@ -13,9 +13,9 @@ if (__DEV__ && process.env.JEST_WORKER_ID === undefined) {
     .use(
       reactotronZustand({
         stores: [
-          { name: "recipient-storage", zustand: useRecipientStore },
-          { name: "quote-storage", zustand: useQuoteStore },
-          { name: "transfer-storage", zustand: useTransferStore },
+          { name: "recipient", zustand: useRecipientStore },
+          { name: "quote", zustand: useQuoteStore },
+          { name: "transfer", zustand: useTransferStore },
         ],
       }),
     )

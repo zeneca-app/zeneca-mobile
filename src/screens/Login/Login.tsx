@@ -1,19 +1,93 @@
+import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
-import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Pressable, SafeAreaView, StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import Logo from "@/assets/zeneca-logo-bright.svg";
 import { colors } from "@/styles/colors";
 import LogoLetter from "@/assets/zeneca-logo-letters.svg";
 import GradientCircle from "@/assets/zeneca-gradient-circle.svg";
+import { usePrivy, getUserEmbeddedWallet } from "@privy-io/expo";
+import LoginOptions from "@/components/login/login-options";
+import { LoginStatus } from "@/lib/types/login";
+import * as SecureStore from "expo-secure-store";
+import { usersGetUser } from "@/client/";
 
 
 const Login = () => {
+  const { isReady, user, logout } = usePrivy();
+  const address = getUserEmbeddedWallet(user)?.address;
+
   const { t } = useTranslation();
   const navigation = useNavigation();
 
-  const loginOptions = async () => {
-    navigation.navigate("LoginOptions");
-  }
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("");
+  const [isFetchingUser, setIsFetchingUser] = useState(false);
+  const [loginStatus, setLoginStatus] = useState<LoginStatus>(
+    LoginStatus.INITIAL
+  );
+
+  const token = SecureStore.getItem(`token-${address}`);
+
+  const [isLoginOptionsVisible, setIsLoginOptionsVisible] = useState(false);
+
+  useEffect(() => {
+    if (address) {
+      setIsLoading(true);
+      setLoadingMessage("Logging in...");
+      getToken()
+        .then(() => {
+          setIsLoading(false);
+        })
+        .catch(() => {
+          SecureStore.deleteItemAsync(`token-${address}`).then(() => logout());
+          setIsLoading(false);
+        });
+    }
+  }, [address]);
+
+  const getToken = async () => {
+    try {
+      if (token) {
+        navigation.navigate("Home");
+
+        return token;
+      }
+    } catch (error) {
+      console.error(error as any);
+      throw new Error(error as any);
+    }
+  };
+
+  const fetchUserData = async (token: string) => {
+    try {
+      setIsFetchingUser(true);
+      const userData = await usersGetUser({
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setIsFetchingUser(false);
+
+      return userData;
+    } catch (error) {
+      console.log("Error fetching user data", { error });
+      setIsLoading(false);
+      setIsFetchingUser(false);
+
+      throw new Error(error as any);
+    }
+  };
+
+  /* if (!isReady) {
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <Logo width={60} height={60} />
+        <ActivityIndicator animating={true} color={"#fff"} />
+      </SafeAreaView>
+    );
+  } */
+
 
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
@@ -33,7 +107,7 @@ const Login = () => {
             </View>
           </View>
           <View style={styles.buttonsContainer}>
-            <Pressable style={styles.signUpButton} onPress={loginOptions}>
+            <Pressable style={styles.signUpButton} onPress={() => setIsLoginOptionsVisible(true)}>
               <Text style={styles.signUpButtonText}>
                 {t("login.signUpButton")}
               </Text>
@@ -46,11 +120,23 @@ const Login = () => {
           </View>
         </View>
       </View>
+      <LoginOptions
+        visible={isLoginOptionsVisible}
+        loginStatus={loginStatus}
+        setVisible={setIsLoginOptionsVisible}
+        setLoginStatus={setLoginStatus}
+      />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#0D0B0D', // Assuming you want the same background color as the main container
+  },
   safeAreaContainer: {
     flex: 1,
     backgroundColor: "#0D0B0D",

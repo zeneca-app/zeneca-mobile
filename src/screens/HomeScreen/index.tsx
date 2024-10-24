@@ -26,13 +26,14 @@ import useTransferStore from "@/storage/transferStore";
 import LineHome from "@/assets/line-home.svg";
 import Balance from "@/components/Balance";
 import { useBalance } from "@/context/BalanceContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 const HomeScreen = ({ }) => {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
   const { logout } = usePrivy();
-  const { updateLogged } = useAuthStore((state) => ({ updateLogged: state.updateLogged }));
 
   const { data: balance } = useQuery({
     queryKey: ["balance"],
@@ -53,20 +54,21 @@ const HomeScreen = ({ }) => {
 
   const onLogout = async () => {
     try {
+      console.log("onLogout");
+      await AsyncStorage.removeItem('smartAccountAddress');
       await logout();
       nextLogout();
     } catch (err) {
       const e = err as Error;
       toast({
-        title: e?.message ?? "Login Error",
+        title: e?.message ?? "Logout Error",
         preset: "error",
       });
-      updateLogged(false);
     }
+    
   };
 
   const nextLogout = () => {
-    updateLogged(false);
     navigation.navigate("Login");
   }
 

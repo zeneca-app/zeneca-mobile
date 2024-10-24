@@ -21,15 +21,12 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { RootStackParamList } from "@/navigation/types";
 import HomeScreen from "@/screens/HomeScreen";
 import Login from "@/screens/Login/Login";
+import LoginWithEmail from "@/screens/Login/LoginWithEmail";
 import QuoteScreen from "@/screens/Quote";
 import RecipientsScreen from "@/screens/Recipients";
 import QuoteConfirmationScreen from "@/screens/QuoteConfirmation";
-import useAuthStore from "@/storage/authStore";
 import TransactionReceiptScreen from "@/screens/TransactionReceipt";
 import SendSuccessScreen from "@/screens/SendSuccess";
-import LoginOptions from "@/screens/Login/LoginOptions";
-import LoginWithEmail from "@/screens/Login/LoginWithEmail";
-import EmailOtpValidationScreen from "@/screens/Login/EmailOtpValidation";
 import KYCPreview from "@/screens/KYCVerification/KYCPreview";
 import KYCProvider from "@/screens/KYCVerification/KYCProvider";
 import KYCSuccess from "@/screens/KYCVerification/KYCSuccess";
@@ -130,9 +127,6 @@ const AppIndex = () => {
         Manrope_600SemiBold,
         Manrope_700Bold,
     });
-    const queryClient = new QueryClient();
-
-    const { logged } = useAuthStore((state) => ({ logged: state.logged }));
 
     // TODO: Implement Splash Screen while loading fonts
     if (!loaded) {
@@ -145,7 +139,7 @@ const AppIndex = () => {
                 <NavigationContainer>
                     <Providers>
 
-                        <Stack.Navigator initialRouteName={logged ? "MainTabs" : "Login"}>
+                        <Stack.Navigator initialRouteName={"Login"}>
                             <Stack.Group>
                                 <Stack.Screen
                                     options={{ headerShown: false }}
@@ -153,12 +147,9 @@ const AppIndex = () => {
                                     component={Login}
                                 />
                                 <Stack.Screen
-                                    options={{
-                                        headerShown: false,
-                                        presentation: 'transparentModal',
-                                    }}
-                                    name="LoginOptions"
-                                    component={LoginOptions}
+                                    options={{ headerShown: false }}
+                                    name="LoginWithEmail"
+                                    component={LoginWithEmail}
                                 />
                             </Stack.Group>
 
@@ -195,17 +186,6 @@ const AppIndex = () => {
                                 />
                             </Stack.Group>
 
-                            <Stack.Screen
-                                options={{ headerShown: false }}
-                                name="LoginWithEmail"
-                                component={LoginWithEmail}
-                            />
-
-                            <Stack.Screen
-                                options={{ headerShown: false }}
-                                name="EmailOtpValidation"
-                                component={EmailOtpValidationScreen}
-                            />
 
                             <Stack.Screen
                                 options={{ headerShown: false }}

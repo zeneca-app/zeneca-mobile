@@ -1,168 +1,158 @@
-import React, { useCallback, useEffect } from 'react';
-import { z } from 'zod';
-import { useForm, Controller } from 'react-hook-form';
-import { useTranslation } from "react-i18next";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { usePrivy, useEmbeddedWallet, isNotCreated, getUserEmbeddedWallet, useLoginWithEmail } from "@privy-io/expo";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+
+import { useState, useCallback, useEffect } from "react";
+import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, StyleSheet, SafeAreaView } from 'react-native';
+import {
+    usePrivy,
+    useEmbeddedWallet,
+    isNotCreated,
+    getUserEmbeddedWallet,
+    useLoginWithEmail
+} from "@privy-io/expo";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
+import * as SecureStore from "expo-secure-store";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { KeyboardAvoidingView, Platform } from "react-native";
-import { zodResolver } from '@hookform/resolvers/zod';
-import useAuthStore from "@/storage/authStore";
-import { getPimlicoSmartAccountClient } from "@/lib/pimlico";
-import { useChainStore } from "@/storage/chainStore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useWalletStore } from "@/storage/walletStore";
+import { useChainStore } from "@/storage/chainStore";
+import { getPimlicoSmartAccountClient } from "@/lib/pimlico";
+import { LoginStatus } from "@/lib/types/login";
+import EmailInput from "@/components/login/email-input";
+import CodeInput from "@/components/login/code-input";
+import { loginLoginOrCreate } from "@/client/";
 
-
-const TEST_EMAIL = "tester@zeneca.app";
-
-type TranslationFunction = (key: string) => string;
-
-const createSchema = (t: TranslationFunction) => z.object({
-    email: z.string().email({ message: t("loginWithEmail.errorText") }),
-});
 
 const LoginWithEmail = () => {
     const { t } = useTranslation();
     const navigation = useNavigation();
 
-    const schema = createSchema(t);
-    type FormData = z.infer<typeof schema>;
+    // const { address } = usePrivyWagmiProvider();
+    const [email, setEmail] = useState<string>("");
+    const [code, setCode] = useState<`${number | ""}`>("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [loadingMessage, setLoadingMessage] = useState("");
+    const [loginStatus, setLoginStatus] = useState<LoginStatus>(
+        LoginStatus.SUCCESS_EMAIL
+    );
 
-    const { logout, user, isReady } = usePrivy();
-    const wallet = useEmbeddedWallet();
+    const { logout, user, isReady, getAccessToken } = usePrivy();
     type PrivyUser = typeof user;
+
+    const wallet = useEmbeddedWallet();
+    const userAddress = getUserEmbeddedWallet(user)?.address;
 
     const chain = useChainStore((state) => state.chain);
     const setAddress = useWalletStore((state) => state.setAddress);
 
-    const { updateLogged } = useAuthStore((state) => ({
-        updateLogged: state.updateLogged,
-    }));
-
-    const { control, handleSubmit, formState: { errors }, watch } = useForm<FormData>({
-        resolver: zodResolver(schema),
-        defaultValues: {
-            email: '',
+    const { state, sendCode, loginWithCode } = useLoginWithEmail({
+        onError: (error) => {
+            console.error("ERRRORRRR", error);
+            setIsLoading(false);
+            setLoginStatus(LoginStatus.CODE_ERROR);
+        },
+        onLoginSuccess(user, isNewUser) {
+            console.log("Logged in", user);
         },
     });
 
-    const successLogin = () => {
-        updateLogged(true);
-        navigation.navigate("MainTabs");
-    };
-
-    const onSubmit = (data: FormData) => {
-        const email = data.email;
-        if (email === TEST_EMAIL) {
-            successLogin();
-        } else {
-            sendCode({ email });
-            navigation.navigate("EmailOtpValidation", { email: email } as any);
-        }
-    };
-
-    const email = watch('email');
-    const isContinueButtonDisabled = errors.email !== undefined || email.trim() === '';
-
-    const { sendCode, state } = useLoginWithEmail();
-
-
     const handleConnection = useCallback(
         async (user: PrivyUser): Promise<void> => {
-            if (isNotCreated(wallet)) {
-                await wallet.create!();
+            const accessToken = await getAccessToken();
+
+            if (!userAddress && isNotCreated(wallet)) {
+                await wallet.create(); // Create the wallet
             }
 
-            console.log("wallet", wallet);
-            const address = getUserEmbeddedWallet(user)?.address;
-
             const smartAccount = await getPimlicoSmartAccountClient(
-                address as `0x${string}`,
+                userAddress as `0x${string}`,
                 chain,
                 wallet
             );
 
-            // Store addresses in AsyncStorage
-            await AsyncStorage.setItem('userAddress', address || '');
-            await AsyncStorage.setItem('smartAccountAddress', smartAccount?.account?.address);
-
             setAddress(smartAccount?.account?.address as `0x${string}`);
+
+            const account = user?.linked_accounts.find(account => account.type === 'google_oauth');
+            if (account) {
+                loginLoginOrCreate({
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                    body: {
+                        email: account.email,
+                        has_third_party_auth: true,
+                        wallet: {
+                            address: userAddress as `0x${string}`,
+                        }
+                    }
+                });
+            }
+
+            await SecureStore.setItemAsync(`token-${userAddress}`, accessToken!);
         },
         [user]
     );
 
+    const goToNextScreen = () => {
+        navigation.navigate("Home");
+    };
+
     useEffect(() => {
-        if (state.status === "done" && user && isReady) {
+        if (state.status === "done" && user) {
             try {
                 handleConnection(user)
                     .then(() => {
-
                         console.log("success");
-                        successLogin();
+                        goToNextScreen();
                     })
                     .catch((e) => {
                         console.error("Error Handling Connection", e);
-
+                        setIsLoading(false);
+                        setLoginStatus(LoginStatus.CODE_ERROR);
+                        navigation.navigate("Login");
                         throw new Error(e);
                     });
             } catch (e) {
                 console.log("Error Connecting Stuffs", e);
+                navigation.navigate("Login");
                 throw new Error(e as any);
             }
         } else if (state.status === "initial") {
-            //setLoginStatus(LoginStatus.INITIAL);
+            setLoginStatus(LoginStatus.INITIAL);
         }
-    }, [state, user, isReady]);
+    }, [state, user]);
 
-    return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles.mainContainer}
-        >
-            <SafeAreaView style={styles.safeAreaContainer}>
-                <View style={styles.topContent}>
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                        <Ionicons name="arrow-back" size={24} color="white" />
-                    </TouchableOpacity>
-                    <Text style={styles.title}>{t("loginWithEmail.title")}</Text>
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.label}>{t("loginWithEmail.emailLabel")}</Text>
-                        <Controller
-                            control={control}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                                <TextInput
-                                    style={styles.input}
-                                    onBlur={onBlur}
-                                    onChangeText={onChange}
-                                    value={value}
-                                    autoComplete="email"
-                                    keyboardType="email-address"
-                                    autoCapitalize="none"
-                                />
-                            )}
-                            name="email"
-                        />
-                        <View style={[styles.inputLine, errors.email && styles.inputLineError]} />
-                        {errors.email && (
-                            <Text style={styles.errorText}>{errors.email.message}</Text>
-                        )}
+    return (<KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.mainContainer}
+    >
+        <SafeAreaView style={styles.safeAreaContainer}>
+            {loginStatus === LoginStatus.INITIAL && (
+                <EmailInput
+                    email={email}
+                    setEmail={setEmail}
+                    setCode={setCode}
+                    setIsLoading={setIsLoading}
+                    setLoadingMessage={setLoadingMessage}
+                    setLoginStatus={setLoginStatus}
 
-                    </View>
-                </View>
-                <View style={styles.bottomContent}>
-                    <TouchableOpacity
-                        disabled={isContinueButtonDisabled}
-                        style={[styles.continueButton, isContinueButtonDisabled && styles.continueButtonDisabled]}
-                        onPress={handleSubmit(onSubmit)}>
-                        <Text style={styles.continueButtonText}>{t("loginWithEmail.continueButton")}</Text>
-                    </TouchableOpacity>
-                </View>
-            </SafeAreaView>
-        </KeyboardAvoidingView>
-    );
-};
+                />
+            )}
+
+            {loginStatus === LoginStatus.SUCCESS_EMAIL && (
+                <CodeInput
+                    code={code}
+                    email={email!}
+                    setCode={setCode}
+                    setIsLoading={setIsLoading}
+                    setLoginStatus={setLoginStatus}
+                    setLoadingMessage={setLoadingMessage}
+                    sendCode={sendCode}
+                    loginWithCode={loginWithCode}
+                />
+            )}
+        </SafeAreaView>
+    </KeyboardAvoidingView>)
+}
 
 const styles = StyleSheet.create({
     mainContainer: {

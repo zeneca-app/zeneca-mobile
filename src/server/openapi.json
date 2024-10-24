@@ -10,7 +10,7 @@
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/LoginEmailOtpIn" }
+              "schema": { "$ref": "#/components/schemas/UserCreateIn" }
             }
           },
           "required": true
@@ -20,7 +20,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/LoginEmailOtpOut" }
+                "schema": { "$ref": "#/components/schemas/User" }
               }
             }
           },
@@ -29,113 +29,11 @@
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v0/auth": {
-      "post": {
-        "tags": ["login"],
-        "summary": "Authenticate",
-        "operationId": "login-authenticate",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": { "$ref": "#/components/schemas/EmailAuthIn" }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/Authenticated" }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v0/customers/me": {
-      "get": {
-        "tags": ["customers"],
-        "summary": "Get Customer",
-        "description": "Get current user.",
-        "operationId": "customers-get_customer",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/CustomerRead" }
               }
             }
           }
         },
         "security": [{ "HTTPBearer": [] }]
-      }
-    },
-    "/v0/customers/": {
-      "post": {
-        "tags": ["customers"],
-        "summary": "Create Customer",
-        "operationId": "customers-create_customer",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": { "$ref": "#/components/schemas/CustomerCreateIn" }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/CustomerRead" }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v0/customers/balance": {
-      "get": {
-        "tags": ["customers"],
-        "summary": "Get Balance",
-        "description": "Get current user balance.",
-        "operationId": "customers-get_balance",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/Balance" }
-              }
-            }
-          }
-        }
       }
     },
     "/v0/quotes/": {
@@ -424,8 +322,24 @@
     "/v0/webhooks/koywe": {
       "post": {
         "tags": ["webhooks"],
-        "summary": "New Event Received",
-        "operationId": "webhooks-new_event_received",
+        "summary": "Event From Koywe Received",
+        "operationId": "webhooks-event_from_koywe_received",
+        "responses": { "204": { "description": "Successful Response" } }
+      }
+    },
+    "/v0/webhooks/bridge": {
+      "post": {
+        "tags": ["webhooks"],
+        "summary": "Event From Bridge Received",
+        "operationId": "webhooks-event_from_bridge_received",
+        "responses": { "204": { "description": "Successful Response" } }
+      }
+    },
+    "/v0/webhooks/aiprise": {
+      "post": {
+        "tags": ["webhooks"],
+        "summary": "Event From Aiprise Received",
+        "operationId": "webhooks-event_from_aiprise_received",
         "responses": { "204": { "description": "Successful Response" } }
       }
     },
@@ -449,54 +363,29 @@
           }
         }
       }
+    },
+    "/v0/users/me": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Get User",
+        "description": "Get current user.",
+        "operationId": "users-get_user",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/User" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
     }
   },
   "components": {
     "schemas": {
-      "Address": {
-        "properties": {
-          "street_line_1": { "type": "string", "title": "Street Line 1" },
-          "street_line_2": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Street Line 2"
-          },
-          "city": { "type": "string", "title": "City" },
-          "country": { "$ref": "#/components/schemas/Country" },
-          "state": { "type": "string", "title": "State" },
-          "postal_code": { "type": "string", "title": "Postal Code" }
-        },
-        "type": "object",
-        "required": [
-          "street_line_1",
-          "city",
-          "country",
-          "state",
-          "postal_code"
-        ],
-        "title": "Address"
-      },
-      "AddressRead": {
-        "properties": {
-          "street_line_1": { "type": "string", "title": "Street Line 1" },
-          "street_line_2": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Street Line 2"
-          },
-          "city": { "type": "string", "title": "City" },
-          "country": { "type": "string", "title": "Country" },
-          "state": { "type": "string", "title": "State" },
-          "postal_code": { "type": "string", "title": "Postal Code" }
-        },
-        "type": "object",
-        "required": [
-          "street_line_1",
-          "city",
-          "country",
-          "state",
-          "postal_code"
-        ],
-        "title": "AddressRead"
-      },
       "AddressUS": {
         "properties": {
           "street_line_1": { "type": "string", "title": "Street Line 1" },
@@ -523,21 +412,6 @@
           "postal_code"
         ],
         "title": "AddressUS"
-      },
-      "Authenticated": {
-        "properties": {
-          "session_jwt": { "type": "string", "title": "Session Jwt" },
-          "session_token": { "type": "string", "title": "Session Token" }
-        },
-        "type": "object",
-        "required": ["session_jwt", "session_token"],
-        "title": "Authenticated"
-      },
-      "Balance": {
-        "properties": { "balance": { "type": "string", "title": "Balance" } },
-        "type": "object",
-        "required": ["balance"],
-        "title": "Balance"
       },
       "Bank": {
         "properties": {
@@ -616,114 +490,6 @@
         "required": ["person_type", "first_name", "last_name"],
         "title": "BeneficiaryUS"
       },
-      "BusinessCreate": {
-        "properties": {
-          "name": { "type": "string", "title": "Name" },
-          "description": { "type": "string", "title": "Description" },
-          "tax_identification": {
-            "type": "string",
-            "title": "Tax Identification"
-          },
-          "identification_type": {
-            "$ref": "#/components/schemas/BusinessIdentificationType"
-          },
-          "country": { "$ref": "#/components/schemas/KYCCountry" },
-          "source_of_funds": { "type": "string", "title": "Source Of Funds" },
-          "incorporation_date": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Incorporation Date"
-          },
-          "business_type": { "$ref": "#/components/schemas/BusinessType" },
-          "website": {
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 2083,
-                "minLength": 1,
-                "format": "uri"
-              },
-              { "type": "null" }
-            ],
-            "title": "Website"
-          }
-        },
-        "type": "object",
-        "required": [
-          "name",
-          "description",
-          "tax_identification",
-          "identification_type",
-          "country",
-          "source_of_funds",
-          "incorporation_date",
-          "business_type"
-        ],
-        "title": "BusinessCreate"
-      },
-      "BusinessIdentificationType": {
-        "type": "string",
-        "enum": [
-          "cl_rut",
-          "mx_rfc",
-          "co_nit",
-          "pe_ruc",
-          "ar_cuit",
-          "br_cnpj",
-          "pa_ruc"
-        ],
-        "title": "BusinessIdentificationType"
-      },
-      "BusinessRead": {
-        "properties": {
-          "name": { "type": "string", "title": "Name" },
-          "description": { "type": "string", "title": "Description" },
-          "tax_identification": {
-            "type": "string",
-            "title": "Tax Identification"
-          },
-          "identification_type": {
-            "type": "string",
-            "title": "Identification Type"
-          },
-          "website": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Website"
-          },
-          "source_of_funds": { "type": "string", "title": "Source Of Funds" },
-          "business_type": { "type": "string", "title": "Business Type" },
-          "incorporation_date": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Incorporation Date"
-          }
-        },
-        "type": "object",
-        "required": [
-          "name",
-          "description",
-          "tax_identification",
-          "identification_type",
-          "website",
-          "source_of_funds",
-          "business_type",
-          "incorporation_date"
-        ],
-        "title": "BusinessRead"
-      },
-      "BusinessType": {
-        "type": "string",
-        "enum": [
-          "cooperative",
-          "corporation",
-          "llc",
-          "solo_prop",
-          "partnership",
-          "trust",
-          "other"
-        ],
-        "title": "BusinessType"
-      },
       "Country": {
         "type": "string",
         "enum": ["USA", "COL", "MEX", "BRA", "ARG", "PAN"],
@@ -751,60 +517,6 @@
         "type": "string",
         "enum": ["USD", "COP", "EUR", "MXN", "BRL", "ARS"],
         "title": "Currency"
-      },
-      "CustomerCreateIn": {
-        "properties": {
-          "email": { "type": "string", "format": "email", "title": "Email" },
-          "person_type": { "$ref": "#/components/schemas/PersonType" },
-          "address": { "$ref": "#/components/schemas/Address" },
-          "individual": {
-            "anyOf": [
-              { "$ref": "#/components/schemas/IndividualCreate" },
-              { "type": "null" }
-            ]
-          },
-          "business": {
-            "anyOf": [
-              { "$ref": "#/components/schemas/BusinessCreate" },
-              { "type": "null" }
-            ]
-          }
-        },
-        "type": "object",
-        "required": ["email", "person_type", "address"],
-        "title": "CustomerCreateIn"
-      },
-      "CustomerRead": {
-        "properties": {
-          "id": { "type": "string", "format": "uuid", "title": "Id" },
-          "email": { "type": "string", "title": "Email" },
-          "person_type": { "$ref": "#/components/schemas/PersonType" },
-          "address": { "$ref": "#/components/schemas/AddressRead" },
-          "individual": {
-            "anyOf": [
-              { "$ref": "#/components/schemas/IndividualRead" },
-              { "type": "null" }
-            ]
-          },
-          "business": {
-            "anyOf": [
-              { "$ref": "#/components/schemas/BusinessRead" },
-              { "type": "null" }
-            ]
-          }
-        },
-        "type": "object",
-        "required": ["id", "email", "person_type", "address"],
-        "title": "CustomerRead"
-      },
-      "EmailAuthIn": {
-        "properties": {
-          "code": { "type": "string", "title": "Code" },
-          "email_id": { "type": "string", "title": "Email Id" }
-        },
-        "type": "object",
-        "required": ["code", "email_id"],
-        "title": "EmailAuthIn"
       },
       "ExternalAccountBR": {
         "properties": {
@@ -881,156 +593,6 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
-      },
-      "IndividualCreate": {
-        "properties": {
-          "first_name": { "type": "string", "title": "First Name" },
-          "last_name": { "type": "string", "title": "Last Name" },
-          "date_of_birth": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Date Of Birth"
-          },
-          "tax_identification": {
-            "type": "string",
-            "title": "Tax Identification"
-          },
-          "identification_type": {
-            "$ref": "#/components/schemas/IndividualIdentificationType"
-          },
-          "country": { "$ref": "#/components/schemas/KYCCountry" },
-          "middle_name": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Middle Name"
-          },
-          "second_last_name": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Second Last Name"
-          },
-          "phone_number": {
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 64,
-                "minLength": 7,
-                "format": "phone"
-              },
-              { "type": "null" }
-            ],
-            "title": "Phone Number"
-          },
-          "gov_id_image_front": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Gov Id Image Front"
-          },
-          "gov_id_image_back": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Gov Id Image Back"
-          }
-        },
-        "type": "object",
-        "required": [
-          "first_name",
-          "last_name",
-          "date_of_birth",
-          "tax_identification",
-          "identification_type",
-          "country"
-        ],
-        "title": "IndividualCreate"
-      },
-      "IndividualIdentificationType": {
-        "type": "string",
-        "enum": [
-          "cl_rut",
-          "mx_curp",
-          "pa_cedula_ciu",
-          "co_cedula_ciu",
-          "co_cedula_ext",
-          "pe_dni",
-          "br_cpf"
-        ],
-        "title": "IndividualIdentificationType"
-      },
-      "IndividualRead": {
-        "properties": {
-          "first_name": { "type": "string", "title": "First Name" },
-          "last_name": { "type": "string", "title": "Last Name" },
-          "middle_name": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Middle Name"
-          },
-          "second_last_name": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Second Last Name"
-          },
-          "phone_number": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Phone Number"
-          },
-          "date_of_birth": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Date Of Birth"
-          },
-          "tax_identification": {
-            "type": "string",
-            "title": "Tax Identification"
-          },
-          "identification_type": {
-            "type": "string",
-            "title": "Identification Type"
-          },
-          "country": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Country"
-          },
-          "gov_id_image_front": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Gov Id Image Front"
-          },
-          "gov_id_image_back": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Gov Id Image Back"
-          }
-        },
-        "type": "object",
-        "required": [
-          "first_name",
-          "last_name",
-          "middle_name",
-          "second_last_name",
-          "phone_number",
-          "date_of_birth",
-          "tax_identification",
-          "identification_type",
-          "country",
-          "gov_id_image_front",
-          "gov_id_image_back"
-        ],
-        "title": "IndividualRead"
-      },
-      "KYCCountry": {
-        "type": "string",
-        "enum": ["US", "CO", "PE", "PA", "MX", "BR", "AR", "CL"],
-        "title": "KYCCountry"
-      },
-      "LoginEmailOtpIn": {
-        "properties": {
-          "email": { "type": "string", "format": "email", "title": "Email" }
-        },
-        "type": "object",
-        "required": ["email"],
-        "title": "LoginEmailOtpIn"
-      },
-      "LoginEmailOtpOut": {
-        "properties": {
-          "email_id": { "type": "string", "title": "Email Id" },
-          "email": { "type": "string", "format": "email", "title": "Email" }
-        },
-        "type": "object",
-        "required": ["email_id", "email"],
-        "title": "LoginEmailOtpOut"
       },
       "PaymentRail": {
         "type": "string",
@@ -1441,6 +1003,68 @@
         ],
         "title": "USAState"
       },
+      "User": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Name"
+          },
+          "email": { "type": "string", "title": "Email" },
+          "phone": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Phone"
+          },
+          "has_third_party_auth": {
+            "type": "boolean",
+            "title": "Has Third Party Auth",
+            "default": false
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": ["name", "email", "phone"],
+        "title": "User"
+      },
+      "UserCreateIn": {
+        "properties": {
+          "email": { "type": "string", "format": "email", "title": "Email" },
+          "name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Name"
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "minLength": 7,
+                "format": "phone"
+              },
+              { "type": "null" }
+            ],
+            "title": "Phone"
+          },
+          "wallet": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/WalletCreateIn" },
+              { "type": "null" }
+            ]
+          },
+          "has_third_party_auth": {
+            "type": "boolean",
+            "title": "Has Third Party Auth",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": ["email"],
+        "title": "UserCreateIn"
+      },
       "ValidationError": {
         "properties": {
           "loc": {
@@ -1454,6 +1078,12 @@
         "type": "object",
         "required": ["loc", "msg", "type"],
         "title": "ValidationError"
+      },
+      "WalletCreateIn": {
+        "properties": { "address": { "type": "string", "title": "Address" } },
+        "type": "object",
+        "required": ["address"],
+        "title": "WalletCreateIn"
       },
       "WithdrawalRead": {
         "properties": {

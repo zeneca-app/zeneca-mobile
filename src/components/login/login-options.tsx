@@ -1,155 +1,192 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Modal, View, Text, StyleSheet, Pressable } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { baseSepolia } from "viem/chains";
 import { toast } from "burnt";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { usePrivy, useEmbeddedWallet, isNotCreated, getUserEmbeddedWallet, useLoginWithOAuth } from "@privy-io/expo";
 import { useWalletStore } from "@/storage/walletStore";
 import { useChainStore } from "@/storage/chainStore";
-import useAuthStore from "@/storage/authStore";
 import { colors } from "@/styles/colors";
 import { getPimlicoSmartAccountClient } from "@/lib/pimlico";
+import LoginButton from "@/components/login/button";
+import { LoginStatus } from "@/lib/types/login";
+import ErrorModal from "@/components/error-modal";
+import { loginLoginOrCreate } from "@/client/";
+import * as SecureStore from "expo-secure-store";
 
 
+const LoginOptions: React.FC<{
+    visible: boolean,
+    loginStatus: LoginStatus,
+    setVisible: (visible: boolean) => void,
+    setLoginStatus: (status: LoginStatus) => void,
 
-const LoginOptions: React.FC = () => {
+}> = ({ visible, loginStatus, setLoginStatus, setVisible }) => {
+    const [isEmailLoading, setIsEmailLoading] = useState(false);
+    const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+    const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
+
     const { t } = useTranslation();
     const navigation = useNavigation();
-    const { logout, user } = usePrivy();
+    const { logout, user, getAccessToken } = usePrivy();
+    type PrivyUser = typeof user;
+    const userAddress = getUserEmbeddedWallet(user)?.address;
     const wallet = useEmbeddedWallet();
 
     const setAddress = useWalletStore((state) => state.setAddress);
     const chain = useChainStore((state) => state.chain);
     const setChain = useChainStore((state) => state.setChain);
 
+    const hideModal = () => {
+        setVisible(false);
+    }
+
     const goToNextScreen = () => {
-        navigation.goBack(); // Dismiss the modal
+        hideModal();
         navigation.navigate("MainTabs");
     };
 
-    type PrivyUser = typeof user;
-
     const { login, state } = useLoginWithOAuth({
+        onError: (error) => {
+            console.error("ERRRORRRR", error);
+            setIsGoogleLoading(false);
+            setLoginStatus(LoginStatus.CODE_ERROR);
+        },
         onSuccess: (user, isNewUser) => {
             console.log("onSuccess");
         },
-        onError: (error) => {
-            console.log("error", error);
-            logout();
-        },
     });
+
 
     const handleConnection = useCallback(
         async (user: PrivyUser): Promise<void> => {
-            if (isNotCreated(wallet)) {
-                await wallet.create!();
+            const accessToken = await getAccessToken();
+
+            if (!userAddress && isNotCreated(wallet)) {
+                await wallet.create(); // Create the wallet
             }
 
-            const address = getUserEmbeddedWallet(user)?.address;
-
             const smartAccount = await getPimlicoSmartAccountClient(
-                address as `0x${string}`,
+                userAddress as `0x${string}`,
                 chain,
                 wallet
             );
 
-            // Store addresses in AsyncStorage
-            await AsyncStorage.setItem('userAddress', address || '');
-            await AsyncStorage.setItem('smartAccountAddress', smartAccount?.account?.address as `0x${string}`);
-
             setAddress(smartAccount?.account?.address as `0x${string}`);
             setChain(baseSepolia);
+
+            const account = user?.linked_accounts.find(account => account.type === 'google_oauth');
+            if (account) {
+                loginLoginOrCreate({
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                    body: {
+                        email: account.email,
+                        has_third_party_auth: true,
+                        wallet: {
+                            address: userAddress as `0x${string}`,
+                        }
+                    }
+                });
+            }
+
+            await SecureStore.setItemAsync(`token-${userAddress}`, accessToken!);
         },
         [user]
     );
 
     const successLogin = () => {
-        updateLogged(true);
         goToNextScreen();
     };
 
     useEffect(() => {
         if (state.status === "done" && user) {
             try {
+                setIsGoogleLoading(true);
                 handleConnection(user)
                     .then(() => {
-
+                        setIsGoogleLoading(false);
                         console.log("success");
                         successLogin();
                     })
                     .catch((e) => {
                         console.error("Error Handling Connection", e);
-
+                        setIsGoogleLoading(false);
                         throw new Error(e);
                     });
             } catch (e) {
                 console.log("Error Connecting Stuffs", e);
+                hideModal();
+                showErrorToast();
                 throw new Error(e as any);
             }
+            showErrorToast();
         } else if (state.status === "initial") {
-            //setLoginStatus(LoginStatus.INITIAL);
+            setLoginStatus(LoginStatus.INITIAL);
         }
-    }, [state, user]);
 
-    const { updateLogged } = useAuthStore((state) => ({
-        updateLogged: state.updateLogged,
-    }));
+
+    }, [state, user]);
 
     const loginWithGmail = async () => {
         await login({ provider: "google" });
     };
 
+    const showErrorToast = () => {
+        // Show toast if an error occurs
+        if (state.status === "error" || loginStatus === LoginStatus.CODE_ERROR) {
+            toast({
+                title: "An error has occurred",
+                haptic: "error",
+                preset: "done",
+                message: "Please try again",
+            });
+        }
+    }
+
     const loginWithEmail = () => {
-        navigation.goBack(); // Dismiss the modal
+        hideModal();
         navigation.navigate("LoginWithEmail");
     };
 
+
+
     return (
         <Modal
+            visible={visible}
             transparent={true}
             animationType="slide"
         >
             <Pressable
                 style={styles.overlay}
-                onPress={navigation.goBack}
+                onPress={hideModal}
             />
             <View style={styles.modalContent}>
                 <View style={styles.buttonsContainer}>
-                    <Pressable style={styles.commonButtonPrimary} onPress={loginWithEmail}>
-                        <Ionicons
-                            name="mail"
-                            size={24}
-                            color={colors.darkHighlight}
-                            style={styles.buttonIcon}
-                        />
-                        <View style={styles.textContainer}>
-                            <Text style={styles.commonButtonPrimaryText}>
-                                {t("loginOptions.emailOption")}
-                            </Text>
-                        </View>
-                    </Pressable>
-                    <Pressable style={styles.commonButtonSecondary} onPress={loginWithGmail}>
-                        <Ionicons
-                            name="logo-google"
-                            size={24}
-                            color="white"
-                            style={styles.buttonIcon}
-                        />
-                        <View style={styles.textContainer}>
-                            <Text style={styles.commonButtonSecondaryText}>
-                                {t("loginOptions.googleOption")}
-                            </Text>
-                        </View>
-                    </Pressable>
+                    <LoginButton
+                        icon="mail"
+                        text={t("loginOptions.emailOption")}
+                        onPress={loginWithEmail}
+                        isPrimary={true}
+                        isLoading={isEmailLoading}
+                        disabled={isGoogleLoading}
+                    />
+                    <LoginButton
+                        icon="logo-google"
+                        text={t("loginOptions.googleOption")}
+                        onPress={loginWithGmail}
+                        isPrimary={false}
+                        isLoading={isGoogleLoading}
+                        disabled={isEmailLoading}
+                    />
                     <Text style={styles.termsText}>
                         {t("loginOptions.terms")} <Text style={styles.termsTextLink}>{t("loginOptions.termsLink")}</Text>.
                     </Text>
                 </View>
             </View>
-
         </Modal>
     );
 };
