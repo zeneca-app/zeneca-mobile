@@ -1,348 +1,207 @@
-import Feather from "@expo/vector-icons/Feather";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { usePrivy } from "@privy-io/expo";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { useQuery } from "@tanstack/react-query";
-import { toast } from "burnt";
-import { LinearGradient } from "expo-linear-gradient";
-import { useCallback } from "react";
+import { useEffect, useState } from "react";
+
+import { getUserEmbeddedWallet, usePrivy } from "@privy-io/expo";
+import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
-import {
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { customersGetBalance, transfersGetTransfers } from "@/client";
-import useAuthStore from "@/storage/authStore";
+import * as SecureStore from "expo-secure-store";
+//import LoginForm from "../components/login/login-form";
+import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import Logo from "@/assets/zeneca-logo-bright.svg";
 import { colors } from "@/constants/colors";
-import { format, parseISO } from 'date-fns';
-import { es, enUS } from 'date-fns/locale';
-import { formatCurrency, CurrencyCode } from "@/utils/currencyUtils";
-import { formatQuoteToNumber } from "@/utils/quote";
-import useTransferStore from "@/storage/transferStore";
-import LineHome from "@/assets/line-home.svg";
-import Balance from "@/components/Balance";
-import { useBalance, BalanceProvider } from "@/context/BalanceContext";
+import LogoLetter from "@/assets/zeneca-logo-letters.svg";
+import GradientCircle from "@/assets/zeneca-gradient-circle.svg";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+export enum LoginStatus {
+    INITIAL = "initial",
+    EMAIL_ERROR = "email-error",
+    CODE_ERROR = "code-error",
+    SUCCESS_EMAIL = "email-success",
+    SUCCESS_CODE = "code-success",
+}
 
-const HomeScreen = ({ }) => {
-  const navigation = useNavigation();
-  const { t } = useTranslation();
+const Home = () => {
+    const { t } = useTranslation();
+    const { isReady, user, logout } = usePrivy();
+    const address = getUserEmbeddedWallet(user)?.address;
 
-  const { logout } = usePrivy();
-  const { updateLogged } = useAuthStore((state) => ({ updateLogged: state.updateLogged }));
+    //const { user: storedUser, setUser } = useUserStore((state) => state);
+    const [isFetchingUser, setIsFetchingUser] = useState(false);
+    const [userFetchingCounter, setUserFetchingCounter] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
+    const [loadingMessage, setLoadingMessage] = useState("");
+    const [loginStatus, setLoginStatus] = useState<LoginStatus>(
+        LoginStatus.INITIAL
+    );
 
-  const { data: balance } = useQuery({
-    queryKey: ["balance"],
-    queryFn: customersGetBalance,
-  });
+    useEffect(() => {
+        if (address) {
+            setIsLoading(true);
+            setLoadingMessage("Logging in...");
+            getToken()
+                .then(() => {
+                    setIsLoading(false);
+                })
+                .catch(() => {
+                    AsyncStorage.removeItem(`smartAccountAddress`).then(() => logout());
+                    setIsLoading(false);
+                });
+        }
+    }, [address]);
 
-  const { data: transactions } = useQuery({
-    queryKey: ["transactions"],
-    queryFn: transfersGetTransfers,
-  });
-
-  const { setTransfer } = useTransferStore((state) => ({ setTransfer: state.setTransfer }));
-
-  const formatDate = (dateString: string) => {
-    const date = parseISO(dateString);
-    return format(date, t("home.date_format"), { locale: es });
-  };
-
-  const onLogout = async () => {
-    try {
-      await logout();
-      nextLogout();
-    } catch (err) {
-      const e = err as Error;
-      toast({
-        title: e?.message ?? "Login Error",
-        preset: "error",
-      });
-      updateLogged(false);
-    }
-  };
-
-  const nextLogout = () => {
-    updateLogged(false);
-    navigation.navigate("Login");
-  }
-
-  const onSend = useCallback(
-    () => navigation.navigate("Recipients"),
-    [navigation],
-  );
-
-  const renderTransaction = useCallback(({ item }: { item: any }) => {
-    const isWithdrawal = item.withdrawal !== null;
-    const quote = formatQuoteToNumber(item.quote);
-
-    const formatWithdrawal = (currency: string, amount: string) => {
-      const formatted = formatCurrency(amount, currency as CurrencyCode, true)
-      return "-" + formatted
+    /*   if (!!token && storedUser && !!passcode) {
+        return (
+          <Biometrics
+            address={address!}
+            user={storedUser}
+            logout={logout}
+            setUser={setUser}
+          />
+        );
+      } */
+    const loginOptions = async () => {
+        router.push("/app/login-options");
     }
 
-    const formatDeposit = (currency: string, amount: string) => {
-      const formatted = formatCurrency(amount, currency as CurrencyCode, true)
-      return "+" + formatted
-    }
+    const getToken = async () => {
+        try {
+            const smartAccountAddress = await AsyncStorage.getItem("smartAccountAddress");
 
-    const handlePress = () => {
-      setTransfer(item);
-      navigation.navigate("TransactionReceipt");
+            if (smartAccountAddress) {
+
+                router.push("/app/home");
+
+                return smartAccountAddress;
+            }
+        } catch (error) {
+            console.error(error as any);
+            throw new Error(error as any);
+        }
     };
 
-
     return (
-      <TouchableOpacity style={styles.transactionItem} onPress={handlePress}>
-        <View style={styles.transactionLeft}>
-          <View style={styles.transactionIcon}>
-            {isWithdrawal ? (
-              <Feather name="arrow-up-right" size={20} color="white" />
-            ) : (
-              <Ionicons name="arrow-down" size={20} color="white" />
-            )}
-          </View>
-          <View>
-            <Text style={styles.transactionName}>{t("home.withdrawal")}</Text>
-            <Text style={styles.transactionTime}>{formatDate(item.created_at)}</Text>
-          </View>
-        </View>
-        <Text
-          style={[
-            styles.transactionAmount,
-            { color: isWithdrawal ? "#FF5252" : "#4CAF50" },
-          ]}
-        >
-          {isWithdrawal
-            ? formatWithdrawal(
-              quote.destination.toUpperCase(),
-              quote.amount_out,
-            )
-            : formatDeposit(quote.source.toUpperCase(), quote.amount_in)}
-        </Text>
-      </TouchableOpacity>
-    );
-  }, []);
-
-  const renderEmptyList = () => (
-    <View style={styles.emptyListContainer}>
-      <Text style={styles.emptyListText}>
-        {t("home.empty_transactions")}
-      </Text>
-    </View>
-  );
-
-  const keyExtractor = useCallback((item: any) => item.id, []);
-
-  const goDepositCrypto = () => {
-    navigation.navigate("DepositCrypto");
-  }
-
-  return (
-    <BalanceProvider>
-      <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
-        <View style={styles.container}>
-        <View style={styles.backgroundContainer}>
-          <LineHome style={styles.lineHome} />
-        </View>
-
-        <View style={styles.wrapperHeader}>
-          <View style={styles.header}>
-            <TouchableOpacity style={styles.profileButton} onPress={onLogout}>
-              <Ionicons name="person-sharp" size={20} color="white" />
-            </TouchableOpacity>
-          </View>
-          <LinearGradient
-            colors={["#A48BF1", "#80B0F9"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.balanceCard}
-          >
-            <Balance />
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.depositButton} onPress={goDepositCrypto}>
-                <Ionicons name="arrow-down" size={20} color="white" />
-                <Text style={styles.buttonText}>{t("home.depositActionText")}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.sendButton} onPress={onSend}>
-                <Feather name="arrow-up-right" size={20} color="white" />
-                <Text style={styles.buttonText}>{t("home.sendActionText")}</Text>
-              </TouchableOpacity>
+        <SafeAreaView style={styles.safeAreaContainer}>
+            <View style={styles.container}>
+                <View style={styles.backgroundContainer}>
+                    <GradientCircle style={styles.gradientCircle} />
+                    <View style={styles.logoOverlay}>
+                        <Logo width={60} height={60} />
+                    </View>
+                </View>
+                <View style={styles.contentContainer}>
+                    <View style={styles.logoContainer}>
+                        <LogoLetter style={styles.logoLetters} />
+                        <View style={styles.descriptionContainer}>
+                            <Text style={styles.description}>{t("login.description_line_1")}</Text>
+                            <Text style={styles.description}>{t("login.description_line_2")}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.buttonsContainer}>
+                        <Pressable style={styles.signUpButton} onPress={loginOptions}>
+                            <Text style={styles.signUpButtonText}>
+                                {t("login.signUpButton")}
+                            </Text>
+                        </Pressable>
+                        {/* <Pressable style={styles.signInButton} onPress={loginOptions}>
+              <Text style={styles.signInButtonText}>
+                {t("login.signInButton")}
+              </Text>
+            </Pressable> */}
+                    </View>
+                </View>
             </View>
-          </LinearGradient>
-        </View>
-        <View style={styles.transactionsContainer}>
-          <Text style={styles.transactionsHeader}>{t("home.transactions")}</Text>
-          <FlatList
-            data={[...(transactions?.data || [])].reverse()}
-            renderItem={renderTransaction}
-            keyExtractor={keyExtractor}
-            showsVerticalScrollIndicator={false}
-            ListEmptyComponent={renderEmptyList}
-          />
-          </View>
-        </View>
-      </SafeAreaView>
-    </BalanceProvider>
-  );
+        </SafeAreaView>
+    );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  backgroundContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  lineHome: {
-    position: 'absolute',
-    // Adjust these values to change the position
-    top: -30,  // Moves the component up by 50 units
-  },
-  wrapperHeader: {
-    paddingTop: 20,
-  },
-  header: {
-    flexDirection: "row",
-    marginBottom: 20,
-  },
-  profileButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#18171A",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  balanceCard: {
-    borderRadius: 30,
-    padding: 20,
-    marginBottom: 3,
-  },
-  balanceContainer: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    marginBottom: 20,
-  },
-  currencySign: {
-    fontSize: 24,
-    fontWeight: "bold",
-    fontFamily: "Manrope_700Bold",
-    color: "white",
-    marginRight: 4,
-    marginTop: 4,
-  },
-  balanceAmount: {
-    fontSize: 38,
-    fontWeight: "bold",
-    fontFamily: "Manrope_700Bold",
-    color: "white",
-  },
-  balanceUsd: {
-    fontSize: 16,
-    fontFamily: "Manrope_600SemiBold",
-    color: "white",
-    marginLeft: 5,
-    marginBottom: 7,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  sendButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: 'rgba(0, 0, 0, 0.15)',
-    borderRadius: 25,
-    paddingVertical: 14,
-    paddingHorizontal: 20,
-    flex: 1,
-    marginHorizontal: 5,
-  },
-  depositButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: 'rgba(0, 0, 0, 0.15)',
-    borderRadius: 25,
-    paddingVertical: 14,
-    paddingHorizontal: 20,
-    flex: 1,
-    marginHorizontal: 5,
-  },
-  buttonText: {
-    color: "white",
-    marginLeft: 8,
-    fontFamily: "Manrope_600SemiBold",
-    fontSize: 16,
-  },
-  emptyListContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 20,
-  },
-  emptyListText: {
-    color: '#999',
-    fontSize: 16,
-    textAlign: 'center',
-    fontFamily: "Manrope_600SemiBold",
-  },
-  transactionsContainer: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: colors.darkHighlight,
-    borderRadius: 40,
-  },
-  transactionsHeader: {
-    color: "#999",
-    fontSize: 12,
-    paddingVertical: 20,
-  },
-  transactionItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 15,
-  },
-  transactionLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  transactionIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#333",
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 10,
-  },
-  transactionInitial: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  transactionName: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "500",
-  },
-  transactionTime: {
-    color: "#999",
-    fontSize: 12,
-  },
-  transactionAmount: {
-    fontSize: 16,
-    fontWeight: "500",
-  },
+    safeAreaContainer: {
+        flex: 1,
+        backgroundColor: "#0D0B0D",
+    },
+    container: {
+        flex: 1,
+        backgroundColor: "#0D0B0D",
+    },
+    backgroundContainer: {
+        position: 'absolute',
+        top: '25%',
+        left: 0,
+        right: 0,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    gradientCircle: {
+        position: "absolute",
+    },
+    logoOverlay: {
+        position: "absolute",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    contentContainer: {
+        marginTop: '60%',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+    },
+    logoContainer: {
+        marginBottom: 40,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    logoLetters: {
+        marginBottom: 20,
+    },
+    title: {
+        fontSize: 30,
+        fontFamily: "Manrope_700Bold",
+        color: "white",
+    },
+    descriptionContainer: {
+        marginTop: 10,
+    },
+    description: {
+        textAlign: 'center',
+        fontSize: 28,
+        fontFamily: "Manrope_500Medium",
+        color: "white",
+    },
+    buttonsContainer: {
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: "center",
+    },
+    signUpButton: {
+        marginBottom: 20,
+        flexDirection: 'row',
+        width: '100%',
+        padding: 16,
+        borderRadius: 35,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "white",
+    },
+    signUpButtonText: {
+        color: colors.darkHighlight,
+        fontSize: 16,
+        fontFamily: "Manrope_600SemiBold",
+    },
+    signInButton: {
+        flexDirection: 'row',
+        width: '100%',
+        padding: 16,
+        borderRadius: 35,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#252328",
+    },
+    signInButtonText: {
+        color: "white",
+        fontSize: 16,
+        fontFamily: "Manrope_500Medium",
+    },
 });
 
-export default HomeScreen;
+export default Home;

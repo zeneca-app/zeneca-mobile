@@ -39,8 +39,10 @@ Sentry.init({
         Sentry.reactNativeTracingIntegration({
         }),
     ],
+    environment: process.env.EXPO_PUBLIC_SENTRY_ENVIRONMENT,
     enabled: !isRunningInExpoGo(),
 });
+
 
 LogBox.ignoreLogs([new RegExp("TypeError:.*")]);
 
@@ -83,7 +85,6 @@ const AppLayout = () => {
         }
     }, [loaded]);
 
-    //const { logged } = useAuthStore((state) => ({ logged: state.logged }));
 
     return (
         <PostHogProvider

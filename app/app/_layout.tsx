@@ -3,8 +3,24 @@ import { Stack } from "expo-router";
 
 export default function AppLayout() {
     return (
-        <Stack>
-           {/*  <Stack.Screen
+        <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen
+                options={{ headerShown: false }}
+                name="home"
+            />
+            <Stack.Screen
+                options={{ headerShown: false }}
+                name="deposit-crypto"
+            />
+            <Stack.Screen
+                name="login-options"
+                options={{
+                    headerShown: false,
+                    presentation: 'transparentModal',
+                }}
+            />
+
+            {/*  <Stack.Screen
                 options={{ headerShown: false }}
                 name="Login"
                 component={Login}
@@ -24,11 +40,7 @@ export default function AppLayout() {
                 name="MainTabs"
                 component={MainTabs}
             />
-            <Stack.Screen
-                options={{ headerShown: false }}
-                name="Home"
-                component={HomeScreen}
-            />
+           
             <Stack.Screen
                 options={{ headerShown: false }}
                 name="Recipients"
