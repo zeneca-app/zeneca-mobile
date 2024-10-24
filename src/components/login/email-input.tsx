@@ -35,7 +35,7 @@ function EmailInput({
     const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
 
     const successLogin = () => {
-        navigation.navigate("MainTabs");
+        navigation.navigate("Home");
     };
 
     const { sendCode } = useLoginWithEmail({

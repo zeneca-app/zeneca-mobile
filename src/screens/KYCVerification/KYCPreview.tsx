@@ -22,7 +22,7 @@ const KYCVerificationScreen = () => {
     };
 
     const goHome = () => {
-        navigation.navigate("MainTabs");
+        navigation.navigate("Home");
     };
 
     return (<SafeAreaView style={styles.container}>

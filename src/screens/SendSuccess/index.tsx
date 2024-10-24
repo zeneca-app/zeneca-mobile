@@ -16,7 +16,7 @@ const SendSuccessScreen = () => {
     }));
 
     const goHome = () => {
-        navigation.navigate("MainTabs");
+        navigation.navigate("Home");
     };
 
     const showReceipt = async () => {

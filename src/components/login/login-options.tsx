@@ -45,7 +45,7 @@ const LoginOptions: React.FC<{
 
     const goToNextScreen = () => {
         hideModal();
-        navigation.navigate("MainTabs");
+        navigation.navigate("Home");
     };
 
     const { login, state } = useLoginWithOAuth({

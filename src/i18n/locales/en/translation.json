@@ -50,7 +50,13 @@
     "empty_transactions": "No transactions",
     "date_format": "MMM d",
     "transactions": "Transactions",
-    "withdrawal": "Withdrawal"
+    "withdrawal": "Withdrawal",
+    "logout": {
+      "title": "Logout",
+      "message": "Are you sure you want to logout?",
+      "cancel": "Cancel",
+      "confirm": "Logout"
+    }
   },
   "recipients": {
     "title": "Send money to?",

@@ -1,6 +1,5 @@
 import Feather from "@expo/vector-icons/Feather";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { usePrivy } from "@privy-io/expo";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "burnt";
@@ -14,8 +13,9 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Alert
 } from "react-native";
-import { customersGetBalance, transfersGetTransfers } from "@/client";
+import { transfersGetTransfers } from "@/client";
 import useAuthStore from "@/storage/authStore";
 import { colors } from "@/styles/colors";
 import { format, parseISO } from 'date-fns';
@@ -27,18 +27,17 @@ import LineHome from "@/assets/line-home.svg";
 import Balance from "@/components/Balance";
 import { useBalance } from "@/context/BalanceContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
+import { usePrivy, getUserEmbeddedWallet } from "@privy-io/expo";
 
 
 const HomeScreen = ({ }) => {
+  const { isReady, user, logout } = usePrivy();
+  const address = getUserEmbeddedWallet(user)?.address;
+
   const navigation = useNavigation();
   const { t } = useTranslation();
 
-  const { logout } = usePrivy();
-
-  const { data: balance } = useQuery({
-    queryKey: ["balance"],
-    queryFn: customersGetBalance,
-  });
 
   const { data: transactions } = useQuery({
     queryKey: ["transactions"],
@@ -52,23 +51,38 @@ const HomeScreen = ({ }) => {
     return format(date, t("home.date_format"), { locale: es });
   };
 
-  const onLogout = async () => {
+  const onLogout = () => {
+    Alert.alert(
+      t("home.logout.title"),
+      t("home.logout.message"),
+      [
+        {
+          text: t("home.logout.cancel"),
+          style: "cancel"
+        },
+        {
+          text: t("home.logout.confirm"),
+          onPress: performLogout
+        }
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const performLogout = async () => {
     try {
-      console.log("onLogout");
-      await AsyncStorage.removeItem('smartAccountAddress');
-      await logout();
-      nextLogout();
+      console.log("Performing logout");
+      SecureStore.deleteItemAsync(`token-${address}`).then(() => logout()).then(() => goToLogin());
     } catch (err) {
-      const e = err as Error;
-      toast({
-        title: e?.message ?? "Logout Error",
+      const errorMessage = err instanceof Error ? err.message : "Logout Error";
+      toast({ 
+        title: errorMessage,
         preset: "error",
       });
     }
-    
   };
 
-  const nextLogout = () => {
+  const goToLogin = () => {
     navigation.navigate("Login");
   }
 

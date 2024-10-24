@@ -43,7 +43,13 @@
     "empty_transactions": "No tienes movimientos",
     "date_format": "d 'de' MMMM",
     "transactions": "Movimientos",
-    "withdrawal": "Retiro"
+    "withdrawal": "Retiro",
+    "logout": {
+      "title": "Cerrar sesión",
+      "message": "¿Estás seguro de querer cerrar sesión?",
+      "cancel": "Cancelar",
+      "confirm": "Cerrar sesión"
+    }
   },
   "depositCrypto": {
     "title": "Depósito con Crypto",
