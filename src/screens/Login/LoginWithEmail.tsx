@@ -71,14 +71,14 @@ const LoginWithEmail = () => {
 
             setAddress(smartAccount?.account?.address as `0x${string}`);
 
-            const account = user?.linked_accounts.find(account => account.type === 'google_oauth');
+            const account = user?.linked_accounts.find(account => account.type === 'email');
             if (account) {
                 loginLoginOrCreate({
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
                     body: {
-                        email: account.email,
+                        email: account.address,
                         has_third_party_auth: true,
                         wallet: {
                             address: userAddress as `0x${string}`,
