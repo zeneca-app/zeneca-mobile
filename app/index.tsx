@@ -25,7 +25,8 @@ import { formatQuoteToNumber } from "@/utils/quote";
 import useTransferStore from "@/storage/transferStore";
 import LineHome from "@/assets/line-home.svg";
 import Balance from "@/components/Balance";
-import { useBalance } from "@/context/BalanceContext";
+import { useBalance, BalanceProvider } from "@/context/BalanceContext";
+
 
 const HomeScreen = ({ }) => {
   const navigation = useNavigation();
@@ -142,8 +143,9 @@ const HomeScreen = ({ }) => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
-      <View style={styles.container}>
+    <BalanceProvider>
+      <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
+        <View style={styles.container}>
         <View style={styles.backgroundContainer}>
           <LineHome style={styles.lineHome} />
         </View>
@@ -182,10 +184,10 @@ const HomeScreen = ({ }) => {
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={renderEmptyList}
           />
+          </View>
         </View>
-      </View>
-
-    </SafeAreaView>
+      </SafeAreaView>
+    </BalanceProvider>
   );
 };
 

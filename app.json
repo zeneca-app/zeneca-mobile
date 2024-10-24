@@ -12,7 +12,7 @@
       "backgroundColor": "#000"
     },
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "app.zeneca.prod",
       "usesAppleSignIn": true
     },
@@ -74,6 +74,9 @@
       ],
       "expo-router"
     ],
+    "experiments": {
+      "typedRoutes": true
+    },
     "extra": {
       "eas": {
         "projectId": "07db86a6-53e9-40e0-b3f5-84d401b54213"

@@ -8,17 +8,21 @@ import {
     Manrope_700Bold,
     useFonts,
 } from "@expo-google-fonts/manrope";
-
 import * as Sentry from '@sentry/react-native';
 import * as SplashScreen from 'expo-splash-screen';
-import { Ionicons } from '@expo/vector-icons';
-import { NavigationContainer } from "@react-navigation/native";
-import { Suspense, useCallback } from "react";
-import { StyleSheet, TouchableOpacity, View, LogBox } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { Link, Stack, useRouter, useSegments } from 'expo-router';
+import { LogBox } from "react-native";
+import { Slot } from 'expo-router';
+import { PostHogProvider } from "posthog-react-native";
+import { PrivyProvider } from "@privy-io/expo";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { WagmiProvider, createConfig, http } from "wagmi";
+import { baseSepolia, base } from 'wagmi/chains';
 
-import { Providers } from "@/components/Providers";
+
+const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID!;
+const CLIENT_ID = process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID!;
+const POSTHOG_API_KEY = process.env.EXPO_PUBLIC_POSTHOG_API_KEY!;
+const POSTHOG_HOST = process.env.EXPO_PUBLIC_POSTHOG_HOST!;
 
 
 const navigationIntegration = Sentry.reactNavigationIntegration({
@@ -47,6 +51,16 @@ export {
 SplashScreen.preventAutoHideAsync();
 
 
+const queryClient = new QueryClient();
+
+const wagmiConfig = createConfig({
+    chains: [baseSepolia, base],
+    transports: {
+        [baseSepolia.id]: http(),
+        [base.id]: http(),
+    },
+});
+
 const AppLayout = () => {
     const [loaded, error] = useFonts({
         Manrope_300Light,
@@ -67,13 +81,23 @@ const AppLayout = () => {
         }
     }, [loaded]);
 
-
     //const { logged } = useAuthStore((state) => ({ logged: state.logged }));
 
     return (
-        <Stack>
-
-        </Stack>
+        <PostHogProvider
+            apiKey={POSTHOG_API_KEY}
+            options={{
+                host: POSTHOG_HOST,
+            }}
+        >
+            <PrivyProvider appId={APP_ID} clientId={CLIENT_ID}>
+                <QueryClientProvider client={queryClient}>
+                    <WagmiProvider config={wagmiConfig}>
+                        <Slot />
+                    </WagmiProvider>
+                </QueryClientProvider>
+            </PrivyProvider>
+        </PostHogProvider>
     );
 };
 
