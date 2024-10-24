@@ -17,6 +17,7 @@ import { PrivyProvider } from "@privy-io/expo";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { WagmiProvider, createConfig, http } from "wagmi";
 import { baseSepolia, base } from 'wagmi/chains';
+import { isRunningInExpoGo } from "expo";
 
 
 const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID!;
@@ -38,6 +39,7 @@ Sentry.init({
         Sentry.reactNativeTracingIntegration({
         }),
     ],
+    enabled: !isRunningInExpoGo(),
 });
 
 LogBox.ignoreLogs([new RegExp("TypeError:.*")]);
