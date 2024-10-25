@@ -6,6 +6,7 @@
     "signInButton": "Iniciar sesión"
   },
   "loginOptions": {
+    "title": "Crea tu cuenta",
     "emailOption": "Continuar con email",
     "googleOption": "Continuar con Google",
     "appleOption": "Continuar con Apple",

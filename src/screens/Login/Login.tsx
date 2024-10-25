@@ -23,13 +23,9 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
   const [isFetchingUser, setIsFetchingUser] = useState(false);
-  const [loginStatus, setLoginStatus] = useState<LoginStatus>(
-    LoginStatus.INITIAL
-  );
 
   const token = SecureStore.getItem(`token-${address}`);
 
-  const [isLoginOptionsVisible, setIsLoginOptionsVisible] = useState(false);
 
   useEffect(() => {
     if (address) {
@@ -123,11 +119,6 @@ const Login = () => {
           </View>
         </View>
       </View>
-
-      <LoadingScreen
-        isVisible={isLoading}
-        text={loadingMessage}
-      />
 
     </SafeAreaView>
   );

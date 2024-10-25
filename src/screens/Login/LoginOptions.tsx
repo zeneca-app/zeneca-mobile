@@ -149,7 +149,7 @@ const LoginOptions = () => {
                     <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
                         <Ionicons name="chevron-back" size={22} color="white" />
                     </TouchableOpacity>
-                    <Text style={styles.title}>Create your account</Text>
+                    <Text style={styles.title}>{t("loginOptions.title")}</Text>
                     <View style={styles.modalContent}>
                         <View style={styles.buttonsContainer}>
                             <LoginButton
