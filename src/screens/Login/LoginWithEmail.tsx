@@ -39,7 +39,6 @@ const LoginWithEmail = () => {
     type PrivyUser = typeof user;
 
     const wallet = useEmbeddedWallet();
-    const userAddress = getUserEmbeddedWallet(user)?.address;
 
     const chain = useChainStore((state) => state.chain);
     const setAddress = useWalletStore((state) => state.setAddress);
@@ -57,14 +56,22 @@ const LoginWithEmail = () => {
 
     const handleConnection = useCallback(
         async (user: PrivyUser): Promise<void> => {
+            setIsLoading(true);
+            let address = getUserEmbeddedWallet(user)?.address;
             const accessToken = await getAccessToken();
 
-            if (!userAddress && isNotCreated(wallet)) {
-                await wallet.create(); // Create the wallet
+            if (isNotCreated(wallet)) {
+                console.log("Creating wallet...");
+                await wallet.create!();
+                console.log("Wallet created, waiting for address...");
+            }
+
+            if (!address) {
+                return;
             }
 
             const smartAccount = await getPimlicoSmartAccountClient(
-                userAddress as `0x${string}`,
+                address as `0x${string}`,
                 chain,
                 wallet
             );
@@ -72,24 +79,29 @@ const LoginWithEmail = () => {
             setAddress(smartAccount?.account?.address as `0x${string}`);
 
             const account = user?.linked_accounts.find(account => account.type === 'email');
-            if (account) {
-                loginLoginOrCreate({
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                    body: {
-                        email: account.address,
-                        has_third_party_auth: true,
-                        wallet: {
-                            address: userAddress as `0x${string}`,
-                        }
-                    }
-                });
+            if (!account) {
+                return
             }
 
-            await SecureStore.setItemAsync(`token-${userAddress}`, accessToken!);
+            await loginLoginOrCreate({
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                body: {
+                    email: account.address,
+                    has_third_party_auth: false,
+                    wallet: {
+                        address: address as `0x${string}`,
+                    }
+                }
+            });
+
+            await SecureStore.setItemAsync(`token-${address}`, accessToken!);
+            setIsLoading(false);
+            console.log("success");
+            goToNextScreen();
         },
-        [user]
+        [user, wallet]
     );
 
     const goToNextScreen = () => {
@@ -99,8 +111,10 @@ const LoginWithEmail = () => {
     useEffect(() => {
         if (state.status === "done" && user) {
             try {
+                setIsLoading(true);
                 handleConnection(user)
                     .then(() => {
+                        setIsLoading(false);
                         console.log("success");
                         goToNextScreen();
                     })
@@ -109,12 +123,12 @@ const LoginWithEmail = () => {
                         setIsLoading(false);
                         setLoginStatus(LoginStatus.CODE_ERROR);
                         navigation.navigate("Login");
-                        throw new Error(e);
                     });
             } catch (e) {
+                setIsLoading(false);
                 console.log("Error Connecting Stuffs", e);
-                navigation.navigate("Login");
-                throw new Error(e as any);
+                //navigation.navigate("Login");
+
             }
         } else if (state.status === "initial") {
             setLoginStatus(LoginStatus.INITIAL);

@@ -14,7 +14,7 @@ import { usersGetUser } from "@/client/";
 
 
 const Login = () => {
-  const { isReady, user, logout } = usePrivy();
+  const { isReady, user, logout, } = usePrivy();
   const address = getUserEmbeddedWallet(user)?.address;
 
   const { t } = useTranslation();

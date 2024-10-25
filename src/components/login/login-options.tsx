@@ -32,7 +32,6 @@ const LoginOptions: React.FC<{
     const navigation = useNavigation();
     const { logout, user, getAccessToken } = usePrivy();
     type PrivyUser = typeof user;
-    const userAddress = getUserEmbeddedWallet(user)?.address;
     const wallet = useEmbeddedWallet();
 
     const setAddress = useWalletStore((state) => state.setAddress);
@@ -63,9 +62,16 @@ const LoginOptions: React.FC<{
     const handleConnection = useCallback(
         async (user: PrivyUser): Promise<void> => {
             const accessToken = await getAccessToken();
+            const userAddress = getUserEmbeddedWallet(user)?.address;
 
-            if (!userAddress && isNotCreated(wallet)) {
-                await wallet.create(); // Create the wallet
+            if (isNotCreated(wallet)) {
+                console.log("Creating wallet...");
+                await wallet.create!();
+                console.log("Wallet created, waiting for address...");
+            }
+
+            if (!userAddress) {
+                return;
             }
 
             const smartAccount = await getPimlicoSmartAccountClient(
@@ -78,24 +84,27 @@ const LoginOptions: React.FC<{
             setChain(baseSepolia);
 
             const account = user?.linked_accounts.find(account => account.type === 'google_oauth');
-            if (account) {
-                loginLoginOrCreate({
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                    body: {
-                        email: account.email,
-                        has_third_party_auth: true,
-                        wallet: {
-                            address: userAddress as `0x${string}`,
-                        }
-                    }
-                });
+            if (!account) {
+                return;
             }
+
+            // create user on the backend
+            loginLoginOrCreate({
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                body: {
+                    email: account.email,
+                    has_third_party_auth: true,
+                    wallet: {
+                        address: userAddress as `0x${string}`,
+                    }
+                }
+            });
 
             await SecureStore.setItemAsync(`token-${userAddress}`, accessToken!);
         },
-        [user]
+        [user, wallet]
     );
 
     const successLogin = () => {

@@ -40,13 +40,13 @@ function CodeInput({
 
     const { t } = useTranslation();
 
-    const [verificationCode, setVerificationCode] = useState('');
+    const isCodeFilled = code.length === 6;
     const navigation = useNavigation();
 
     const handleOtpFilled = (otp: string) => {
-        setVerificationCode(otp);
+        setCode(otp as `${number | ""}`);
     };
-    
+
     const handleConfirmCode = async () => {
         try {
             console.log("Logging in with code", code);
@@ -65,15 +65,10 @@ function CodeInput({
         }
     };
 
-    const handleContinue = () => {
-        loginWithCode({ code: verificationCode, email: email });
-    };
-
     const dismissScreen = () => {
         setLoginStatus(LoginStatus.INITIAL)
     }
 
-    const isCodeFilled = verificationCode.length === 6;
 
     return (
         <>
@@ -88,7 +83,7 @@ function CodeInput({
                         numberOfDigits={6}
                         focusColor="#5A10EF"
                         focusStickBlinkingDuration={500}
-                        onTextChange={(text) => setVerificationCode(text)}
+                        onTextChange={(text) => setCode(text as `${number | ""}`)}
                         onFilled={handleOtpFilled}
                         theme={{
                             containerStyle: styles.otpContainer,
@@ -108,7 +103,7 @@ function CodeInput({
                         !isCodeFilled && styles.continueButtonDisabled
                     ]}
                     disabled={!isCodeFilled}
-                    onPress={handleContinue}>
+                    onPress={handleConfirmCode}>
                     <Text style={[
                         styles.continueButtonText,
                         !isCodeFilled && styles.continueButtonTextDisabled
