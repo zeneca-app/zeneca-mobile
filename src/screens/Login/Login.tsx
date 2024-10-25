@@ -11,7 +11,7 @@ import LoginOptions from "@/components/login/login-options";
 import { LoginStatus } from "@/lib/types/login";
 import * as SecureStore from "expo-secure-store";
 import { usersGetUser } from "@/client/";
-
+import LoadingScreen from "@/components/Loading";
 
 const Login = () => {
   const { isReady, user, logout, } = usePrivy();
@@ -123,9 +123,17 @@ const Login = () => {
       <LoginOptions
         visible={isLoginOptionsVisible}
         loginStatus={loginStatus}
+        isLoading={isLoading}
+        setIsLoading={setIsLoading}
         setVisible={setIsLoginOptionsVisible}
         setLoginStatus={setLoginStatus}
       />
+      
+      <LoadingScreen
+        isVisible={isLoading}
+        text={loadingMessage}
+      />
+
     </SafeAreaView>
   );
 };

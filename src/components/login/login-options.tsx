@@ -20,14 +20,12 @@ import * as SecureStore from "expo-secure-store";
 const LoginOptions: React.FC<{
     visible: boolean,
     loginStatus: LoginStatus,
+    isLoading: boolean,
     setVisible: (visible: boolean) => void,
+    setIsLoading: (isLoading: boolean) => void,
     setLoginStatus: (status: LoginStatus) => void,
 
-}> = ({ visible, loginStatus, setLoginStatus, setVisible }) => {
-    const [isEmailLoading, setIsEmailLoading] = useState(false);
-    const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-    const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
-
+}> = ({ visible, loginStatus, isLoading, setLoginStatus, setIsLoading, setVisible }) => {
     const { t } = useTranslation();
     const navigation = useNavigation();
     const { logout, user, getAccessToken } = usePrivy();
@@ -50,7 +48,7 @@ const LoginOptions: React.FC<{
     const { login, state } = useLoginWithOAuth({
         onError: (error) => {
             console.error("ERRRORRRR", error);
-            setIsGoogleLoading(false);
+            setIsLoading(false);
             setLoginStatus(LoginStatus.CODE_ERROR);
         },
         onSuccess: (user, isNewUser) => {
@@ -61,13 +59,11 @@ const LoginOptions: React.FC<{
 
     const handleConnection = useCallback(
         async (user: PrivyUser): Promise<void> => {
+            setIsLoading(true);
             const accessToken = await getAccessToken();
             const userAddress = getUserEmbeddedWallet(user)?.address;
-
             if (isNotCreated(wallet)) {
-                console.log("Creating wallet...");
                 await wallet.create!();
-                console.log("Wallet created, waiting for address...");
             }
 
             if (!userAddress) {
@@ -88,6 +84,7 @@ const LoginOptions: React.FC<{
             setChain(baseSepolia);
 
             const account = user?.linked_accounts.find(account => account.type === 'google_oauth');
+
             if (!account) {
                 return;
             }
@@ -108,6 +105,7 @@ const LoginOptions: React.FC<{
             });
 
             await SecureStore.setItemAsync(`token-${userAddress}`, accessToken!);
+            setIsLoading(false);
         },
         [user, wallet]
     );
@@ -119,25 +117,23 @@ const LoginOptions: React.FC<{
     useEffect(() => {
         if (state.status === "done" && user) {
             try {
-                setIsGoogleLoading(true);
+                setIsLoading(true);
                 handleConnection(user)
                     .then(() => {
-                        setIsGoogleLoading(false);
+                        setIsLoading(false);
                         console.log("success");
                         successLogin();
                     })
                     .catch((e) => {
                         console.error("Error Handling Connection", e);
-                        setIsGoogleLoading(false);
+                        setIsLoading(false);
                         throw new Error(e);
                     });
             } catch (e) {
                 console.log("Error Connecting Stuffs", e);
                 hideModal();
-                showErrorToast();
                 throw new Error(e as any);
             }
-            showErrorToast();
         } else if (state.status === "initial") {
             setLoginStatus(LoginStatus.INITIAL);
         }
@@ -149,24 +145,10 @@ const LoginOptions: React.FC<{
         await login({ provider: "google" });
     };
 
-    const showErrorToast = () => {
-        // Show toast if an error occurs
-        if (state.status === "error" || loginStatus === LoginStatus.CODE_ERROR) {
-            toast({
-                title: "An error has occurred",
-                haptic: "error",
-                preset: "done",
-                message: "Please try again",
-            });
-        }
-    }
-
     const loginWithEmail = () => {
         hideModal();
         navigation.navigate("LoginWithEmail");
     };
-
-
 
     return (
         <Modal
@@ -185,16 +167,15 @@ const LoginOptions: React.FC<{
                         text={t("loginOptions.emailOption")}
                         onPress={loginWithEmail}
                         isPrimary={true}
-                        isLoading={isEmailLoading}
-                        disabled={isGoogleLoading}
+                        disabled={isLoading}
                     />
                     <LoginButton
                         icon="logo-google"
                         text={t("loginOptions.googleOption")}
                         onPress={loginWithGmail}
                         isPrimary={false}
-                        isLoading={isGoogleLoading}
-                        disabled={isEmailLoading}
+                        isLoading={isLoading}
+                        disabled={isLoading}
                     />
                     <Text style={styles.termsText}>
                         {t("loginOptions.terms")} <Text style={styles.termsTextLink}>{t("loginOptions.termsLink")}</Text>.
