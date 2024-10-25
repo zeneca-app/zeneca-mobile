@@ -7,7 +7,7 @@ import { colors } from "@/styles/colors";
 import LogoLetter from "@/assets/zeneca-logo-letters.svg";
 import GradientCircle from "@/assets/zeneca-gradient-circle.svg";
 import { usePrivy, getUserEmbeddedWallet } from "@privy-io/expo";
-import LoginOptions from "@/components/login/login-options";
+import LoginOptions from "@/screens/Login/LoginOptions";
 import { LoginStatus } from "@/lib/types/login";
 import * as SecureStore from "expo-secure-store";
 import { usersGetUser } from "@/client/";
@@ -88,6 +88,9 @@ const Login = () => {
     );
   } */
 
+  const loginWithOptions = () => {
+    navigation.navigate("LoginOptions");
+  };
 
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
@@ -107,7 +110,7 @@ const Login = () => {
             </View>
           </View>
           <View style={styles.buttonsContainer}>
-            <Pressable style={styles.signUpButton} onPress={() => setIsLoginOptionsVisible(true)}>
+            <Pressable style={styles.signUpButton} onPress={loginWithOptions}>
               <Text style={styles.signUpButtonText}>
                 {t("login.signUpButton")}
               </Text>
@@ -120,15 +123,7 @@ const Login = () => {
           </View>
         </View>
       </View>
-      <LoginOptions
-        visible={isLoginOptionsVisible}
-        loginStatus={loginStatus}
-        isLoading={isLoading}
-        setIsLoading={setIsLoading}
-        setVisible={setIsLoginOptionsVisible}
-        setLoginStatus={setLoginStatus}
-      />
-      
+
       <LoadingScreen
         isVisible={isLoading}
         text={loadingMessage}

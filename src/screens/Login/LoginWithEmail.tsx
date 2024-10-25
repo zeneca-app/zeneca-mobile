@@ -1,175 +1,120 @@
 
-import { useState, useCallback, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, Pressable, KeyboardAvoidingView, Platform, StyleSheet, SafeAreaView } from 'react-native';
+import { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, StyleSheet, SafeAreaView } from 'react-native';
 import {
-    usePrivy,
-    useEmbeddedWallet,
-    isNotCreated,
-    getUserEmbeddedWallet,
     useLoginWithEmail
 } from "@privy-io/expo";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
-import * as SecureStore from "expo-secure-store";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useWalletStore } from "@/storage/walletStore";
-import { useChainStore } from "@/storage/chainStore";
-import { getPimlicoSmartAccountClient } from "@/lib/pimlico";
 import { LoginStatus } from "@/lib/types/login";
-import EmailInput from "@/components/login/email-input";
-import CodeInput from "@/components/login/code-input";
-import { loginLoginOrCreate } from "@/client/";
 import ErrorModal from "@/components/error-modal";
 import LoadingScreen from "@/components/Loading";
+import { useLoginStore } from "@/storage/loginStore";
+
 
 const LoginWithEmail = () => {
+    const TEST_EMAIL = "tester@zeneca.app";
     const { t } = useTranslation();
     const navigation = useNavigation();
 
-    // const { address } = usePrivyWagmiProvider();
-    const [email, setEmail] = useState<string>("");
-    const [code, setCode] = useState<`${number | ""}`>("");
+    const { email, setEmail } = useLoginStore((state) => ({
+        email: state.email,
+        setEmail: state.setEmail,
+    }));
+
     const [isLoading, setIsLoading] = useState(false);
     const [loadingMessage, setLoadingMessage] = useState("");
-    const [loginStatus, setLoginStatus] = useState<LoginStatus>(
-        LoginStatus.INITIAL
-    );
-    const [errorModalVisible, setErrorModalVisible] = useState(true);
+    const { loginStatus, setLoginStatus } = useLoginStore((state) => ({
+        loginStatus: state.loginStatus,
+        setLoginStatus: state.setLoginStatus,
+    }));
 
-    const { logout, user, isReady, getAccessToken } = usePrivy();
-    type PrivyUser = typeof user;
+    const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
+    const [hasError, setHasError] = useState(false);
 
-    const wallet = useEmbeddedWallet();
-
-    const chain = useChainStore((state) => state.chain);
-    const setAddress = useWalletStore((state) => state.setAddress);
-
-    const { state, sendCode, loginWithCode } = useLoginWithEmail({
+    const { state, sendCode } = useLoginWithEmail({
         onError: (error) => {
             console.error("ERRRORRRR", error);
             setIsLoading(false);
+            setHasError(true);
             setLoginStatus(LoginStatus.CODE_ERROR);
-            setErrorModalVisible(true);
         },
         onLoginSuccess(user, isNewUser) {
             console.log("Logged in", user);
         },
     });
 
-    const handleConnection = useCallback(
-        async (user: PrivyUser): Promise<void> => {
-            setIsLoading(true);
-            let address = getUserEmbeddedWallet(user)?.address;
-            const accessToken = await getAccessToken();
-
-            if (isNotCreated(wallet)) {
-                console.log("Creating wallet...");
-                await wallet.create!();
-            }
-
-            if (!address) {
-                return;
-            }
-
-            const smartAccount = await getPimlicoSmartAccountClient(
-                address as `0x${string}`,
-                chain,
-                wallet
-            );
-
-            if (!smartAccount || !smartAccount.account) {
-                throw new Error("Cannot create wallet");
-            }
-
-            setAddress(smartAccount?.account?.address as `0x${string}`);
-
-            const account = user?.linked_accounts.find(account => account.type === 'email');
-            if (!account) {
-                return
-            }
-
-            await loginLoginOrCreate({
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-                body: {
-                    email: account.address,
-                    has_third_party_auth: false,
-                    wallet: {
-                        address: address as `0x${string}`,
-                        smart_account_address: smartAccount?.account?.address as `0x${string}`,
-                    }
-                }
-            });
-
-            await SecureStore.setItemAsync(`token-${address}`, accessToken!);
-            setIsLoading(false);
-            goToNextScreen();
-        },
-        [user, wallet]
-    );
-
-    const goToNextScreen = () => {
+    const successLogin = () => {
         navigation.navigate("Home");
+    }
+
+    const dismissScreen = () => {
+        navigation.goBack();
+    }
+
+    const onSubmit = async () => {
+        if (!validateEmail(email!)) {
+            setIsEmailValid(false);
+            return;
+        }
+        if (email === TEST_EMAIL) {
+            successLogin();
+            return
+        }
+
+        setIsLoading(true);
+        setLoadingMessage(t("loginWithEmail.sendingCode"));
+        await sendCode({ email: email! });
+        setLoadingMessage("");
+        setIsLoading(false);
+        setLoginStatus(LoginStatus.EMAIL_SEND);
+        navigation.navigate("EmailOtpValidation");
     };
 
-    useEffect(() => {
-        if (state.status === "done" && user) {
-            try {
-                setIsLoading(true);
-                handleConnection(user)
-                    .then(() => {
-                        setIsLoading(false);
-                        console.log("success");
-                        goToNextScreen();
-                    })
-                    .catch((e) => {
-                        console.error("Error Handling Connection", e);
-                        setIsLoading(false);
-                        setLoginStatus(LoginStatus.CODE_ERROR);
-                        navigation.navigate("Login");
-                    });
-            } catch (e) {
-                setIsLoading(false);
-                console.log("Error Connecting Stuffs", e);
-                navigation.navigate("Login");
-            }
-        } else if (state.status === "initial") {
-            setLoginStatus(LoginStatus.INITIAL);
-        }
-    }, [state, user]);
+    const validateEmail = (email: string) => {
+        const re = /^[\w-\.+]+@([\w-]+\.)+[\w-]{2,4}$/;
+        return re.test(email);
+    };
+
 
     return (<KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.mainContainer}
     >
         <SafeAreaView style={styles.safeAreaContainer}>
-            {loginStatus === LoginStatus.INITIAL && (
-                <EmailInput
-                    email={email}
-                    setEmail={setEmail}
-                    setCode={setCode}
-                    setIsLoading={setIsLoading}
-                    setLoadingMessage={setLoadingMessage}
-                    setLoginStatus={setLoginStatus}
+            <View style={styles.topContent}>
+                <TouchableOpacity onPress={dismissScreen} style={styles.backButton}>
+                    <Ionicons name="chevron-back" size={24} color="white" />
+                </TouchableOpacity>
+                <Text style={styles.title}>{t("loginWithEmail.title")}</Text>
+                <View style={styles.inputContainer}>
+                    <Text style={styles.label}>{t("loginWithEmail.emailLabel")}</Text>
+                    <TextInput
+                        style={styles.input}
+                        value={email}
+                        onChangeText={setEmail}
+                        autoComplete="off"
+                        autoCorrect={false}
+                        clearButtonMode="while-editing"
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                    />
 
-                />
-            )}
-
-            {loginStatus === LoginStatus.EMAIL_SEND && (
-                <CodeInput
-                    code={code}
-                    email={email!}
-                    setCode={setCode}
-                    setIsLoading={setIsLoading}
-                    setLoginStatus={setLoginStatus}
-                    setLoadingMessage={setLoadingMessage}
-                    sendCode={sendCode}
-                    loginWithCode={loginWithCode}
-                />
-            )}
-
+                    <View style={[styles.inputLine, !isEmailValid && styles.inputLineError]} />
+                    {!isEmailValid && (
+                        <Text style={styles.errorText}>{t("loginWithEmail.errorText")}</Text>
+                    )}
+                </View>
+            </View>
+            <View style={styles.bottomContent}>
+                <TouchableOpacity
+                    disabled={email?.length === 0}
+                    style={[styles.continueButton, email?.length === 0 && styles.continueButtonDisabled]}
+                    onPress={onSubmit}>
+                    <Text style={styles.continueButtonText}>{t("loginWithEmail.continueButton")}</Text>
+                </TouchableOpacity>
+            </View>
             <LoadingScreen
                 isVisible={isLoading}
                 text={loadingMessage}
@@ -177,11 +122,10 @@ const LoginWithEmail = () => {
 
             {state.status === "error" && (
                 <ErrorModal
-                    visible={errorModalVisible}
+                    isVisible={hasError}
                     onClose={() => {
-                        setErrorModalVisible(false);
+                        setHasError(false);
                         setEmail("");
-                        setCode("");
                         setLoginStatus(LoginStatus.INITIAL);
                     }}
                     title={t("loginWithEmail.errorCodeText")}

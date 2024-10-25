@@ -3,17 +3,18 @@ import { Modal, View, Text, StyleSheet, Dimensions, Animated, TouchableOpacity }
 import { Feather } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 
+export type ModalState = 'dismissed' | 'loading' | 'error';
 
-interface ErrorModalProps {
-    isVisible: boolean;
-    title: string;
-    onClose: () => void;
-    actionButtonText: string;
+interface StatusModalProps {
+    modalState: ModalState;
+    text: string;
+    onClose?: () => void;
+    actionButtonText?: string;
 }
 
 const { width } = Dimensions.get('window');
 
-const ErrorModal: React.FC<ErrorModalProps> = ({ isVisible, title, onClose, actionButtonText }) => {
+const StatusModal: React.FC<StatusModalProps> = ({ modalState = 'dismissed', text, onClose, actionButtonText }) => {
     const { t } = useTranslation();
     const rotateAnim = useRef(new Animated.Value(0)).current;
 
@@ -27,20 +28,32 @@ const ErrorModal: React.FC<ErrorModalProps> = ({ isVisible, title, onClose, acti
         ).start();
     }, []);
 
+    const spin = rotateAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['0deg', '360deg'],
+    });
 
     return (
         <Modal
             transparent={true}
             animationType="slide"
-            visible={isVisible}
+            visible={modalState !== 'dismissed'}
         >
             <View style={styles.container}>
                 <View style={styles.content}>
-                    <Feather name="alert-circle" size={40} color="white" />
-                    <Text style={styles.loadingText}>{title}</Text>
-                    <TouchableOpacity onPress={onClose}>
-                        <Text style={styles.actionButtonText}>{actionButtonText}</Text>
-                    </TouchableOpacity>
+                    {modalState === 'error' ? (
+                        <Feather name="alert-circle" size={40} color="white" />
+                    ) : (
+                        <Animated.View style={{ transform: [{ rotate: spin }] }}>
+                            <Feather name="clock" size={40} color="white" />
+                        </Animated.View>
+                    )}
+                    <Text style={styles.text}>{text}</Text>
+                    {modalState === 'error' && onClose && (
+                        <TouchableOpacity style={styles.actionButton} onPress={onClose}>
+                            <Text style={styles.actionButtonText}>{actionButtonText}</Text>
+                        </TouchableOpacity>
+                    )}
                 </View>
             </View>
         </Modal>
@@ -60,22 +73,27 @@ const styles = StyleSheet.create({
         backgroundColor: '#18171A',
         paddingVertical: 60,
         paddingHorizontal: 40,
-        borderRadius: 20,
+        borderRadius: 40,
         alignItems: 'center',
         width: width - 40,
-
     },
-    loadingText: {
+    text: {
         color: '#fff',
         marginTop: 10,
         fontSize: 24,
         fontWeight: 'bold',
     },
+    actionButton: {
+        marginTop: 20,
+        backgroundColor: "#252328",
+        padding: 12,
+        borderRadius: 20,
+    },
     actionButtonText: {
-        color: '#5A10EF',
+        color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
     },
 });
 
-export default ErrorModal;
+export default StatusModal;

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Modal, View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -15,19 +15,16 @@ import { LoginStatus } from "@/lib/types/login";
 import ErrorModal from "@/components/error-modal";
 import { loginLoginOrCreate } from "@/client/";
 import * as SecureStore from "expo-secure-store";
+import LoadingScreen from "@/components/Loading";
 
 
-const LoginOptions: React.FC<{
-    visible: boolean,
-    loginStatus: LoginStatus,
-    isLoading: boolean,
-    setVisible: (visible: boolean) => void,
-    setIsLoading: (isLoading: boolean) => void,
-    setLoginStatus: (status: LoginStatus) => void,
 
-}> = ({ visible, loginStatus, isLoading, setLoginStatus, setIsLoading, setVisible }) => {
+
+const LoginOptions = () => {
     const { t } = useTranslation();
     const navigation = useNavigation();
+    const [isLoading, setIsLoading] = useState(false);
+    const [loadingMessage, setLoadingMessage] = useState("");
     const { logout, user, getAccessToken } = usePrivy();
     type PrivyUser = typeof user;
     const wallet = useEmbeddedWallet();
@@ -35,13 +32,11 @@ const LoginOptions: React.FC<{
     const setAddress = useWalletStore((state) => state.setAddress);
     const chain = useChainStore((state) => state.chain);
     const setChain = useChainStore((state) => state.setChain);
-
-    const hideModal = () => {
-        setVisible(false);
-    }
+    const [loginStatus, setLoginStatus] = useState<LoginStatus>(
+        LoginStatus.INITIAL
+    );
 
     const goToNextScreen = () => {
-        hideModal();
         navigation.navigate("Home");
     };
 
@@ -131,7 +126,6 @@ const LoginOptions: React.FC<{
                     });
             } catch (e) {
                 console.log("Error Connecting Stuffs", e);
-                hideModal();
                 throw new Error(e as any);
             }
         } else if (state.status === "initial") {
@@ -146,58 +140,82 @@ const LoginOptions: React.FC<{
     };
 
     const loginWithEmail = () => {
-        hideModal();
         navigation.navigate("LoginWithEmail");
     };
 
     return (
-        <Modal
-            visible={visible}
-            transparent={true}
-            animationType="slide"
-        >
-            <Pressable
-                style={styles.overlay}
-                onPress={hideModal}
-            />
-            <View style={styles.modalContent}>
-                <View style={styles.buttonsContainer}>
-                    <LoginButton
-                        icon="mail"
-                        text={t("loginOptions.emailOption")}
-                        onPress={loginWithEmail}
-                        isPrimary={true}
-                        disabled={isLoading}
-                    />
-                    <LoginButton
-                        icon="logo-google"
-                        text={t("loginOptions.googleOption")}
-                        onPress={loginWithGmail}
-                        isPrimary={false}
-                        isLoading={isLoading}
-                        disabled={isLoading}
-                    />
+        <SafeAreaView style={styles.safeArea}>
+            <View style={styles.modalOverlay}>
+                <View style={styles.topContent}>
+                    <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+                        <Ionicons name="chevron-back" size={22} color="white" />
+                    </TouchableOpacity>
+                    <Text style={styles.title}>Create your account</Text>
+                    <View style={styles.modalContent}>
+                        <View style={styles.buttonsContainer}>
+                            <LoginButton
+                                icon="mail"
+                                text={t("loginOptions.emailOption")}
+                                onPress={loginWithEmail}
+                                isPrimary={true}
+                                disabled={isLoading}
+                            />
+                            <LoginButton
+                                icon="logo-google"
+                                text={t("loginOptions.googleOption")}
+                                onPress={loginWithGmail}
+                                isPrimary={false}
+                                isLoading={isLoading}
+                                disabled={isLoading}
+                            />
+
+                        </View>
+                    </View>
+                </View>
+                <View style={styles.termsContainer}>
                     <Text style={styles.termsText}>
                         {t("loginOptions.terms")} <Text style={styles.termsTextLink}>{t("loginOptions.termsLink")}</Text>.
                     </Text>
                 </View>
             </View>
-        </Modal>
+
+            <LoadingScreen
+                isVisible={isLoading}
+                text={loadingMessage}
+            />
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
-    overlay: {
+    safeArea: {
         flex: 1,
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        backgroundColor: '#19181B', // Semi-transparent background
+    },
+    modalOverlay: {
+        flex: 1,
+        justifyContent: 'space-between',
+    },
+    topContent: {
+        flex: 1,
+    },
+    title: {
+        marginLeft: 25,
+        fontSize: 32,
+        color: 'white',
+        marginBottom: 20,
+        fontFamily: "Manrope_500Medium"
+    },
+    backButton: {
+        marginLeft: 20,
+        marginBottom: 20,
     },
     modalContent: {
-        height: '45%',
+        flex: 1,
         backgroundColor: '#19181B',
         borderRadius: 50,
         alignItems: 'center',
+        justifyContent: 'flex-start',
     },
     handleBar: {
         marginTop: 10,
@@ -255,8 +273,11 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: "Manrope_500Medium",
     },
-    textContainer: {
-        marginLeft: 15,
+    termsContainer: {
+        width: '100%',
+        paddingHorizontal: 30,
+        paddingBottom: 20,
+        alignItems: 'center',
     },
     termsText: {
         color: "white",

@@ -40,75 +40,10 @@ function CodeInput({
 
     const { t } = useTranslation();
 
-    const isCodeFilled = code.length === 6;
-    const navigation = useNavigation();
-
-    const handleOtpFilled = (otp: string) => {
-        setCode(otp as `${number | ""}`);
-    };
-
-    const handleConfirmCode = async () => {
-        try {
-            console.log("Logging in with code", code);
-            setIsLoading(true);
-            setLoadingMessage(t("loginWithEmail.verifyingCode"));
-            await loginWithCode({
-                code: code,
-                email,
-            });
-            //setLoginStatus(LoginStatus.CODE_SUCCESS);
-        } catch (error) {
-            setLoadingMessage("");
-            setIsLoading(false);
-            setLoginStatus(LoginStatus.CODE_ERROR);
-            console.error("Error confirming code", error);
-        }
-    };
-
-    const dismissScreen = () => {
-        setLoginStatus(LoginStatus.INITIAL)
-    }
-
+  
     return (
         <>
-            <View style={styles.topContent}>
-                <TouchableOpacity onPress={dismissScreen} style={styles.backButton}>
-                    <Ionicons name="chevron-back" size={24} color="white" />
-                </TouchableOpacity>
-                <Text style={styles.title}>{t("emailOtpValidation.title")}</Text>
-                <Text style={styles.subtitle}>{t("emailOtpValidation.subtitle")} {email}</Text>
-                <View style={styles.codeInputContainer}>
-                    <OtpInput
-                        numberOfDigits={6}
-                        focusColor="#5A10EF"
-                        focusStickBlinkingDuration={500}
-                        onTextChange={(text) => setCode(text as `${number | ""}`)}
-                        onFilled={handleOtpFilled}
-                        theme={{
-                            containerStyle: styles.otpContainer,
-                            inputsContainerStyle: styles.otpInputsContainer,
-                            pinCodeContainerStyle: styles.otpPinCodeContainer,
-                            pinCodeTextStyle: styles.otpPinCodeText,
-                            focusStickStyle: styles.otpFocusStick,
-                            focusedPinCodeContainerStyle: styles.otpActivePinCodeContainer,
-                        }}
-                    />
-                </View>
-            </View>
-            <View style={styles.bottomContent}>
-                <TouchableOpacity
-                    style={[
-                        styles.continueButton,
-                        !isCodeFilled && styles.continueButtonDisabled
-                    ]}
-                    disabled={!isCodeFilled}
-                    onPress={handleConfirmCode}>
-                    <Text style={[
-                        styles.continueButtonText,
-                        !isCodeFilled && styles.continueButtonTextDisabled
-                    ]}>{t("emailOtpValidation.continueButton")}</Text>
-                </TouchableOpacity>
-            </View>
+            
         </>
     );
 }
@@ -136,42 +71,9 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         fontFamily: "Manrope_500Medium",
     },
-    subtitle: {
-        fontSize: 16,
-        color: '#95929F',
-        marginBottom: 30,
-        fontFamily: "Manrope_400Regular",
-    },
-    codeInputContainer: {
-        marginBottom: 30,
-    },
-    otpContainer: {
-        width: '100%',
-    },
-    otpInputsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    otpPinCodeContainer: {
-        width: 40,
-        height: 50,
-        borderWidth: 0,
-        borderBottomWidth: 1,
-        borderBottomColor: '#313036',
-        backgroundColor: 'transparent',
-        borderRadius: 0,
-    },
-    otpPinCodeText: {
-        color: '#fff',
-        fontSize: 24,
-    },
-    otpFocusStick: {
-        display: 'none', // Hide the focus stick
-    },
-    otpActivePinCodeContainer: {
-        borderBottomColor: '#5A10EF',
-        borderBottomWidth: 2
-    },
+   
+    
+    
     bottomContent: {
         padding: 20,
     },

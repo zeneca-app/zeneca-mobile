@@ -22,6 +22,8 @@ import { RootStackParamList } from "@/navigation/types";
 import HomeScreen from "@/screens/HomeScreen";
 import Login from "@/screens/Login/Login";
 import LoginWithEmail from "@/screens/Login/LoginWithEmail";
+import LoginOptions from "@/screens/Login/LoginOptions";
+import LoginOtpVerification from "@/screens/Login/LoginOtpVerification";
 import QuoteScreen from "@/screens/Quote";
 import RecipientsScreen from "@/screens/Recipients";
 import QuoteConfirmationScreen from "@/screens/QuoteConfirmation";
@@ -149,10 +151,21 @@ const AppIndex = () => {
                                 />
                                 <Stack.Screen
                                     options={{ headerShown: false }}
+                                    name="EmailOtpValidation"
+                                    component={LoginOtpVerification}
+                                />
+                                <Stack.Screen
+                                    options={{ headerShown: false }}
                                     name="LoginWithEmail"
                                     component={LoginWithEmail}
                                 />
+                                <Stack.Screen
+                                    options={{ headerShown: false }}
+                                    name="LoginOptions"
+                                    component={LoginOptions}
+                                />
                             </Stack.Group>
+
 
                             <Stack.Screen
                                 options={{ headerShown: false }}
