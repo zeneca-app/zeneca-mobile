@@ -172,7 +172,6 @@ const LoginOtpScreen = () => {
         navigation.navigate("LoginWithEmail");
     }
 
-    console.log("modalState", modalState);
 
     return (<KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
