@@ -20,6 +20,7 @@ export const BalanceProvider: React.FC<{ children: ReactNode }> = ({ children })
   const smartAccountAddress = useWalletStore((state) => state.address);
   const chain = useChainStore((state) => state.chain);
   const setAddress = useWalletStore((state) => state.setAddress);
+  //const user = useUserStore((state) => state.user); 
 
   const {
     data: balance,

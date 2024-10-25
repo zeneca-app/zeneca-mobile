@@ -80,6 +80,10 @@ const LoginOptions: React.FC<{
                 wallet
             );
 
+            if (!smartAccount || !smartAccount.account) {
+                throw new Error("Cannot create wallet");
+            }
+
             setAddress(smartAccount?.account?.address as `0x${string}`);
             setChain(baseSepolia);
 
@@ -98,6 +102,7 @@ const LoginOptions: React.FC<{
                     has_third_party_auth: true,
                     wallet: {
                         address: userAddress as `0x${string}`,
+                        smart_account_address: smartAccount?.account?.address as `0x${string}`,
                     }
                 }
             });

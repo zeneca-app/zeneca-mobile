@@ -965,10 +965,14 @@ export const WalletCreateInSchema = {
         address: {
             type: 'string',
             title: 'Address'
+        },
+        smart_account_address: {
+            type: 'string',
+            title: 'Smart Account Address'
         }
     },
     type: 'object',
-    required: ['address'],
+    required: ['address', 'smart_account_address'],
     title: 'WalletCreateIn'
 } as const;
 

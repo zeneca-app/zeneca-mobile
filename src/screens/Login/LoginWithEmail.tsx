@@ -76,6 +76,10 @@ const LoginWithEmail = () => {
                 wallet
             );
 
+            if (!smartAccount || !smartAccount.account) {
+                throw new Error("Cannot create wallet");
+            }
+
             setAddress(smartAccount?.account?.address as `0x${string}`);
 
             const account = user?.linked_accounts.find(account => account.type === 'email');
@@ -92,6 +96,7 @@ const LoginWithEmail = () => {
                     has_third_party_auth: false,
                     wallet: {
                         address: address as `0x${string}`,
+                        smart_account_address: smartAccount?.account?.address as `0x${string}`,
                     }
                 }
             });

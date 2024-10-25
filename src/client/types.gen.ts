@@ -204,6 +204,7 @@ export type ValidationError = {
 
 export type WalletCreateIn = {
     address: string;
+    smart_account_address: string;
 };
 
 export type WithdrawalRead = {
