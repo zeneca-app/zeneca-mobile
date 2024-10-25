@@ -16,7 +16,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { QueryClient } from "@tanstack/react-query";
 import { Suspense, useCallback } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View, LogBox } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { RootStackParamList } from "@/navigation/types";
 import HomeScreen from "@/screens/HomeScreen";
@@ -60,6 +60,7 @@ type CustomTabBarProps = BottomTabBarProps & {
     state: TabNavigationState<ParamListBase>;
 };
 
+LogBox.ignoreLogs([new RegExp("TypeError:.*")]);
 
 
 const CustomTabBar: React.FC<CustomTabBarProps> = ({ state, descriptors, navigation }) => {

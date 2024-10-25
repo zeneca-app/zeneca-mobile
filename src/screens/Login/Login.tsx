@@ -131,6 +131,11 @@ const Login = () => {
 };
 
 const styles = StyleSheet.create({
+  loadingMessage: {
+    color: "white",
+    fontSize: 16,
+    fontFamily: "Manrope_500Medium",
+  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',

@@ -16,7 +16,11 @@
     "title": "¿Cuál es tu email?",
     "emailLabel": "Email",
     "continueButton": "Continuar",
-    "errorText": "Email inválido"
+    "errorText": "Email inválido",
+    "errorCodeText": "Código o email inválido",
+    "sendingCode": "Enviando código...",
+    "verifyingCode": "Verificando código...",
+    "errorCodeTryAgain": "Intenta de nuevo"
   },
   "emailOtpValidation": {
     "title": "Ingresa el código de verificación",

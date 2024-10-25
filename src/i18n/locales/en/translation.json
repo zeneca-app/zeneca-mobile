@@ -16,7 +16,11 @@
     "title": "What's your email?",
     "emailLabel": "Email",
     "continueButton": "Continue",
-    "errorText": "Invalid email"
+    "errorText": "Invalid email",
+    "errorCodeText": "Invalid code or email",
+    "sendingCode": "Sending code...",
+    "verifyingCode": "Verifying code...",
+    "errorCodeTryAgain": "Try again"
   },
   "depositCrypto": {
     "title": "Deposit with Crypto",

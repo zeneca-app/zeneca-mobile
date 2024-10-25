@@ -5,8 +5,9 @@ import { Modal, View, Text, StyleSheet, Pressable } from 'react-native';
 const ErrorModal: React.FC<{
     visible: boolean,
     onClose: () => void,
-    errorMessage: string,
-}> = ({ visible, onClose, errorMessage }) => {
+    title: string,
+    actionButtonText: string,
+}> = ({ visible, onClose, title, actionButtonText }) => {
     return (
         <Modal
             visible={visible}
@@ -19,10 +20,9 @@ const ErrorModal: React.FC<{
             />
             <View style={styles.modalContent}>
                 <Text style={styles.errorIcon}>🚫</Text>
-                <Text style={styles.title}>Ha ocurrido un error</Text>
-                <Text style={styles.message}>{errorMessage}</Text>
+                <Text style={styles.title}>{title}</Text>
                 <Pressable style={styles.closeButton} onPress={onClose}>
-                    <Text style={styles.closeButtonText}>Close</Text>
+                    <Text style={styles.closeButtonText}>{actionButtonText}</Text>
                 </Pressable>
             </View>
         </Modal>

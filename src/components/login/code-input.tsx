@@ -17,11 +17,11 @@ type LoginWithCode = (args: {
 
 type CodeInputProps = {
     code: `${number | ""}`;
+    email: string;
     setCode: (code: `${number | ""}`) => void;
     setIsLoading: (isLoading: boolean) => void;
     setLoadingMessage: (message: string) => void;
     setLoginStatus: (status: LoginStatus) => void;
-    email: string;
     sendCode: SendCode;
     loginWithCode: LoginWithCode;
 };
@@ -29,11 +29,11 @@ type CodeInputProps = {
 
 function CodeInput({
     code,
+    email,
     setCode,
     setIsLoading,
     setLoadingMessage,
     setLoginStatus,
-    email,
     sendCode,
     loginWithCode,
 }: CodeInputProps) {
@@ -51,16 +51,16 @@ function CodeInput({
         try {
             console.log("Logging in with code", code);
             setIsLoading(true);
-            setLoadingMessage("Verifying code...");
+            setLoadingMessage(t("loginWithEmail.verifyingCode"));
             await loginWithCode({
                 code: code,
                 email,
             });
-            setLoginStatus(LoginStatus.SUCCESS_CODE);
+            //setLoginStatus(LoginStatus.CODE_SUCCESS);
         } catch (error) {
             setLoadingMessage("");
             setIsLoading(false);
-            setLoginStatus(LoginStatus.SUCCESS_EMAIL);
+            setLoginStatus(LoginStatus.CODE_ERROR);
             console.error("Error confirming code", error);
         }
     };
@@ -68,7 +68,6 @@ function CodeInput({
     const dismissScreen = () => {
         setLoginStatus(LoginStatus.INITIAL)
     }
-
 
     return (
         <>

@@ -61,12 +61,12 @@ function EmailInput({
         }
 
         setIsLoading(true);
-        setLoadingMessage("Sending code...");
+        setLoadingMessage(t("loginWithEmail.sendingCode"));
         await sendCode({ email: email! });
         setLoadingMessage("");
         setIsLoading(false);
         setCode("");
-        setLoginStatus(LoginStatus.SUCCESS_EMAIL);
+        setLoginStatus(LoginStatus.EMAIL_SEND);
     };
 
     const validateEmail = (email: string) => {

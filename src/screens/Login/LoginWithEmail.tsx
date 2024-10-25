@@ -1,6 +1,6 @@
 
 import { useState, useCallback, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Pressable, KeyboardAvoidingView, Platform, StyleSheet, SafeAreaView } from 'react-native';
 import {
     usePrivy,
     useEmbeddedWallet,
@@ -20,7 +20,8 @@ import { LoginStatus } from "@/lib/types/login";
 import EmailInput from "@/components/login/email-input";
 import CodeInput from "@/components/login/code-input";
 import { loginLoginOrCreate } from "@/client/";
-
+import ErrorModal from "@/components/error-modal";
+import LoadingScreen from "@/components/Loading";
 
 const LoginWithEmail = () => {
     const { t } = useTranslation();
@@ -32,8 +33,9 @@ const LoginWithEmail = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [loadingMessage, setLoadingMessage] = useState("");
     const [loginStatus, setLoginStatus] = useState<LoginStatus>(
-        LoginStatus.SUCCESS_EMAIL
+        LoginStatus.INITIAL
     );
+    const [errorModalVisible, setErrorModalVisible] = useState(true);
 
     const { logout, user, isReady, getAccessToken } = usePrivy();
     type PrivyUser = typeof user;
@@ -48,6 +50,7 @@ const LoginWithEmail = () => {
             console.error("ERRRORRRR", error);
             setIsLoading(false);
             setLoginStatus(LoginStatus.CODE_ERROR);
+            setErrorModalVisible(true);
         },
         onLoginSuccess(user, isNewUser) {
             console.log("Logged in", user);
@@ -63,7 +66,6 @@ const LoginWithEmail = () => {
             if (isNotCreated(wallet)) {
                 console.log("Creating wallet...");
                 await wallet.create!();
-                console.log("Wallet created, waiting for address...");
             }
 
             if (!address) {
@@ -103,7 +105,6 @@ const LoginWithEmail = () => {
 
             await SecureStore.setItemAsync(`token-${address}`, accessToken!);
             setIsLoading(false);
-            console.log("success");
             goToNextScreen();
         },
         [user, wallet]
@@ -132,8 +133,7 @@ const LoginWithEmail = () => {
             } catch (e) {
                 setIsLoading(false);
                 console.log("Error Connecting Stuffs", e);
-                //navigation.navigate("Login");
-
+                navigation.navigate("Login");
             }
         } else if (state.status === "initial") {
             setLoginStatus(LoginStatus.INITIAL);
@@ -157,7 +157,7 @@ const LoginWithEmail = () => {
                 />
             )}
 
-            {loginStatus === LoginStatus.SUCCESS_EMAIL && (
+            {loginStatus === LoginStatus.EMAIL_SEND && (
                 <CodeInput
                     code={code}
                     email={email!}
@@ -167,6 +167,25 @@ const LoginWithEmail = () => {
                     setLoadingMessage={setLoadingMessage}
                     sendCode={sendCode}
                     loginWithCode={loginWithCode}
+                />
+            )}
+
+            <LoadingScreen
+                isVisible={isLoading}
+                text={loadingMessage}
+            />
+
+            {state.status === "error" && (
+                <ErrorModal
+                    visible={errorModalVisible}
+                    onClose={() => {
+                        setErrorModalVisible(false);
+                        setEmail("");
+                        setCode("");
+                        setLoginStatus(LoginStatus.INITIAL);
+                    }}
+                    title={t("loginWithEmail.errorCodeText")}
+                    actionButtonText={t("loginWithEmail.errorCodeTryAgain")}
                 />
             )}
         </SafeAreaView>
