@@ -8,7 +8,6 @@ import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LoginStatus } from "@/lib/types/login";
-import ErrorModal from "@/components/error-modal";
 import LoadingScreen from "@/components/Loading";
 import { useLoginStore } from "@/storage/loginStore";
 
@@ -120,18 +119,7 @@ const LoginWithEmail = () => {
                 text={loadingMessage}
             />
 
-            {state.status === "error" && (
-                <ErrorModal
-                    isVisible={hasError}
-                    onClose={() => {
-                        setHasError(false);
-                        setEmail("");
-                        setLoginStatus(LoginStatus.INITIAL);
-                    }}
-                    title={t("loginWithEmail.errorCodeText")}
-                    actionButtonText={t("loginWithEmail.errorCodeTryAgain")}
-                />
-            )}
+
         </SafeAreaView>
     </KeyboardAvoidingView>)
 }

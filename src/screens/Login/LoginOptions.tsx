@@ -12,7 +12,6 @@ import { colors } from "@/styles/colors";
 import { getPimlicoSmartAccountClient } from "@/lib/pimlico";
 import LoginButton from "@/components/login/button";
 import { LoginStatus } from "@/lib/types/login";
-import ErrorModal from "@/components/error-modal";
 import { loginLoginOrCreate } from "@/client/";
 import * as SecureStore from "expo-secure-store";
 import LoadingScreen from "@/components/Loading";
