@@ -367,15 +367,15 @@
     "/v0/users/me": {
       "get": {
         "tags": ["users"],
-        "summary": "Get User",
+        "summary": "Me",
         "description": "Get current user.",
-        "operationId": "users-get_user",
+        "operationId": "users-me",
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/User" }
+                "schema": { "$ref": "#/components/schemas/UserRead" }
               }
             }
           }
@@ -386,6 +386,34 @@
   },
   "components": {
     "schemas": {
+      "AccountRead": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "name": { "type": "string", "title": "Name" },
+          "status": { "$ref": "#/components/schemas/AccountStatus" },
+          "country": { "type": "string", "title": "Country" },
+          "category": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Category"
+          },
+          "person_type": { "$ref": "#/components/schemas/PersonType" }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "status",
+          "country",
+          "category",
+          "person_type"
+        ],
+        "title": "AccountRead"
+      },
+      "AccountStatus": {
+        "type": "string",
+        "enum": ["CREATED", "VERIFYING", "ACTIVE", "DELETED"],
+        "title": "AccountStatus"
+      },
       "AddressUS": {
         "properties": {
           "street_line_1": { "type": "string", "title": "Street Line 1" },
@@ -1020,6 +1048,10 @@
             "title": "Has Third Party Auth",
             "default": false
           },
+          "provider_id": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Provider Id"
+          },
           "created_at": {
             "type": "string",
             "format": "date-time",
@@ -1027,7 +1059,7 @@
           }
         },
         "type": "object",
-        "required": ["name", "email", "phone"],
+        "required": ["name", "email", "phone", "provider_id"],
         "title": "User"
       },
       "UserCreateIn": {
@@ -1065,6 +1097,51 @@
         "required": ["email"],
         "title": "UserCreateIn"
       },
+      "UserRead": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Name"
+          },
+          "email": { "type": "string", "title": "Email" },
+          "phone": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Phone"
+          },
+          "has_third_party_auth": {
+            "type": "boolean",
+            "title": "Has Third Party Auth"
+          },
+          "provider_id": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Provider Id"
+          },
+          "wallets": {
+            "items": { "$ref": "#/components/schemas/WalletRead" },
+            "type": "array",
+            "title": "Wallets"
+          },
+          "account": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/AccountRead" },
+              { "type": "null" }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "email",
+          "phone",
+          "has_third_party_auth",
+          "provider_id",
+          "wallets",
+          "account"
+        ],
+        "title": "UserRead"
+      },
       "ValidationError": {
         "properties": {
           "loc": {
@@ -1090,6 +1167,18 @@
         "type": "object",
         "required": ["address", "smart_account_address"],
         "title": "WalletCreateIn"
+      },
+      "WalletRead": {
+        "properties": {
+          "address": { "type": "string", "title": "Address" },
+          "smart_account_address": {
+            "type": "string",
+            "title": "Smart Account Address"
+          }
+        },
+        "type": "object",
+        "required": ["address", "smart_account_address"],
+        "title": "WalletRead"
       },
       "WithdrawalRead": {
         "properties": {

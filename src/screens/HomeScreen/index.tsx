@@ -1,6 +1,6 @@
 import Feather from "@expo/vector-icons/Feather";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "burnt";
 import { LinearGradient } from "expo-linear-gradient";
@@ -16,17 +16,14 @@ import {
   Alert
 } from "react-native";
 import { transfersGetTransfers } from "@/client";
-import useAuthStore from "@/storage/authStore";
 import { colors } from "@/styles/colors";
 import { format, parseISO } from 'date-fns';
-import { es, enUS } from 'date-fns/locale';
+import { es } from 'date-fns/locale';
 import { formatCurrency, CurrencyCode } from "@/utils/currencyUtils";
 import { formatQuoteToNumber } from "@/utils/quote";
 import useTransferStore from "@/storage/transferStore";
 import LineHome from "@/assets/line-home.svg";
 import Balance from "@/components/Balance";
-import { useBalance } from "@/context/BalanceContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
 import { usePrivy, getUserEmbeddedWallet } from "@privy-io/expo";
 

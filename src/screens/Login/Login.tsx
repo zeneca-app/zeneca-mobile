@@ -7,25 +7,26 @@ import { colors } from "@/styles/colors";
 import LogoLetter from "@/assets/zeneca-logo-letters.svg";
 import GradientCircle from "@/assets/zeneca-gradient-circle.svg";
 import { usePrivy, getUserEmbeddedWallet } from "@privy-io/expo";
-import LoginOptions from "@/screens/Login/LoginOptions";
-import { LoginStatus } from "@/lib/types/login";
 import * as SecureStore from "expo-secure-store";
-import { usersGetUser } from "@/client/";
-import LoadingScreen from "@/components/Loading";
+import { usersMe } from "@/client";
+import { useUserStore } from "@/storage/userStore";
+import { DBUser } from "@/storage/interfaces";
+
+
 
 const Login = () => {
-  const { isReady, user, logout, } = usePrivy();
-  const address = getUserEmbeddedWallet(user)?.address;
-
   const { t } = useTranslation();
   const navigation = useNavigation();
+
+  const { isReady, user, logout } = usePrivy();
+  const address = getUserEmbeddedWallet(user)?.address;
+  const { user: storedUser, setUser } = useUserStore((state) => state);
 
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
   const [isFetchingUser, setIsFetchingUser] = useState(false);
 
   const token = SecureStore.getItem(`token-${address}`);
-
 
   useEffect(() => {
     if (address) {
@@ -45,8 +46,14 @@ const Login = () => {
   const getToken = async () => {
     try {
       if (token) {
-        navigation.navigate("Home");
+        
+        const userData = await fetchUserData(token).then((data) => data.data);
+        console.log("userData", userData);
+        
+        setUser({ ...userData, token } as DBUser);
+        setIsFetchingUser(false);
 
+        navigation.navigate("Home");
         return token;
       }
     } catch (error) {
@@ -58,7 +65,7 @@ const Login = () => {
   const fetchUserData = async (token: string) => {
     try {
       setIsFetchingUser(true);
-      const userData = await usersGetUser({
+      const userData = await usersMe({
         headers: {
           Authorization: `Bearer ${token}`,
         },
