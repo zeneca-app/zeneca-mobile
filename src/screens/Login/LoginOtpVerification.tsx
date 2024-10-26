@@ -13,7 +13,6 @@ import { OtpInput } from "react-native-otp-entry";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import * as SecureStore from "expo-secure-store";
-import { useWalletStore } from "@/storage/walletStore";
 import { useChainStore } from "@/storage/chainStore";
 import { getPimlicoSmartAccountClient } from "@/lib/pimlico";
 import { LoginStatus } from "@/lib/types/login";
@@ -47,7 +46,6 @@ const LoginOtpScreen = () => {
     const wallet = useEmbeddedWallet();
 
     const chain = useChainStore((state) => state.chain);
-    const setAddress = useWalletStore((state) => state.setAddress);
 
     const { state, loginWithCode } = useLoginWithEmail({
         onError: (error) => {
@@ -86,7 +84,6 @@ const LoginOtpScreen = () => {
                 throw new Error("Cannot create wallet");
             }
 
-            setAddress(smartAccount?.account?.address as `0x${string}`);
 
             const account = user?.linked_accounts.find(account => account.type === 'email');
             if (!account) {
