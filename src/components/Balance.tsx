@@ -10,7 +10,7 @@ export type balanceProps = {
 };
 
 const Balance = ({
-  displayCurrencyName = true,
+  displayCurrencyName = false,
   containerClasses = undefined,
   captionClasses = undefined,
 }: balanceProps) => {
