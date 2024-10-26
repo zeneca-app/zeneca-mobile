@@ -23,7 +23,6 @@ import useTransferStore from "@/storage/transferStore";
 import BaseIcon from "@/assets/base-logo.svg";
 import USDCIcon from "@/assets/usdc.svg";
 import { transferUSDC, getPimlicoSmartAccountClient } from "@/lib/pimlico"
-import { useWalletStore } from "@/storage/walletStore";
 import { useChainStore } from "@/storage/chainStore";
 import { useBalance } from "@/context/BalanceContext";
 

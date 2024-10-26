@@ -6,15 +6,15 @@ import { toast } from "burnt";
 import Clipboard from '@react-native-clipboard/clipboard';
 import BaseLogo from '@/assets/base-logo.svg';
 import { useTranslation } from 'react-i18next';
-import { useWalletStore } from '@/storage/walletStore';
+import { useUserStore } from '@/storage/userStore';
 import { shortenAddress } from '@/utils/address';
 
 const DepositCrypto = () => {
     const { t } = useTranslation();
     const navigation = useNavigation();
-    const smartAccountAddress = useWalletStore((state) => state.address);
+    const { user: storedUser } = useUserStore((state) => state);
 
-    const walletAddress = smartAccountAddress;
+    const walletAddress = storedUser?.wallets[0].smart_account_address as `0x${string}`;
 
     const copyToClipboard = () => {
         Clipboard.setString(walletAddress);

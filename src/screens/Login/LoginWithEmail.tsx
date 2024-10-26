@@ -1,168 +1,128 @@
-import React, { useCallback, useEffect } from 'react';
-import { z } from 'zod';
-import { useForm, Controller } from 'react-hook-form';
-import { useTranslation } from "react-i18next";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { usePrivy, useEmbeddedWallet, isNotCreated, getUserEmbeddedWallet, useLoginWithEmail } from "@privy-io/expo";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+
+import { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, StyleSheet, SafeAreaView } from 'react-native';
+import {
+    useLoginWithEmail
+} from "@privy-io/expo";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { KeyboardAvoidingView, Platform } from "react-native";
-import { zodResolver } from '@hookform/resolvers/zod';
-import useAuthStore from "@/storage/authStore";
-import { getPimlicoSmartAccountClient } from "@/lib/pimlico";
-import { useChainStore } from "@/storage/chainStore";
-import { useWalletStore } from "@/storage/walletStore";
+import { LoginStatus } from "@/lib/types/login";
+import LoadingScreen from "@/components/Loading";
+import { useLoginStore } from "@/storage/loginStore";
 
-
-const TEST_EMAIL = "tester@zeneca.app";
-
-type TranslationFunction = (key: string) => string;
-
-const createSchema = (t: TranslationFunction) => z.object({
-    email: z.string().email({ message: t("loginWithEmail.errorText") }),
-});
 
 const LoginWithEmail = () => {
+    const TEST_EMAIL = "tester@zeneca.app";
     const { t } = useTranslation();
     const navigation = useNavigation();
 
-    const schema = createSchema(t);
-    type FormData = z.infer<typeof schema>;
-
-    const { logout, user, isReady } = usePrivy();
-    const wallet = useEmbeddedWallet();
-    type PrivyUser = typeof user;
-
-    const chain = useChainStore((state) => state.chain);
-    const setAddress = useWalletStore((state) => state.setAddress);
-
-    const { updateLogged } = useAuthStore((state) => ({
-        updateLogged: state.updateLogged,
+    const { email, setEmail } = useLoginStore((state) => ({
+        email: state.email,
+        setEmail: state.setEmail,
     }));
 
-    const { control, handleSubmit, formState: { errors }, watch } = useForm<FormData>({
-        resolver: zodResolver(schema),
-        defaultValues: {
-            email: '',
+    const [isLoading, setIsLoading] = useState(false);
+    const [loadingMessage, setLoadingMessage] = useState("");
+    const { loginStatus, setLoginStatus } = useLoginStore((state) => ({
+        loginStatus: state.loginStatus,
+        setLoginStatus: state.setLoginStatus,
+    }));
+
+    const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
+    const [hasError, setHasError] = useState(false);
+
+    const { state, sendCode } = useLoginWithEmail({
+        onError: (error) => {
+            console.error("ERRRORRRR", error);
+            setIsLoading(false);
+            setHasError(true);
+            setLoginStatus(LoginStatus.CODE_ERROR);
+        },
+        onLoginSuccess(user, isNewUser) {
+            console.log("Logged in", user);
         },
     });
 
     const successLogin = () => {
-        updateLogged(true);
-        navigation.navigate("MainTabs");
-    };
+        navigation.navigate("Home");
+    }
 
-    const onSubmit = (data: FormData) => {
-        const email = data.email;
+    const dismissScreen = () => {
+        navigation.goBack();
+    }
+
+    const onSubmit = async () => {
+        if (!validateEmail(email!)) {
+            setIsEmailValid(false);
+            return;
+        }
         if (email === TEST_EMAIL) {
             successLogin();
-        } else {
-            sendCode({ email });
-            navigation.navigate("EmailOtpValidation", { email: email } as any);
+            return
         }
+
+        setIsLoading(true);
+        setLoadingMessage(t("loginWithEmail.sendingCode"));
+        await sendCode({ email: email! });
+        setLoadingMessage("");
+        setIsLoading(false);
+        setLoginStatus(LoginStatus.EMAIL_SEND);
+        navigation.navigate("EmailOtpValidation");
     };
 
-    const email = watch('email');
-    const isContinueButtonDisabled = errors.email !== undefined || email.trim() === '';
+    const validateEmail = (email: string) => {
+        const re = /^[\w-\.+]+@([\w-]+\.)+[\w-]{2,4}$/;
+        return re.test(email);
+    };
 
-    const { sendCode, state } = useLoginWithEmail();
 
+    return (<KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.mainContainer}
+    >
+        <SafeAreaView style={styles.safeAreaContainer}>
+            <View style={styles.topContent}>
+                <TouchableOpacity onPress={dismissScreen} style={styles.backButton}>
+                    <Ionicons name="chevron-back" size={24} color="white" />
+                </TouchableOpacity>
+                <Text style={styles.title}>{t("loginWithEmail.title")}</Text>
+                <View style={styles.inputContainer}>
+                    <Text style={styles.label}>{t("loginWithEmail.emailLabel")}</Text>
+                    <TextInput
+                        style={styles.input}
+                        value={email}
+                        onChangeText={setEmail}
+                        autoComplete="off"
+                        autoCorrect={false}
+                        clearButtonMode="while-editing"
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                    />
 
-    const handleConnection = useCallback(
-        async (user: PrivyUser): Promise<void> => {
-            if (isNotCreated(wallet)) {
-                await wallet.create!();
-            }
-
-            console.log("wallet", wallet);
-            const address = getUserEmbeddedWallet(user)?.address;
-
-            const smartAccount = await getPimlicoSmartAccountClient(
-                address as `0x${string}`,
-                chain,
-                wallet
-            );
-
-            // Store addresses in AsyncStorage
-            await AsyncStorage.setItem('userAddress', address || '');
-            await AsyncStorage.setItem('smartAccountAddress', smartAccount?.account?.address);
-
-            setAddress(smartAccount?.account?.address as `0x${string}`);
-        },
-        [user]
-    );
-
-    useEffect(() => {
-        if (state.status === "done" && user && isReady) {
-            try {
-                handleConnection(user)
-                    .then(() => {
-
-                        console.log("success");
-                        successLogin();
-                    })
-                    .catch((e) => {
-                        console.error("Error Handling Connection", e);
-
-                        throw new Error(e);
-                    });
-            } catch (e) {
-                console.log("Error Connecting Stuffs", e);
-                throw new Error(e as any);
-            }
-        } else if (state.status === "initial") {
-            //setLoginStatus(LoginStatus.INITIAL);
-        }
-    }, [state, user, isReady]);
-
-    return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles.mainContainer}
-        >
-            <SafeAreaView style={styles.safeAreaContainer}>
-                <View style={styles.topContent}>
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                        <Ionicons name="arrow-back" size={24} color="white" />
-                    </TouchableOpacity>
-                    <Text style={styles.title}>{t("loginWithEmail.title")}</Text>
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.label}>{t("loginWithEmail.emailLabel")}</Text>
-                        <Controller
-                            control={control}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                                <TextInput
-                                    style={styles.input}
-                                    onBlur={onBlur}
-                                    onChangeText={onChange}
-                                    value={value}
-                                    autoComplete="email"
-                                    keyboardType="email-address"
-                                    autoCapitalize="none"
-                                />
-                            )}
-                            name="email"
-                        />
-                        <View style={[styles.inputLine, errors.email && styles.inputLineError]} />
-                        {errors.email && (
-                            <Text style={styles.errorText}>{errors.email.message}</Text>
-                        )}
-
-                    </View>
+                    <View style={[styles.inputLine, !isEmailValid && styles.inputLineError]} />
+                    {!isEmailValid && (
+                        <Text style={styles.errorText}>{t("loginWithEmail.errorText")}</Text>
+                    )}
                 </View>
-                <View style={styles.bottomContent}>
-                    <TouchableOpacity
-                        disabled={isContinueButtonDisabled}
-                        style={[styles.continueButton, isContinueButtonDisabled && styles.continueButtonDisabled]}
-                        onPress={handleSubmit(onSubmit)}>
-                        <Text style={styles.continueButtonText}>{t("loginWithEmail.continueButton")}</Text>
-                    </TouchableOpacity>
-                </View>
-            </SafeAreaView>
-        </KeyboardAvoidingView>
-    );
-};
+            </View>
+            <View style={styles.bottomContent}>
+                <TouchableOpacity
+                    disabled={email?.length === 0}
+                    style={[styles.continueButton, email?.length === 0 && styles.continueButtonDisabled]}
+                    onPress={onSubmit}>
+                    <Text style={styles.continueButtonText}>{t("loginWithEmail.continueButton")}</Text>
+                </TouchableOpacity>
+            </View>
+            <LoadingScreen
+                isVisible={isLoading}
+                text={loadingMessage}
+            />
+
+
+        </SafeAreaView>
+    </KeyboardAvoidingView>)
+}
 
 const styles = StyleSheet.create({
     mainContainer: {

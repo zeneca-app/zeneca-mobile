@@ -7,7 +7,7 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { WagmiProvider, createConfig, http } from "wagmi";
 import { baseSepolia, base } from 'wagmi/chains';
 import { BalanceProvider } from "@/context/BalanceContext";
-
+import { MyPermissiveSecureStorageAdapter } from "@/lib/storage-adapter";
 
 const queryClient = new QueryClient();
 
@@ -32,7 +32,12 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
                 host: POSTHOG_HOST,
             }}
         >
-            <PrivyProvider appId={APP_ID} clientId={CLIENT_ID}>
+            <PrivyProvider
+                storage={MyPermissiveSecureStorageAdapter}
+                appId={APP_ID}
+                clientId={CLIENT_ID}
+                supportedChains={[baseSepolia, base]}
+            >
                 <QueryClientProvider client={queryClient}>
                     <WagmiProvider config={wagmiConfig}>
                         <BalanceProvider>

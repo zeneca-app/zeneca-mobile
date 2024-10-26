@@ -6,6 +6,7 @@
     "signInButton": "Sign in"
   },
   "loginOptions": {
+    "title": "Create your account",
     "emailOption": "Continue with email",
     "googleOption": "Continue with Google",
     "appleOption": "Continue with Apple",
@@ -16,7 +17,11 @@
     "title": "What's your email?",
     "emailLabel": "Email",
     "continueButton": "Continue",
-    "errorText": "Invalid email"
+    "errorText": "Invalid email",
+    "errorCodeText": "Invalid code or email",
+    "sendingCode": "Sending code...",
+    "verifyingCode": "Verifying code...",
+    "errorCodeTryAgain": "Try again"
   },
   "depositCrypto": {
     "title": "Deposit with Crypto",
@@ -50,7 +55,13 @@
     "empty_transactions": "No transactions",
     "date_format": "MMM d",
     "transactions": "Transactions",
-    "withdrawal": "Withdrawal"
+    "withdrawal": "Withdrawal",
+    "logout": {
+      "title": "Logout",
+      "message": "Are you sure you want to logout?",
+      "cancel": "Cancel",
+      "confirm": "Logout"
+    }
   },
   "recipients": {
     "title": "Send money to?",

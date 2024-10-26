@@ -16,20 +16,19 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { QueryClient } from "@tanstack/react-query";
 import { Suspense, useCallback } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View, LogBox } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { RootStackParamList } from "@/navigation/types";
 import HomeScreen from "@/screens/HomeScreen";
 import Login from "@/screens/Login/Login";
+import LoginWithEmail from "@/screens/Login/LoginWithEmail";
+import LoginOptions from "@/screens/Login/LoginOptions";
+import LoginOtpVerification from "@/screens/Login/LoginOtpVerification";
 import QuoteScreen from "@/screens/Quote";
 import RecipientsScreen from "@/screens/Recipients";
 import QuoteConfirmationScreen from "@/screens/QuoteConfirmation";
-import useAuthStore from "@/storage/authStore";
 import TransactionReceiptScreen from "@/screens/TransactionReceipt";
 import SendSuccessScreen from "@/screens/SendSuccess";
-import LoginOptions from "@/screens/Login/LoginOptions";
-import LoginWithEmail from "@/screens/Login/LoginWithEmail";
-import EmailOtpValidationScreen from "@/screens/Login/EmailOtpValidation";
 import KYCPreview from "@/screens/KYCVerification/KYCPreview";
 import KYCProvider from "@/screens/KYCVerification/KYCProvider";
 import KYCSuccess from "@/screens/KYCVerification/KYCSuccess";
@@ -63,6 +62,7 @@ type CustomTabBarProps = BottomTabBarProps & {
     state: TabNavigationState<ParamListBase>;
 };
 
+LogBox.ignoreLogs([new RegExp("TypeError:.*")]);
 
 
 const CustomTabBar: React.FC<CustomTabBarProps> = ({ state, descriptors, navigation }) => {
@@ -130,9 +130,6 @@ const AppIndex = () => {
         Manrope_600SemiBold,
         Manrope_700Bold,
     });
-    const queryClient = new QueryClient();
-
-    const { logged } = useAuthStore((state) => ({ logged: state.logged }));
 
     // TODO: Implement Splash Screen while loading fonts
     if (!loaded) {
@@ -145,7 +142,7 @@ const AppIndex = () => {
                 <NavigationContainer>
                     <Providers>
 
-                        <Stack.Navigator initialRouteName={logged ? "MainTabs" : "Login"}>
+                        <Stack.Navigator initialRouteName={"Login"}>
                             <Stack.Group>
                                 <Stack.Screen
                                     options={{ headerShown: false }}
@@ -153,14 +150,22 @@ const AppIndex = () => {
                                     component={Login}
                                 />
                                 <Stack.Screen
-                                    options={{
-                                        headerShown: false,
-                                        presentation: 'transparentModal',
-                                    }}
+                                    options={{ headerShown: false }}
+                                    name="EmailOtpValidation"
+                                    component={LoginOtpVerification}
+                                />
+                                <Stack.Screen
+                                    options={{ headerShown: false }}
+                                    name="LoginWithEmail"
+                                    component={LoginWithEmail}
+                                />
+                                <Stack.Screen
+                                    options={{ headerShown: false }}
                                     name="LoginOptions"
                                     component={LoginOptions}
                                 />
                             </Stack.Group>
+
 
                             <Stack.Screen
                                 options={{ headerShown: false }}
@@ -195,17 +200,6 @@ const AppIndex = () => {
                                 />
                             </Stack.Group>
 
-                            <Stack.Screen
-                                options={{ headerShown: false }}
-                                name="LoginWithEmail"
-                                component={LoginWithEmail}
-                            />
-
-                            <Stack.Screen
-                                options={{ headerShown: false }}
-                                name="EmailOtpValidation"
-                                component={EmailOtpValidationScreen}
-                            />
 
                             <Stack.Screen
                                 options={{ headerShown: false }}

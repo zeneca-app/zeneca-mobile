@@ -13,7 +13,7 @@ const KYCSuccess = () => {
     const navigation = useNavigation();
 
     const goHome = () => {
-        navigation.navigate("MainTabs");
+        navigation.navigate("Home");
     }
 
     return (
