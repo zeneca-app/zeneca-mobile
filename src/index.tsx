@@ -43,7 +43,7 @@ import { isRunningInExpoGo } from "expo";
 import { Suspense, useCallback } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import "../app/global.css";
+import "./styles/global.css";
 
 const navigationIntegration = Sentry.reactNavigationIntegration({
   enableTimeToInitialDisplay: true,

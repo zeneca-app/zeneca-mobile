@@ -15,6 +15,8 @@ module.exports = {
           },
           bull: "#04AE92",
           short: "#F58989",
+          background: "#19181B",
+          highlight: "#18171A",
         },
         light: {
           content: {
