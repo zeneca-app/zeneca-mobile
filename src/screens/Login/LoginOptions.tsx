@@ -34,10 +34,6 @@ const LoginOptions = () => {
     LoginStatus.INITIAL
   );
 
-  const goToNextScreen = () => {
-    navigation.navigate("Home");
-  };
-
   const { login, state } = useLoginWithOAuth({
     onError: (error) => {
       console.error("ERRRORRRR", error);
@@ -55,7 +51,13 @@ const LoginOptions = () => {
     async (user: PrivyUser): Promise<void> => {
       setIsLoading(true);
       const accessToken = await getAccessToken();
+
+      if (!accessToken) {
+        return;
+      }
+      
       const userAddress = getUserEmbeddedWallet(user)?.address;
+
       if (isNotCreated(wallet)) {
         await wallet.create!();
       }
@@ -74,9 +76,8 @@ const LoginOptions = () => {
         throw new Error("Cannot create wallet");
       }
 
-
       const account = user?.linked_accounts.find(account => account.type === 'google_oauth');
-
+      
       if (!account) {
         return;
       }
@@ -117,9 +118,6 @@ const LoginOptions = () => {
     return userData;
   };
 
-  const successLogin = () => {
-    goToNextScreen();
-  };
 
   useEffect(() => {
     if (state.status === "done" && user) {
@@ -129,7 +127,7 @@ const LoginOptions = () => {
           .then(() => {
             setIsLoading(false);
             console.log("success");
-            successLogin();
+            navigation.navigate("Home");
           })
           .catch((e) => {
             console.error("Error Handling Connection", e);

@@ -46,12 +46,9 @@ const Login = () => {
   const getToken = async () => {
     try {
       if (token) {
-        
-        const userData = await fetchUserData(token).then((data) => data.data);
-        console.log("userData", userData);
+        const userData = await fetchUserData(token);
         setUser({ ...userData, token } as DBUser);
         setIsFetchingUser(false);
-
         navigation.navigate("Home");
         return token;
       }
@@ -64,14 +61,20 @@ const Login = () => {
   const fetchUserData = async (token: string) => {
     try {
       setIsFetchingUser(true);
-      const userData = await usersMe({
+
+      const response = await usersMe({
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      if (response.error) {
+        throw new Error("Authentication failed. Please log in again.");
+      }
+
       setIsFetchingUser(false);
 
-      return userData;
+      return response.data;
     } catch (error) {
       console.log("Error fetching user data", { error });
       setIsLoading(false);
