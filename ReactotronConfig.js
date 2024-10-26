@@ -4,6 +4,7 @@ import Reactotron from "reactotron-react-native";
 import useQuoteStore from "@/storage/quoteStore";
 import useRecipientStore from "@/storage/recipientStore";
 import useTransferStore from "@/storage/transferStore";
+import { useUserStore } from "@/storage/userStore";
 
 // do not allow Reactotron to be used in production and in tests
 if (__DEV__ && process.env.JEST_WORKER_ID === undefined) {
@@ -16,6 +17,7 @@ if (__DEV__ && process.env.JEST_WORKER_ID === undefined) {
           { name: "recipient", zustand: useRecipientStore },
           { name: "quote", zustand: useQuoteStore },
           { name: "transfer", zustand: useTransferStore },
+          { name: "user", zustand: useUserStore },
         ],
       }),
     )
