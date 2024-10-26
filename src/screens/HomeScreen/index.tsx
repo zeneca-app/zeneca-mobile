@@ -148,7 +148,7 @@ const HomeScreen = ({}) => {
     <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
       <View style={styles.container}>
         <View className="flex-1 z-index-50">
-          <Text className="heading text-white w-full">something</Text>
+          <Text className="headline text-white w-full">something</Text>
         </View>
         <View style={styles.backgroundContainer}>
           <LineHome style={styles.lineHome} />
