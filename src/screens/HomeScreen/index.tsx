@@ -148,7 +148,7 @@ const HomeScreen = ({}) => {
     <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
       <View style={styles.container}>
         <View className="flex-1 z-index-50">
-          <Text className="headline text-white w-full">something</Text>
+          <Text className="text-headline text-white w-full">something</Text>
         </View>
         <View style={styles.backgroundContainer}>
           <LineHome style={styles.lineHome} />
@@ -161,13 +161,13 @@ const HomeScreen = ({}) => {
             </TouchableOpacity>
           </View>
 
+          <Balance />
           <LinearGradient
             colors={["#A48BF1", "#80B0F9"]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.balanceCard}
           >
-            <Balance />
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.depositButton}

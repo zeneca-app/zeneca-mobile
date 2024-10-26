@@ -36,6 +36,44 @@ module.exports = {
       rounded: {
         DEFAULT: "2.5rem",
       },
+      fontFamily: {
+        sans: ['"manrope"'],
+      },
+      fontSize: {
+        base: 16,
+        headline: [
+          32,
+          {
+            lineHeight: "1.31",
+            letterSpacing: "-0.02em",
+            fontWeight: "500",
+          },
+        ],
+        "caption-xl": [
+          "1rem",
+          {
+            lineHeight: "1.46",
+            fontWeight: "500",
+          },
+        ],
+        "button-s": [
+          "1rem",
+          {
+            lineHeight: "1.15",
+            fontWeight: "600",
+          },
+        ],
+        "heading-l": [
+          56,
+          {
+            lineHeight: "1.125",
+            letterSpacing: "-0.01em",
+            fontWeight: "400",
+          },
+        ],
+      },
+
+      spacing: {},
     },
   },
   plugins: [],

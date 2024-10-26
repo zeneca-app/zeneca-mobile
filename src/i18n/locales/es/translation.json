@@ -116,5 +116,8 @@
   "faceId": {
     "prompt": "Confirma con tu Face ID",
     "fallback": "Usa tu contraseña"
+  },
+  "balance": {
+    "equity": "Balance total"
   }
 }
