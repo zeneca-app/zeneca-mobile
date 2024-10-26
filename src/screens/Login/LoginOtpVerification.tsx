@@ -19,12 +19,14 @@ import { LoginStatus } from "@/lib/types/login";
 import { loginLoginOrCreate } from "@/client/";
 import { useLoginStore } from "@/storage/loginStore";
 import StatusModal, { ModalState } from "@/components/status-modal";
-
+import { usersMe } from "@/client";
+import { DBUser } from "@/storage/interfaces";
+import { useUserStore } from "@/storage/userStore";
 
 const LoginOtpScreen = () => {
     const { t } = useTranslation();
     const navigation = useNavigation();
-
+    const { setUser } = useUserStore((state) => state);
     const { email } = useLoginStore((state) => ({
         email: state.email,
     }));
@@ -104,12 +106,24 @@ const LoginOtpScreen = () => {
                 }
             });
 
+            const userData = await fetchUserData(accessToken!);
+            setUser({ ...userData, token: accessToken! } as DBUser);
+
             await SecureStore.setItemAsync(`token-${address}`, accessToken!);
             setModalState('dismissed');
             goToNextScreen();
         },
         [user, wallet]
     );
+
+    const fetchUserData = async (token: string) => {
+        const userData = await usersMe({
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }).then((data) => data.data);
+        return userData;
+    };
 
     const goToNextScreen = () => {
         navigation.navigate("Home");

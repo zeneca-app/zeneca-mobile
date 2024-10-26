@@ -1,10 +1,9 @@
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useBalance as useWagmiBalance } from 'wagmi';
-import { Address } from 'viem';
+import { Address, zeroAddress } from 'viem';
 import { useChainStore } from "@/storage/chainStore";
 import tokens from "@/constants/tokens";
 import { useUserStore } from "@/storage/userStore";
-
 interface BalanceContextType {
   balanceFormatted: string;
   balance: ReturnType<typeof useWagmiBalance>['data'];
@@ -18,12 +17,19 @@ export const BalanceProvider: React.FC<{ children: ReactNode }> = ({ children })
   const chain = useChainStore((state) => state.chain);
   const { user: storedUser } = useUserStore((state) => state);
 
+  const getAddress = () => {
+    if (storedUser && storedUser.wallets) {
+      return storedUser.wallets[0].smart_account_address as `0x${string}`;
+    }
+    return zeroAddress;
+  }
+
   const {
     data: balance,
     isLoading: isLoadingBalance,
     refetch: refetchBalance,
   } = useWagmiBalance({
-    address: storedUser?.wallets[0].smart_account_address as `0x${string}`,
+    address: getAddress() as Address,
     token: tokens.USDC[chain.id] as Address,
   });
 

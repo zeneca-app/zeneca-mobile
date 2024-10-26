@@ -49,7 +49,6 @@ const Login = () => {
         
         const userData = await fetchUserData(token).then((data) => data.data);
         console.log("userData", userData);
-        
         setUser({ ...userData, token } as DBUser);
         setIsFetchingUser(false);
 

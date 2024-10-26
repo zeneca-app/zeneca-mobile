@@ -14,15 +14,16 @@ import { LoginStatus } from "@/lib/types/login";
 import { loginLoginOrCreate } from "@/client/";
 import * as SecureStore from "expo-secure-store";
 import LoadingScreen from "@/components/Loading";
-
-
-
+import { usersMe } from "@/client/";
+import { DBUser } from "@/storage/interfaces";
+import { useUserStore } from "@/storage/userStore";
 
 const LoginOptions = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
+  const { setUser } = useUserStore((state) => state);
   const { logout, user, getAccessToken } = usePrivy();
   type PrivyUser = typeof user;
   const wallet = useEmbeddedWallet();
@@ -42,6 +43,7 @@ const LoginOptions = () => {
       console.error("ERRRORRRR", error);
       setIsLoading(false);
       setLoginStatus(LoginStatus.CODE_ERROR);
+      logout();
     },
     onSuccess: (user, isNewUser) => {
       console.log("onSuccess");
@@ -80,7 +82,7 @@ const LoginOptions = () => {
       }
 
       // create user on the backend
-      loginLoginOrCreate({
+      await loginLoginOrCreate({
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -94,6 +96,10 @@ const LoginOptions = () => {
         }
       });
 
+      const userData = await fetchUserData(accessToken!);
+
+      setUser({ ...userData, token: accessToken! } as DBUser);
+
       await SecureStore.setItemAsync(`token-${userAddress}`, accessToken!);
 
       setChain(baseSepolia);
@@ -101,6 +107,15 @@ const LoginOptions = () => {
     },
     [user, wallet]
   );
+
+  const fetchUserData = async (token: string) => {
+    const userData = await usersMe({
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((data) => data.data);
+    return userData;
+  };
 
   const successLogin = () => {
     goToNextScreen();
