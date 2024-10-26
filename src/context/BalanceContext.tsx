@@ -5,7 +5,7 @@ import { useChainStore } from "@/storage/chainStore";
 import { useWalletStore } from "@/storage/walletStore";
 import tokens from "@/constants/tokens";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useUserStore } from "@/storage/userStore";
 
 interface BalanceContextType {
   balanceFormatted: string;
@@ -17,30 +17,19 @@ interface BalanceContextType {
 const BalanceContext = createContext<BalanceContextType | undefined>(undefined);
 
 export const BalanceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const smartAccountAddress = useWalletStore((state) => state.address);
   const chain = useChainStore((state) => state.chain);
-  const setAddress = useWalletStore((state) => state.setAddress);
-  //const user = useUserStore((state) => state.user); 
+  const { user: storedUser } = useUserStore((state) => state);
 
   const {
     data: balance,
     isLoading: isLoadingBalance,
     refetch: refetchBalance,
   } = useWagmiBalance({
-    address: smartAccountAddress,
+    address: storedUser?.wallets[0].smart_account_address as `0x${string}`,
     token: tokens.USDC[chain.id] as Address,
   });
 
   const balanceFormatted = balance?.formatted ?? "0";
-
-
-  useEffect(() => {
-    const fetchAddresses = async () => {
-      const storedSmartAccountAddress = await AsyncStorage.getItem('smartAccountAddress');
-      if (storedSmartAccountAddress) setAddress(storedSmartAccountAddress as `0x${string}`);
-    };
-    fetchAddresses();
-  }, []);
 
   return (
     <BalanceContext.Provider value={{ balance, balanceFormatted, isLoadingBalance, refetchBalance }}>
