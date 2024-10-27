@@ -1,40 +1,23 @@
-import LineHome from "@/assets/line-home.svg";
 import { customersGetBalance, transfersGetTransfers } from "@/client";
 import Balance from "@/components/Balance";
-import { useBalance } from "@/context/BalanceContext";
+import OrdersListCard from "@/components/Cards/OrdersListCard";
+import VerifyCtaCard from "@/components/Cards/VerifyCtaCard";
+import LoggedLayout from "@/components/LoggedLayout";
 import useAuthStore from "@/storage/authStore";
 import useTransferStore from "@/storage/transferStore";
 import { colors } from "@/styles/colors";
-import { CurrencyCode, formatCurrency } from "@/utils/currencyUtils";
-import { formatQuoteToNumber } from "@/utils/quote";
-import Feather from "@expo/vector-icons/Feather";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { usePrivy } from "@privy-io/expo";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
-import { toast } from "burnt";
 import { format, parseISO } from "date-fns";
-import { enUS, es } from "date-fns/locale";
-import { LinearGradient } from "expo-linear-gradient";
+import { es } from "date-fns/locale";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, View } from "react-native";
+import HomeActions from "./components/HomeActions";
 
 const HomeScreen = ({}) => {
   const navigation = useNavigation();
   const { t } = useTranslation();
-
-  const { logout } = usePrivy();
-  const { updateLogged } = useAuthStore((state) => ({
-    updateLogged: state.updateLogged,
-  }));
 
   const { data: balance } = useQuery({
     queryKey: ["balance"],
@@ -55,152 +38,24 @@ const HomeScreen = ({}) => {
     return format(date, t("home.date_format"), { locale: es });
   };
 
-  const onLogout = async () => {
-    try {
-      await logout();
-      nextLogout();
-    } catch (err) {
-      const e = err as Error;
-      toast({
-        title: e?.message ?? "Login Error",
-        preset: "error",
-      });
-      updateLogged(false);
-    }
-  };
-
-  const nextLogout = () => {
-    updateLogged(false);
-    navigation.navigate("Login");
-  };
-
   const onSend = useCallback(
     () => navigation.navigate("Recipients"),
     [navigation],
   );
-
-  const renderTransaction = useCallback(({ item }: { item: any }) => {
-    const isWithdrawal = item.withdrawal !== null;
-    const quote = formatQuoteToNumber(item.quote);
-
-    const formatWithdrawal = (currency: string, amount: string) => {
-      const formatted = formatCurrency(amount, currency as CurrencyCode, true);
-      return "-" + formatted;
-    };
-
-    const formatDeposit = (currency: string, amount: string) => {
-      const formatted = formatCurrency(amount, currency as CurrencyCode, true);
-      return "+" + formatted;
-    };
-
-    const handlePress = () => {
-      setTransfer(item);
-      navigation.navigate("TransactionReceipt");
-    };
-
-    return (
-      <TouchableOpacity style={styles.transactionItem} onPress={handlePress}>
-        <View style={styles.transactionLeft}>
-          <View style={styles.transactionIcon}>
-            {isWithdrawal ? (
-              <Feather name="arrow-up-right" size={20} color="white" />
-            ) : (
-              <Ionicons name="arrow-down" size={20} color="white" />
-            )}
-          </View>
-          <View>
-            <Text style={styles.transactionName}>{t("home.withdrawal")}</Text>
-            <Text style={styles.transactionTime}>
-              {formatDate(item.created_at)}
-            </Text>
-          </View>
-        </View>
-        <Text
-          style={[
-            styles.transactionAmount,
-            { color: isWithdrawal ? "#FF5252" : "#4CAF50" },
-          ]}
-        >
-          {isWithdrawal
-            ? formatWithdrawal(
-                quote.destination.toUpperCase(),
-                quote.amount_out,
-              )
-            : formatDeposit(quote.source.toUpperCase(), quote.amount_in)}
-        </Text>
-      </TouchableOpacity>
-    );
-  }, []);
-
-  const renderEmptyList = () => (
-    <View style={styles.emptyListContainer}>
-      <Text style={styles.emptyListText}>{t("home.empty_transactions")}</Text>
-    </View>
-  );
-
-  const keyExtractor = useCallback((item: any) => item.id, []);
 
   const goDepositCrypto = () => {
     navigation.navigate("DepositCrypto");
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
-      <View style={styles.container}>
-        <View className="flex-1 z-index-50">
-          <Text className="text-headline text-white w-full">something</Text>
-        </View>
-        <View style={styles.backgroundContainer}>
-          <LineHome style={styles.lineHome} />
-        </View>
-
-        <View style={styles.wrapperHeader}>
-          <View style={styles.header}>
-            <TouchableOpacity style={styles.profileButton} onPress={onLogout}>
-              <Ionicons name="person-sharp" size={20} color="white" />
-            </TouchableOpacity>
-          </View>
-
-          <Balance />
-          <LinearGradient
-            colors={["#A48BF1", "#80B0F9"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.balanceCard}
-          >
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={styles.depositButton}
-                onPress={goDepositCrypto}
-              >
-                <Ionicons name="arrow-down" size={20} color="white" />
-                <Text style={styles.buttonText}>
-                  {t("home.depositActionText")}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.sendButton} onPress={onSend}>
-                <Feather name="arrow-up-right" size={20} color="white" />
-                <Text style={styles.buttonText}>
-                  {t("home.sendActionText")}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </LinearGradient>
-        </View>
-        <View style={styles.transactionsContainer}>
-          <Text style={styles.transactionsHeader}>
-            {t("home.transactions")}
-          </Text>
-          <FlatList
-            data={[...(transactions?.data || [])].reverse()}
-            renderItem={renderTransaction}
-            keyExtractor={keyExtractor}
-            showsVerticalScrollIndicator={false}
-            ListEmptyComponent={renderEmptyList}
-          />
-        </View>
+    <LoggedLayout>
+      <View className="pt-12 pb-6">
+        <Balance />
       </View>
-    </SafeAreaView>
+      <VerifyCtaCard />
+      <OrdersListCard />
+      <HomeActions />
+    </LoggedLayout>
   );
 };
 
