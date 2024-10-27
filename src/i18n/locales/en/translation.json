@@ -118,6 +118,22 @@
     "fallback": "Use passcode"
   },
   "balance": {
-    "equity": "Balance"
+    "equity": "Balance",
+    "available_funds": "Available funds"
+  },
+  "accountVerification": {
+    "complete_to_continue": "Verify your account to continue.",
+    "quick_and_easy": "Is quick and easy!",
+    "verify_my_account": "Verify my account"
+  },
+  "ordersListCard": {
+    "myAssets": "My stocks",
+    "empty_transactions": "Here you will see a list of all your purchased stocks.",
+    "empty_transactions_no_funds": "Make your first deposit and start investing!",
+    "empty_transactions_no_assets": "Press explore to select a Stock to purchase"
+  },
+  "homeActions": {
+    "deposit": "Deposit",
+    "explore": "Explore"
   }
 }

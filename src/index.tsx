@@ -44,6 +44,7 @@ import { Suspense, useCallback } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "./styles/global.css";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const navigationIntegration = Sentry.reactNavigationIntegration({
   enableTimeToInitialDisplay: true,
@@ -109,19 +110,6 @@ const CustomTabBar: React.FC<CustomTabBarProps> = ({
   );
 };
 
-const MainTabs = () => {
-  return (
-    <Tab.Navigator
-      tabBar={(props) => <CustomTabBar {...props} />}
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Tab.Screen name="Home" component={HomeScreen} />
-    </Tab.Navigator>
-  );
-};
-
 const AppIndex = () => {
   const [loaded] = useFonts({
     Manrope_300Light,
@@ -145,7 +133,7 @@ const AppIndex = () => {
         <NavigationContainer>
           <Providers>
             <View className="flex-1 text-white font-sans">
-              <Stack.Navigator initialRouteName={logged ? "MainTabs" : "Login"}>
+              <Stack.Navigator initialRouteName={logged ? "Home" : "Login"}>
                 <Stack.Group>
                   <Stack.Screen
                     options={{ headerShown: false }}
@@ -162,11 +150,6 @@ const AppIndex = () => {
                   />
                 </Stack.Group>
 
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="MainTabs"
-                  component={MainTabs}
-                />
                 <Stack.Screen
                   options={{ headerShown: false }}
                   name="Home"

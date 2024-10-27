@@ -16,11 +16,14 @@ const Balance = ({
 }: balanceProps) => {
   const { t } = useTranslation();
 
+  //TODO Remove hardcoded values
   const { balanceFormatted } = useBalance();
+  const available = formatCurrency(30, "USD");
+  const balance = 100000;
 
   return (
     <View
-      className={`w-full flex h-24 justify-start items-stretch${containerClasses ? " " + containerClasses : ""}`}
+      className={`w-full flex h-44 justify-start items-stretch px-layout${containerClasses ? " " + containerClasses : ""}`}
     >
       <Text
         className={`caption-xl text-gray-50 pb-3${captionClasses ? " " + captionClasses : ""}`}
@@ -30,7 +33,7 @@ const Balance = ({
       <View className="flex-row flex-1 text-white items-start">
         <Text className="text-heading-l text-white font-sans">$</Text>
         <Text className="text-heading-l text-white font-sans">
-          {formatCurrency(Number(balanceFormatted), "USD")}
+          {formatCurrency(Number(balance), "USD")}
         </Text>
         {displayCurrencyName && (
           <Text className="text-white text-base font-semibold">
@@ -38,6 +41,16 @@ const Balance = ({
           </Text>
         )}
       </View>
+      <Text
+        className={`caption-xl text-gray-50 pb-2${captionClasses ? " " + captionClasses : ""}`}
+      >
+        {t("balance.available_funds")}
+      </Text>
+      <Text
+        className={`caption-xl text-white pb-3${captionClasses ? " " + captionClasses : ""}`}
+      >
+        ${available}
+      </Text>
     </View>
   );
 };

@@ -1,240 +1,271 @@
-import React, { useCallback, useEffect } from 'react';
-import { z } from 'zod';
-import { useForm, Controller } from 'react-hook-form';
-import { useTranslation } from "react-i18next";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { usePrivy, useEmbeddedWallet, isNotCreated, getUserEmbeddedWallet, useLoginWithEmail } from "@privy-io/expo";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
-import { useNavigation } from "@react-navigation/native";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { KeyboardAvoidingView, Platform } from "react-native";
-import { zodResolver } from '@hookform/resolvers/zod';
-import useAuthStore from "@/storage/authStore";
 import { getPimlicoSmartAccountClient } from "@/lib/pimlico";
+import useAuthStore from "@/storage/authStore";
 import { useChainStore } from "@/storage/chainStore";
 import { useWalletStore } from "@/storage/walletStore";
-
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  getUserEmbeddedWallet,
+  isNotCreated,
+  useEmbeddedWallet,
+  useLoginWithEmail,
+  usePrivy,
+} from "@privy-io/expo";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import React, { useCallback, useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { z } from "zod";
 
 const TEST_EMAIL = "tester@zeneca.app";
 
 type TranslationFunction = (key: string) => string;
 
-const createSchema = (t: TranslationFunction) => z.object({
+const createSchema = (t: TranslationFunction) =>
+  z.object({
     email: z.string().email({ message: t("loginWithEmail.errorText") }),
-});
+  });
 
 const LoginWithEmail = () => {
-    const { t } = useTranslation();
-    const navigation = useNavigation();
+  const { t } = useTranslation();
+  const navigation = useNavigation();
 
-    const schema = createSchema(t);
-    type FormData = z.infer<typeof schema>;
+  const schema = createSchema(t);
+  type FormData = z.infer<typeof schema>;
 
-    const { logout, user, isReady } = usePrivy();
-    const wallet = useEmbeddedWallet();
-    type PrivyUser = typeof user;
+  const { logout, user, isReady } = usePrivy();
+  const wallet = useEmbeddedWallet();
+  type PrivyUser = typeof user;
 
-    const chain = useChainStore((state) => state.chain);
-    const setAddress = useWalletStore((state) => state.setAddress);
+  const chain = useChainStore((state) => state.chain);
+  const setAddress = useWalletStore((state) => state.setAddress);
 
-    const { updateLogged } = useAuthStore((state) => ({
-        updateLogged: state.updateLogged,
-    }));
+  const { updateLogged } = useAuthStore((state) => ({
+    updateLogged: state.updateLogged,
+  }));
 
-    const { control, handleSubmit, formState: { errors }, watch } = useForm<FormData>({
-        resolver: zodResolver(schema),
-        defaultValues: {
-            email: '',
-        },
-    });
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      email: "",
+    },
+  });
 
-    const successLogin = () => {
-        updateLogged(true);
-        navigation.navigate("MainTabs");
-    };
+  const successLogin = () => {
+    updateLogged(true);
+    navigation.navigate("Home");
+  };
 
-    const onSubmit = (data: FormData) => {
-        const email = data.email;
-        if (email === TEST_EMAIL) {
+  const onSubmit = (data: FormData) => {
+    const email = data.email;
+    if (email === TEST_EMAIL) {
+      successLogin();
+    } else {
+      sendCode({ email });
+      navigation.navigate("EmailOtpValidation", { email: email } as any);
+    }
+  };
+
+  const email = watch("email");
+  const isContinueButtonDisabled =
+    errors.email !== undefined || email.trim() === "";
+
+  const { sendCode, state } = useLoginWithEmail();
+
+  const handleConnection = useCallback(
+    async (user: PrivyUser): Promise<void> => {
+      if (isNotCreated(wallet)) {
+        await wallet.create!();
+      }
+
+      console.log("wallet", wallet);
+      const address = getUserEmbeddedWallet(user)?.address;
+
+      const smartAccount = await getPimlicoSmartAccountClient(
+        address as `0x${string}`,
+        chain,
+        wallet,
+      );
+
+      // Store addresses in AsyncStorage
+      await AsyncStorage.setItem("userAddress", address || "");
+      await AsyncStorage.setItem(
+        "smartAccountAddress",
+        smartAccount?.account?.address,
+      );
+
+      setAddress(smartAccount?.account?.address as `0x${string}`);
+    },
+    [user],
+  );
+
+  useEffect(() => {
+    if (state.status === "done" && user && isReady) {
+      try {
+        handleConnection(user)
+          .then(() => {
+            console.log("success");
             successLogin();
-        } else {
-            sendCode({ email });
-            navigation.navigate("EmailOtpValidation", { email: email } as any);
-        }
-    };
+          })
+          .catch((e) => {
+            console.error("Error Handling Connection", e);
 
-    const email = watch('email');
-    const isContinueButtonDisabled = errors.email !== undefined || email.trim() === '';
+            throw new Error(e);
+          });
+      } catch (e) {
+        console.log("Error Connecting Stuffs", e);
+        throw new Error(e as any);
+      }
+    } else if (state.status === "initial") {
+      //setLoginStatus(LoginStatus.INITIAL);
+    }
+  }, [state, user, isReady]);
 
-    const { sendCode, state } = useLoginWithEmail();
-
-
-    const handleConnection = useCallback(
-        async (user: PrivyUser): Promise<void> => {
-            if (isNotCreated(wallet)) {
-                await wallet.create!();
-            }
-
-            console.log("wallet", wallet);
-            const address = getUserEmbeddedWallet(user)?.address;
-
-            const smartAccount = await getPimlicoSmartAccountClient(
-                address as `0x${string}`,
-                chain,
-                wallet
-            );
-
-            // Store addresses in AsyncStorage
-            await AsyncStorage.setItem('userAddress', address || '');
-            await AsyncStorage.setItem('smartAccountAddress', smartAccount?.account?.address);
-
-            setAddress(smartAccount?.account?.address as `0x${string}`);
-        },
-        [user]
-    );
-
-    useEffect(() => {
-        if (state.status === "done" && user && isReady) {
-            try {
-                handleConnection(user)
-                    .then(() => {
-
-                        console.log("success");
-                        successLogin();
-                    })
-                    .catch((e) => {
-                        console.error("Error Handling Connection", e);
-
-                        throw new Error(e);
-                    });
-            } catch (e) {
-                console.log("Error Connecting Stuffs", e);
-                throw new Error(e as any);
-            }
-        } else if (state.status === "initial") {
-            //setLoginStatus(LoginStatus.INITIAL);
-        }
-    }, [state, user, isReady]);
-
-    return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles.mainContainer}
-        >
-            <SafeAreaView style={styles.safeAreaContainer}>
-                <View style={styles.topContent}>
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                        <Ionicons name="arrow-back" size={24} color="white" />
-                    </TouchableOpacity>
-                    <Text style={styles.title}>{t("loginWithEmail.title")}</Text>
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.label}>{t("loginWithEmail.emailLabel")}</Text>
-                        <Controller
-                            control={control}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                                <TextInput
-                                    style={styles.input}
-                                    onBlur={onBlur}
-                                    onChangeText={onChange}
-                                    value={value}
-                                    autoComplete="email"
-                                    keyboardType="email-address"
-                                    autoCapitalize="none"
-                                />
-                            )}
-                            name="email"
-                        />
-                        <View style={[styles.inputLine, errors.email && styles.inputLineError]} />
-                        {errors.email && (
-                            <Text style={styles.errorText}>{errors.email.message}</Text>
-                        )}
-
-                    </View>
-                </View>
-                <View style={styles.bottomContent}>
-                    <TouchableOpacity
-                        disabled={isContinueButtonDisabled}
-                        style={[styles.continueButton, isContinueButtonDisabled && styles.continueButtonDisabled]}
-                        onPress={handleSubmit(onSubmit)}>
-                        <Text style={styles.continueButtonText}>{t("loginWithEmail.continueButton")}</Text>
-                    </TouchableOpacity>
-                </View>
-            </SafeAreaView>
-        </KeyboardAvoidingView>
-    );
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.mainContainer}
+    >
+      <SafeAreaView style={styles.safeAreaContainer}>
+        <View style={styles.topContent}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.backButton}
+          >
+            <Ionicons name="arrow-back" size={24} color="white" />
+          </TouchableOpacity>
+          <Text style={styles.title}>{t("loginWithEmail.title")}</Text>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>{t("loginWithEmail.emailLabel")}</Text>
+            <Controller
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={styles.input}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  autoComplete="email"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                />
+              )}
+              name="email"
+            />
+            <View
+              style={[styles.inputLine, errors.email && styles.inputLineError]}
+            />
+            {errors.email && (
+              <Text style={styles.errorText}>{errors.email.message}</Text>
+            )}
+          </View>
+        </View>
+        <View style={styles.bottomContent}>
+          <TouchableOpacity
+            disabled={isContinueButtonDisabled}
+            style={[
+              styles.continueButton,
+              isContinueButtonDisabled && styles.continueButtonDisabled,
+            ]}
+            onPress={handleSubmit(onSubmit)}
+          >
+            <Text style={styles.continueButtonText}>
+              {t("loginWithEmail.continueButton")}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
+  );
 };
 
 const styles = StyleSheet.create({
-    mainContainer: {
-        flex: 1,
-        backgroundColor: '#0D0B0D',
-    },
-    safeAreaContainer: {
-        flex: 1,
-    },
-    topContent: {
-        padding: 20,
-    },
-    backButton: {
-        marginBottom: 20,
-    },
-    title: {
-        fontSize: 32,
-        color: '#fff',
-        marginBottom: 20,
-        fontFamily: "Manrope_500Medium",
-    },
-    inputContainer: {
-        marginTop: 20,
-    },
-    inputLineError: {
-        borderColor: 'red',
-    },
-    label: {
-        color: '#95929F',
-        fontSize: 14,
-        marginBottom: 4,
-        fontFamily: "Manrope_300Light",
-    },
-    input: {
-        color: '#fff',
-        fontSize: 16,
-        paddingVertical: 8,
-    },
-    errorText: {
-        color: 'red',
-        fontSize: 12,
-        marginTop: 4,
-        fontFamily: "Manrope_300Light",
-    },
-    inputLine: {
-        height: 1,
-        backgroundColor: '#333',
-        marginTop: 8,
-    },
-    bottomContent: {
-        padding: 20,
-        marginTop: 'auto',
-    },
-    continueButton: {
-        borderRadius: 35,
-        backgroundColor: "white",
-        padding: 16,
-        alignItems: "center",
-    },
-    continueButtonDisabled: {
-        backgroundColor: "rgba(215, 191, 250, 0.17)",
-    },
-    continueButtonText: {
-        color: "black",
-        fontSize: 18,
-        fontFamily: "Manrope_500Medium",
-    },
-    continueButtonTextDisabled: {
-        color: "rgba(233, 220, 251, 0.45)",
-        fontSize: 18,
-        fontFamily: "Manrope_500Medium",
-    },
+  mainContainer: {
+    flex: 1,
+    backgroundColor: "#0D0B0D",
+  },
+  safeAreaContainer: {
+    flex: 1,
+  },
+  topContent: {
+    padding: 20,
+  },
+  backButton: {
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 32,
+    color: "#fff",
+    marginBottom: 20,
+    fontFamily: "Manrope_500Medium",
+  },
+  inputContainer: {
+    marginTop: 20,
+  },
+  inputLineError: {
+    borderColor: "red",
+  },
+  label: {
+    color: "#95929F",
+    fontSize: 14,
+    marginBottom: 4,
+    fontFamily: "Manrope_300Light",
+  },
+  input: {
+    color: "#fff",
+    fontSize: 16,
+    paddingVertical: 8,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 4,
+    fontFamily: "Manrope_300Light",
+  },
+  inputLine: {
+    height: 1,
+    backgroundColor: "#333",
+    marginTop: 8,
+  },
+  bottomContent: {
+    padding: 20,
+    marginTop: "auto",
+  },
+  continueButton: {
+    borderRadius: 35,
+    backgroundColor: "white",
+    padding: 16,
+    alignItems: "center",
+  },
+  continueButtonDisabled: {
+    backgroundColor: "rgba(215, 191, 250, 0.17)",
+  },
+  continueButtonText: {
+    color: "black",
+    fontSize: 18,
+    fontFamily: "Manrope_500Medium",
+  },
+  continueButtonTextDisabled: {
+    color: "rgba(233, 220, 251, 0.45)",
+    fontSize: 18,
+    fontFamily: "Manrope_500Medium",
+  },
 });
 
 export default LoginWithEmail;
