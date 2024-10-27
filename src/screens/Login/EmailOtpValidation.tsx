@@ -1,4 +1,3 @@
-import useAuthStore from "@/storage/authStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useLoginWithEmail } from "@privy-io/expo";
 import { useNavigation } from "@react-navigation/native";
@@ -30,9 +29,9 @@ const EmailOtpValidationScreen = ({ route }: EmailOtpValidationScreenProps) => {
   const [verificationCode, setVerificationCode] = useState("");
   const navigation = useNavigation();
 
-  const { updateLogged } = useAuthStore((state) => ({
+  /*   const { updateLogged } = useAuthStore((state) => ({
     updateLogged: state.updateLogged,
-  }));
+  })); */
 
   const { loginWithCode } = useLoginWithEmail({
     onLoginSuccess(user, isNewUser) {

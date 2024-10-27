@@ -1,8 +1,11 @@
-<<<<<<< HEAD
+import { loginLoginOrCreate, usersMe } from "@/client/";
+import LoadingScreen from "@/components/Loading";
+import LoginButton from "@/components/login/button";
 import { getPimlicoSmartAccountClient } from "@/lib/pimlico";
-import useAuthStore from "@/storage/authStore";
+import { LoginStatus } from "@/lib/types/login";
 import { useChainStore } from "@/storage/chainStore";
-import { useWalletStore } from "@/storage/walletStore";
+import { DBUser } from "@/storage/interfaces";
+import { useUserStore } from "@/storage/userStore";
 import { colors } from "@/styles/colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {
@@ -12,175 +15,19 @@ import {
   useLoginWithOAuth,
   usePrivy,
 } from "@privy-io/expo";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { toast } from "burnt";
-import React, { useCallback, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
-import { baseSepolia } from "viem/chains";
-
-const LoginOptions: React.FC = () => {
-  const { t } = useTranslation();
-  const navigation = useNavigation();
-  const { logout, user } = usePrivy();
-  const wallet = useEmbeddedWallet();
-
-  const setAddress = useWalletStore((state) => state.setAddress);
-  const chain = useChainStore((state) => state.chain);
-  const setChain = useChainStore((state) => state.setChain);
-
-  const goToNextScreen = () => {
-    navigation.goBack(); // Dismiss the modal
-    navigation.navigate("Home");
-  };
-
-  type PrivyUser = typeof user;
-
-  const { login, state } = useLoginWithOAuth({
-    onSuccess: (user, isNewUser) => {
-      console.log("onSuccess");
-    },
-    onError: (error) => {
-      console.log("error", error);
-      logout();
-    },
-  });
-
-  const handleConnection = useCallback(
-    async (user: PrivyUser): Promise<void> => {
-      if (isNotCreated(wallet)) {
-        await wallet.create!();
-      }
-
-      const address = getUserEmbeddedWallet(user)?.address;
-
-      const smartAccount = await getPimlicoSmartAccountClient(
-        address as `0x${string}`,
-        chain,
-        wallet,
-      );
-
-      // Store addresses in AsyncStorage
-      await AsyncStorage.setItem("userAddress", address || "");
-      await AsyncStorage.setItem(
-        "smartAccountAddress",
-        smartAccount?.account?.address as `0x${string}`,
-      );
-
-      setAddress(smartAccount?.account?.address as `0x${string}`);
-      setChain(baseSepolia);
-    },
-    [user],
-  );
-
-  const successLogin = () => {
-    updateLogged(true);
-    goToNextScreen();
-  };
-
-  useEffect(() => {
-    if (state.status === "done" && user) {
-      try {
-        handleConnection(user)
-          .then(() => {
-            console.log("success");
-            successLogin();
-          })
-          .catch((e) => {
-            console.error("Error Handling Connection", e);
-
-            throw new Error(e);
-          });
-      } catch (e) {
-        console.log("Error Connecting Stuffs", e);
-        throw new Error(e as any);
-      }
-    } else if (state.status === "initial") {
-      //setLoginStatus(LoginStatus.INITIAL);
-    }
-  }, [state, user]);
-
-  const { updateLogged } = useAuthStore((state) => ({
-    updateLogged: state.updateLogged,
-  }));
-
-  const loginWithGmail = async () => {
-    await login({ provider: "google" });
-  };
-
-  const loginWithEmail = () => {
-    navigation.goBack(); // Dismiss the modal
-    navigation.navigate("LoginWithEmail");
-  };
-
-  return (
-    <Modal transparent={true} animationType="slide">
-      <Pressable style={styles.overlay} onPress={navigation.goBack} />
-      <View style={styles.modalContent}>
-        <View style={styles.buttonsContainer}>
-          <Pressable
-            style={styles.commonButtonPrimary}
-            onPress={loginWithEmail}
-          >
-            <Ionicons
-              name="mail"
-              size={24}
-              color={colors.darkHighlight}
-              style={styles.buttonIcon}
-            />
-            <View style={styles.textContainer}>
-              <Text style={styles.commonButtonPrimaryText}>
-                {t("loginOptions.emailOption")}
-              </Text>
-            </View>
-          </Pressable>
-          <Pressable
-            style={styles.commonButtonSecondary}
-            onPress={loginWithGmail}
-          >
-            <Ionicons
-              name="logo-google"
-              size={24}
-              color="white"
-              style={styles.buttonIcon}
-            />
-            <View style={styles.textContainer}>
-              <Text style={styles.commonButtonSecondaryText}>
-                {t("loginOptions.googleOption")}
-              </Text>
-            </View>
-          </Pressable>
-          <Text style={styles.termsText}>
-            {t("loginOptions.terms")}{" "}
-            <Text style={styles.termsTextLink}>
-              {t("loginOptions.termsLink")}
-            </Text>
-            .
-          </Text>
-        </View>
-      </View>
-    </Modal>
-=======
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
-import { useTranslation } from 'react-i18next';
-import { useNavigation } from "@react-navigation/native";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { baseSepolia } from "viem/chains";
-import { toast } from "burnt";
-import { usePrivy, useEmbeddedWallet, isNotCreated, getUserEmbeddedWallet, useLoginWithOAuth } from "@privy-io/expo";
-import { useChainStore } from "@/storage/chainStore";
-import { colors } from "@/styles/colors";
-import { getPimlicoSmartAccountClient } from "@/lib/pimlico";
-import LoginButton from "@/components/login/button";
-import { LoginStatus } from "@/lib/types/login";
-import { loginLoginOrCreate } from "@/client/";
 import * as SecureStore from "expo-secure-store";
-import LoadingScreen from "@/components/Loading";
-import { usersMe } from "@/client/";
-import { DBUser } from "@/storage/interfaces";
-import { useUserStore } from "@/storage/userStore";
+import React, { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { baseSepolia } from "viem/chains";
 
 const LoginOptions = () => {
   const { t } = useTranslation();
@@ -195,7 +42,7 @@ const LoginOptions = () => {
   const chain = useChainStore((state) => state.chain);
   const setChain = useChainStore((state) => state.setChain);
   const [loginStatus, setLoginStatus] = useState<LoginStatus>(
-    LoginStatus.INITIAL
+    LoginStatus.INITIAL,
   );
 
   const { login, state } = useLoginWithOAuth({
@@ -210,7 +57,6 @@ const LoginOptions = () => {
     },
   });
 
-
   const handleConnection = useCallback(
     async (user: PrivyUser): Promise<void> => {
       setIsLoading(true);
@@ -219,7 +65,7 @@ const LoginOptions = () => {
       if (!accessToken) {
         return;
       }
-      
+
       const userAddress = getUserEmbeddedWallet(user)?.address;
 
       if (isNotCreated(wallet)) {
@@ -233,15 +79,17 @@ const LoginOptions = () => {
       const smartAccount = await getPimlicoSmartAccountClient(
         userAddress as `0x${string}`,
         chain,
-        wallet
+        wallet,
       );
 
       if (!smartAccount || !smartAccount.account) {
         throw new Error("Cannot create wallet");
       }
 
-      const account = user?.linked_accounts.find(account => account.type === 'google_oauth');
-      
+      const account = user?.linked_accounts.find(
+        (account) => account.type === "google_oauth",
+      );
+
       if (!account) {
         return;
       }
@@ -256,9 +104,10 @@ const LoginOptions = () => {
           has_third_party_auth: true,
           wallet: {
             address: userAddress as `0x${string}`,
-            smart_account_address: smartAccount?.account?.address as `0x${string}`,
-          }
-        }
+            smart_account_address: smartAccount?.account
+              ?.address as `0x${string}`,
+          },
+        },
       });
 
       const userData = await fetchUserData(accessToken!);
@@ -270,7 +119,7 @@ const LoginOptions = () => {
       setChain(baseSepolia);
       setIsLoading(false);
     },
-    [user, wallet]
+    [user, wallet],
   );
 
   const fetchUserData = async (token: string) => {
@@ -281,7 +130,6 @@ const LoginOptions = () => {
     }).then((data) => data.data);
     return userData;
   };
-
 
   useEffect(() => {
     if (state.status === "done" && user) {
@@ -305,8 +153,6 @@ const LoginOptions = () => {
     } else if (state.status === "initial") {
       setLoginStatus(LoginStatus.INITIAL);
     }
-
-
   }, [state, user]);
 
   const loginWithGmail = async () => {
@@ -321,7 +167,10 @@ const LoginOptions = () => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.modalOverlay}>
         <View style={styles.topContent}>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
             <Ionicons name="chevron-back" size={22} color="white" />
           </TouchableOpacity>
           <Text style={styles.title}>{t("loginOptions.title")}</Text>
@@ -342,47 +191,33 @@ const LoginOptions = () => {
                 isLoading={isLoading}
                 disabled={isLoading}
               />
-
             </View>
           </View>
         </View>
         <View style={styles.termsContainer}>
           <Text style={styles.termsText}>
-            {t("loginOptions.terms")} <Text style={styles.termsTextLink}>{t("loginOptions.termsLink")}</Text>.
+            {t("loginOptions.terms")}{" "}
+            <Text style={styles.termsTextLink}>
+              {t("loginOptions.termsLink")}
+            </Text>
+            .
           </Text>
         </View>
       </View>
 
-      <LoadingScreen
-        isVisible={isLoading}
-        text={loadingMessage}
-      />
+      <LoadingScreen isVisible={isLoading} text={loadingMessage} />
     </SafeAreaView>
->>>>>>> main
   );
 };
 
 const styles = StyleSheet.create({
-<<<<<<< HEAD
-  overlay: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
-  },
-  modalContent: {
-    height: "45%",
-    backgroundColor: "#19181B",
-    borderRadius: 50,
-    alignItems: "center",
-=======
   safeArea: {
     flex: 1,
-    backgroundColor: '#19181B', // Semi-transparent background
+    backgroundColor: "#19181B", // Semi-transparent background
   },
   modalOverlay: {
     flex: 1,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   topContent: {
     flex: 1,
@@ -390,9 +225,9 @@ const styles = StyleSheet.create({
   title: {
     marginLeft: 25,
     fontSize: 32,
-    color: 'white',
+    color: "white",
     marginBottom: 20,
-    fontFamily: "Manrope_500Medium"
+    fontFamily: "Manrope_500Medium",
   },
   backButton: {
     marginLeft: 20,
@@ -400,17 +235,15 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     flex: 1,
-    backgroundColor: '#19181B',
+    backgroundColor: "#19181B",
     borderRadius: 50,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
->>>>>>> main
+    alignItems: "center",
+    justifyContent: "flex-start",
   },
   handleBar: {
     marginTop: 10,
     width: 50,
     height: 4,
-<<<<<<< HEAD
     backgroundColor: "#312F36",
     borderRadius: 2,
   },
@@ -430,27 +263,6 @@ const styles = StyleSheet.create({
   commonButtonPrimary: {
     flexDirection: "row",
     width: "100%",
-=======
-    backgroundColor: '#312F36',
-    borderRadius: 2,
-  },
-  buttonsContainer: {
-    width: '100%',
-    paddingVertical: 60,
-    paddingHorizontal: 30,
-    alignItems: 'center',
-    justifyContent: "center",
-  },
-  loadingText: {
-    color: '#fff',
-    marginTop: 10,
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  commonButtonPrimary: {
-    flexDirection: 'row',
-    width: '100%',
->>>>>>> main
     height: 55,
     borderRadius: 25,
     justifyContent: "center",
@@ -459,13 +271,8 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   commonButtonSecondary: {
-<<<<<<< HEAD
     flexDirection: "row",
     width: "100%",
-=======
-    flexDirection: 'row',
-    width: '100%',
->>>>>>> main
     height: 55,
     borderRadius: 25,
     justifyContent: "center",
@@ -489,16 +296,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "Manrope_500Medium",
   },
-<<<<<<< HEAD
-  textContainer: {
-    marginLeft: 15,
-=======
   termsContainer: {
-    width: '100%',
+    width: "100%",
     paddingHorizontal: 30,
     paddingBottom: 20,
-    alignItems: 'center',
->>>>>>> main
+    alignItems: "center",
   },
   termsText: {
     color: "white",

@@ -10,7 +10,6 @@ const useCamera = () => {
     }
   };
 
-
   return {
     permission,
     getPermission,

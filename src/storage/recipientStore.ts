@@ -1,8 +1,8 @@
-import { create } from "zustand";
-import { createJSONStorage, devtools, persist } from "zustand/middleware";
 import { RecipientReadWithExternalAccount } from "@/client";
 import { RecipientCrypto } from "@/lib/types/recipient";
 import zustandStorage from "@/storage/storage";
+import { create } from "zustand";
+import { createJSONStorage, devtools, persist } from "zustand/middleware";
 
 interface RecipientState {
   recipient?: RecipientReadWithExternalAccount;

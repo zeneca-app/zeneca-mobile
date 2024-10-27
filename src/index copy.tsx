@@ -6,6 +6,7 @@ import HomeScreen from "@/screens/HomeScreen";
 import KYCPreview from "@/screens/KYCVerification/KYCPreview";
 import KYCProvider from "@/screens/KYCVerification/KYCProvider";
 import KYCSuccess from "@/screens/KYCVerification/KYCSuccess";
+import EmailOtpValidationScreen from "@/screens/Login/EmailOtpValidation";
 import Login from "@/screens/Login/Login";
 import LoginOptions from "@/screens/Login/LoginOptions";
 import LoginOtpVerification from "@/screens/Login/LoginOtpVerification";
@@ -40,7 +41,7 @@ import * as Sentry from "@sentry/react-native";
 import { QueryClient } from "@tanstack/react-query";
 import { isRunningInExpoGo } from "expo";
 import { Suspense, useCallback } from "react";
-import { LogBox, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "./styles/global.css";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -64,8 +65,6 @@ const Tab = createBottomTabNavigator();
 type CustomTabBarProps = BottomTabBarProps & {
   state: TabNavigationState<ParamListBase>;
 };
-
-LogBox.ignoreLogs([new RegExp("TypeError:.*")]);
 
 const CustomTabBar: React.FC<CustomTabBarProps> = ({
   state,
@@ -111,19 +110,6 @@ const CustomTabBar: React.FC<CustomTabBarProps> = ({
   );
 };
 
-const MainTabs = () => {
-  return (
-    <Tab.Navigator
-      tabBar={(props) => <CustomTabBar {...props} />}
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Tab.Screen name="Home" component={HomeScreen} />
-    </Tab.Navigator>
-  );
-};
-
 const AppIndex = () => {
   const [loaded] = useFonts({
     Manrope_300Light,
@@ -132,6 +118,9 @@ const AppIndex = () => {
     Manrope_600SemiBold,
     Manrope_700Bold,
   });
+  const queryClient = new QueryClient();
+
+  const { logged } = useAuthStore((state) => ({ logged: state.logged }));
 
   // TODO: Implement Splash Screen while loading fonts
   if (!loaded) {
@@ -139,12 +128,12 @@ const AppIndex = () => {
   }
 
   return (
-    <GestureHandlerRootView className="flex-1 text-white font-sans">
-      <Suspense fallback={<></>}>
-        <SafeAreaProvider>
-          <NavigationContainer>
-            <Providers>
-              <Stack.Navigator initialRouteName={"Login"}>
+    <Suspense fallback={<></>}>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <Providers>
+            <View className="flex-1 text-white font-sans">
+              <Stack.Navigator initialRouteName={logged ? "Home" : "Login"}>
                 <Stack.Group>
                   <Stack.Screen
                     options={{ headerShown: false }}
@@ -152,27 +141,15 @@ const AppIndex = () => {
                     component={Login}
                   />
                   <Stack.Screen
-                    options={{ headerShown: false }}
-                    name="EmailOtpValidation"
-                    component={LoginOtpVerification}
-                  />
-                  <Stack.Screen
-                    options={{ headerShown: false }}
-                    name="LoginWithEmail"
-                    component={LoginWithEmail}
-                  />
-                  <Stack.Screen
-                    options={{ headerShown: false }}
+                    options={{
+                      headerShown: false,
+                      presentation: "transparentModal",
+                    }}
                     name="LoginOptions"
                     component={LoginOptions}
                   />
                 </Stack.Group>
 
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="MainTabs"
-                  component={MainTabs}
-                />
                 <Stack.Screen
                   options={{ headerShown: false }}
                   name="Home"
@@ -200,6 +177,18 @@ const AppIndex = () => {
                     component={TransactionReceiptScreen}
                   />
                 </Stack.Group>
+
+                <Stack.Screen
+                  options={{ headerShown: false }}
+                  name="LoginWithEmail"
+                  component={LoginWithEmail}
+                />
+
+                <Stack.Screen
+                  options={{ headerShown: false }}
+                  name="EmailOtpValidation"
+                  component={EmailOtpValidationScreen}
+                />
 
                 <Stack.Screen
                   options={{ headerShown: false }}
@@ -245,11 +234,11 @@ const AppIndex = () => {
                   component={SendConfirmation}
                 />
               </Stack.Navigator>
-            </Providers>
-          </NavigationContainer>
-        </SafeAreaProvider>
-      </Suspense>
-    </GestureHandlerRootView>
+            </View>
+          </Providers>
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </Suspense>
   );
 };
 

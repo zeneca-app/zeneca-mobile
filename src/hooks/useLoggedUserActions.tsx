@@ -1,4 +1,3 @@
-import useAuthStore from "@/storage/authStore";
 import { usePrivy } from "@privy-io/expo";
 import { useNavigation } from "@react-navigation/native";
 import { toast } from "burnt";

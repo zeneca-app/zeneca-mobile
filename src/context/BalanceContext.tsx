@@ -1,19 +1,22 @@
-import React, { createContext, useContext, ReactNode } from 'react';
-import { useBalance as useWagmiBalance } from 'wagmi';
-import { Address, zeroAddress } from 'viem';
-import { useChainStore } from "@/storage/chainStore";
 import tokens from "@/constants/tokens";
+import { useChainStore } from "@/storage/chainStore";
 import { useUserStore } from "@/storage/userStore";
+import React, { createContext, ReactNode, useContext } from "react";
+import { Address, zeroAddress } from "viem";
+import { useBalance as useWagmiBalance } from "wagmi";
+
 interface BalanceContextType {
   balanceFormatted: string;
-  balance: ReturnType<typeof useWagmiBalance>['data'];
+  balance: ReturnType<typeof useWagmiBalance>["data"];
   isLoadingBalance: boolean;
   refetchBalance: () => void;
 }
 
 const BalanceContext = createContext<BalanceContextType | undefined>(undefined);
 
-export const BalanceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const BalanceProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const chain = useChainStore((state) => state.chain);
   const { user: storedUser } = useUserStore((state) => state);
 
@@ -22,7 +25,7 @@ export const BalanceProvider: React.FC<{ children: ReactNode }> = ({ children })
       return storedUser.wallets[0].smart_account_address as `0x${string}`;
     }
     return zeroAddress;
-  }
+  };
 
   const {
     data: balance,
@@ -36,7 +39,9 @@ export const BalanceProvider: React.FC<{ children: ReactNode }> = ({ children })
   const balanceFormatted = balance?.formatted ?? "0";
 
   return (
-    <BalanceContext.Provider value={{ balance, balanceFormatted, isLoadingBalance, refetchBalance }}>
+    <BalanceContext.Provider
+      value={{ balance, balanceFormatted, isLoadingBalance, refetchBalance }}
+    >
       {children}
     </BalanceContext.Provider>
   );
@@ -45,7 +50,7 @@ export const BalanceProvider: React.FC<{ children: ReactNode }> = ({ children })
 export const useBalance = () => {
   const context = useContext(BalanceContext);
   if (context === undefined) {
-    throw new Error('useBalanceContext must be used within a BalanceProvider');
+    throw new Error("useBalanceContext must be used within a BalanceProvider");
   }
   return context;
 };

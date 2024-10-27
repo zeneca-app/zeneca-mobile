@@ -14,15 +14,9 @@ const SendSuccessScreen = () => {
     txHash: state.txHash,
   }));
 
-<<<<<<< HEAD
   const goHome = () => {
     navigation.navigate("Home");
   };
-=======
-    const goHome = () => {
-        navigation.navigate("Home");
-    };
->>>>>>> main
 
   const showReceipt = async () => {
     const url = `https://sepolia.basescan.org/tx/${txHash}`;

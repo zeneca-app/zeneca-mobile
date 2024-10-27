@@ -8,6 +8,7 @@
   letter-spacing: -0.02rem;
 }
 
-.card {}
+.card {
+}
 
 @tailwind utilities;

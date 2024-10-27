@@ -1,5 +1,5 @@
-import { Address } from "viem";
 import { Basename } from "@/types/basenames";
+import { Address } from "viem";
 
 export type TransferCrypto = {
   name?: string | Basename;
