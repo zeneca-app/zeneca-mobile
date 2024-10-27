@@ -1,19 +1,101 @@
+import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
-import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Pressable, SafeAreaView, StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import Logo from "@/assets/zeneca-logo-bright.svg";
 import { colors } from "@/styles/colors";
 import LogoLetter from "@/assets/zeneca-logo-letters.svg";
 import GradientCircle from "@/assets/zeneca-gradient-circle.svg";
+import { usePrivy, getUserEmbeddedWallet } from "@privy-io/expo";
+import * as SecureStore from "expo-secure-store";
+import { usersMe } from "@/client";
+import { useUserStore } from "@/storage/userStore";
+import { DBUser } from "@/storage/interfaces";
+
 
 
 const Login = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
 
-  const loginOptions = async () => {
+  const { isReady, user, logout } = usePrivy();
+  const address = getUserEmbeddedWallet(user)?.address;
+  const { user: storedUser, setUser } = useUserStore((state) => state);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("");
+  const [isFetchingUser, setIsFetchingUser] = useState(false);
+
+  const token = SecureStore.getItem(`token-${address}`);
+
+  useEffect(() => {
+    if (address) {
+      setIsLoading(true);
+      setLoadingMessage("Logging in...");
+      getToken()
+        .then(() => {
+          setIsLoading(false);
+        })
+        .catch(() => {
+          SecureStore.deleteItemAsync(`token-${address}`).then(() => logout());
+          setIsLoading(false);
+        });
+    }
+  }, [address]);
+
+  const getToken = async () => {
+    try {
+      if (token) {
+        const userData = await fetchUserData(token);
+        setUser({ ...userData, token } as DBUser);
+        setIsFetchingUser(false);
+        navigation.navigate("Home");
+        return token;
+      }
+    } catch (error) {
+      console.error(error as any);
+      throw new Error(error as any);
+    }
+  };
+
+  const fetchUserData = async (token: string) => {
+    try {
+      setIsFetchingUser(true);
+
+      const response = await usersMe({
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.error) {
+        throw new Error("Authentication failed. Please log in again.");
+      }
+
+      setIsFetchingUser(false);
+
+      return response.data;
+    } catch (error) {
+      console.log("Error fetching user data", { error });
+      setIsLoading(false);
+      setIsFetchingUser(false);
+
+      throw new Error(error as any);
+    }
+  };
+
+  /* if (!isReady) {
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <Logo width={60} height={60} />
+        <ActivityIndicator animating={true} color={"#fff"} />
+      </SafeAreaView>
+    );
+  } */
+
+  const loginWithOptions = () => {
     navigation.navigate("LoginOptions");
-  }
+  };
 
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
@@ -33,7 +115,7 @@ const Login = () => {
             </View>
           </View>
           <View style={styles.buttonsContainer}>
-            <Pressable style={styles.signUpButton} onPress={loginOptions}>
+            <Pressable style={styles.signUpButton} onPress={loginWithOptions}>
               <Text style={styles.signUpButtonText}>
                 {t("login.signUpButton")}
               </Text>
@@ -46,11 +128,23 @@ const Login = () => {
           </View>
         </View>
       </View>
+
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  loadingMessage: {
+    color: "white",
+    fontSize: 16,
+    fontFamily: "Manrope_500Medium",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#0D0B0D', // Assuming you want the same background color as the main container
+  },
   safeAreaContainer: {
     flex: 1,
     backgroundColor: "#0D0B0D",

@@ -1,8 +1,42 @@
 import "@/i18n";
+<<<<<<< HEAD
 import { Providers } from "@/components/Providers";
+=======
+import {
+    Manrope_300Light,
+    Manrope_400Regular,
+    Manrope_500Medium,
+    Manrope_600SemiBold,
+    Manrope_700Bold,
+    useFonts,
+} from "@expo-google-fonts/manrope";
+import { isRunningInExpoGo } from "expo";
+import * as Sentry from '@sentry/react-native';
+import { createBottomTabNavigator, BottomTabBarProps } from "@react-navigation/bottom-tabs";
+import { ParamListBase, TabNavigationState } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { QueryClient } from "@tanstack/react-query";
+import { Suspense, useCallback } from "react";
+import { StyleSheet, TouchableOpacity, View, LogBox } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+>>>>>>> main
 import { RootStackParamList } from "@/navigation/types";
 import DepositCrypto from "@/screens/Deposit/DepositCrypto";
 import HomeScreen from "@/screens/HomeScreen";
+<<<<<<< HEAD
+=======
+import Login from "@/screens/Login/Login";
+import LoginWithEmail from "@/screens/Login/LoginWithEmail";
+import LoginOptions from "@/screens/Login/LoginOptions";
+import LoginOtpVerification from "@/screens/Login/LoginOtpVerification";
+import QuoteScreen from "@/screens/Quote";
+import RecipientsScreen from "@/screens/Recipients";
+import QuoteConfirmationScreen from "@/screens/QuoteConfirmation";
+import TransactionReceiptScreen from "@/screens/TransactionReceipt";
+import SendSuccessScreen from "@/screens/SendSuccess";
+>>>>>>> main
 import KYCPreview from "@/screens/KYCVerification/KYCPreview";
 import KYCProvider from "@/screens/KYCVerification/KYCProvider";
 import KYCSuccess from "@/screens/KYCVerification/KYCSuccess";
@@ -66,6 +100,7 @@ type CustomTabBarProps = BottomTabBarProps & {
   state: TabNavigationState<ParamListBase>;
 };
 
+<<<<<<< HEAD
 const CustomTabBar: React.FC<CustomTabBarProps> = ({
   state,
   descriptors,
@@ -76,6 +111,9 @@ const CustomTabBar: React.FC<CustomTabBarProps> = ({
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const isFocused = state.index === index;
+=======
+LogBox.ignoreLogs([new RegExp("TypeError:.*")]);
+>>>>>>> main
 
         const onPress = () => {
           const event = navigation.emit({
@@ -111,6 +149,7 @@ const CustomTabBar: React.FC<CustomTabBarProps> = ({
 };
 
 const AppIndex = () => {
+<<<<<<< HEAD
   const [loaded] = useFonts({
     Manrope_300Light,
     Manrope_400Regular,
@@ -121,6 +160,15 @@ const AppIndex = () => {
   const queryClient = new QueryClient();
 
   const { logged } = useAuthStore((state) => ({ logged: state.logged }));
+=======
+    const [loaded] = useFonts({
+        Manrope_300Light,
+        Manrope_400Regular,
+        Manrope_500Medium,
+        Manrope_600SemiBold,
+        Manrope_700Bold,
+    });
+>>>>>>> main
 
   // TODO: Implement Splash Screen while loading fonts
   if (!loaded) {
@@ -150,6 +198,7 @@ const AppIndex = () => {
                   />
                 </Stack.Group>
 
+<<<<<<< HEAD
                 <Stack.Screen
                   options={{ headerShown: false }}
                   name="Home"
@@ -195,6 +244,66 @@ const AppIndex = () => {
                   name="DepositCrypto"
                   component={DepositCrypto}
                 />
+=======
+                        <Stack.Navigator initialRouteName={"Login"}>
+                            <Stack.Group>
+                                <Stack.Screen
+                                    options={{ headerShown: false }}
+                                    name="Login"
+                                    component={Login}
+                                />
+                                <Stack.Screen
+                                    options={{ headerShown: false }}
+                                    name="EmailOtpValidation"
+                                    component={LoginOtpVerification}
+                                />
+                                <Stack.Screen
+                                    options={{ headerShown: false }}
+                                    name="LoginWithEmail"
+                                    component={LoginWithEmail}
+                                />
+                                <Stack.Screen
+                                    options={{ headerShown: false }}
+                                    name="LoginOptions"
+                                    component={LoginOptions}
+                                />
+                            </Stack.Group>
+
+
+                            <Stack.Screen
+                                options={{ headerShown: false }}
+                                name="MainTabs"
+                                component={MainTabs}
+                            />
+                            <Stack.Screen
+                                options={{ headerShown: false }}
+                                name="Home"
+                                component={HomeScreen}
+                            />
+                            <Stack.Screen
+                                options={{ headerShown: false }}
+                                name="Recipients"
+                                component={RecipientsScreen}
+                            />
+                            <Stack.Screen
+                                options={{ headerShown: false }}
+                                name="Quote"
+                                component={QuoteScreen}
+                            />
+                            <Stack.Screen
+                                options={{ headerShown: false }}
+                                name="QuoteConfirmation"
+                                component={QuoteConfirmationScreen}
+                            />
+                            <Stack.Group screenOptions={{ presentation: 'modal' }}>
+                                <Stack.Screen
+                                    name="TransactionReceipt"
+                                    options={{ headerShown: false }}
+                                    component={TransactionReceiptScreen}
+                                />
+                            </Stack.Group>
+
+>>>>>>> main
 
                 <Stack.Screen
                   options={{ headerShown: false }}

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { customersGetBalance, transfersGetTransfers } from "@/client";
 import Balance from "@/components/Balance";
 import OrdersListCard from "@/components/Cards/OrdersListCard";
@@ -6,12 +7,17 @@ import LoggedLayout from "@/components/LoggedLayout";
 import useAuthStore from "@/storage/authStore";
 import useTransferStore from "@/storage/transferStore";
 import { colors } from "@/styles/colors";
+=======
+import Feather from "@expo/vector-icons/Feather";
+import Ionicons from "@expo/vector-icons/Ionicons";
+>>>>>>> main
 import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { format, parseISO } from "date-fns";
 import { es } from "date-fns/locale";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
+<<<<<<< HEAD
 import { StyleSheet, View } from "react-native";
 import HomeActions from "./components/HomeActions";
 
@@ -23,6 +29,37 @@ const HomeScreen = ({}) => {
     queryKey: ["balance"],
     queryFn: customersGetBalance,
   });
+=======
+import {
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Alert
+} from "react-native";
+import { transfersGetTransfers } from "@/client";
+import { colors } from "@/styles/colors";
+import { format, parseISO } from 'date-fns';
+import { es } from 'date-fns/locale';
+import { formatCurrency, CurrencyCode } from "@/utils/currencyUtils";
+import { formatQuoteToNumber } from "@/utils/quote";
+import useTransferStore from "@/storage/transferStore";
+import LineHome from "@/assets/line-home.svg";
+import Balance from "@/components/Balance";
+import * as SecureStore from "expo-secure-store";
+import { usePrivy, getUserEmbeddedWallet } from "@privy-io/expo";
+
+
+const HomeScreen = ({ }) => {
+  const { isReady, user, logout } = usePrivy();
+  const address = getUserEmbeddedWallet(user)?.address;
+
+  const navigation = useNavigation();
+  const { t } = useTranslation();
+
+>>>>>>> main
 
   const { data: transactions } = useQuery({
     queryKey: ["transactions"],
@@ -38,6 +75,44 @@ const HomeScreen = ({}) => {
     return format(date, t("home.date_format"), { locale: es });
   };
 
+<<<<<<< HEAD
+=======
+  const onLogout = () => {
+    Alert.alert(
+      t("home.logout.title"),
+      t("home.logout.message"),
+      [
+        {
+          text: t("home.logout.cancel"),
+          style: "cancel"
+        },
+        {
+          text: t("home.logout.confirm"),
+          onPress: performLogout
+        }
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const performLogout = async () => {
+    try {
+      console.log("Performing logout");
+      SecureStore.deleteItemAsync(`token-${address}`).then(() => logout()).then(() => goToLogin());
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Logout Error";
+      toast({ 
+        title: errorMessage,
+        preset: "error",
+      });
+    }
+  };
+
+  const goToLogin = () => {
+    navigation.navigate("Login");
+  }
+
+>>>>>>> main
   const onSend = useCallback(
     () => navigation.navigate("Recipients"),
     [navigation],

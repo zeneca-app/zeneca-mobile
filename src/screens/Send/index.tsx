@@ -7,12 +7,11 @@ import { colors } from "@/styles/colors";
 import Keypad from "@/components/Keypad";
 import useRecipientStore from "@/storage/recipientStore";
 import useTransferStore from "@/storage/transferStore";
-import { useWalletStore } from "@/storage/walletStore";
 import { shortenAddress } from "@/utils/address";
 import { Address } from "viem";
 import { formatCurrency } from "@/utils/currencyUtils";
 import { useBalance } from "@/context/BalanceContext";
-
+import { useUserStore } from "@/storage/userStore";
 
 const SendScreen = () => {
     const { t } = useTranslation();
@@ -23,7 +22,7 @@ const SendScreen = () => {
     }));
     const [amount, setAmount] = useState('0');
     const [fontSize, setFontSize] = useState(48);
-    const smartAccountAddress = useWalletStore((state) => state.address);
+    const { user: storedUser } = useUserStore((state) => state);
 
     const { recipientCrypto } = useRecipientStore((state) => ({
         recipientCrypto: state.recipientCrypto,
@@ -62,7 +61,7 @@ const SendScreen = () => {
             name: recipientCrypto?.name,
             address: recipientCrypto?.address as Address,
             amount: parseFloat(amount),
-            from_address: smartAccountAddress as Address,
+            from_address: storedUser?.wallets[0].smart_account_address as Address,
             to_address: recipientCrypto?.address as Address,
         });
         navigation.navigate("SendConfirmation");
