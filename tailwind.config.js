@@ -24,7 +24,12 @@ module.exports = {
           },
           bull: "#04AE92",
           short: "#F58989",
-          background: "#19181B",
+          background: {
+            100: "#19181B",
+            90: "#262429",
+            80: "#313036",
+            white: "#ffffff",
+          },
           highlight: "#18171A",
           gray: {
             alpha: {
@@ -72,6 +77,9 @@ module.exports = {
           80: "#313036",
           90: "#262429",
           100: "#19181B",
+          alpha: {
+            90: "#000001C2",
+          },
         },
         red: {
           20: "#F58989",

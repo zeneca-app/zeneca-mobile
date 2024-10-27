@@ -1,7 +1,15 @@
+import BottomSheet, {
+  BottomSheetButton,
+  BottomSheetModal,
+  BottomSheetView,
+} from "@/components/BottomSheet/BottomSheet";
 import Button from "@/components/Button";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
 
@@ -10,13 +18,21 @@ const HomeActions = () => {
 
   const { t } = useTranslation();
 
+  //const { dismiss, present } = useBottomSheetModal();
+
   const handleDeposit = () => {
-    console.log("deposit clicked");
+    depositBottomMenuRef.current?.present();
   };
 
   const handleExplore = () => {
     console.log("explore clicked");
   };
+
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log("handleSheetChanges", index);
+  }, []);
+
+  const depositBottomMenuRef = useRef<BottomSheetModal>(null);
 
   return (
     <>
@@ -37,6 +53,24 @@ const HomeActions = () => {
           </View>
         </LinearGradient>
       </View>
+      <BottomSheet ref={depositBottomMenuRef}>
+        <BottomSheetView className="px-layout items-stretch rounded-card m-2 flex gap-8 pb-14">
+          <BottomSheetButton
+            icon={
+              <MaterialCommunityIcons name="bank" size={24} color="white" />
+            }
+            label="linea1"
+            caption="linea2"
+            onPress={() => console.log("button pressed")}
+          />
+          <BottomSheetButton
+            icon={<Ionicons name="wallet" size={24} color="white" />}
+            label="linea1"
+            caption="linea2"
+            onPress={() => console.log("button pressed")}
+          />
+        </BottomSheetView>
+      </BottomSheet>
     </>
   );
 };

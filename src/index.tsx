@@ -43,6 +43,7 @@ import { Suspense, useCallback } from "react";
 import { LogBox, StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "./styles/global.css";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const navigationIntegration = Sentry.reactNavigationIntegration({
@@ -140,115 +141,117 @@ const AppIndex = () => {
 
   return (
     <GestureHandlerRootView className="flex-1 text-white font-sans">
-      <Suspense fallback={<></>}>
-        <SafeAreaProvider>
-          <NavigationContainer>
-            <Providers>
-              <Stack.Navigator initialRouteName={"Login"}>
-                <Stack.Group>
+      <BottomSheetModalProvider>
+        <Suspense fallback={<></>}>
+          <SafeAreaProvider>
+            <NavigationContainer>
+              <Providers>
+                <Stack.Navigator initialRouteName={"Home"}>
+                  <Stack.Group>
+                    <Stack.Screen
+                      options={{ headerShown: false }}
+                      name="Login"
+                      component={Login}
+                    />
+                    <Stack.Screen
+                      options={{ headerShown: false }}
+                      name="EmailOtpValidation"
+                      component={LoginOtpVerification}
+                    />
+                    <Stack.Screen
+                      options={{ headerShown: false }}
+                      name="LoginWithEmail"
+                      component={LoginWithEmail}
+                    />
+                    <Stack.Screen
+                      options={{ headerShown: false }}
+                      name="LoginOptions"
+                      component={LoginOptions}
+                    />
+                  </Stack.Group>
+
                   <Stack.Screen
                     options={{ headerShown: false }}
-                    name="Login"
-                    component={Login}
+                    name="MainTabs"
+                    component={MainTabs}
                   />
                   <Stack.Screen
                     options={{ headerShown: false }}
-                    name="EmailOtpValidation"
-                    component={LoginOtpVerification}
+                    name="Home"
+                    component={HomeScreen}
                   />
                   <Stack.Screen
                     options={{ headerShown: false }}
-                    name="LoginWithEmail"
-                    component={LoginWithEmail}
+                    name="Recipients"
+                    component={RecipientsScreen}
                   />
                   <Stack.Screen
                     options={{ headerShown: false }}
-                    name="LoginOptions"
-                    component={LoginOptions}
+                    name="Quote"
+                    component={QuoteScreen}
                   />
-                </Stack.Group>
-
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="MainTabs"
-                  component={MainTabs}
-                />
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="Home"
-                  component={HomeScreen}
-                />
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="Recipients"
-                  component={RecipientsScreen}
-                />
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="Quote"
-                  component={QuoteScreen}
-                />
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="QuoteConfirmation"
-                  component={QuoteConfirmationScreen}
-                />
-                <Stack.Group screenOptions={{ presentation: "modal" }}>
                   <Stack.Screen
-                    name="TransactionReceipt"
                     options={{ headerShown: false }}
-                    component={TransactionReceiptScreen}
+                    name="QuoteConfirmation"
+                    component={QuoteConfirmationScreen}
                   />
-                </Stack.Group>
+                  <Stack.Group screenOptions={{ presentation: "modal" }}>
+                    <Stack.Screen
+                      name="TransactionReceipt"
+                      options={{ headerShown: false }}
+                      component={TransactionReceiptScreen}
+                    />
+                  </Stack.Group>
 
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="DepositCrypto"
-                  component={DepositCrypto}
-                />
+                  <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="DepositCrypto"
+                    component={DepositCrypto}
+                  />
 
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="KYCPreview"
-                  component={KYCPreview}
-                />
+                  <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="KYCPreview"
+                    component={KYCPreview}
+                  />
 
-                <Stack.Screen
-                  options={{
-                    headerShown: false,
-                  }}
-                  name="KYCProvider"
-                  component={KYCProvider}
-                />
+                  <Stack.Screen
+                    options={{
+                      headerShown: false,
+                    }}
+                    name="KYCProvider"
+                    component={KYCProvider}
+                  />
 
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="KYCSuccess"
-                  component={KYCSuccess}
-                />
+                  <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="KYCSuccess"
+                    component={KYCSuccess}
+                  />
 
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="Send"
-                  component={Send}
-                />
+                  <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="Send"
+                    component={Send}
+                  />
 
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="SendSuccess"
-                  component={SendSuccessScreen}
-                />
+                  <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="SendSuccess"
+                    component={SendSuccessScreen}
+                  />
 
-                <Stack.Screen
-                  options={{ headerShown: false }}
-                  name="SendConfirmation"
-                  component={SendConfirmation}
-                />
-              </Stack.Navigator>
-            </Providers>
-          </NavigationContainer>
-        </SafeAreaProvider>
-      </Suspense>
+                  <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="SendConfirmation"
+                    component={SendConfirmation}
+                  />
+                </Stack.Navigator>
+              </Providers>
+            </NavigationContainer>
+          </SafeAreaProvider>
+        </Suspense>
+      </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );
 };
