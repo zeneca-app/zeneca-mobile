@@ -1,0 +1,80 @@
+import BottomSheet, {
+  BottomSheetButton,
+  BottomSheetModal,
+  BottomSheetView,
+} from "@/components/BottomSheet/BottomSheet";
+import Button from "@/components/Button";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { useNavigation } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
+import { useCallback, useRef } from "react";
+import { useTranslation } from "react-i18next";
+import { Text, View } from "react-native";
+
+const HomeActions = () => {
+  const navigation = useNavigation();
+
+  const { t } = useTranslation();
+
+  //const { dismiss, present } = useBottomSheetModal();
+
+  const handleDeposit = () => {
+    depositBottomMenuRef.current?.present();
+  };
+
+  const handleExplore = () => {
+    console.log("explore clicked");
+  };
+
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log("handleSheetChanges", index);
+  }, []);
+
+  const depositBottomMenuRef = useRef<BottomSheetModal>(null);
+
+  return (
+    <>
+      <View className="flex absolute bottom-0 h-bottom-actions w-full">
+        <LinearGradient
+          style={{ flex: 1 }}
+          colors={["#0D0C0E00", "#0D0C0E", "#0D0C0E"]}
+        >
+          <View className="flex-row flex-1 items-center justify-between px-layout w-full gap-2">
+            <Button onPress={handleDeposit} className="flex-1">
+              <AntDesign name="plus" size={16} color="currentColor" />
+              <Text className="text-button-m">{t("homeActions.deposit")}</Text>
+            </Button>
+            <Button onPress={handleExplore} className="flex-1">
+              <AntDesign name="search1" size={16} color="currentColor" />
+              <Text className="text-button-m">{t("homeActions.explore")}</Text>
+            </Button>
+          </View>
+        </LinearGradient>
+      </View>
+      <BottomSheet ref={depositBottomMenuRef}>
+        <BottomSheetView className="px-layout items-stretch rounded-card m-2 flex gap-8 pb-14">
+          <BottomSheetButton
+            icon={
+              <MaterialCommunityIcons name="bank" size={24} color="white" />
+            }
+            label="linea1"
+            caption="linea2"
+            onPress={() => console.log("button pressed")}
+          />
+          <BottomSheetButton
+            icon={<Ionicons name="wallet" size={24} color="white" />}
+            label="linea1"
+            caption="linea2"
+            onPress={() => console.log("button pressed")}
+          />
+        </BottomSheetView>
+      </BottomSheet>
+    </>
+  );
+};
+
+HomeActions.displayName = "HomeActions";
+
+export default HomeActions;

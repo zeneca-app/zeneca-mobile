@@ -1,204 +1,60 @@
-import Feather from "@expo/vector-icons/Feather";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { customersGetBalance, transfersGetTransfers } from "@/client";
+import Balance from "@/components/Balance";
+import OrdersListCard from "@/components/Cards/OrdersListCard";
+import VerifyCtaCard from "@/components/Cards/VerifyCtaCard";
+import LoggedLayout from "@/components/LoggedLayout";
+import useTransferStore from "@/storage/transferStore";
+import { colors } from "@/styles/colors";
 import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
-import { toast } from "burnt";
-import { LinearGradient } from "expo-linear-gradient";
+import { format, parseISO } from "date-fns";
+import { es } from "date-fns/locale";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Alert
-} from "react-native";
-import { transfersGetTransfers } from "@/client";
-import { colors } from "@/styles/colors";
-import { format, parseISO } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { formatCurrency, CurrencyCode } from "@/utils/currencyUtils";
-import { formatQuoteToNumber } from "@/utils/quote";
-import useTransferStore from "@/storage/transferStore";
-import LineHome from "@/assets/line-home.svg";
-import Balance from "@/components/Balance";
-import * as SecureStore from "expo-secure-store";
-import { usePrivy, getUserEmbeddedWallet } from "@privy-io/expo";
+import { StyleSheet, View } from "react-native";
+import HomeActions from "./components/HomeActions";
 
-
-const HomeScreen = ({ }) => {
-  const { isReady, user, logout } = usePrivy();
-  const address = getUserEmbeddedWallet(user)?.address;
-
+const HomeScreen = ({}) => {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
+  const { data: balance } = useQuery({
+    queryKey: ["balance"],
+    queryFn: customersGetBalance,
+  });
 
   const { data: transactions } = useQuery({
     queryKey: ["transactions"],
     queryFn: transfersGetTransfers,
   });
 
-  const { setTransfer } = useTransferStore((state) => ({ setTransfer: state.setTransfer }));
+  const { setTransfer } = useTransferStore((state) => ({
+    setTransfer: state.setTransfer,
+  }));
 
   const formatDate = (dateString: string) => {
     const date = parseISO(dateString);
     return format(date, t("home.date_format"), { locale: es });
   };
 
-  const onLogout = () => {
-    Alert.alert(
-      t("home.logout.title"),
-      t("home.logout.message"),
-      [
-        {
-          text: t("home.logout.cancel"),
-          style: "cancel"
-        },
-        {
-          text: t("home.logout.confirm"),
-          onPress: performLogout
-        }
-      ],
-      { cancelable: false }
-    );
-  };
-
-  const performLogout = async () => {
-    try {
-      console.log("Performing logout");
-      SecureStore.deleteItemAsync(`token-${address}`).then(() => logout()).then(() => goToLogin());
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Logout Error";
-      toast({ 
-        title: errorMessage,
-        preset: "error",
-      });
-    }
-  };
-
-  const goToLogin = () => {
-    navigation.navigate("Login");
-  }
-
   const onSend = useCallback(
     () => navigation.navigate("Recipients"),
     [navigation],
   );
 
-  const renderTransaction = useCallback(({ item }: { item: any }) => {
-    const isWithdrawal = item.withdrawal !== null;
-    const quote = formatQuoteToNumber(item.quote);
-
-    const formatWithdrawal = (currency: string, amount: string) => {
-      const formatted = formatCurrency(amount, currency as CurrencyCode, true)
-      return "-" + formatted
-    }
-
-    const formatDeposit = (currency: string, amount: string) => {
-      const formatted = formatCurrency(amount, currency as CurrencyCode, true)
-      return "+" + formatted
-    }
-
-    const handlePress = () => {
-      setTransfer(item);
-      navigation.navigate("TransactionReceipt");
-    };
-
-
-    return (
-      <TouchableOpacity style={styles.transactionItem} onPress={handlePress}>
-        <View style={styles.transactionLeft}>
-          <View style={styles.transactionIcon}>
-            {isWithdrawal ? (
-              <Feather name="arrow-up-right" size={20} color="white" />
-            ) : (
-              <Ionicons name="arrow-down" size={20} color="white" />
-            )}
-          </View>
-          <View>
-            <Text style={styles.transactionName}>{t("home.withdrawal")}</Text>
-            <Text style={styles.transactionTime}>{formatDate(item.created_at)}</Text>
-          </View>
-        </View>
-        <Text
-          style={[
-            styles.transactionAmount,
-            { color: isWithdrawal ? "#FF5252" : "#4CAF50" },
-          ]}
-        >
-          {isWithdrawal
-            ? formatWithdrawal(
-              quote.destination.toUpperCase(),
-              quote.amount_out,
-            )
-            : formatDeposit(quote.source.toUpperCase(), quote.amount_in)}
-        </Text>
-      </TouchableOpacity>
-    );
-  }, []);
-
-  const renderEmptyList = () => (
-    <View style={styles.emptyListContainer}>
-      <Text style={styles.emptyListText}>
-        {t("home.empty_transactions")}
-      </Text>
-    </View>
-  );
-
-  const keyExtractor = useCallback((item: any) => item.id, []);
-
   const goDepositCrypto = () => {
     navigation.navigate("DepositCrypto");
-  }
+  };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
-      <View style={styles.container}>
-        <View style={styles.backgroundContainer}>
-          <LineHome style={styles.lineHome} />
-        </View>
-
-        <View style={styles.wrapperHeader}>
-          <View style={styles.header}>
-            <TouchableOpacity style={styles.profileButton} onPress={onLogout}>
-              <Ionicons name="person-sharp" size={20} color="white" />
-            </TouchableOpacity>
-          </View>
-          <LinearGradient
-            colors={["#A48BF1", "#80B0F9"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.balanceCard}
-          >
-            <Balance />
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.depositButton} onPress={goDepositCrypto}>
-                <Ionicons name="arrow-down" size={20} color="white" />
-                <Text style={styles.buttonText}>{t("home.depositActionText")}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.sendButton} onPress={onSend}>
-                <Feather name="arrow-up-right" size={20} color="white" />
-                <Text style={styles.buttonText}>{t("home.sendActionText")}</Text>
-              </TouchableOpacity>
-            </View>
-          </LinearGradient>
-        </View>
-        <View style={styles.transactionsContainer}>
-          <Text style={styles.transactionsHeader}>{t("home.transactions")}</Text>
-          <FlatList
-            data={[...(transactions?.data || [])].reverse()}
-            renderItem={renderTransaction}
-            keyExtractor={keyExtractor}
-            showsVerticalScrollIndicator={false}
-            ListEmptyComponent={renderEmptyList}
-          />
-        </View>
+    <LoggedLayout>
+      <View className="pt-12 pb-6">
+        <Balance />
       </View>
-
-    </SafeAreaView>
+      <VerifyCtaCard />
+      <OrdersListCard />
+      <HomeActions />
+    </LoggedLayout>
   );
 };
 
@@ -207,16 +63,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   backgroundContainer: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
   },
   lineHome: {
-    position: 'absolute',
+    position: "absolute",
     // Adjust these values to change the position
-    top: -30,  // Moves the component up by 50 units
+    top: -30, // Moves the component up by 50 units
   },
   wrapperHeader: {
     paddingTop: 20,
@@ -271,7 +127,7 @@ const styles = StyleSheet.create({
   sendButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: 'rgba(0, 0, 0, 0.15)',
+    backgroundColor: "rgba(0, 0, 0, 0.15)",
     borderRadius: 25,
     paddingVertical: 14,
     paddingHorizontal: 20,
@@ -281,7 +137,7 @@ const styles = StyleSheet.create({
   depositButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: 'rgba(0, 0, 0, 0.15)',
+    backgroundColor: "rgba(0, 0, 0, 0.15)",
     borderRadius: 25,
     paddingVertical: 14,
     paddingHorizontal: 20,
@@ -296,14 +152,14 @@ const styles = StyleSheet.create({
   },
   emptyListContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingVertical: 20,
   },
   emptyListText: {
-    color: '#999',
+    color: "#999",
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: "center",
     fontFamily: "Manrope_600SemiBold",
   },
   transactionsContainer: {

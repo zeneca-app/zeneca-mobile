@@ -1,5 +1,5 @@
-import { create } from "zustand";
 import { DBUser } from "@/storage/interfaces";
+import { create } from "zustand";
 
 type UserStore = {
   user?: DBUser;

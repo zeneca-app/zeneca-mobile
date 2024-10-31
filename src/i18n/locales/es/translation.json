@@ -127,5 +127,24 @@
   "faceId": {
     "prompt": "Confirma con tu Face ID",
     "fallback": "Usa tu contraseña"
+  },
+  "balance": {
+    "equity": "Balance total",
+    "available_funds": "Disponible para invertir"
+  },
+  "accountVerification": {
+    "complete_to_continue": "Completa tu verificación para comenzar.",
+    "quick_and_easy": "¡Es rápido y sencillo!",
+    "verify_my_account": "Verificar mi cuenta"
+  },
+  "ordersListCard": {
+    "myAssets": "Mis inversiones",
+    "empty_transactions": "Aqui verás tus inversiones activas.",
+    "empty_transactions_no_funds": "¡Haz tu primer depósito y comienza a invertir!",
+    "empty_transactions_no_assets": "Presiona Explorar para invertir"
+  },
+  "homeActions": {
+    "deposit": "Depositar",
+    "explore": "Explorar"
   }
 }

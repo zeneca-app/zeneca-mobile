@@ -1,18 +1,23 @@
-import { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { useTranslation } from "react-i18next";
-import { Pressable, SafeAreaView, StyleSheet, Text, View, ActivityIndicator } from "react-native";
-import Logo from "@/assets/zeneca-logo-bright.svg";
-import { colors } from "@/styles/colors";
-import LogoLetter from "@/assets/zeneca-logo-letters.svg";
 import GradientCircle from "@/assets/zeneca-gradient-circle.svg";
-import { usePrivy, getUserEmbeddedWallet } from "@privy-io/expo";
-import * as SecureStore from "expo-secure-store";
+import Logo from "@/assets/zeneca-logo-bright.svg";
+import LogoLetter from "@/assets/zeneca-logo-letters.svg";
 import { usersMe } from "@/client";
-import { useUserStore } from "@/storage/userStore";
 import { DBUser } from "@/storage/interfaces";
-
-
+import { useUserStore } from "@/storage/userStore";
+import { colors } from "@/styles/colors";
+import { getUserEmbeddedWallet, usePrivy } from "@privy-io/expo";
+import { useNavigation } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  ActivityIndicator,
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 const Login = () => {
   const { t } = useTranslation();
@@ -110,8 +115,12 @@ const Login = () => {
           <View style={styles.logoContainer}>
             <LogoLetter style={styles.logoLetters} />
             <View style={styles.descriptionContainer}>
-              <Text style={styles.description}>{t("login.description_line_1")}</Text>
-              <Text style={styles.description}>{t("login.description_line_2")}</Text>
+              <Text style={styles.description}>
+                {t("login.description_line_1")}
+              </Text>
+              <Text style={styles.description}>
+                {t("login.description_line_2")}
+              </Text>
             </View>
           </View>
           <View style={styles.buttonsContainer}>
@@ -128,7 +137,6 @@ const Login = () => {
           </View>
         </View>
       </View>
-
     </SafeAreaView>
   );
 };
@@ -141,9 +149,9 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#0D0B0D', // Assuming you want the same background color as the main container
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#0D0B0D", // Assuming you want the same background color as the main container
   },
   safeAreaContainer: {
     flex: 1,
@@ -154,8 +162,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#0D0B0D",
   },
   backgroundContainer: {
-    position: 'absolute',
-    top: '25%',
+    position: "absolute",
+    top: "25%",
     left: 0,
     right: 0,
     alignItems: "center",
@@ -170,10 +178,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   contentContainer: {
-    marginTop: '60%',
+    marginTop: "60%",
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 20,
   },
   logoContainer: {
@@ -193,20 +201,20 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   description: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 28,
     fontFamily: "Manrope_500Medium",
     color: "white",
   },
   buttonsContainer: {
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
     justifyContent: "center",
   },
   signUpButton: {
     marginBottom: 20,
-    flexDirection: 'row',
-    width: '100%',
+    flexDirection: "row",
+    width: "100%",
     padding: 16,
     borderRadius: 35,
     justifyContent: "center",
@@ -219,8 +227,8 @@ const styles = StyleSheet.create({
     fontFamily: "Manrope_600SemiBold",
   },
   signInButton: {
-    flexDirection: 'row',
-    width: '100%',
+    flexDirection: "row",
+    width: "100%",
     padding: 16,
     borderRadius: 35,
     justifyContent: "center",

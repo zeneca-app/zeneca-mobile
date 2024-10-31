@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+
+.headline {
+  font-family: "Manrope_500Medium";
+  font-size: 2rem;
+  line-height: 1.31;
+  letter-spacing: -0.02rem;
+}
+
+.card {
+}
+
+@tailwind utilities;

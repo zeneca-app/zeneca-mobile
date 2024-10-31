@@ -40,3 +40,8 @@ yarn-error.*
 
 
 .env.local
+
+.env*
+.flaskenv*
+!.env.project
+!.env.vault

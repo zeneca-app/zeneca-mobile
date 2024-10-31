@@ -1,13 +1,3 @@
-import type { Address, Chain } from "viem";
-import {
-  ContractFunctionParameters,
-  createPublicClient,
-  encodePacked,
-  http,
-  keccak256,
-  namehash,
-} from "viem";
-import { base, mainnet } from "viem/chains";
 import { RESOLVER_ADDRESSES_BY_CHAIN_ID } from "@/constants/basenames";
 import L2ResolverAbi from "@/lib/abis/L2ResolverAbi";
 import { getChainPublicClient } from "@/lib/pimlico";
@@ -20,6 +10,16 @@ import {
 } from "@/lib/types/basenames";
 import { isBase } from "@/lib/utils/isBase";
 import { isEthereum } from "@/lib/utils/isEthereum";
+import type { Address, Chain } from "viem";
+import {
+  ContractFunctionParameters,
+  createPublicClient,
+  encodePacked,
+  http,
+  keccak256,
+  namehash,
+} from "viem";
+import { base, mainnet } from "viem/chains";
 
 export const BASENAME_L2_RESOLVER_ADDRESS =
   "0xC6d566A56A1aFf6508b41f6c90ff131615583BCD";

@@ -1,6 +1,5 @@
-import * as SecureStore from "expo-secure-store";
-
 import type { Storage } from "@privy-io/js-sdk-core";
+import * as SecureStore from "expo-secure-store";
 
 // Instead of always requiring the device to ALWYAS be unlocked before accessing storage,
 // this adapter allows access if the device has been unlocked ONCE by the user.

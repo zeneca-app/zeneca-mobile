@@ -1,63 +1,58 @@
-import { StyleSheet, View, Text } from "react-native";
-import { useTranslation } from "react-i18next";
-import { formatCurrency } from "@/utils/currencyUtils";
 import { useBalance } from "@/context/BalanceContext";
+import { formatCurrency } from "@/utils/currencyUtils";
+import { useTranslation } from "react-i18next";
+import { Text, View } from "react-native";
 
-const Balance = () => {
-  const { t } = useTranslation();
-
-  const { balanceFormatted } = useBalance();
-
-  return (<View style={styles.balanceContainer}>
-    <Text style={styles.currencySign}>$</Text>
-    <Text style={styles.balanceAmount}>
-      {formatCurrency(Number(balanceFormatted), "USD")}
-    </Text>
-    <Text style={styles.balanceUsd}>{t("home.currency")}</Text>
-
-  </View>);
+export type balanceProps = {
+  displayCurrencyName?: boolean;
+  containerClasses?: string;
+  captionClasses?: string;
 };
 
-const styles = StyleSheet.create({
-  balanceContainer: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    marginBottom: 20,
-  },
-  currencySign: {
-    fontSize: 24,
-    fontWeight: "bold",
-    fontFamily: "Manrope_700Bold",
-    color: "white",
-    marginRight: 4,
-    marginTop: 4,
-  },
-  balanceAmount: {
-    fontSize: 38,
-    fontWeight: "bold",
-    fontFamily: "Manrope_700Bold",
-    color: "white",
-  },
-  balanceUsd: {
-    fontSize: 16,
-    fontFamily: "Manrope_600SemiBold",
-    color: "white",
-    marginLeft: 5,
-    marginBottom: 7,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  sendButton: {
-    backgroundColor: "white",
-    padding: 10,
-    borderRadius: 5,
-  },
-  sendButtonText: {
-    color: "black",
-    fontSize: 16,
-  },
-});
+const Balance = ({
+  displayCurrencyName = false,
+  containerClasses = undefined,
+  captionClasses = undefined,
+}: balanceProps) => {
+  const { t } = useTranslation();
+
+  //TODO Remove hardcoded values
+  const { balanceFormatted } = useBalance();
+  const available = formatCurrency(30, "USD");
+  const balance = 100000;
+
+  return (
+    <View
+      className={`w-full flex h-44 justify-start items-stretch px-layout${containerClasses ? " " + containerClasses : ""}`}
+    >
+      <Text
+        className={`caption-xl text-gray-50 pb-3${captionClasses ? " " + captionClasses : ""}`}
+      >
+        {t("balance.equity")}
+      </Text>
+      <View className="flex-row flex-1 text-white items-start">
+        <Text className="text-heading-l text-white font-sans">$</Text>
+        <Text className="text-heading-l text-white font-sans">
+          {formatCurrency(Number(balance), "USD")}
+        </Text>
+        {displayCurrencyName && (
+          <Text className="text-white text-base font-semibold">
+            {t("home.currency")}
+          </Text>
+        )}
+      </View>
+      <Text
+        className={`caption-xl text-gray-50 pb-2${captionClasses ? " " + captionClasses : ""}`}
+      >
+        {t("balance.available_funds")}
+      </Text>
+      <Text
+        className={`caption-xl text-white pb-3${captionClasses ? " " + captionClasses : ""}`}
+      >
+        ${available}
+      </Text>
+    </View>
+  );
+};
 
 export default Balance;
