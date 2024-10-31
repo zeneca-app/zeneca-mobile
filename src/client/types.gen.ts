@@ -22,6 +22,12 @@ export type AddressUS = {
 
 export type country = "USA";
 
+export type Balance = {
+  available?: string;
+  pending?: string;
+  equity?: string;
+};
+
 export type Bank = {
   id?: string;
   name: string;
@@ -419,3 +425,11 @@ export type CountriesGetCountriesError = unknown;
 export type UsersMeResponse = UserRead;
 
 export type UsersMeError = unknown;
+
+export type UsersMyBalanceResponse = Balance;
+
+export type UsersMyBalanceError = unknown;
+
+export type UsersMyAssetsResponse = unknown;
+
+export type UsersMyAssetsError = unknown;

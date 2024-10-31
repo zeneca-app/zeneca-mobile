@@ -38,6 +38,10 @@ import type {
   TransfersGetTransfersResponse,
   UsersMeError,
   UsersMeResponse,
+  UsersMyAssetsError,
+  UsersMyAssetsResponse,
+  UsersMyBalanceError,
+  UsersMyBalanceResponse,
   WebhooksEventFromAipriseReceivedError,
   WebhooksEventFromAipriseReceivedResponse,
   WebhooksEventFromBridgeReceivedError,
@@ -292,5 +296,38 @@ export const usersMe = <ThrowOnError extends boolean = false>(
   >({
     ...options,
     url: "/v0/users/me",
+  });
+};
+
+/**
+ * My Balance
+ */
+export const usersMyBalance = <ThrowOnError extends boolean = false>(
+  options?: Options<unknown, ThrowOnError>,
+) => {
+  return (options?.client ?? client).get<
+    UsersMyBalanceResponse,
+    UsersMyBalanceError,
+    ThrowOnError
+  >({
+    ...options,
+    url: "/v0/users/me/balance",
+  });
+};
+
+/**
+ * My Assets
+ * Get user's stock assets
+ */
+export const usersMyAssets = <ThrowOnError extends boolean = false>(
+  options?: Options<unknown, ThrowOnError>,
+) => {
+  return (options?.client ?? client).get<
+    UsersMyAssetsResponse,
+    UsersMyAssetsError,
+    ThrowOnError
+  >({
+    ...options,
+    url: "/v0/users/me/assets",
   });
 };

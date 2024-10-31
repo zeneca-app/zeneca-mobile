@@ -84,6 +84,28 @@ export const AddressUSSchema = {
   title: "AddressUS",
 } as const;
 
+export const BalanceSchema = {
+  properties: {
+    available: {
+      type: "string",
+      title: "Available",
+      default: "0",
+    },
+    pending: {
+      type: "string",
+      title: "Pending",
+      default: "0",
+    },
+    equity: {
+      type: "string",
+      title: "Equity",
+      default: "0",
+    },
+  },
+  type: "object",
+  title: "Balance",
+} as const;
+
 export const BankSchema = {
   properties: {
     id: {
