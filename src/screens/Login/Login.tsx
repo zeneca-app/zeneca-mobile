@@ -34,6 +34,7 @@ const Login = () => {
   const [isFetchingUser, setIsFetchingUser] = useState(false);
 
   const token = SecureStore.getItem(`token-${address}`);
+  console.log("token", token);
 
   useEffect(() => {
     if (address) {
