@@ -1,4 +1,6 @@
 import { Country, Currency } from "@/client";
+import { BigNumber } from "bignumber.js";
+import numeral from "numeral";
 
 export type CurrencyCode = "USD" | "COP" | "MXN" | "EUR";
 
@@ -7,6 +9,19 @@ export const currencyLocales: Record<CurrencyCode, string> = {
   COP: "es-CO",
   MXN: "es-MX",
   EUR: "de-DE",
+};
+
+export const currencyFormatter = (value: number | string) => {
+  try {
+    return numeral(value).format("$0,0.00");
+  } catch (error) {
+    console.error("Error formatting currency for value ", value, "\n", error);
+    return "0.00";
+  }
+};
+
+export const percentageFormatter = (value: number | string) => {
+  return numeral(value).format("0.00%");
 };
 
 export const formatCurrency = (

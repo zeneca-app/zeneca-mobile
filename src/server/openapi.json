@@ -526,7 +526,39 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/MyAssets"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/v0/assets/": {
+      "get": {
+        "tags": [
+          "assets"
+        ],
+        "summary": "Get Assets",
+        "operationId": "assets-get_assets",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AssetRead"
+                  },
+                  "type": "array",
+                  "title": "Response Assets-Get Assets"
+                }
               }
             }
           }
@@ -641,6 +673,50 @@
           "postal_code"
         ],
         "title": "AddressUS"
+      },
+      "AssetRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "symbol": {
+            "type": "string",
+            "title": "Symbol"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "display_name": {
+            "type": "string",
+            "title": "Display Name"
+          },
+          "logo_url": {
+            "type": "string",
+            "title": "Logo Url"
+          },
+          "external_id": {
+            "type": "string",
+            "title": "External Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "symbol",
+          "description",
+          "display_name",
+          "logo_url",
+          "external_id"
+        ],
+        "title": "AssetRead"
       },
       "Balance": {
         "properties": {
@@ -988,6 +1064,45 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "MyAsset": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "symbol": {
+            "type": "string",
+            "title": "Symbol"
+          },
+          "amount": {
+            "type": "string",
+            "title": "Amount"
+          },
+          "equity": {
+            "type": "string",
+            "title": "Equity"
+          },
+          "change_percent": {
+            "type": "string",
+            "title": "Change Percent"
+          }
+        },
+        "type": "object",
+        "required": [
+          "symbol",
+          "amount",
+          "equity",
+          "change_percent"
+        ],
+        "title": "MyAsset"
+      },
+      "MyAssets": {
+        "items": {
+          "$ref": "#/components/schemas/MyAsset"
+        },
+        "type": "array",
+        "title": "MyAssets"
       },
       "PaymentRail": {
         "type": "string",

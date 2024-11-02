@@ -103,6 +103,7 @@ module.exports = {
       },
       height: {
         "bottom-actions": 110,
+        separator: 24,
       },
       fontSize: {
         base: 16,

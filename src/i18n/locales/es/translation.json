@@ -49,6 +49,12 @@
     "date_format": "d 'de' MMMM",
     "transactions": "Movimientos",
     "withdrawal": "Retiro",
+    "actions": {
+      "deposit_crypto": "Deposito cripto",
+      "deposit_crypto_caption": "Desde tu billetera o exchange.h",
+      "deposit_from_bank": "Transferencia ancaria",
+      "deposit_from_bank_caption": "Desde tu banco local"
+    },
     "logout": {
       "title": "Cerrar sesión",
       "message": "¿Estás seguro de querer cerrar sesión?",

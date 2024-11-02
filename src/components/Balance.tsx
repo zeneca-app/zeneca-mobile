@@ -1,5 +1,7 @@
-import { useBalance } from "@/context/BalanceContext";
-import { formatCurrency } from "@/utils/currencyUtils";
+import { usersMyBalance } from "@/client";
+import { useUserStore } from "@/storage/userStore";
+import { currencyFormatter } from "@/utils/currencyUtils";
+import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
 
@@ -9,6 +11,21 @@ export type balanceProps = {
   captionClasses?: string;
 };
 
+/* const mockData = {
+  data: { available: "0", equity: "2.22684", pending: "0" },
+  response: {
+    _bodyBlob: {},
+    _bodyInit: {},
+    bodyUsed: true,
+    headers: { map: [Object] },
+    ok: true,
+    status: 200,
+    statusText: "",
+    type: "default",
+    url: "https://sandbox.zeneca.app/v0/users/me/balance",
+  },
+}; */
+
 const Balance = ({
   displayCurrencyName = false,
   containerClasses = undefined,
@@ -16,10 +33,32 @@ const Balance = ({
 }: balanceProps) => {
   const { t } = useTranslation();
 
+  const { user } = useUserStore();
+
+  const { isPending, error, data } = useQuery({
+    queryKey: ["balance"],
+    queryFn: () =>
+      usersMyBalance({
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      }).then((res) => res),
+  });
+
+  if (!user || isPending) {
+    return null;
+  }
+
   //TODO Remove hardcoded values
-  const { balanceFormatted } = useBalance();
-  const available = formatCurrency(30, "USD");
-  const balance = 100000;
+  const equity = data?.data?.equity
+    ? currencyFormatter(data?.data?.equity)
+    : "0.00";
+  const available = data?.data?.available
+    ? currencyFormatter(data?.data?.available)
+    : "0.00";
+  const pending = data?.data?.pending
+    ? currencyFormatter(data?.data?.pending)
+    : "0.00";
 
   return (
     <View
@@ -31,10 +70,7 @@ const Balance = ({
         {t("balance.equity")}
       </Text>
       <View className="flex-row flex-1 text-white items-start">
-        <Text className="text-heading-l text-white font-sans">$</Text>
-        <Text className="text-heading-l text-white font-sans">
-          {formatCurrency(Number(balance), "USD")}
-        </Text>
+        <Text className="text-heading-l text-white font-sans">{equity}</Text>
         {displayCurrencyName && (
           <Text className="text-white text-base font-semibold">
             {t("home.currency")}
@@ -49,7 +85,7 @@ const Balance = ({
       <Text
         className={`caption-xl text-white pb-3${captionClasses ? " " + captionClasses : ""}`}
       >
-        ${available}
+        {available}
       </Text>
     </View>
   );

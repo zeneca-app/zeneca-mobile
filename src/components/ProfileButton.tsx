@@ -1,4 +1,5 @@
 import useLoggedUserActions from "@/hooks/useLoggedUserActions";
+import { useUserStore } from "@/storage/userStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
@@ -14,13 +15,21 @@ const ProfileButton = ({
 }: ProfileButtonProps) => {
   const { onLogout } = useLoggedUserActions;
 
+  const { user } = useUserStore();
+
   const defaultClasses =
     "rounded-full bg-gray-100 h-12 w-12 flex justify-center items-center";
+
+  const handlePress = () => {
+    if (__DEV__ && user) {
+      console.log("USER TOKEN\n", user?.token);
+    }
+  };
 
   return (
     <TouchableOpacity
       className={`${defaultClasses} ${className}`}
-      onPress={onLogout}
+      onPress={handlePress}
     >
       {children ? (
         children
