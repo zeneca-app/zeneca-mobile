@@ -24,9 +24,14 @@ const HomeActions = () => {
     depositBottomMenuRef.current?.present();
   };
 
-  const handleDepositiCrypto = () => {
+  const handleDepositCrypto = () => {
     depositBottomMenuRef.current?.dismiss();
     navigation.navigate("DepositCrypto");
+  };
+
+  const handleDepositBank = () => {
+    depositBottomMenuRef.current?.dismiss();
+    navigation.navigate("DepositWithBank");
   };
 
   const handleExplore = () => {
@@ -66,13 +71,13 @@ const HomeActions = () => {
             }
             label={t("home.actions.deposit_from_bank")}
             caption={t("home.actions.deposit_from_bank_caption")}
-            onPress={() => console.log("button pressed")}
+            onPress={handleDepositBank}
           />
           <BottomSheetButton
             icon={<Ionicons name="wallet" size={24} color="white" />}
             label={t("home.actions.deposit_crypto")}
             caption={t("home.actions.deposit_crypto_caption")}
-            onPress={handleDepositiCrypto}
+            onPress={handleDepositCrypto}
           />
         </BottomSheetView>
       </BottomSheet>

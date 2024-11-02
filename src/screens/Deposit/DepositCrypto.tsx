@@ -1,23 +1,22 @@
 import BaseLogo from "@/assets/base-logo.svg";
+import CopyIcon from "@/assets/copy.svg";
+import CryptoNetworkButton from "@/components/Buttons/CryptoNetworkButton";
+import Card from "@/components/Card";
+import LoggedLayout from "@/components/LoggedLayout";
 import { useUserStore } from "@/storage/userStore";
 import { shortenAddress } from "@/utils/address";
-import { Ionicons } from "@expo/vector-icons";
 import Clipboard from "@react-native-clipboard/clipboard";
-import { useNavigation } from "@react-navigation/native";
 import { toast } from "burnt";
-import React, { useEffect, useState } from "react";
+import { cssInterop } from "nativewind";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+
+// TODO: Retrieve wallet address from smart contract
 
 const DepositCrypto = () => {
   const { t } = useTranslation();
-  const navigation = useNavigation();
   const { user: storedUser } = useUserStore((state) => state);
 
   const walletAddress = storedUser?.wallets[0]
@@ -31,147 +30,56 @@ const DepositCrypto = () => {
     });
   };
 
+  cssInterop(CopyIcon, { className: "style" });
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#0D0C0E" }}>
-      <View style={styles.container}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="chevron-back" size={22} color="white" />
-        </TouchableOpacity>
+    <LoggedLayout>
+      <Text className="text-heading-s text-gray-10 px-layout pb-layout-l pt-layout-s">
+        {t("depositCrypto.title")}
+      </Text>
 
-        <Text style={styles.title}>{t("depositCrypto.title")}</Text>
+      <ScrollView className="flex-1 px-layout">
+        <View className="flex gap w-full">
+          <Card className="py-layout-s">
+            <CryptoNetworkButton
+              token="USDC"
+              iconSlot={<BaseLogo width={40} height={40} />}
+              onPress={() => {}}
+            />
+          </Card>
 
-        <View style={styles.card}>
-          <View style={styles.networkInfo}>
-            <View style={styles.logoContainer}>
-              {/* Replace with actual Polygon logo */}
-              <BaseLogo width={40} height={40} />
-            </View>
-            <Text style={styles.networkName}>Base</Text>
-          </View>
-
-          <View style={styles.addressContainer}>
-            <Text style={styles.addressLabel}>
+          <Card className="flex items-stretch justify-start gap-xs py-layout">
+            <Text className="text-gray-50 text-caption-l">
               {t("depositCrypto.addressLabel")}
             </Text>
-            <View style={styles.addressRow}>
-              <Text style={styles.address}>
+            <View className="flex flex-row justify-between items-center">
+              <Text className="text-dark-content-white text-body-s flex-1">
                 {shortenAddress(walletAddress)}
               </Text>
               <TouchableOpacity
-                style={styles.copyButton}
+                className="w-10 h-10 flex items-center justify-center"
                 onPress={copyToClipboard}
               >
-                <Ionicons name="copy-outline" size={20} color="white" />
+                <CopyIcon className="w-6 h-6" />
               </TouchableOpacity>
             </View>
-          </View>
-          <View style={styles.separator} />
-          <View style={styles.infoContainer}>
-            <Text style={styles.infoText}>{t("depositCrypto.infoText")}</Text>
-
-            <Text style={styles.disclaimerText}>
-              {t("depositCrypto.disclaimerText")}
-            </Text>
-          </View>
+          </Card>
+          <View className="h-px bg-dark-background-100" />
         </View>
-      </View>
-    </SafeAreaView>
+        <View className="text-center flex gap items-stretch pt-layout-l px-layout-l">
+          <Text className="text-caption-xl text-gray-50 text-center">
+            {t("depositCrypto.infoText")}
+          </Text>
+
+          <Text className="text-caption-xl text-gray-50 text-center">
+            {t("depositCrypto.disclaimerText")}
+          </Text>
+        </View>
+      </ScrollView>
+    </LoggedLayout>
   );
 };
 
-export default DepositCrypto;
+DepositCrypto.displayName = "DepositCrypto";
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  backButton: {
-    marginLeft: 20,
-    marginBottom: 20,
-  },
-  title: {
-    marginLeft: 25,
-    fontSize: 32,
-    color: "white",
-    marginBottom: 20,
-    fontFamily: "Manrope_500Medium",
-  },
-  card: {
-    marginTop: 20,
-    paddingVertical: 40,
-    paddingHorizontal: 20,
-    width: "100%",
-    backgroundColor: "#19181B",
-    borderRadius: 40,
-  },
-  networkInfo: {
-    padding: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  networkName: {
-    color: "white",
-    fontSize: 20,
-    fontFamily: "Manrope_500Medium",
-  },
-  logoContainer: {
-    marginRight: 10,
-  },
-  logo: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "rgb(0, 82, 255)",
-  },
-  addressContainer: {
-    borderRadius: 24,
-    padding: 20,
-    backgroundColor: "#262429",
-    marginBottom: 20,
-  },
-  addressLabel: {
-    color: "#96939F",
-    marginBottom: 5,
-    fontSize: 12,
-    fontFamily: "Manrope_400Regular",
-  },
-  addressRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  address: {
-    color: "white",
-    fontSize: 16,
-  },
-  copyButton: {
-    padding: 5,
-  },
-  separator: {
-    height: 1,
-    backgroundColor: "#333333", // Adjust color as needed
-    marginVertical: 20,
-  },
-  infoContainer: {
-    marginTop: 20,
-    flexDirection: "column",
-  },
-  infoText: {
-    textAlign: "center",
-    color: "#96939F",
-    fontFamily: "Manrope_400Regular",
-    fontSize: 14,
-    marginBottom: 25,
-  },
-  disclaimerText: {
-    marginBottom: 15,
-    textAlign: "center",
-    color: "#96939F",
-    fontFamily: "Manrope_400Regular",
-    fontSize: 14,
-  },
-});
+export default DepositCrypto;

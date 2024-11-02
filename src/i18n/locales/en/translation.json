@@ -30,6 +30,13 @@
     "disclaimerText": "Make sure the network is the same as the one from the wallet you are sending from or you could lose your funds.",
     "addressCopied": "Address copied to clipboard"
   },
+  "depositWithBank": {
+    "title": "Transfer from Bank"
+  },
+  "comingSoon": {
+    "title": "Coming soon!",
+    "subtitle": "We are working on this feature and will be available soon."
+  },
   "emailOtpValidation": {
     "title": "Enter the verification code",
     "subtitle": "We sent you one to",

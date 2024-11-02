@@ -1,7 +1,10 @@
 import LineHome from "@/assets/line-home.svg";
 import ProfileButton from "@/components/ProfileButton";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import React from "react";
 import { ImageBackground, SafeAreaView, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 export type LoggedLayoutProps = {
   children: React.ReactNode;
@@ -33,6 +36,20 @@ const LoggedLayout = ({
 };
 
 function DefaultLeftNav() {
+  const navigation = useNavigation();
+
+  const currentRoute = useRoute();
+
+  const withBackButton = currentRoute.name !== "Home";
+
+  if (withBackButton) {
+    return (
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Ionicons name="chevron-back" size={22} color="white" />
+      </TouchableOpacity>
+    );
+  }
+
   return <ProfileButton />;
 }
 

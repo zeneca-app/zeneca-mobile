@@ -1,6 +1,5 @@
-import useStockDetails from "@/hooks/useStockDetails";
+import { STOCKS } from "@/constants/stocks";
 import { currencyFormatter, percentageFormatter } from "@/utils/currencyUtils";
-import { Image } from "expo-image";
 import { Text, View } from "react-native";
 
 export type OrderListItemProps = {
@@ -13,22 +12,17 @@ export type OrderListItemProps = {
 };
 
 const OrderListItem = ({ order }: OrderListItemProps) => {
-  const { isLoading, stock } = useStockDetails({
-    symbol: order.symbol,
-  });
+  const Logo = STOCKS?.[order.symbol as keyof typeof STOCKS]?.logo || null;
 
   const increased = !order.change_percent.includes("-");
 
-  const symbolName = stock?.name || order.symbol;
-
-  //console.log(stock?.logo);
+  const symbolName =
+    STOCKS?.[order.symbol as keyof typeof STOCKS]?.name || order.symbol;
 
   return (
     <View className="flex-row gap-3">
       <View className="w-12 h-12 bg-gray-90 rounded-full overflow-hidden">
-        {!isLoading && (
-          <Image source={stock?.logo} contentFit="contain" transition={300} />
-        )}
+        <Logo style={{ height: "100%", width: "100%" }} />
       </View>
       <View className="flex-1 flex justify-center items-stretch">
         <Text className="text-gray-10 text-caption-xl">{symbolName}</Text>

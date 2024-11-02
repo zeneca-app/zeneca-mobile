@@ -21,6 +21,7 @@ module.exports = {
             disabled: "#D7BFFA2B",
             dark: "#19181B",
             30: "#E9DCFB73",
+            white: "#ffffff",
           },
           bull: "#04AE92",
           short: "#F58989",
@@ -144,10 +145,34 @@ module.exports = {
             fontWeight: "400",
           },
         ],
+        "heading-s": [
+          32,
+          {
+            lineHeight: "1.3125",
+            letterSpacing: "-0.01em",
+            fontWeight: "500",
+          },
+        ],
+        "body-s": [
+          16,
+          {
+            lineHeight: 1.5,
+            letterSpacing: "0",
+            fontWeight: "500",
+          },
+        ],
       },
       spacing: {
         layout: 24,
+        "layout-s": 16,
+        "layout-l": 32,
         "bottom-actions": 110,
+      },
+      gap: {
+        xs: 4,
+        s: 8,
+        DEFAULT: 16,
+        l: 24,
       },
     },
   },

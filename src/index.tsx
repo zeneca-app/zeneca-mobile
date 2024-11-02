@@ -2,6 +2,7 @@ import "@/i18n";
 import { Providers } from "@/components/Providers";
 import { RootStackParamList } from "@/navigation/types";
 import DepositCrypto from "@/screens/Deposit/DepositCrypto";
+import DepositWithBank from "@/screens/Deposit/DepositWithBank";
 import HomeScreen from "@/screens/HomeScreen";
 import KYCPreview from "@/screens/KYCVerification/KYCPreview";
 import KYCProvider from "@/screens/KYCVerification/KYCProvider";
@@ -169,7 +170,6 @@ const AppIndex = () => {
                       component={LoginOptions}
                     />
                   </Stack.Group>
-
                   <Stack.Screen
                     options={{ headerShown: false }}
                     name="MainTabs"
@@ -202,19 +202,21 @@ const AppIndex = () => {
                       component={TransactionReceiptScreen}
                     />
                   </Stack.Group>
-
                   <Stack.Screen
                     options={{ headerShown: false }}
                     name="DepositCrypto"
                     component={DepositCrypto}
                   />
-
+                  <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="DepositWithBank"
+                    component={DepositWithBank}
+                  />
                   <Stack.Screen
                     options={{ headerShown: false }}
                     name="KYCPreview"
                     component={KYCPreview}
                   />
-
                   <Stack.Screen
                     options={{
                       headerShown: false,
@@ -222,25 +224,21 @@ const AppIndex = () => {
                     name="KYCProvider"
                     component={KYCProvider}
                   />
-
                   <Stack.Screen
                     options={{ headerShown: false }}
                     name="KYCSuccess"
                     component={KYCSuccess}
                   />
-
                   <Stack.Screen
                     options={{ headerShown: false }}
                     name="Send"
                     component={Send}
                   />
-
                   <Stack.Screen
                     options={{ headerShown: false }}
                     name="SendSuccess"
                     component={SendSuccessScreen}
                   />
-
                   <Stack.Screen
                     options={{ headerShown: false }}
                     name="SendConfirmation"

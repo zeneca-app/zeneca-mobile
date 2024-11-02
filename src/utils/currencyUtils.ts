@@ -1,5 +1,4 @@
 import { Country, Currency } from "@/client";
-import { BigNumber } from "bignumber.js";
 import numeral from "numeral";
 
 export type CurrencyCode = "USD" | "COP" | "MXN" | "EUR";
