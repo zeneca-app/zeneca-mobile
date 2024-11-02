@@ -24,6 +24,16 @@ const HomeActions = () => {
     depositBottomMenuRef.current?.present();
   };
 
+  const handleDepositCrypto = () => {
+    depositBottomMenuRef.current?.dismiss();
+    navigation.navigate("DepositCrypto");
+  };
+
+  const handleDepositBank = () => {
+    depositBottomMenuRef.current?.dismiss();
+    navigation.navigate("DepositWithBank");
+  };
+
   const handleExplore = () => {
     console.log("explore clicked");
   };
@@ -59,15 +69,15 @@ const HomeActions = () => {
             icon={
               <MaterialCommunityIcons name="bank" size={24} color="white" />
             }
-            label="linea1"
-            caption="linea2"
-            onPress={() => console.log("button pressed")}
+            label={t("home.actions.deposit_from_bank")}
+            caption={t("home.actions.deposit_from_bank_caption")}
+            onPress={handleDepositBank}
           />
           <BottomSheetButton
             icon={<Ionicons name="wallet" size={24} color="white" />}
-            label="linea1"
-            caption="linea2"
-            onPress={() => console.log("button pressed")}
+            label={t("home.actions.deposit_crypto")}
+            caption={t("home.actions.deposit_crypto_caption")}
+            onPress={handleDepositCrypto}
           />
         </BottomSheetView>
       </BottomSheet>

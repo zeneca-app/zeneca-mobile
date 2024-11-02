@@ -1,18 +1,32 @@
 import ChartArrowUp from "@/assets/chart-arrow-up.svg";
+import { usersMyAssets } from "@/client";
 import Card from "@/components/Card";
-import { useBalance } from "@/context/BalanceContext";
-import BigNumber from "bignumber.js";
+import OrderListItem from "@/components/ListItems/OrderListItem"; // Import OrderListItem
+import Separator from "@/components/ListItems/Separator";
+import { useUserStore } from "@/storage/userStore";
+import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { FlatList, Text, View } from "react-native";
 
 const OrdersListCard = () => {
   const { t } = useTranslation();
+  const { user } = useUserStore();
 
-  const balance = BigNumber();
+  const { isPending, error, data, refetch } = useQuery({
+    queryKey: ["assets"],
+    queryFn: () =>
+      usersMyAssets({
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      }).then((res) => res),
+  });
 
   const canTrade = true;
 
-  const hasOrders = false;
+  console.log("data", data);
+
+  const hasOrders = data?.data?.length && data?.data?.length > 0;
 
   // Component to render if no transactions
   const Empty = ({ canTrade = false }: { canTrade?: boolean }) => (
@@ -35,16 +49,32 @@ const OrdersListCard = () => {
     </View>
   );
 
-  const OrdersList = () => {};
+  const separator = () => <Separator />;
+
+  const renderItem = ({ item }) => {
+    console.log("orderlist item", item);
+    return <OrderListItem order={item} />;
+  };
 
   return (
     <Card className="flex-1">
-      <View className="">
+      <View className="pb-4">
         <Text className="text-caption-xl text-gray-50">
           {t("ordersListCard.myAssets")}
         </Text>
       </View>
-      {hasOrders ? <FlatList /> : <Empty canTrade={canTrade} />}
+      {hasOrders ? (
+        <FlatList
+          data={data?.data}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          ItemSeparatorComponent={separator}
+          onRefresh={refetch}
+          refreshing={isPending}
+        />
+      ) : (
+        <Empty canTrade={canTrade} />
+      )}
     </Card>
   );
 };

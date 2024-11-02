@@ -14,7 +14,7 @@ const VerifyCTACard = () => {
     navigation.navigate("KYCPreview");
   };
 
-  const isVerifyed = false;
+  const isVerifyed = true;
 
   if (!isVerifyed) {
     return (

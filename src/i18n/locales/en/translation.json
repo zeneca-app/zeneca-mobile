@@ -30,6 +30,13 @@
     "disclaimerText": "Make sure the network is the same as the one from the wallet you are sending from or you could lose your funds.",
     "addressCopied": "Address copied to clipboard"
   },
+  "depositWithBank": {
+    "title": "Transfer from Bank"
+  },
+  "comingSoon": {
+    "title": "Coming soon!",
+    "subtitle": "We are working on this feature and will be available soon."
+  },
   "emailOtpValidation": {
     "title": "Enter the verification code",
     "subtitle": "We sent you one to",
@@ -56,6 +63,12 @@
     "date_format": "MMM d",
     "transactions": "Transactions",
     "withdrawal": "Withdrawal",
+    "actions": {
+      "deposit_crypto": "Deposit with Crypto",
+      "deposit_crypto_caption": "Deposit from your exchange or wallet",
+      "deposit_from_bank": "Deposit from Bank",
+      "deposit_from_bank_caption": "Deposit from your bank account"
+    },
     "logout": {
       "title": "Logout",
       "message": "Are you sure you want to logout?",
