@@ -51,8 +51,8 @@
     "withdrawal": "Retiro",
     "actions": {
       "deposit_crypto": "Deposito cripto",
-      "deposit_crypto_caption": "Desde tu billetera o exchange.h",
-      "deposit_from_bank": "Transferencia ancaria",
+      "deposit_crypto_caption": "Desde tu billetera o exchange",
+      "deposit_from_bank": "Transferencia bancaria",
       "deposit_from_bank_caption": "Desde tu banco local"
     },
     "logout": {
