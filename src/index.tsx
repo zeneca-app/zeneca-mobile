@@ -152,7 +152,7 @@ const AppIndex = () => {
           <SafeAreaProvider>
             <NavigationContainer>
               <Providers>
-                <Stack.Navigator initialRouteName={"login"}>
+                <Stack.Navigator initialRouteName={"Login"}>
                   <Stack.Group>
                     <Stack.Screen
                       options={{ headerShown: false }}
