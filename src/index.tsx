@@ -48,6 +48,7 @@ import "./styles/global.css";
 import ETFDetail from "@/screens/ETF/ETFDetail";
 import ETFPurchase from "@/screens/ETF/ETFPurchase";
 import ETFPurchaseConfirmation from "@/screens/ETF/ETFPurchaseConfirmation";
+import ETFPurchaseSuccess from "@/screens/ETF/ETFPurchaseSuccess";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
@@ -151,7 +152,7 @@ const AppIndex = () => {
           <SafeAreaProvider>
             <NavigationContainer>
               <Providers>
-                <Stack.Navigator initialRouteName={"ExploreETFs"}>
+                <Stack.Navigator initialRouteName={"login"}>
                   <Stack.Group>
                     <Stack.Screen
                       options={{ headerShown: false }}
@@ -239,6 +240,12 @@ const AppIndex = () => {
                     options={{ headerShown: false }}
                     name="ETFPurchaseConfirmation"
                     component={ETFPurchaseConfirmation}
+                  />
+
+                  <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="ETFPurchaseSuccess"
+                    component={ETFPurchaseSuccess}
                   />
 
                   <Stack.Screen

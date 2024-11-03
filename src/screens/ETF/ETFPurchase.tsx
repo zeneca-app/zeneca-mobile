@@ -67,7 +67,7 @@ const ETFPurchase = ({ route }) => {
           }
         >
           <Text
-            className={`text-button-m ${!canContinue ? "text-dark-content-30" : ""}`}
+            className={`text-button-m ${!canContinue ? "text-dark-content-30" : "text-dark-content-dark"}`}
           >
             {t("etfPurchase.continue")}
           </Text>

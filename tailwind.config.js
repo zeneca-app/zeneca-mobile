@@ -117,7 +117,14 @@ module.exports = {
           },
         ],
         "caption-xl": [
-          "1rem",
+          16,
+          {
+            lineHeight: "1.46",
+            fontWeight: "500",
+          },
+        ],
+        "caption-l": [
+          14,
           {
             lineHeight: "1.46",
             fontWeight: "500",

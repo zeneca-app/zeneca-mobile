@@ -171,6 +171,17 @@
   "etfPurchase": {
     "continue": "Continue",
     "max": "MAX",
-    "available": "Available"
+    "available": "Available",
+    "price": "Price",
+    "fee": "Transaction fee",
+    "total": "Total",
+    "disclaimer": "You are initiating a purchase order for <0>{{etf_amount}}</0> shares of <1>{{display_name}} {{symbol}}</1> for <2>${{amount}}</2> at <3>${{etf_price}}</3> per share.",
+    "confirm": "Confirm",
+    "success": {
+      "title": "Success!",
+      "subtitle": "Your purchase was successful",
+      "done_button": "Understood",
+      "view_order_button": "View order"
+    }
   }
 }

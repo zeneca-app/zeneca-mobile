@@ -23,7 +23,7 @@ const Button = ({
   const defaultClasses =
     "py-5 px-6 flex-row justify-center items-center bg-white text-dark-content-dark rounded-full gap-2 transition-colors duration-300";
 
-  const defaultDisabledClasses = "bg-dark-content-disabled ";
+  const defaultDisabledClasses = "!bg-dark-content-disabled ";
 
   const handlePress = () => {
     if (!isLoading && !disabled) {

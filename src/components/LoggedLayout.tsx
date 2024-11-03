@@ -11,6 +11,7 @@ export type LoggedLayoutProps = {
   navLeft?: React.ReactNode;
   navCenter?: React.ReactNode;
   navRight?: React.ReactNode;
+  wrapperClasses?: string;
 };
 
 const LoggedLayout = ({
@@ -18,12 +19,17 @@ const LoggedLayout = ({
   navLeft = null,
   navCenter = null,
   navRight = null,
+  wrapperClasses = "",
 }: LoggedLayoutProps) => {
   return (
-    <SafeAreaView className="flex-1 items-stretch bg-basic-black relative font-sans">
+    <SafeAreaView
+      className={`flex-1 items-stretch bg-basic-black relative font-sans`}
+    >
       <ImageBackground source={LineHome} resizeMode="cover" />
       <ImageBackground source={LineHome} resizeMode="cover" />
-      <View className="flex-row px-layout h-12 items-center">
+      <View
+        className={`flex-row px-layout h-12 items-center  ${wrapperClasses}`}
+      >
         <View className="w-12 pr-3">
           {navLeft ? navLeft : <DefaultLeftNav />}
         </View>
