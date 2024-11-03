@@ -4,6 +4,7 @@ import LogoLetter from "@/assets/zeneca-logo-letters.svg";
 import { usersMe } from "@/client";
 import { DBUser } from "@/storage/interfaces";
 import { useUserStore } from "@/storage/userStore";
+import { usersMeQueryKey } from "@/client/@tanstack/react-query.gen";
 import { colors } from "@/styles/colors";
 import { getUserEmbeddedWallet, usePrivy } from "@privy-io/expo";
 import { useNavigation } from "@react-navigation/native";
@@ -18,6 +19,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { useQuery } from "@tanstack/react-query";
 
 const Login = () => {
   const { t } = useTranslation();

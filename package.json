@@ -9,7 +9,7 @@
     "web": "expo start --web",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "generate-client": "npx @hey-api/openapi-ts -i src/server/openapi.json -o src/client -c @hey-api/client-fetch"
+    "generate-client": "npx openapi-ts"
   },
   "dependencies": {
     "@ethersproject/shims": "^5.7.0",
