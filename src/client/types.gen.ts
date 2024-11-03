@@ -22,14 +22,34 @@ export type AddressUS = {
 
 export type country = 'USA';
 
-export type AssetRead = {
+export type AssetDetail = {
     id: string;
     name: string;
-    symbol: string;
     description: string;
+    symbol: string;
     display_name: string;
     logo_url: string;
     external_id: string;
+    price: string;
+    change_percent: string;
+    change: string;
+    close: string;
+    high: string;
+    low: string;
+    open: string;
+    previous_close: string;
+    volume: string;
+};
+
+export type AssetPrice = {
+    id: string;
+    name: string;
+    description: string;
+    symbol: string;
+    display_name: string;
+    logo_url: string;
+    external_id: string;
+    price: string;
 };
 
 export type Balance = {
@@ -189,6 +209,18 @@ export type RecipientRequestUS = {
     external_account: ExternalAccountUS;
     customer_id: string;
 };
+
+export type StockTickData = {
+    close: string;
+    high: string;
+    low: string;
+    open: string;
+    timestamp: number;
+};
+
+export type StockTickDataList = Array<StockTickData>;
+
+export type Timespan = 'DAY' | 'WEEK' | 'MONTH' | 'YEAR';
 
 export type TokenSymbol = 'usdc.polygon' | 'usdc.base' | 'usdc.stellar';
 
@@ -382,6 +414,29 @@ export type UsersMyAssetsResponse = (MyAssets);
 
 export type UsersMyAssetsError = unknown;
 
-export type AssetsGetAssetsResponse = (Array<AssetRead>);
+export type AssetsGetAssetsResponse = (Array<AssetPrice>);
 
 export type AssetsGetAssetsError = unknown;
+
+export type AssetsGetAssetTicksData = {
+    path: {
+        asset_id: string;
+    };
+    query?: {
+        timespan?: (Timespan);
+    };
+};
+
+export type AssetsGetAssetTicksResponse = (StockTickDataList);
+
+export type AssetsGetAssetTicksError = (HTTPValidationError);
+
+export type AssetsGetAssetDetailData = {
+    path: {
+        asset_id: string;
+    };
+};
+
+export type AssetsGetAssetDetailResponse = (AssetDetail);
+
+export type AssetsGetAssetDetailError = (HTTPValidationError);

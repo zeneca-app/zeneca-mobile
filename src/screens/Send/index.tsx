@@ -1,4 +1,4 @@
-import Keypad from "@/components/Keypad";
+import Keypad from "@/components/KeypadOld";
 import { useBalance } from "@/context/BalanceContext";
 import useRecipientStore from "@/storage/recipientStore";
 import useTransferStore from "@/storage/transferStore";

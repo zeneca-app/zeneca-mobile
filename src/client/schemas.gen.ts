@@ -84,7 +84,7 @@ export const AddressUSSchema = {
     title: 'AddressUS'
 } as const;
 
-export const AssetReadSchema = {
+export const AssetDetailSchema = {
     properties: {
         id: {
             type: 'string',
@@ -95,13 +95,13 @@ export const AssetReadSchema = {
             type: 'string',
             title: 'Name'
         },
-        symbol: {
-            type: 'string',
-            title: 'Symbol'
-        },
         description: {
             type: 'string',
             title: 'Description'
+        },
+        symbol: {
+            type: 'string',
+            title: 'Symbol'
         },
         display_name: {
             type: 'string',
@@ -114,11 +114,88 @@ export const AssetReadSchema = {
         external_id: {
             type: 'string',
             title: 'External Id'
+        },
+        price: {
+            type: 'string',
+            title: 'Price'
+        },
+        change_percent: {
+            type: 'string',
+            title: 'Change Percent'
+        },
+        change: {
+            type: 'string',
+            title: 'Change'
+        },
+        close: {
+            type: 'string',
+            title: 'Close'
+        },
+        high: {
+            type: 'string',
+            title: 'High'
+        },
+        low: {
+            type: 'string',
+            title: 'Low'
+        },
+        open: {
+            type: 'string',
+            title: 'Open'
+        },
+        previous_close: {
+            type: 'string',
+            title: 'Previous Close'
+        },
+        volume: {
+            type: 'string',
+            title: 'Volume'
         }
     },
     type: 'object',
-    required: ['id', 'name', 'symbol', 'description', 'display_name', 'logo_url', 'external_id'],
-    title: 'AssetRead'
+    required: ['id', 'name', 'description', 'symbol', 'display_name', 'logo_url', 'external_id', 'price', 'change_percent', 'change', 'close', 'high', 'low', 'open', 'previous_close', 'volume'],
+    title: 'AssetDetail'
+} as const;
+
+export const AssetPriceSchema = {
+    properties: {
+        id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Id'
+        },
+        name: {
+            type: 'string',
+            title: 'Name'
+        },
+        description: {
+            type: 'string',
+            title: 'Description'
+        },
+        symbol: {
+            type: 'string',
+            title: 'Symbol'
+        },
+        display_name: {
+            type: 'string',
+            title: 'Display Name'
+        },
+        logo_url: {
+            type: 'string',
+            title: 'Logo Url'
+        },
+        external_id: {
+            type: 'string',
+            title: 'External Id'
+        },
+        price: {
+            type: 'string',
+            title: 'Price'
+        }
+    },
+    type: 'object',
+    required: ['id', 'name', 'description', 'symbol', 'display_name', 'logo_url', 'external_id', 'price'],
+    title: 'AssetPrice'
 } as const;
 
 export const BalanceSchema = {
@@ -822,6 +899,48 @@ export const RecipientRequestUSSchema = {
     type: 'object',
     required: ['name', 'country', 'owner', 'external_account', 'customer_id'],
     title: 'RecipientRequestUS'
+} as const;
+
+export const StockTickDataSchema = {
+    properties: {
+        close: {
+            type: 'string',
+            title: 'Close'
+        },
+        high: {
+            type: 'string',
+            title: 'High'
+        },
+        low: {
+            type: 'string',
+            title: 'Low'
+        },
+        open: {
+            type: 'string',
+            title: 'Open'
+        },
+        timestamp: {
+            type: 'integer',
+            title: 'Timestamp'
+        }
+    },
+    type: 'object',
+    required: ['close', 'high', 'low', 'open', 'timestamp'],
+    title: 'StockTickData'
+} as const;
+
+export const StockTickDataListSchema = {
+    items: {
+        '$ref': '#/components/schemas/StockTickData'
+    },
+    type: 'array',
+    title: 'StockTickDataList'
+} as const;
+
+export const TimespanSchema = {
+    type: 'string',
+    enum: ['DAY', 'WEEK', 'MONTH', 'YEAR'],
+    title: 'Timespan'
 } as const;
 
 export const TokenSymbolSchema = {

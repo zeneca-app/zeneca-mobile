@@ -51,8 +51,8 @@
     "withdrawal": "Retiro",
     "actions": {
       "deposit_crypto": "Deposito cripto",
-      "deposit_crypto_caption": "Desde tu billetera o exchange",
-      "deposit_from_bank": "Transferencia bancaria",
+      "deposit_crypto_caption": "Desde tu billetera o exchange.h",
+      "deposit_from_bank": "Transferencia ancaria",
       "deposit_from_bank_caption": "Desde tu banco local"
     },
     "logout": {
@@ -68,6 +68,13 @@
     "infoText": "Esta dirección solamente puede recibir USDC en Base Sepolia",
     "disclaimerText": "Asegúrate de que la red sea la misma que la de la billetera desde la que envías o podrías perder tus fondos.",
     "addressCopied": "Dirección copiada al portapapeles"
+  },
+  "depositWithBank": {
+    "title": "Transfer from Crypto"
+  },
+  "comingSoon": {
+    "title": "¡Próximamente!",
+    "subtitle": "Estamos trabajando en esta función. ¡Mantente atento!"
   },
   "recipients": {
     "title": "A quién le vas a enviar dinero",
@@ -152,5 +159,18 @@
   "homeActions": {
     "deposit": "Depositar",
     "explore": "Explorar"
+  },
+  "explore": {
+    "title": "Acciones <0>ETFs</0>"
+  },
+  "etfDetail": {
+    "buy": "Comprar",
+    "from": "from: ",
+    "to": "to: "
+  },
+  "etfPurchase": {
+    "continue": "Continuar",
+    "max": "MAX",
+    "available": "Disponible"
   }
 }

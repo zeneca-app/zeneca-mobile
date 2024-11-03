@@ -159,5 +159,18 @@
   "homeActions": {
     "deposit": "Deposit",
     "explore": "Explore"
+  },
+  "explore": {
+    "title": "ETFs <0>Stocks</0>"
+  },
+  "etfDetail": {
+    "buy": "Buy",
+    "from": "from: ",
+    "to": "to: "
+  },
+  "etfPurchase": {
+    "continue": "Continue",
+    "max": "MAX",
+    "available": "Available"
   }
 }

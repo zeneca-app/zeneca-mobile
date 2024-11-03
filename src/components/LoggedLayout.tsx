@@ -20,14 +20,16 @@ const LoggedLayout = ({
   navRight = null,
 }: LoggedLayoutProps) => {
   return (
-    <SafeAreaView className="flex-1 items-stretch bg-basic-black relative">
+    <SafeAreaView className="flex-1 items-stretch bg-basic-black relative font-sans">
       <ImageBackground source={LineHome} resizeMode="cover" />
       <ImageBackground source={LineHome} resizeMode="cover" />
       <View className="flex-row px-layout h-12 items-center">
         <View className="w-12 pr-3">
           {navLeft ? navLeft : <DefaultLeftNav />}
         </View>
-        <View className="flex-1">{navCenter}</View>
+        <View className="flex-1 flex justify-center items-center">
+          {navCenter}
+        </View>
         <View className="w-12">{navRight}</View>
       </View>
       <View className="flex-1">{children}</View>
