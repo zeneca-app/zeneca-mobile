@@ -150,6 +150,64 @@ export type MyAsset = {
 
 export type MyAssets = Array<MyAsset>;
 
+export type Order = {
+  id: string;
+  status: OrderStatus;
+  transaction_hash: string | null;
+  symbol: string;
+  name: string;
+  order_side: OrderSide;
+  order_type: OrderType;
+  asset_quantity: string;
+  payment_quantity: string;
+  network_fee: string;
+  created_at: string;
+};
+
+export type OrderQuote = {
+  id: string;
+  asset_id: string;
+  side: OrderSide;
+  order_type: OrderType;
+  quantity?: string | null;
+  amount?: string | null;
+  fee: string;
+  external_order_id: string;
+  smart_account_address: string;
+  signature: string;
+  timestamp: number;
+  order_data: OrderQuoteData;
+  chain_id: number;
+  deadline: number;
+};
+
+export type OrderQuoteData = {
+  request_timestamp: number;
+  recipient: string;
+  asset_token: string;
+  payment_token: string;
+  sell: boolean;
+  order_type: number;
+  asset_token_quantity: string;
+  payment_token_quantity: string;
+  price: string;
+  tif: number;
+};
+
+export type OrderQuoteRequest = {
+  asset_id: string;
+  side: OrderSide;
+  order_type: OrderType;
+  quantity?: number | string | null;
+  amount?: number | string | null;
+};
+
+export type OrderSide = "BUY" | "SELL";
+
+export type OrderStatus = "PENDING" | "FILLED" | "CANCELLED" | "ERROR";
+
+export type OrderType = "MARKET" | "LIMIT";
+
 export type PaymentRail = "ach" | "ach_push" | "wire" | "sepa";
 
 export type PersonType = "individual" | "business";
@@ -512,3 +570,15 @@ export type AssetsGetAssetDetailData = {
 export type AssetsGetAssetDetailResponse = AssetDetail;
 
 export type AssetsGetAssetDetailError = HTTPValidationError;
+
+export type OrdersGetOrdersResponse = Array<Order>;
+
+export type OrdersGetOrdersError = unknown;
+
+export type OrdersCreateQuoteOrderData = {
+  body: OrderQuoteRequest;
+};
+
+export type OrdersCreateQuoteOrderResponse = OrderQuote;
+
+export type OrdersCreateQuoteOrderError = HTTPValidationError;
