@@ -22,6 +22,11 @@ import type {
   LoginLoginOrCreateData,
   LoginLoginOrCreateError,
   LoginLoginOrCreateResponse,
+  OrdersCreateQuoteOrderData,
+  OrdersCreateQuoteOrderError,
+  OrdersCreateQuoteOrderResponse,
+  OrdersGetOrdersError,
+  OrdersGetOrdersResponse,
   QuotesCreateQuoteData,
   QuotesCreateQuoteError,
   QuotesCreateQuoteResponse,
@@ -385,5 +390,37 @@ export const assetsGetAssetDetail = <ThrowOnError extends boolean = false>(
   >({
     ...options,
     url: "/v0/assets/{asset_id}/",
+  });
+};
+
+/**
+ * Get Orders
+ */
+export const ordersGetOrders = <ThrowOnError extends boolean = false>(
+  options?: Options<unknown, ThrowOnError>,
+) => {
+  return (options?.client ?? client).get<
+    OrdersGetOrdersResponse,
+    OrdersGetOrdersError,
+    ThrowOnError
+  >({
+    ...options,
+    url: "/v0/orders/",
+  });
+};
+
+/**
+ * Create Quote Order
+ */
+export const ordersCreateQuoteOrder = <ThrowOnError extends boolean = false>(
+  options: Options<OrdersCreateQuoteOrderData, ThrowOnError>,
+) => {
+  return (options?.client ?? client).post<
+    OrdersCreateQuoteOrderResponse,
+    OrdersCreateQuoteOrderError,
+    ThrowOnError
+  >({
+    ...options,
+    url: "/v0/orders/quote",
   });
 };
