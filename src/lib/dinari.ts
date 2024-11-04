@@ -1,39 +1,13 @@
+import { OrderQuote } from "@/client/";
+import tokens from "@/constants/tokens";
 import orderProcessorAbi from "@/lib/abis/orderProcesssorAbi";
 import { Address, encodeFunctionData, Hex } from "viem";
 
-type FeeQuote = {
-  orderId: string;
-  requester: string;
-  fee: bigint;
-  timestamp: number;
-  deadline: number;
-};
-
-type FeeQuoteResponse = {
-  fee_quote: FeeQuote;
-  fee_quote_signature: string;
-};
-
-type OrderParams = {
-  requestTimestamp: number;
-  recipient: Address;
-  assetToken: Address;
-  paymentToken: Address;
-  assetTokenQuantity: bigint;
-  paymentTokenQuantity: bigint;
-  price: bigint;
-  tif: number;
-  orderType: number;
-  sell: boolean;
-};
-
-export const prepareOrder = async (
-  totalSpendAmount: bigint,
-  orderParams: OrderParams,
-  feeQuoteResponse: FeeQuoteResponse,
-  orderProcessorAddress: Address,
-  paymentTokenAddress: Address,
-) => {
+export const createOrder = async (amount: string, quote: OrderQuote) => {
+  const orderProcessorAddress = tokens.ORDER_PROCESSOR_ADDRESS[
+    quote.chain_id
+  ] as Address;
+  const paymentTokenAddress = tokens.USDC[quote.chain_id] as Address;
   const approvalData = encodeFunctionData({
     abi: [
       {
@@ -48,34 +22,34 @@ export const prepareOrder = async (
       },
     ],
     functionName: "approve",
-    args: [orderProcessorAddress, totalSpendAmount],
+    args: [orderProcessorAddress, BigInt(amount)],
   }) as Hex;
 
-  // 2. Encode order creation call
+  // 2. Encode order approval call
   const createOrderData = encodeFunctionData({
     abi: orderProcessorAbi,
     functionName: "createOrder",
     args: [
       [
-        orderParams.requestTimestamp, // When the order was created
-        orderParams.recipient, // Who receives the assets
-        orderParams.assetToken, // Token you want to buy/sell
-        orderParams.paymentToken, // Token you're paying with
-        orderParams.sell, // false = buy, true = sell
-        orderParams.orderType, // 0 = market order
-        orderParams.assetTokenQuantity, // Amount of asset tokens
-        orderParams.paymentTokenQuantity, // Amount of payment tokens
-        orderParams.price, // Limit price (0 for market orders)
-        orderParams.tif, // Time in force (1 = good til cancelled)
+        quote.order_data.request_timestamp, // When the order was created
+        quote.order_data.recipient, // Who receives the assets
+        quote.order_data.asset_token, // Token you want to buy/sell
+        quote.order_data.payment_token, // Token you're paying with
+        quote.order_data.sell, // false = buy, true = sell
+        quote.order_data.order_type, // 0 = market order
+        quote.order_data.asset_token_quantity, // Amount of asset tokens
+        quote.order_data.payment_token_quantity, // Amount of payment tokens
+        quote.order_data.price, // Limit price (0 for market orders)
+        quote.order_data.tif, // Time in force (1 = good til cancelled)
       ],
       [
-        feeQuoteResponse.fee_quote.orderId, // Unique ID for this fee quote
-        feeQuoteResponse.fee_quote.requester, // Who requested the quote
-        feeQuoteResponse.fee_quote.fee, // Fee amount
-        feeQuoteResponse.fee_quote.timestamp, // When quote was issued
-        feeQuoteResponse.fee_quote.deadline, // When quote expires
+        quote.id, // Unique ID for this fee quote
+        quote.smart_account_address, // Who requested the quote
+        quote.fee, // Fee amount
+        quote.timestamp, // When quote was issued
+        quote.deadline, // When quote expires
       ],
-      feeQuoteResponse.fee_quote_signature,
+      quote.signature,
     ],
   }) as Hex;
 
