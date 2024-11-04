@@ -35,7 +35,8 @@ const HomeActions = () => {
   };
 
   const handleExplore = () => {
-    console.log("explore clicked");
+    depositBottomMenuRef.current?.dismiss();
+    navigation.navigate("ExploreETFs");
   };
 
   const handleSheetChanges = useCallback((index: number) => {

@@ -8,6 +8,7 @@ export type buttonProps = {
   loadingSlot?: React.ReactNode;
   className?: string;
   children: React.ReactNode;
+  disabledClasses?: string;
 };
 
 const Button = ({
@@ -17,9 +18,12 @@ const Button = ({
   className,
   disabled = false,
   children,
+  disabledClasses = "",
 }: buttonProps) => {
   const defaultClasses =
-    "py-4 px-6 flex-row justify-center items-center bg-white text-dark-content-dark rounded-full gap-2";
+    "py-5 px-6 flex-row justify-center items-center bg-white text-dark-content-dark rounded-full gap-2 transition-colors duration-300";
+
+  const defaultDisabledClasses = "!bg-dark-content-disabled ";
 
   const handlePress = () => {
     if (!isLoading && !disabled) {
@@ -30,7 +34,7 @@ const Button = ({
   return (
     <TouchableOpacity
       onPress={handlePress}
-      className={`${defaultClasses} ${className}`}
+      className={`${defaultClasses} ${className} ${disabled ? defaultDisabledClasses + " " + disabledClasses : ""}`}
     >
       {isLoading && loadingSlot ? { loadingSlot } : children}
     </TouchableOpacity>

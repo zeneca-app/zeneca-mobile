@@ -69,6 +69,13 @@
     "disclaimerText": "Asegúrate de que la red sea la misma que la de la billetera desde la que envías o podrías perder tus fondos.",
     "addressCopied": "Dirección copiada al portapapeles"
   },
+  "depositWithBank": {
+    "title": "Transfer from Crypto"
+  },
+  "comingSoon": {
+    "title": "¡Próximamente!",
+    "subtitle": "Estamos trabajando en esta función. ¡Mantente atento!"
+  },
   "recipients": {
     "title": "A quién le vas a enviar dinero",
     "searchResultLabel": "Encontrado",
@@ -152,5 +159,29 @@
   "homeActions": {
     "deposit": "Depositar",
     "explore": "Explorar"
+  },
+  "explore": {
+    "title": "Acciones <0>ETFs</0>"
+  },
+  "etfDetail": {
+    "buy": "Comprar",
+    "from": "from: ",
+    "to": "to: "
+  },
+  "etfPurchase": {
+    "continue": "Continuar",
+    "max": "MAX",
+    "available": "Disponible",
+    "price": "Precio",
+    "fee": "Comisión",
+    "total": "Total",
+    "disclaimer": "Estas iniciando una orden de compra de <0>{{etf_amount}}</0> acciones de <1>{{display_name}} {{symbol}}</1> por <2>${{amount}}</2> a <3>${{etf_price}}</3> por acción.",
+    "confirm": "Confirmar",
+    "success": {
+      "title": "¡Listo!",
+      "subtitle": "Tu inversión se realizó con éxito",
+      "done_button": "Entendido",
+      "view_order_button": "Ver orden"
+    }
   }
 }

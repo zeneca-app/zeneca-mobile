@@ -554,7 +554,7 @@
               "application/json": {
                 "schema": {
                   "items": {
-                    "$ref": "#/components/schemas/AssetRead"
+                    "$ref": "#/components/schemas/AssetPrice"
                   },
                   "type": "array",
                   "title": "Response Assets-Get Assets"
@@ -562,12 +562,107 @@
               }
             }
           }
-        },
-        "security": [
+        }
+      }
+    },
+    "/v0/assets/{asset_id}/ticks": {
+      "get": {
+        "tags": [
+          "assets"
+        ],
+        "summary": "Get Asset Ticks",
+        "operationId": "assets-get_asset_ticks",
+        "parameters": [
           {
-            "HTTPBearer": []
+            "name": "asset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Asset Id"
+            }
+          },
+          {
+            "name": "timespan",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Timespan"
+                }
+              ],
+              "default": "MONTH",
+              "title": "Timespan"
+            }
           }
-        ]
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StockTickDataList"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v0/assets/{asset_id}/": {
+      "get": {
+        "tags": [
+          "assets"
+        ],
+        "summary": "Get Asset Detail",
+        "operationId": "assets-get_asset_detail",
+        "parameters": [
+          {
+            "name": "asset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Asset Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssetDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -674,7 +769,7 @@
         ],
         "title": "AddressUS"
       },
-      "AssetRead": {
+      "AssetDetail": {
         "properties": {
           "id": {
             "type": "string",
@@ -685,13 +780,13 @@
             "type": "string",
             "title": "Name"
           },
-          "symbol": {
-            "type": "string",
-            "title": "Symbol"
-          },
           "description": {
             "type": "string",
             "title": "Description"
+          },
+          "symbol": {
+            "type": "string",
+            "title": "Symbol"
           },
           "display_name": {
             "type": "string",
@@ -704,19 +799,113 @@
           "external_id": {
             "type": "string",
             "title": "External Id"
+          },
+          "price": {
+            "type": "string",
+            "title": "Price"
+          },
+          "change_percent": {
+            "type": "string",
+            "title": "Change Percent"
+          },
+          "change": {
+            "type": "string",
+            "title": "Change"
+          },
+          "close": {
+            "type": "string",
+            "title": "Close"
+          },
+          "high": {
+            "type": "string",
+            "title": "High"
+          },
+          "low": {
+            "type": "string",
+            "title": "Low"
+          },
+          "open": {
+            "type": "string",
+            "title": "Open"
+          },
+          "previous_close": {
+            "type": "string",
+            "title": "Previous Close"
+          },
+          "volume": {
+            "type": "string",
+            "title": "Volume"
           }
         },
         "type": "object",
         "required": [
           "id",
           "name",
-          "symbol",
           "description",
+          "symbol",
           "display_name",
           "logo_url",
-          "external_id"
+          "external_id",
+          "price",
+          "change_percent",
+          "change",
+          "close",
+          "high",
+          "low",
+          "open",
+          "previous_close",
+          "volume"
         ],
-        "title": "AssetRead"
+        "title": "AssetDetail"
+      },
+      "AssetPrice": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "symbol": {
+            "type": "string",
+            "title": "Symbol"
+          },
+          "display_name": {
+            "type": "string",
+            "title": "Display Name"
+          },
+          "logo_url": {
+            "type": "string",
+            "title": "Logo Url"
+          },
+          "external_id": {
+            "type": "string",
+            "title": "External Id"
+          },
+          "price": {
+            "type": "string",
+            "title": "Price"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "description",
+          "symbol",
+          "display_name",
+          "logo_url",
+          "external_id",
+          "price"
+        ],
+        "title": "AssetPrice"
       },
       "Balance": {
         "properties": {
@@ -1524,6 +1713,56 @@
           "customer_id"
         ],
         "title": "RecipientRequestUS"
+      },
+      "StockTickData": {
+        "properties": {
+          "close": {
+            "type": "string",
+            "title": "Close"
+          },
+          "high": {
+            "type": "string",
+            "title": "High"
+          },
+          "low": {
+            "type": "string",
+            "title": "Low"
+          },
+          "open": {
+            "type": "string",
+            "title": "Open"
+          },
+          "timestamp": {
+            "type": "integer",
+            "title": "Timestamp"
+          }
+        },
+        "type": "object",
+        "required": [
+          "close",
+          "high",
+          "low",
+          "open",
+          "timestamp"
+        ],
+        "title": "StockTickData"
+      },
+      "StockTickDataList": {
+        "items": {
+          "$ref": "#/components/schemas/StockTickData"
+        },
+        "type": "array",
+        "title": "StockTickDataList"
+      },
+      "Timespan": {
+        "type": "string",
+        "enum": [
+          "DAY",
+          "WEEK",
+          "MONTH",
+          "YEAR"
+        ],
+        "title": "Timespan"
       },
       "TokenSymbol": {
         "type": "string",

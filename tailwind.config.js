@@ -117,10 +117,38 @@ module.exports = {
           },
         ],
         "caption-xl": [
-          "1rem",
+          16,
           {
             lineHeight: "1.46",
             fontWeight: "500",
+          },
+        ],
+        "caption-l": [
+          14,
+          {
+            lineHeight: "1.46",
+            fontWeight: "500",
+          },
+        ],
+        "caption-m": [
+          12,
+          {
+            lineHeight: "1.46",
+            fontWeight: "500",
+          },
+        ],
+        "caption-s": [
+          10,
+          {
+            lineHeight: "1.46",
+            fontWeight: "500",
+          },
+        ],
+        "chart-s": [
+          10,
+          {
+            lineHeight: "1.46",
+            fontWeight: "300",
           },
         ],
         "button-s": [
@@ -145,11 +173,43 @@ module.exports = {
             fontWeight: "400",
           },
         ],
+        "heading-m": [
+          40,
+          {
+            lineHeight: "1.1",
+            letterSpacing: "-0.01em",
+            fontWeight: "500",
+          },
+        ],
         "heading-s": [
           32,
           {
             lineHeight: "1.3125",
             letterSpacing: "-0.01em",
+            fontWeight: "500",
+          },
+        ],
+        "body-xl": [
+          24,
+          {
+            lineHeight: 1.5,
+            letterSpacing: "0",
+            fontWeight: "500",
+          },
+        ],
+        "body-l": [
+          20,
+          {
+            lineHeight: 1.4,
+            letterSpacing: "0",
+            fontWeight: "500",
+          },
+        ],
+        "body-m": [
+          18,
+          {
+            lineHeight: 1.4,
+            letterSpacing: "0",
             fontWeight: "500",
           },
         ],

@@ -28,3 +28,12 @@ export const STOCKS: Record<StockSymbol, { name: string; logo: any }> = {
     logo: AMZNlogo,
   },
 };
+
+export const CHART_TIMEFRAMES: Record<string, string> = {
+  "1D": "1D",
+  "1M": "1M",
+  "3M": "3M",
+  "1Y": "1Y",
+};
+
+export const TIMEFRAME_DEFAULT = "1M";
