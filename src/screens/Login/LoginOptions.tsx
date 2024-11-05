@@ -27,7 +27,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { baseSepolia } from "viem/chains";
+
 
 const LoginOptions = () => {
   const { t } = useTranslation();
@@ -115,8 +115,6 @@ const LoginOptions = () => {
       setUser({ ...userData, token: accessToken! } as DBUser);
 
       await SecureStore.setItemAsync(`token-${userAddress}`, accessToken!);
-
-      setChain(baseSepolia);
       setIsLoading(false);
     },
     [user, wallet],
