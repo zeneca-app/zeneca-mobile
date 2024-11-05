@@ -4,8 +4,11 @@ import VerifyCtaCard from "@/components/Cards/VerifyCtaCard";
 import LoggedLayout from "@/components/LoggedLayout";
 import { View } from "react-native";
 import HomeActions from "./components/HomeActions";
+import { useAuthInterceptor } from "@/hooks/apiInterceptor";
 
 const HomeScreen = () => {
+  useAuthInterceptor();
+
   return (
     <LoggedLayout>
       <View className="pt-12 pb-6">
