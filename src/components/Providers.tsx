@@ -6,13 +6,14 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PostHogProvider } from "posthog-react-native";
 import React from "react";
 import { createConfig, http, WagmiProvider } from "wagmi";
-import { base, baseSepolia } from "wagmi/chains";
+import { base, baseSepolia, sepolia } from "wagmi/chains";
 
 const queryClient = new QueryClient();
 
 const wagmiConfig = createConfig({
-  chains: [baseSepolia, base],
+  chains: [sepolia, baseSepolia, base],
   transports: {
+    [sepolia.id]: http(),
     [baseSepolia.id]: http(),
     [base.id]: http(),
   },
@@ -35,7 +36,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
         storage={MyPermissiveSecureStorageAdapter}
         appId={APP_ID}
         clientId={CLIENT_ID}
-        supportedChains={[baseSepolia, base]}
+        supportedChains={[sepolia, baseSepolia, base]}
       >
         <QueryClientProvider client={queryClient}>
           <WagmiProvider config={wagmiConfig}>

@@ -695,6 +695,10 @@ export const OrderQuoteSchema = {
       type: "string",
       title: "Fee",
     },
+    total: {
+      type: "string",
+      title: "Total",
+    },
     external_order_id: {
       type: "string",
       title: "External Order Id",
@@ -707,10 +711,6 @@ export const OrderQuoteSchema = {
       type: "string",
       title: "Signature",
     },
-    timestamp: {
-      type: "integer",
-      title: "Timestamp",
-    },
     order_data: {
       $ref: "#/components/schemas/OrderQuoteData",
     },
@@ -722,6 +722,10 @@ export const OrderQuoteSchema = {
       type: "integer",
       title: "Deadline",
     },
+    created_at: {
+      type: "integer",
+      title: "Created At",
+    },
   },
   type: "object",
   required: [
@@ -730,26 +734,31 @@ export const OrderQuoteSchema = {
     "side",
     "order_type",
     "fee",
+    "total",
     "external_order_id",
     "smart_account_address",
     "signature",
-    "timestamp",
     "order_data",
     "chain_id",
     "deadline",
+    "created_at",
   ],
   title: "OrderQuote",
 } as const;
 
 export const OrderQuoteDataSchema = {
   properties: {
-    request_timestamp: {
-      type: "integer",
-      title: "Request Timestamp",
-    },
     recipient: {
       type: "string",
       title: "Recipient",
+    },
+    asset_token_quantity: {
+      type: "integer",
+      title: "Asset Token Quantity",
+    },
+    payment_token_quantity: {
+      type: "integer",
+      title: "Payment Token Quantity",
     },
     asset_token: {
       type: "string",
@@ -767,35 +776,41 @@ export const OrderQuoteDataSchema = {
       type: "integer",
       title: "Order Type",
     },
-    asset_token_quantity: {
+    limit_price: {
       type: "string",
-      title: "Asset Token Quantity",
-    },
-    payment_token_quantity: {
-      type: "string",
-      title: "Payment Token Quantity",
-    },
-    price: {
-      type: "string",
-      title: "Price",
+      title: "Limit Price",
     },
     tif: {
       type: "integer",
       title: "Tif",
     },
+    fee: {
+      type: "string",
+      title: "Fee",
+    },
+    request_timestamp: {
+      type: "integer",
+      title: "Request Timestamp",
+    },
+    allowance_amount: {
+      type: "integer",
+      title: "Allowance Amount",
+    },
   },
   type: "object",
   required: [
-    "request_timestamp",
     "recipient",
+    "asset_token_quantity",
+    "payment_token_quantity",
     "asset_token",
     "payment_token",
     "sell",
     "order_type",
-    "asset_token_quantity",
-    "payment_token_quantity",
-    "price",
+    "limit_price",
     "tif",
+    "fee",
+    "request_timestamp",
+    "allowance_amount",
   ],
   title: "OrderQuoteData",
 } as const;
