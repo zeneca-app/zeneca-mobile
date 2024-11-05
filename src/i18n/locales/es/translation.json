@@ -154,11 +154,11 @@
     "myAssets": "Mis inversiones",
     "empty_transactions": "Aqui verás tus inversiones activas.",
     "empty_transactions_no_funds": "¡Haz tu primer depósito y comienza a invertir!",
-    "empty_transactions_no_assets": "Presiona Explorar para invertir"
+    "empty_transactions_no_assets": "Presiona Comprar para invertir"
   },
   "homeActions": {
     "deposit": "Depositar",
-    "explore": "Explorar"
+    "explore": "Comprar"
   },
   "explore": {
     "title": "Acciones <0>ETFs</0>"

@@ -54,11 +54,11 @@ const HomeActions = () => {
         >
           <View className="flex-row flex-1 items-center justify-between px-layout w-full gap-2">
             <Button onPress={handleDeposit} className="flex-1">
-              <AntDesign name="plus" size={16} color="currentColor" />
+              <AntDesign name="arrowdown" size={16} color="currentColor" />
               <Text className="text-button-m">{t("homeActions.deposit")}</Text>
             </Button>
             <Button onPress={handleExplore} className="flex-1">
-              <AntDesign name="search1" size={16} color="currentColor" />
+              <AntDesign name="plus" size={16} color="currentColor" />
               <Text className="text-button-m">{t("homeActions.explore")}</Text>
             </Button>
           </View>
