@@ -151,17 +151,17 @@
     "verify_my_account": "Verify my account"
   },
   "ordersListCard": {
-    "myAssets": "My stocks",
+    "myAssets": "My investments",
     "empty_transactions": "Here you will see a list of all your purchased stocks.",
     "empty_transactions_no_funds": "Make your first deposit and start investing!",
-    "empty_transactions_no_assets": "Press explore to select a Stock to purchase"
+    "empty_transactions_no_assets": "Press buy to select a Stock to purchase"
   },
   "homeActions": {
     "deposit": "Deposit",
-    "explore": "Explore"
+    "explore": "Buy"
   },
   "explore": {
-    "title": "ETFs <0>Stocks</0>"
+    "title": "Stocks <0>ETFs</0>"
   },
   "etfDetail": {
     "buy": "Buy",
