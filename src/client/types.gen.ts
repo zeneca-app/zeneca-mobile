@@ -172,26 +172,29 @@ export type OrderQuote = {
   quantity?: string | null;
   amount?: string | null;
   fee: string;
+  total: string;
   external_order_id: string;
   smart_account_address: string;
   signature: string;
-  timestamp: number;
   order_data: OrderQuoteData;
   chain_id: number;
   deadline: number;
+  created_at: number;
 };
 
 export type OrderQuoteData = {
-  request_timestamp: number;
   recipient: string;
+  asset_token_quantity: number;
+  payment_token_quantity: number;
   asset_token: string;
   payment_token: string;
   sell: boolean;
   order_type: number;
-  asset_token_quantity: string;
-  payment_token_quantity: string;
-  price: string;
+  limit_price: string;
   tif: number;
+  fee: string;
+  request_timestamp: number;
+  allowance_amount: number;
 };
 
 export type OrderQuoteRequest = {
