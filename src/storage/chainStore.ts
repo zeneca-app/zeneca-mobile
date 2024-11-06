@@ -1,5 +1,5 @@
 import { Chain } from "viem";
-import { baseSepolia } from "viem/chains";
+import { baseSepolia, sepolia } from "viem/chains";
 import { create } from "zustand";
 
 type ChainStore = {
@@ -8,6 +8,6 @@ type ChainStore = {
 };
 
 export const useChainStore = create<ChainStore>((set, get) => ({
-  chain: baseSepolia,
+  chain: sepolia,
   setChain: (chain) => set({ chain }),
 }));

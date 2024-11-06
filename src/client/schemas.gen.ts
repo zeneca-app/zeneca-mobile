@@ -580,6 +580,308 @@ export const MyAssetsSchema = {
   title: "MyAssets",
 } as const;
 
+export const OrderSchema = {
+  properties: {
+    id: {
+      type: "string",
+      title: "Id",
+    },
+    status: {
+      $ref: "#/components/schemas/OrderStatus",
+    },
+    transaction_hash: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Transaction Hash",
+    },
+    symbol: {
+      type: "string",
+      title: "Symbol",
+    },
+    name: {
+      type: "string",
+      title: "Name",
+    },
+    order_side: {
+      $ref: "#/components/schemas/OrderSide",
+    },
+    order_type: {
+      $ref: "#/components/schemas/OrderType",
+    },
+    asset_quantity: {
+      type: "string",
+      title: "Asset Quantity",
+    },
+    payment_quantity: {
+      type: "string",
+      title: "Payment Quantity",
+    },
+    network_fee: {
+      type: "string",
+      title: "Network Fee",
+    },
+    created_at: {
+      type: "string",
+      format: "date-time",
+      title: "Created At",
+    },
+  },
+  type: "object",
+  required: [
+    "id",
+    "status",
+    "transaction_hash",
+    "symbol",
+    "name",
+    "order_side",
+    "order_type",
+    "asset_quantity",
+    "payment_quantity",
+    "network_fee",
+    "created_at",
+  ],
+  title: "Order",
+} as const;
+
+export const OrderQuoteSchema = {
+  properties: {
+    id: {
+      type: "string",
+      format: "uuid",
+      title: "Id",
+    },
+    asset_id: {
+      type: "string",
+      format: "uuid",
+      title: "Asset Id",
+    },
+    side: {
+      $ref: "#/components/schemas/OrderSide",
+    },
+    order_type: {
+      $ref: "#/components/schemas/OrderType",
+    },
+    quantity: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Quantity",
+      default: "0",
+    },
+    amount: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Amount",
+      default: "0",
+    },
+    fee: {
+      type: "string",
+      title: "Fee",
+    },
+    total: {
+      type: "string",
+      title: "Total",
+    },
+    external_order_id: {
+      type: "string",
+      title: "External Order Id",
+    },
+    smart_account_address: {
+      type: "string",
+      title: "Smart Account Address",
+    },
+    signature: {
+      type: "string",
+      title: "Signature",
+    },
+    order_data: {
+      $ref: "#/components/schemas/OrderQuoteData",
+    },
+    chain_id: {
+      type: "integer",
+      title: "Chain Id",
+    },
+    deadline: {
+      type: "integer",
+      title: "Deadline",
+    },
+    created_at: {
+      type: "integer",
+      title: "Created At",
+    },
+  },
+  type: "object",
+  required: [
+    "id",
+    "asset_id",
+    "side",
+    "order_type",
+    "fee",
+    "total",
+    "external_order_id",
+    "smart_account_address",
+    "signature",
+    "order_data",
+    "chain_id",
+    "deadline",
+    "created_at",
+  ],
+  title: "OrderQuote",
+} as const;
+
+export const OrderQuoteDataSchema = {
+  properties: {
+    recipient: {
+      type: "string",
+      title: "Recipient",
+    },
+    asset_token_quantity: {
+      type: "integer",
+      title: "Asset Token Quantity",
+    },
+    payment_token_quantity: {
+      type: "integer",
+      title: "Payment Token Quantity",
+    },
+    asset_token: {
+      type: "string",
+      title: "Asset Token",
+    },
+    payment_token: {
+      type: "string",
+      title: "Payment Token",
+    },
+    sell: {
+      type: "boolean",
+      title: "Sell",
+    },
+    order_type: {
+      type: "integer",
+      title: "Order Type",
+    },
+    limit_price: {
+      type: "string",
+      title: "Limit Price",
+    },
+    tif: {
+      type: "integer",
+      title: "Tif",
+    },
+    fee: {
+      type: "string",
+      title: "Fee",
+    },
+    request_timestamp: {
+      type: "integer",
+      title: "Request Timestamp",
+    },
+    allowance_amount: {
+      type: "integer",
+      title: "Allowance Amount",
+    },
+  },
+  type: "object",
+  required: [
+    "recipient",
+    "asset_token_quantity",
+    "payment_token_quantity",
+    "asset_token",
+    "payment_token",
+    "sell",
+    "order_type",
+    "limit_price",
+    "tif",
+    "fee",
+    "request_timestamp",
+    "allowance_amount",
+  ],
+  title: "OrderQuoteData",
+} as const;
+
+export const OrderQuoteRequestSchema = {
+  properties: {
+    asset_id: {
+      type: "string",
+      format: "uuid",
+      title: "Asset Id",
+    },
+    side: {
+      $ref: "#/components/schemas/OrderSide",
+    },
+    order_type: {
+      $ref: "#/components/schemas/OrderType",
+    },
+    quantity: {
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Quantity",
+      default: "0",
+    },
+    amount: {
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Amount",
+      default: "0",
+    },
+  },
+  type: "object",
+  required: ["asset_id", "side", "order_type"],
+  title: "OrderQuoteRequest",
+} as const;
+
+export const OrderSideSchema = {
+  type: "string",
+  enum: ["BUY", "SELL"],
+  title: "OrderSide",
+} as const;
+
+export const OrderStatusSchema = {
+  type: "string",
+  enum: ["PENDING", "FILLED", "CANCELLED", "ERROR"],
+  title: "OrderStatus",
+} as const;
+
+export const OrderTypeSchema = {
+  type: "string",
+  enum: ["MARKET", "LIMIT"],
+  title: "OrderType",
+} as const;
+
 export const PaymentRailSchema = {
   type: "string",
   enum: ["ach", "ach_push", "wire", "sepa"],

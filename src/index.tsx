@@ -1,4 +1,6 @@
 import "@/i18n";
+import { useEffect } from "react";
+import { useAuthInterceptor } from "@/hooks/apiInterceptor";
 import { Providers } from "@/components/Providers";
 import { RootStackParamList } from "@/navigation/types";
 import DepositCrypto from "@/screens/Deposit/DepositCrypto";

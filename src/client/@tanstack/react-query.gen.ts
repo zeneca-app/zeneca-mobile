@@ -10,6 +10,8 @@ import {
   client,
   countriesGetCountries,
   loginLoginOrCreate,
+  ordersCreateQuoteOrder,
+  ordersGetOrders,
   quotesCreateQuote,
   quotesGetQuote,
   recipientsCreateRecipient,
@@ -32,6 +34,9 @@ import type {
   LoginLoginOrCreateData,
   LoginLoginOrCreateError,
   LoginLoginOrCreateResponse,
+  OrdersCreateQuoteOrderData,
+  OrdersCreateQuoteOrderError,
+  OrdersCreateQuoteOrderResponse,
   QuotesCreateQuoteData,
   QuotesCreateQuoteError,
   QuotesCreateQuoteResponse,
@@ -579,4 +584,59 @@ export const assetsGetAssetDetailOptions = (
     },
     queryKey: assetsGetAssetDetailQueryKey(options),
   });
+};
+
+export const ordersGetOrdersQueryKey = (options?: Options) => [
+  createQueryKey("ordersGetOrders", options),
+];
+
+export const ordersGetOrdersOptions = (options?: Options) => {
+  return queryOptions({
+    queryFn: async ({ queryKey }) => {
+      const { data } = await ordersGetOrders({
+        ...options,
+        ...queryKey[0],
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: ordersGetOrdersQueryKey(options),
+  });
+};
+
+export const ordersCreateQuoteOrderQueryKey = (
+  options: Options<OrdersCreateQuoteOrderData>,
+) => [createQueryKey("ordersCreateQuoteOrder", options)];
+
+export const ordersCreateQuoteOrderOptions = (
+  options: Options<OrdersCreateQuoteOrderData>,
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey }) => {
+      const { data } = await ordersCreateQuoteOrder({
+        ...options,
+        ...queryKey[0],
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: ordersCreateQuoteOrderQueryKey(options),
+  });
+};
+
+export const ordersCreateQuoteOrderMutation = () => {
+  const mutationOptions: UseMutationOptions<
+    OrdersCreateQuoteOrderResponse,
+    OrdersCreateQuoteOrderError,
+    Options<OrdersCreateQuoteOrderData>
+  > = {
+    mutationFn: async (options) => {
+      const { data } = await ordersCreateQuoteOrder({
+        ...options,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
 };

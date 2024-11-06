@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Button from "@/components/Button";
 import LoggedLayout from "@/components/LoggedLayout";
 import Text from "@/components/Text";
@@ -8,31 +9,81 @@ import BigNumber from "bignumber.js";
 import React, { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
+import { ordersCreateQuoteOrderMutation } from "@/client/@tanstack/react-query.gen";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useEmbeddedWallet } from "@privy-io/expo";
+import { Address } from "viem";
+import { getPimlicoSmartAccountClient } from "@/lib/pimlico";
+import { useChainStore } from "@/storage/chainStore";
+import { createOrder } from "@/lib/dinari";
+import { OrderQuote } from "@/client";
+
+
 
 const ETFPurchaseConfirmation = ({ route }) => {
   const { etf, amount = 0 } = route.params;
 
+  const { t } = useTranslation();
+  const wallet = useEmbeddedWallet();
+  const { chain } = useChainStore();
   const navigation = useNavigation();
 
   const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo || null;
+  const [quote, setQuote] = useState<OrderQuote | null>(null);
 
-  const { t } = useTranslation();
+  const { mutate: createQuote, isPending } = useMutation({
+    ...ordersCreateQuoteOrderMutation(),
+    onError: (error) => {
+      console.error("Error creating quote:", error);
+    },
+    onSuccess: (data) => {
 
-  const fee = 0.3;
+      setQuote(data);
+    },
+  });
+
+  const executeTransaction = async () => {
+    try {
+      if (!quote) {
+        throw new Error("Quote not found");
+      }
+
+      const signerAddress = wallet?.account?.address as Address;
+      const smartAccountClient = await getPimlicoSmartAccountClient(
+        signerAddress,
+        chain,
+        wallet,
+      );
+      const transactions = await createOrder(quote, smartAccountClient);
+      const tx = await smartAccountClient.sendTransactions({ transactions: transactions });
+      console.log("tx", tx);
+    } catch (error) {
+      console.error("Error during transaction:", error);
+    } finally {
+      /* navigation.navigate("ETFPurchaseSuccess", {
+        etf,
+        amount,
+      }); */
+    }
+  };
+
+
+  useEffect(() => {
+    createQuote({
+      body: {
+        asset_id: etf.id,
+        side: "BUY",
+        order_type: "MARKET",
+        amount: amount.toString(),
+      }
+    });
+  }, [createQuote]);
 
   const etfAmount = new BigNumber(amount)
     .dividedBy(etf.price)
     .precision(4)
     .toString();
 
-  const total = new BigNumber(amount).plus(fee);
-
-  const handleConfirm = () => {
-    navigation.navigate("ETFPurchaseSuccess", {
-      etf,
-      amount,
-    });
-  };
 
   return (
     <LoggedLayout>
@@ -67,7 +118,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
             {t("etfPurchase.fee")}
           </Text>
           <Text className="text-caption-xl text-dark-content-white">
-            {currencyFormatter(fee)}
+            {currencyFormatter(quote?.fee ?? 0)}
           </Text>
         </View>
         <View className="flex-row items-center justify-between gap-s">
@@ -75,7 +126,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
             {t("etfPurchase.total")}
           </Text>
           <Text className="text-caption-xl text-dark-content-white">
-            {currencyFormatter(total)}
+            {currencyFormatter(quote?.total ?? 0)}
           </Text>
         </View>
         <View className="h-px rounded-full bg-dark-background-100" />
@@ -92,7 +143,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
             }}
             components={[
               <Text className="text-caption-l text-white font-bold">
-                segment1
+
               </Text>,
               <Text className="text-caption-l text-white font-bold">
                 segment2
@@ -108,7 +159,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
         </Text>
       </View>
       <View className="px-layout">
-        <Button className="" onPress={handleConfirm}>
+        <Button className="" onPress={executeTransaction} disabled={isPending || !quote} >
           <Text className="text-button-m">{t("etfPurchase.confirm")}</Text>
         </Button>
       </View>

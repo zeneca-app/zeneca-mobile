@@ -32,9 +32,11 @@ export function getChainPublicClient(chain: Chain) {
     transport: http(),
   });
 }
+const RPC_BASE_SEPOLIA_URL = "https://rpc.ankr.com/base_sepolia";
+const RPC_SEPOLIA_URL = "https://eth-sepolia.g.alchemy.com/v2/b9I66i0I3RI4gVU3oaO8N1Vs2KNgzjry";
 
 export const publicClient = createPublicClient({
-  transport: http("https://rpc.ankr.com/base_sepolia"),
+  transport: http(RPC_SEPOLIA_URL),
 });
 
 export const paymasterClient = (chain: Chain) =>
