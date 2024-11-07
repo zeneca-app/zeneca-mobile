@@ -1,6 +1,5 @@
 import { usersMyBalanceOptions } from "@/client/@tanstack/react-query.gen";
 import client from "@/client/client";
-import { useUserStore } from "@/storage/userStore";
 import { currencyFormatter } from "@/utils/currencyUtils";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
@@ -25,9 +24,6 @@ const Balance = ({
     }),
   });
 
-  console.log("BALANCE", data);
-
-  //TODO Remove hardcoded values
   const equity = data?.equity ? currencyFormatter(data?.equity) : "0.00";
   const available = data?.available
     ? currencyFormatter(data?.available)

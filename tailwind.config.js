@@ -106,6 +106,9 @@ module.exports = {
         "bottom-actions": 110,
         separator: 24,
       },
+      width: {
+        char: "1em",
+      },
       fontSize: {
         base: 16,
         headline: [

@@ -1,5 +1,6 @@
 import ChartArrowUp from "@/assets/chart-arrow-up.svg";
-import { usersMyAssets } from "@/client";
+import { usersMyAssetsOptions } from "@/client/@tanstack/react-query.gen";
+import client from "@/client/client";
 import Card from "@/components/Card";
 import OrderListItem from "@/components/ListItems/OrderListItem"; // Import OrderListItem
 import Separator from "@/components/ListItems/Separator";
@@ -10,23 +11,18 @@ import { FlatList, Text, View } from "react-native";
 
 const OrdersListCard = () => {
   const { t } = useTranslation();
-  const { user } = useUserStore();
 
   const { isPending, error, data, refetch } = useQuery({
-    queryKey: ["assets"],
-    queryFn: () =>
-      usersMyAssets({
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      }).then((res) => res),
+    ...usersMyAssetsOptions({
+      client: client,
+    }),
   });
 
   const canTrade = true;
 
   console.log("data", data);
 
-  const hasOrders = data?.data?.length && data?.data?.length > 0;
+  const hasOrders = data?.length && data?.length > 0;
 
   // Component to render if no transactions
   const Empty = ({ canTrade = false }: { canTrade?: boolean }) => (
@@ -65,7 +61,7 @@ const OrdersListCard = () => {
       </View>
       {hasOrders ? (
         <FlatList
-          data={data?.data}
+          data={data}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={separator}
