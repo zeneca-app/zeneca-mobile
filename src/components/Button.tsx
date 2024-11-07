@@ -1,5 +1,6 @@
 import React from "react";
 import { TouchableOpacity } from "react-native";
+import { ActivityIndicator } from "react-native";
 
 export type buttonProps = {
   onPress: () => void;
@@ -14,7 +15,7 @@ export type buttonProps = {
 const Button = ({
   onPress,
   isLoading,
-  loadingSlot,
+  loadingSlot = null,
   className,
   disabled = false,
   children,
@@ -36,7 +37,7 @@ const Button = ({
       onPress={handlePress}
       className={`${defaultClasses} ${className} ${disabled ? defaultDisabledClasses + " " + disabledClasses : ""}`}
     >
-      {isLoading && loadingSlot ? { loadingSlot } : children}
+      {isLoading && !loadingSlot ? <ActivityIndicator size="small" color="#ffffff" /> : children}
     </TouchableOpacity>
   );
 };

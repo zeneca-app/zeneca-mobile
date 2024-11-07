@@ -17,8 +17,6 @@ import { getPimlicoSmartAccountClient, publicClient } from "@/lib/pimlico";
 import { useChainStore } from "@/storage/chainStore";
 import { createOrder } from "@/lib/dinari";
 import { OrderQuote } from "@/client";
-import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi"
-//import { waitForTransactionReceipt } from '@wagmi/core'
 
 
 
@@ -112,6 +110,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
       }
     })()
   }, [tx])
+  const isLoading = isCreateQuotePending || transactionInitiated
   const isDisabled = isCreateQuotePending || !quote || transactionInitiated
   return (
     <LoggedLayout>
@@ -187,7 +186,9 @@ const ETFPurchaseConfirmation = ({ route }) => {
         </Text>
       </View>
       <View className="px-layout">
-        <Button className="" onPress={executeTransaction} disabled={isDisabled} >
+        <Button className="" onPress={executeTransaction} disabled={isDisabled}
+          isLoading={isLoading}
+        >
           <Text className="text-button-m">{t("etfPurchase.confirm")}</Text>
         </Button>
       </View>
