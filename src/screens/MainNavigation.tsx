@@ -29,7 +29,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const MainNavigation = () => {
   return (
-    <Stack.Navigator initialRouteName={"Login"}>
+    <Stack.Navigator initialRouteName={"Home"}>
       <Stack.Group>
         <Stack.Screen
           options={{ headerShown: false }}

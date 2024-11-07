@@ -4,6 +4,7 @@ import { MyPermissiveSecureStorageAdapter } from "@/lib/storage-adapter";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { PrivyProvider, usePrivy } from "@privy-io/expo";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import * as SplashScreen from "expo-splash-screen";
 import { PostHogProvider } from "posthog-react-native";
 import React, { ReactNode } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -60,10 +61,15 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
 };
 
 function AwaitPrivyProvider({ children }: { children: ReactNode }) {
-  const { isReady } = usePrivy();
-
+  const { isReady, ...rest } = usePrivy();
   if (!isReady) {
     return null;
   }
+  SplashScreen.hideAsync();
+  rest.getAccessToken().then((token) => {
+    console.log("GET ACCESS TOKEN", token);
+  });
+  console.log("Privy is ready", rest.user);
+
   return <>{children}</>;
 }

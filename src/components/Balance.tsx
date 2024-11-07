@@ -1,4 +1,5 @@
-import { usersMyBalance } from "@/client";
+import { usersMyBalanceOptions } from "@/client/@tanstack/react-query.gen";
+import client from "@/client/client";
 import { useUserStore } from "@/storage/userStore";
 import { currencyFormatter } from "@/utils/currencyUtils";
 import { useQuery } from "@tanstack/react-query";
@@ -11,21 +12,6 @@ export type balanceProps = {
   captionClasses?: string;
 };
 
-/* const mockData = {
-  data: { available: "0", equity: "2.22684", pending: "0" },
-  response: {
-    _bodyBlob: {},
-    _bodyInit: {},
-    bodyUsed: true,
-    headers: { map: [Object] },
-    ok: true,
-    status: 200,
-    statusText: "",
-    type: "default",
-    url: "https://sandbox.zeneca.app/v0/users/me/balance",
-  },
-}; */
-
 const Balance = ({
   displayCurrencyName = false,
   containerClasses = undefined,
@@ -33,32 +19,20 @@ const Balance = ({
 }: balanceProps) => {
   const { t } = useTranslation();
 
-  const { user } = useUserStore();
-
   const { isPending, error, data } = useQuery({
-    queryKey: ["balance"],
-    queryFn: () =>
-      usersMyBalance({
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      }).then((res) => res),
+    ...usersMyBalanceOptions({
+      client: client,
+    }),
   });
 
-  if (!user || isPending) {
-    return null;
-  }
+  console.log("BALANCE", data);
 
   //TODO Remove hardcoded values
-  const equity = data?.data?.equity
-    ? currencyFormatter(data?.data?.equity)
+  const equity = data?.equity ? currencyFormatter(data?.equity) : "0.00";
+  const available = data?.available
+    ? currencyFormatter(data?.available)
     : "0.00";
-  const available = data?.data?.available
-    ? currencyFormatter(data?.data?.available)
-    : "0.00";
-  const pending = data?.data?.pending
-    ? currencyFormatter(data?.data?.pending)
-    : "0.00";
+  const pending = data?.pending ? currencyFormatter(data?.pending) : "0.00";
 
   return (
     <View
