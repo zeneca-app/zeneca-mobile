@@ -1,5 +1,5 @@
-import React, { cloneElement, ReactElement } from "react";
-import { TouchableOpacity, View } from "react-native";
+import React, { cloneElement } from "react";
+import { ActivityIndicator, TouchableOpacity } from "react-native";
 
 export type buttonProps = {
   onPress: () => void;
@@ -16,7 +16,7 @@ export type buttonProps = {
 const Button = ({
   onPress,
   isLoading,
-  loadingSlot,
+  loadingSlot = null,
   className,
   disabled = false,
   variant = "solid",
@@ -69,9 +69,9 @@ const Button = ({
       onPress={handlePress}
       className={`${defaultClasses[variant]} ${className}`}
     >
-      {isLoading && loadingSlot
-        ? { loadingSlot }
-        : renderChildrenWithDefaultClasses(children)}
+      {isLoading &&
+        (loadingSlot || <ActivityIndicator size="small" color="#ffffff" />)}
+      {renderChildrenWithDefaultClasses(children)}
     </TouchableOpacity>
   );
 };

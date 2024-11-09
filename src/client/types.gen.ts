@@ -56,6 +56,7 @@ export type Balance = {
   available?: string;
   pending?: string;
   equity?: string;
+  readonly precision: string;
 };
 
 export type Bank = {
@@ -146,6 +147,7 @@ export type MyAsset = {
   amount: string;
   equity: string;
   change_percent: string;
+  readonly precision: string;
 };
 
 export type MyAssets = Array<MyAsset>;
@@ -201,8 +203,8 @@ export type OrderQuoteRequest = {
   asset_id: string;
   side: OrderSide;
   order_type: OrderType;
-  quantity?: number | string | null;
-  amount?: number | string | null;
+  quantity?: number | null;
+  amount?: number | null;
 };
 
 export type OrderSide = "BUY" | "SELL";

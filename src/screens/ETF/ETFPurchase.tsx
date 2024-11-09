@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Button from "@/components/Button";
 import Keypad from "@/components/Keypad";
 import LoggedLayout from "@/components/LoggedLayout";
@@ -9,6 +10,9 @@ import BigNumber from "bignumber.js";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
+import { useQuery } from "@tanstack/react-query";
+import { usersMyBalanceOptions } from "@/client/@tanstack/react-query.gen";
+
 
 const ETFPurchase = ({ route }) => {
   const { etf } = route.params;
@@ -21,14 +25,37 @@ const ETFPurchase = ({ route }) => {
 
   const { t } = useTranslation();
 
-  const available = 50;
+  const { isPending, error, data: balance } = useQuery({
+    ...usersMyBalanceOptions(),
+  });
+
+
+  const availableDisplayed = new BigNumber(balance?.available || 0)
+    .dividedBy(1_000_000)
+    .decimalPlaces(2, BigNumber.ROUND_DOWN)
+    .toString();
 
   const amountInEtf = new BigNumber(amount)
     .dividedBy(etf.price)
     .precision(4)
     .toString();
 
-  const canContinue = new BigNumber(amount).isGreaterThan(0);
+
+  const hasNumber = Number(amount) > 0;
+  const isLessThanAvailable = Number(amount) <= Number(availableDisplayed);
+  const canContinue = !isPending && hasNumber && isLessThanAvailable;
+
+  console.log("amount", amount)
+  console.log("availableDisplayed", availableDisplayed)
+
+  const goToConfirmation = () => {
+    const isMaxAmount = Number(amount) === Number(availableDisplayed);
+    const amountToBuy = isMaxAmount ?
+      new BigNumber(balance?.available || 0).toString()
+      : new BigNumber(amount).multipliedBy(1_000_000).toString();
+  
+    navigation.navigate("ETFPurchaseConfirmation", { etf, amount: amountToBuy });
+  }
 
   return (
     <LoggedLayout
@@ -43,7 +70,7 @@ const ETFPurchase = ({ route }) => {
     >
       <View className="px-layout flex justify-center items-stretch gap-s flex-1">
         <Text className="text-caption-l text-center text-gray-50">
-          {t("etfPurchase.available")} {currencyFormatter(available)}
+          {t("etfPurchase.available")} {currencyFormatter(availableDisplayed)}
         </Text>
         <View className="flex-row items-center justify-center gap-s">
           <Text className="text-body-l text-center text-gray-10 leading-tight">
@@ -57,14 +84,12 @@ const ETFPurchase = ({ route }) => {
           {amountInEtf} {etf.symbol}
         </Text>
       </View>
-      <Keypad value={amount} onChange={setAmount} maximun={available} />
+      <Keypad value={amount} onChange={setAmount} maximun={Number(availableDisplayed)} />
       <View className="px-layout">
         <Button
           className=""
           disabled={!canContinue}
-          onPress={() =>
-            navigation.navigate("ETFPurchaseConfirmation", { etf, amount })
-          }
+          onPress={goToConfirmation}
         >
           <Text
             className={`text-button-m ${!canContinue ? "text-dark-content-30" : "text-dark-content-dark"}`}

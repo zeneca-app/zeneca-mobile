@@ -241,8 +241,14 @@ export const BalanceSchema = {
       title: "Equity",
       default: "0",
     },
+    precision: {
+      type: "string",
+      title: "Precision",
+      readOnly: true,
+    },
   },
   type: "object",
+  required: ["precision"],
   title: "Balance",
 } as const;
 
@@ -566,9 +572,14 @@ export const MyAssetSchema = {
       type: "string",
       title: "Change Percent",
     },
+    precision: {
+      type: "string",
+      title: "Precision",
+      readOnly: true,
+    },
   },
   type: "object",
-  required: ["symbol", "amount", "equity", "change_percent"],
+  required: ["symbol", "amount", "equity", "change_percent", "precision"],
   title: "MyAsset",
 } as const;
 
@@ -831,32 +842,26 @@ export const OrderQuoteRequestSchema = {
     quantity: {
       anyOf: [
         {
-          type: "number",
-        },
-        {
-          type: "string",
+          type: "integer",
         },
         {
           type: "null",
         },
       ],
       title: "Quantity",
-      default: "0",
+      default: 0,
     },
     amount: {
       anyOf: [
         {
-          type: "number",
-        },
-        {
-          type: "string",
+          type: "integer",
         },
         {
           type: "null",
         },
       ],
       title: "Amount",
-      default: "0",
+      default: 0,
     },
   },
   type: "object",
