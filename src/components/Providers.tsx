@@ -1,6 +1,8 @@
 import "./polyfills";
 import { BalanceProvider } from "@/context/BalanceContext";
+import useUserServices from "@/hooks/useUserServices";
 import { MyPermissiveSecureStorageAdapter } from "@/lib/storage-adapter";
+import { useUserStore } from "@/storage/userStore";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { PrivyProvider, usePrivy } from "@privy-io/expo";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -61,15 +63,22 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
 };
 
 function AwaitPrivyProvider({ children }: { children: ReactNode }) {
-  const { isReady, ...rest } = usePrivy();
+  const { isReady, privyUser, ...rest } = usePrivy();
+  const { fetchUserData } = useUserServices();
+  const { user, setUser } = useUserStore((state) => state);
+
+  rest.getAccessToken().then((token) => {
+    //console.log("GET ACCESS TOKEN", token);
+  });
+  if (!user && privyUser) {
+    fetchUserData().then((userData) => {
+      setUser(userData);
+    });
+  }
   if (!isReady) {
     return null;
   }
-  SplashScreen.hideAsync();
-  rest.getAccessToken().then((token) => {
-    console.log("GET ACCESS TOKEN", token);
-  });
-  console.log("Privy is ready", rest.user);
+  SplashScreen.hideAsync(); //console.log("Privy is ready", isReady, rest.user);
 
   return <>{children}</>;
 }

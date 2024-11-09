@@ -1,15 +1,18 @@
 import { usersMe } from "@/client";
 import { loginLoginOrCreate } from "@/client/";
+import Button from "@/components/Button";
+import FullScreenLoader from "@/components/FullScreenLoader";
 import StatusModal, { ModalState } from "@/components/status-modal";
+import Text from "@/components/Text";
+import TopNavBar from "@/components/TopNavBar";
+import COLORS from "@/constants/colors";
+import useUserServices from "@/hooks/useUserServices";
 import { getPimlicoSmartAccountClient } from "@/lib/pimlico";
 import { LoginStatus } from "@/lib/types/login";
 import { useChainStore } from "@/storage/chainStore";
 import { DBUser } from "@/storage/interfaces";
 import { useLoginStore } from "@/storage/loginStore";
-import { useUserStore } from "@/storage/userStore";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import {
-  getUserEmbeddedWallet,
   isNotCreated,
   useEmbeddedWallet,
   useLoginWithEmail,
@@ -24,143 +27,31 @@ import {
   Platform,
   SafeAreaView,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   View,
 } from "react-native";
 import { OtpInput } from "react-native-otp-entry";
 
-const LoginOtpScreen = () => {
+const LoginOtpScreen = ({ route }) => {
+  const email = route?.params?.email || "";
+
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const { setUser } = useUserStore((state) => state);
-  const { email } = useLoginStore((state) => ({
-    email: state.email,
-  }));
 
   const [code, setCode] = useState<`${number | ""}`>("");
 
   const [modalState, setModalState] = useState<ModalState>("dismissed");
   const [errorMessage, setErrorMessage] = useState("");
-  const [loadingMessage, setLoadingMessage] = useState("");
-  const { loginStatus, setLoginStatus } = useLoginStore((state) => ({
-    loginStatus: state.loginStatus,
-    setLoginStatus: state.setLoginStatus,
-  }));
 
-  const { logout, user, isReady, getAccessToken } = usePrivy();
+  const { getAccessToken } = usePrivy();
   type PrivyUser = typeof user;
 
-  const wallet = useEmbeddedWallet();
+  const { loginWithCode, loginWithEmailState } = useUserServices();
 
-  const chain = useChainStore((state) => state.chain);
-
-  const { state, loginWithCode } = useLoginWithEmail({
-    onError: (error) => {
-      console.error("ERRRORRRR", error);
-      setModalState("error");
-      setLoginStatus(LoginStatus.CODE_ERROR);
-      setErrorMessage(error.message);
-    },
-    onLoginSuccess(user) {
-      console.log("Logged in", user);
-    },
-  });
-
-  const handleConnection = useCallback(
-    async (user: PrivyUser): Promise<void> => {
-      setModalState("loading");
-      let address = getUserEmbeddedWallet(user)?.address;
-      const accessToken = await getAccessToken();
-
-      if (isNotCreated(wallet)) {
-        console.log("Creating wallet...");
-        await wallet.create!();
-      }
-
-      if (!address) {
-        return;
-      }
-
-      const smartAccount = await getPimlicoSmartAccountClient(
-        address as `0x${string}`,
-        chain,
-        wallet,
-      );
-
-      if (!smartAccount || !smartAccount.account) {
-        throw new Error("Cannot create wallet");
-      }
-
-      const account = user?.linked_accounts.find(
-        (account) => account.type === "email",
-      );
-      if (!account) {
-        return;
-      }
-
-      await loginLoginOrCreate({
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: {
-          email: account.address,
-          has_third_party_auth: false,
-          wallet: {
-            address: address as `0x${string}`,
-            smart_account_address: smartAccount?.account
-              ?.address as `0x${string}`,
-          },
-        },
-      });
-
-      const userData = await fetchUserData(accessToken!);
-      setUser({ ...userData, token: accessToken! } as DBUser);
-
-      await SecureStore.setItemAsync(`token-${address}`, accessToken!);
-      setModalState("dismissed");
-      goToNextScreen();
-    },
-    [user, wallet],
-  );
-
-  const fetchUserData = async (token: string) => {
-    const userData = await usersMe({
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((data) => data.data);
-    return userData;
-  };
+  /* › */
 
   const goToNextScreen = () => {
     navigation.navigate("Home");
   };
-
-  useEffect(() => {
-    if (state.status === "done" && user) {
-      try {
-        setModalState("loading");
-        handleConnection(user)
-          .then(() => {
-            setModalState("dismissed");
-            console.log("success");
-            goToNextScreen();
-          })
-          .catch((e) => {
-            console.error("Error Handling Connection", e);
-            setLoginStatus(LoginStatus.CODE_ERROR);
-            navigation.navigate("Login");
-          });
-      } catch (e) {
-        setModalState("error");
-        console.log("Error Connecting Stuffs", e);
-        navigation.navigate("Login");
-      }
-    } else if (state.status === "initial") {
-      setLoginStatus(LoginStatus.INITIAL);
-    }
-  }, [state, user]);
 
   const isCodeFilled = code.length === 6;
 
@@ -170,18 +61,10 @@ const LoginOtpScreen = () => {
 
   const handleConfirmCode = async () => {
     try {
-      console.log("Logging in with code", code);
-      setLoadingMessage(t("loginWithEmail.verifyingCode"));
-      await loginWithCode({
-        code: code,
-        email,
-      });
-      setLoginStatus(LoginStatus.CODE_SUCCESS);
+      await loginWithCode({ code, email });
+      navigation.navigate("Home");
     } catch (error) {
       console.error("Error confirming code", error);
-      setLoadingMessage("");
-      setLoginStatus(LoginStatus.CODE_ERROR);
-      setModalState("error");
     }
   };
 
@@ -190,73 +73,68 @@ const LoginOtpScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.mainContainer}
-    >
-      <SafeAreaView style={styles.safeAreaContainer}>
-        <View style={styles.topContent}>
-          <TouchableOpacity onPress={dismissScreen} style={styles.backButton}>
-            <Ionicons name="chevron-back" size={24} color="white" />
-          </TouchableOpacity>
-          <Text style={styles.title}>{t("emailOtpValidation.title")}</Text>
-          <Text style={styles.subtitle}>
-            {t("emailOtpValidation.subtitle")} {email}
-          </Text>
-          <View style={styles.codeInputContainer}>
-            <OtpInput
-              numberOfDigits={6}
-              focusColor="#5A10EF"
-              focusStickBlinkingDuration={500}
-              onTextChange={(text) => setCode(text as `${number | ""}`)}
-              onFilled={handleOtpFilled}
-              theme={{
-                containerStyle: styles.otpContainer,
-                inputsContainerStyle: styles.otpInputsContainer,
-                pinCodeContainerStyle: styles.otpPinCodeContainer,
-                pinCodeTextStyle: styles.otpPinCodeText,
-                focusStickStyle: styles.otpFocusStick,
-                focusedPinCodeContainerStyle: styles.otpActivePinCodeContainer,
-              }}
-            />
+    <>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        className="flex flex-1 bg-basic-black"
+      >
+        <SafeAreaView className="flex flex-1">
+          <View className="flex flex-1 ">
+            <TopNavBar />
+            <View className="flex flex-1 justify-start items-stretch gap px-layout">
+              <Text className="text-heading-s text-gray-10">
+                {t("emailOtpValidation.title")}
+              </Text>
+              <Text className="text-body-s text-gray-50">
+                {t("emailOtpValidation.subtitle")} {email}
+              </Text>
+              <View className="pb-8">
+                <OtpInput
+                  numberOfDigits={6}
+                  autoFocus
+                  focusColor={COLORS.electric[50]}
+                  focusStickBlinkingDuration={500}
+                  onTextChange={(text) => setCode(text as `${number | ""}`)}
+                  onFilled={handleOtpFilled}
+                  theme={{
+                    containerStyle: styles.otpContainer,
+                    inputsContainerStyle: styles.otpInputsContainer,
+                    pinCodeContainerStyle: styles.otpPinCodeContainer,
+                    pinCodeTextStyle: styles.otpPinCodeText,
+                    focusStickStyle: styles.otpFocusStick,
+                    focusedPinCodeContainerStyle:
+                      styles.otpActivePinCodeContainer,
+                  }}
+                />
+              </View>
+            </View>
           </View>
-        </View>
-        <View style={styles.bottomContent}>
-          <TouchableOpacity
-            style={[
-              styles.continueButton,
-              !isCodeFilled && styles.continueButtonDisabled,
-            ]}
-            disabled={!isCodeFilled}
-            onPress={handleConfirmCode}
-          >
-            <Text
-              style={[
-                styles.continueButtonText,
-                !isCodeFilled && styles.continueButtonTextDisabled,
-              ]}
-            >
-              {t("emailOtpValidation.continueButton")}
-            </Text>
-          </TouchableOpacity>
-        </View>
+          <View className="px-layout flex gap-buttons">
+            <Button disabled={!isCodeFilled} onPress={handleConfirmCode}>
+              <Text className="text-buttom-m">
+                {t("emailOtpValidation.continueButton")}
+              </Text>
+            </Button>
+          </View>
 
-        <StatusModal
-          modalState={modalState}
-          text={
-            modalState === "loading"
-              ? loadingMessage
-              : t("loginWithEmail.errorCodeText")
-          }
-          onClose={() => {
-            setModalState("dismissed");
-            setCode("");
-            navigation.navigate("LoginWithEmail");
-          }}
-          actionButtonText={t("loginWithEmail.errorCodeTryAgain")}
-        />
-      </SafeAreaView>
-    </KeyboardAvoidingView>
+          <StatusModal
+            modalState={modalState}
+            text={
+              modalState === "loading"
+                ? loadingMessage
+                : t("loginWithEmail.errorCodeText")
+            }
+            onClose={() => {
+              setModalState("dismissed");
+              setCode("");
+              navigation.navigate("LoginWithEmail");
+            }}
+            actionButtonText={t("loginWithEmail.errorCodeTryAgain")}
+          />
+        </SafeAreaView>
+      </KeyboardAvoidingView>
+      <FullScreenLoader visible={false} />
+    </>
   );
 };
 

@@ -1,8 +1,8 @@
-import LoadingScreen from "@/components/Loading";
-import { LoginStatus } from "@/lib/types/login";
-import { useLoginStore } from "@/storage/loginStore";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { useLoginWithEmail } from "@privy-io/expo";
+import Button from "@/components/Button";
+import FullScreenLoader from "@/components/FullScreenLoader";
+import Text from "@/components/Text";
+import TopNavBar from "@/components/TopNavBar";
+import useUserServices from "@/hooks/useUserServices";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -10,70 +10,42 @@ import {
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
-  StyleSheet,
-  Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from "react-native";
 
 const LoginWithEmail = () => {
-  const TEST_EMAIL = "tester@zeneca.app";
   const { t } = useTranslation();
   const navigation = useNavigation();
 
-  const { email, setEmail } = useLoginStore((state) => ({
-    email: state.email,
-    setEmail: state.setEmail,
-  }));
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState("");
-  const { loginStatus, setLoginStatus } = useLoginStore((state) => ({
-    loginStatus: state.loginStatus,
-    setLoginStatus: state.setLoginStatus,
-  }));
+  const [email, setEmail] = useState<string | undefined>("");
 
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
-  const [hasError, setHasError] = useState(false);
 
-  const { state, sendCode } = useLoginWithEmail({
-    onError: (error) => {
-      console.error("ERRRORRRR", error);
-      setIsLoading(false);
-      setHasError(true);
-      setLoginStatus(LoginStatus.CODE_ERROR);
-    },
-    onLoginSuccess(user, isNewUser) {
-      console.log("Logged in", user);
-    },
-  });
+  const { sendCode, isLoading, error } = useUserServices();
 
-  const successLogin = () => {
-    navigation.navigate("Home");
+  const [submitted, setSubmitted] = useState<boolean>(false);
+
+  const isSubmitDisabled = !email || (submitted && !isEmailValid);
+  const displayError = submitted && !isEmailValid;
+
+  const handleEmailChange = (email: string) => {
+    setIsEmailValid(validateEmail(email));
+    setEmail(email);
   };
 
-  const dismissScreen = () => {
-    navigation.goBack();
-  };
-
-  const onSubmit = async () => {
-    if (!validateEmail(email!)) {
+  const handleSubmit = async () => {
+    setSubmitted(true);
+    if (!email || !validateEmail(email!)) {
       setIsEmailValid(false);
       return;
     }
-    if (email === TEST_EMAIL) {
-      successLogin();
-      return;
+    try {
+      await sendCode({ email: email! });
+      navigation.navigate("EmailOtpValidation", { email: email });
+    } catch (error) {
+      console.error("ERRRORRRR", error);
     }
-
-    setIsLoading(true);
-    setLoadingMessage(t("loginWithEmail.sendingCode"));
-    await sendCode({ email: email! });
-    setLoadingMessage("");
-    setIsLoading(false);
-    setLoginStatus(LoginStatus.EMAIL_SEND);
-    navigation.navigate("EmailOtpValidation");
   };
 
   const validateEmail = (email: string) => {
@@ -82,130 +54,62 @@ const LoginWithEmail = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.mainContainer}
-    >
-      <SafeAreaView style={styles.safeAreaContainer}>
-        <View style={styles.topContent}>
-          <TouchableOpacity onPress={dismissScreen} style={styles.backButton}>
-            <Ionicons name="chevron-back" size={24} color="white" />
-          </TouchableOpacity>
-          <Text style={styles.title}>{t("loginWithEmail.title")}</Text>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>{t("loginWithEmail.emailLabel")}</Text>
-            <TextInput
-              style={styles.input}
-              value={email}
-              onChangeText={setEmail}
-              autoComplete="off"
-              autoCorrect={false}
-              clearButtonMode="while-editing"
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-
-            <View
-              style={[styles.inputLine, !isEmailValid && styles.inputLineError]}
-            />
-            {!isEmailValid && (
-              <Text style={styles.errorText}>
-                {t("loginWithEmail.errorText")}
+    <>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        className="flex flex-1 bg-basic-black"
+      >
+        <SafeAreaView className="flex flex-1">
+          <View className="flex flex-1 ">
+            <TopNavBar />
+            <View className="flex flex-1 justify-start items-stretch gap px-layout">
+              <Text className="text-heading-s text-gray-10">
+                {t("loginWithEmail.title")}
               </Text>
-            )}
+              <View className="mt-12">
+                <Text className="text-gray-50 text-body-s">
+                  {t("loginWithEmail.emailLabel")}
+                </Text>
+                <TextInput
+                  className="text-white text-body-m py-4"
+                  autoFocus
+                  value={email}
+                  onChangeText={handleEmailChange}
+                  autoComplete="off"
+                  autoCorrect={false}
+                  clearButtonMode="while-editing"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                />
+
+                <View
+                  className={`transition-colors duration-500 h-px rounded-full ${displayError ? "bg-semantic-danger" : "bg-gray-70"}`}
+                />
+                <View className="h-8 w-full">
+                  {displayError && (
+                    <Text className="text-semantic-danger text-body-s">
+                      {!email && t("loginWithEmail.errorText")}
+                      {email && !isEmailValid && t("loginWithEmail.errorText")}
+                    </Text>
+                  )}
+                </View>
+              </View>
+            </View>
           </View>
-        </View>
-        <View style={styles.bottomContent}>
-          <TouchableOpacity
-            disabled={email?.length === 0}
-            style={[
-              styles.continueButton,
-              email?.length === 0 && styles.continueButtonDisabled,
-            ]}
-            onPress={onSubmit}
-          >
-            <Text style={styles.continueButtonText}>
-              {t("loginWithEmail.continueButton")}
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <LoadingScreen isVisible={isLoading} text={loadingMessage} />
-      </SafeAreaView>
-    </KeyboardAvoidingView>
+          <View className="px-layout">
+            <Button disabled={isSubmitDisabled} onPress={handleSubmit}>
+              <Text className="text-inherit text-button-mbjggj">
+                {t("loginWithEmail.continueButton")}
+              </Text>
+            </Button>
+          </View>
+        </SafeAreaView>
+      </KeyboardAvoidingView>
+      <FullScreenLoader visible={isLoading} />
+    </>
   );
 };
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    backgroundColor: "#0D0B0D",
-  },
-  safeAreaContainer: {
-    flex: 1,
-  },
-  topContent: {
-    padding: 20,
-  },
-  backButton: {
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 32,
-    color: "#fff",
-    marginBottom: 20,
-    fontFamily: "Manrope_500Medium",
-  },
-  inputContainer: {
-    marginTop: 20,
-  },
-  inputLineError: {
-    borderColor: "red",
-  },
-  label: {
-    color: "#95929F",
-    fontSize: 14,
-    marginBottom: 4,
-    fontFamily: "Manrope_300Light",
-  },
-  input: {
-    color: "#fff",
-    fontSize: 16,
-    paddingVertical: 8,
-  },
-  errorText: {
-    color: "red",
-    fontSize: 12,
-    marginTop: 4,
-    fontFamily: "Manrope_300Light",
-  },
-  inputLine: {
-    height: 1,
-    backgroundColor: "#333",
-    marginTop: 8,
-  },
-  bottomContent: {
-    padding: 20,
-    marginTop: "auto",
-  },
-  continueButton: {
-    borderRadius: 35,
-    backgroundColor: "white",
-    padding: 16,
-    alignItems: "center",
-  },
-  continueButtonDisabled: {
-    backgroundColor: "rgba(215, 191, 250, 0.17)",
-  },
-  continueButtonText: {
-    color: "black",
-    fontSize: 18,
-    fontFamily: "Manrope_500Medium",
-  },
-  continueButtonTextDisabled: {
-    color: "rgba(233, 220, 251, 0.45)",
-    fontSize: 18,
-    fontFamily: "Manrope_500Medium",
-  },
-});
+LoginWithEmail.displayName = "LoginWithEmail";
 
 export default LoginWithEmail;

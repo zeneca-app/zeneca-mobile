@@ -5,14 +5,11 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import React from "react";
 import { ImageBackground, SafeAreaView, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import TopNavBar, { TopNavBarProps } from "./TopNavBar";
 
 export type LoggedLayoutProps = {
   children: React.ReactNode;
-  navLeft?: React.ReactNode;
-  navCenter?: React.ReactNode;
-  navRight?: React.ReactNode;
-  wrapperClasses?: string;
-};
+} & TopNavBarProps;
 
 const LoggedLayout = ({
   children,
@@ -27,17 +24,12 @@ const LoggedLayout = ({
     >
       <ImageBackground source={LineHome} resizeMode="cover" />
       <ImageBackground source={LineHome} resizeMode="cover" />
-      <View
-        className={`flex-row px-layout h-12 items-center  ${wrapperClasses}`}
-      >
-        <View className="w-12 pr-3">
-          {navLeft ? navLeft : <DefaultLeftNav />}
-        </View>
-        <View className="flex-1 flex justify-center items-center">
-          {navCenter}
-        </View>
-        <View className="w-12">{navRight}</View>
-      </View>
+      <TopNavBar
+        wrapperClasses={wrapperClasses}
+        navLeft={navLeft ? navLeft : <DefaultLeftNav />}
+        navCenter={navCenter}
+        navRight={navRight}
+      />
       <View className="flex-1">{children}</View>
     </SafeAreaView>
   );
