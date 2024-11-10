@@ -30,10 +30,10 @@ export const STOCKS: Record<StockSymbol, { name: string; logo: any }> = {
 };
 
 export const CHART_TIMEFRAMES: Record<string, string> = {
-  "1D": "1D",
-  "1M": "1M",
-  "3M": "3M",
-  "1Y": "1Y",
+  "1D": "DAY",
+  "1W": "WEEK",
+  "1M": "MONTH",
+  "1Y": "YEAR",
 };
 
 export const TIMEFRAME_DEFAULT = "1M";

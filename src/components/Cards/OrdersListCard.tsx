@@ -4,6 +4,7 @@ import client from "@/client/client";
 import Card from "@/components/Card";
 import OrderListItem from "@/components/ListItems/OrderListItem"; // Import OrderListItem
 import Separator from "@/components/ListItems/Separator";
+import Config from "@/config";
 import { useUserStore } from "@/storage/userStore";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
@@ -16,11 +17,10 @@ const OrdersListCard = () => {
     ...usersMyAssetsOptions({
       client: client,
     }),
+    refetchInterval: Config.REFETCH_INTERVAL,
   });
 
   const canTrade = true;
-
-  console.log("data", data);
 
   const hasOrders = data?.length && data?.length > 0;
 

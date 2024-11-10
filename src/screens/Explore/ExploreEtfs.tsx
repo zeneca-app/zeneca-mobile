@@ -1,5 +1,6 @@
 import CopyIcon from "@/assets/copy.svg";
-import { assetsGetAssets } from "@/client";
+import { assetsGetAssetsOptions } from "@/client/@tanstack/react-query.gen";
+import client from "@/client/client";
 import StockListItem from "@/components/ListItems/StockListItem";
 import LoggedLayout from "@/components/LoggedLayout";
 import { useQuery } from "@tanstack/react-query";
@@ -82,20 +83,16 @@ const ExploreETFs = () => {
   cssInterop(CopyIcon, { className: "style" });
 
   const { isPending, error, data, refetch } = useQuery({
-    queryKey: ["etfs"],
-    queryFn: () =>
-      assetsGetAssets({
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      }).then((res) => res),
+    ...assetsGetAssetsOptions({
+      client: client,
+    }),
   });
 
   const renderItem = ({ item }) => {
     return <StockListItem etf={item} />;
   };
 
-  const etfs = mockData || data?.data || [];
+  const etfs = data || [];
 
   const separator = () => <Separator />;
 

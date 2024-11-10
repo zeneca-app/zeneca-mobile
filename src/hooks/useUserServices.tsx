@@ -59,9 +59,18 @@ const useUserServices = () => {
       const address = getUserEmbeddedWallet(user)?.address;
       console.log("address", address);
 
-      if (isNotCreated(wallet)) {
-        console.log("Creating wallet...");
-        await wallet.create!();
+      console.log("WALLET", wallet);
+      try {
+        if (isNotCreated(wallet)) {
+          console.log("Creating wallet...");
+          await wallet.create!();
+        }
+      } catch (err) {
+        console.error("CREATE WALLET", err);
+        toast({
+          title: "Error creating wallet",
+          preset: "error",
+        });
       }
 
       if (!address) {

@@ -18,9 +18,15 @@ const Keypad = ({ onChange, value, maximun, decimals = 2 }: KeypadProps) => {
     onChange("0");
   };
 
-  const addAmount = (amount: number) => {
-    const newValue = new BigNumber(amount);
-    onChange(newValue.toString());
+  const addAmount = (amount: number, maxAmount = maximun) => {
+    const keepPeriod = value.slice(-1) === ".";
+    const newValue = new BigNumber(value).plus(amount);
+    const exceededMax = newValue.isGreaterThan(maxAmount);
+    if (exceededMax) {
+      onChange(adjustToMax(newValue.toString()));
+      return;
+    }
+    onChange(`${newValue.toString()}${keepPeriod ? "." : ""}`);
   };
 
   const adjustToMax = (amount: string, maxAmount = maximun) => {
