@@ -8,7 +8,7 @@ import { currencyFormatter, formatNumber } from "@/utils/currencyUtils";
 import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import BigNumber from "bignumber.js";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
@@ -31,8 +31,6 @@ const ETFPurchase = ({ route }) => {
     ...usersMyBalanceOptions(),
   });
 
-  console.log("balance", balance);
-
   const availableDisplayed = formatNumber(
     balance?.available || 0,
     2,
@@ -48,9 +46,6 @@ const ETFPurchase = ({ route }) => {
   const hasNumber = Number(amount) > 0;
   const isLessThanAvailable = Number(amount) <= Number(availableDisplayed);
   const canContinue = !isPending && hasNumber && isLessThanAvailable;
-
-  console.log("amount", amount);
-  console.log("availableDisplayed", availableDisplayed);
 
   const goToConfirmation = () => {
     const isMaxAmount = Number(amount) === Number(availableDisplayed);

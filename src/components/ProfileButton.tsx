@@ -4,10 +4,10 @@ import BottomSheet, {
 } from "@/components/BottomSheet/BottomSheet";
 import Button from "@/components/Button";
 import Text from "@/components/Text";
-import useUserServices from "@/hooks/useUserServices";
 import { useUserStore } from "@/storage/userStore";
 import Ionicons from "@expo/vector-icons//Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { usePrivy } from "@privy-io/expo";
 import { useNavigation } from "@react-navigation/native";
 import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -27,13 +27,13 @@ const ProfileButton = ({
 
   const navigation = useNavigation();
 
-  const { logout } = useUserServices();
-
   const { t } = useTranslation();
 
-  const { user } = useUserStore();
+  const { setUser } = useUserStore();
 
   const profileOptionsRef = useRef<BottomSheetModal>(null);
+
+  const { logout } = usePrivy();
 
   const defaultClasses =
     "rounded-full bg-gray-100 h-12 w-12 flex justify-center items-center";
@@ -45,6 +45,7 @@ const ProfileButton = ({
   const handleLogout = async () => {
     try {
       setIsLoading(true);
+      setUser(undefined);
       await logout();
       navigation.navigate("Login");
     } catch (error) {

@@ -32,13 +32,13 @@ const Button = ({
   };
 
   const defaultContentClasses = {
-    solid: "text-dark-content-dark",
+    solid: "text-dark-content-dark text-button-m",
     outline: "text-white",
     link: "text-white",
   };
 
   const defaultContentDisabledClasses = {
-    solid: "text-dark-content-30",
+    solid: "text-dark-content-30  text-button-m",
     outline: "text-white",
     link: "text-white",
   };

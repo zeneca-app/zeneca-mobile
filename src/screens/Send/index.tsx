@@ -1,5 +1,4 @@
 import Keypad from "@/components/KeypadOld";
-import { useBalance } from "@/context/BalanceContext";
 import useRecipientStore from "@/storage/recipientStore";
 import useTransferStore from "@/storage/transferStore";
 import { useUserStore } from "@/storage/userStore";
@@ -33,8 +32,6 @@ const SendScreen = () => {
   const { recipientCrypto } = useRecipientStore((state) => ({
     recipientCrypto: state.recipientCrypto,
   }));
-
-  const { balanceFormatted: balance } = useBalance();
 
   const handleKeyPress = (key: string | number) => {
     if (key === "backspace") {

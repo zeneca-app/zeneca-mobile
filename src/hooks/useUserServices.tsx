@@ -1,126 +1,61 @@
-import { usersMe } from "@/client";
 import { loginLoginOrCreate } from "@/client/";
+import { usersMeOptions } from "@/client/@tanstack/react-query.gen";
+import client from "@/client/client";
 import { getPimlicoSmartAccountClient } from "@/lib/pimlico";
 import { useChainStore } from "@/storage/chainStore";
-import { DBUser } from "@/storage/interfaces";
 import { useUserStore } from "@/storage/userStore";
-import {
-  getUserEmbeddedWallet,
-  isNotCreated,
-  useEmbeddedWallet,
-  useLoginWithEmail,
-  usePrivy,
-} from "@privy-io/expo";
-import { useNavigation } from "@react-navigation/native";
+import { useEmbeddedWallet, useLoginWithEmail, usePrivy } from "@privy-io/expo";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { QueryClient } from "@tanstack/react-query";
 import { toast } from "burnt";
-import * as SecureStore from "expo-secure-store";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const useUserServices = () => {
-  const TEST_EMAIL = "tester@zeneca.app";
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(undefined);
 
-  const { setUser } = useUserStore((state) => state);
+  const queryClient = new QueryClient();
 
-  const wallet = useEmbeddedWallet();
+  const loginOrCreateMutationPending = useRef<boolean>(false);
+
+  const [isNewUser, setIsNewUser] = useState(false);
+
+  const { user, setUser } = useUserStore((state) => state);
 
   const chain = useChainStore((state) => state.chain);
 
   const navigation = useNavigation();
 
-  const { logout: privyLogout, getAccessToken } = usePrivy();
+  const { user: privyUser, getAccessToken } = usePrivy();
 
-  /*   const { updateLogged } = useAuthStore((state) => ({
-    updateLogged: state.updateLogged,
-  })); */
+  const wallet = useEmbeddedWallet();
 
-  const fetchUserData = async (token: string) => {
-    const userData = await usersMe({
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((data) => data.data);
-    return userData;
-  };
+  const [isFocussed, setIsFocussed] = useState<boolean>(false);
 
-  const handleLoginError = (err: Error) => {
-    toast({
-      title: err.message,
-      preset: "error",
-    });
-  };
+  useFocusEffect(
+    useCallback(() => {
+      setIsFocussed(true);
+      return () => {
+        setIsFocussed(false);
+      };
+    }, []),
+  );
 
-  const initUser = async (user) => {
-    console.log("====================================");
-    console.log("INIT USER");
-    console.log("====================================");
+  const fetchUserData = async () => {
     try {
-      const address = getUserEmbeddedWallet(user)?.address;
-      console.log("address", address);
-
-      console.log("WALLET", wallet);
-      try {
-        if (isNotCreated(wallet)) {
-          console.log("Creating wallet...");
-          await wallet.create!();
-        }
-      } catch (err) {
-        console.error("CREATE WALLET", err);
-        toast({
-          title: "Error creating wallet",
-          preset: "error",
-        });
-      }
-
-      if (!address) {
-        return;
-      }
-
-      const smartAccount = await getPimlicoSmartAccountClient(
-        address as `0x${string}`,
-        chain,
-        wallet,
-      );
-
-      if (!smartAccount || !smartAccount.account) {
-        throw new Error("Cannot create smart account");
-      }
-
-      const account = user?.linked_accounts.find(
-        (account) => account.type === "email",
-      );
-
-      if (!account) {
-        throw new Error("Cannot find linked account");
-        return;
-      }
-
-      const accessToken = await getAccessToken();
-
-      await loginLoginOrCreate({
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: {
-          email: account.address,
-          has_third_party_auth: false,
-          wallet: {
-            address: address as `0x${string}`,
-            smart_account_address: smartAccount?.account
-              ?.address as `0x${string}`,
-          },
-        },
+      const response = await queryClient.fetchQuery({
+        ...usersMeOptions({
+          client,
+        }),
       });
-
-      const userData = await fetchUserData(accessToken!);
-      setUser({ ...userData, token: accessToken! } as DBUser);
+      console.log("FETCHED USER DATA", response);
+      setUser({ ...response, isNewUser: isNewUser });
+      setIsLoading(false);
+      navigation.navigate("Home");
+      return response;
     } catch (err) {
-      console.error("GET EMBEDDED WALLET", err);
-      toast({
-        title: "Error getting embedded wallet",
-        preset: "error",
-      });
+      console.error("FETCH USER DATA", err);
+      return false;
     }
   };
 
@@ -130,16 +65,118 @@ const useUserServices = () => {
     loginWithCode,
   } = useLoginWithEmail({
     onError: (error) => {
+      setUser(undefined);
       console.error("ERRRORRRR", error);
       setIsLoading(false);
       setError(true);
       handleLoginError(error);
     },
     onLoginSuccess(user, isNewUser) {
-      console.log("Logged in", user);
-      initUser(user);
+      setUser(undefined);
+      setIsNewUser(!!isNewUser);
+      setIsLoading(true);
+      console.log("LOGGED IN", user);
     },
   });
+
+  const { login: loginWithOAuth, state } = useLoginWithOAuth();
+
+  useEffect(() => {
+    const asyncLoginOrCreate = async () => {
+      loginOrCreateMutationPending.current = true;
+      const email = privyUser?.linked_accounts.find(
+        (account) => account.type === "email",
+      );
+      const address = wallet?.account?.address;
+      const accessToken = await getAccessToken();
+      const smartAccount = await getPimlicoSmartAccountClient(
+        wallet?.account?.address as `0x${string}`,
+        chain,
+        wallet,
+      );
+      const requestBody = {
+        email: email?.address,
+        has_third_party_auth: false,
+        wallet: {
+          address: address as `0x${string}`,
+          smart_account_address: smartAccount?.account
+            ?.address as `0x${string}`,
+        },
+      };
+      try {
+        const response = await loginLoginOrCreate({
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: requestBody,
+        });
+        if (response.response.ok) {
+          console.log("LOGIN OR CREATE SUCCESS");
+        } else {
+          console.error(
+            "LOGIN OR CREATE ERROR",
+            JSON.stringify(response.error, null, 2),
+          );
+        }
+        await fetchUserData();
+        loginOrCreateMutationPending.current = false;
+      } catch (err) {
+        console.error("LOGIN OR CREATE", err);
+        loginOrCreateMutationPending.current = false;
+      }
+    };
+
+    const asyncFetch = async () => {
+      await fetchUserData();
+    };
+
+    if (isFocussed && !user) {
+      //If user has been created and is missing a wallet, create one
+      if (
+        loginWithEmailState?.status === "done" &&
+        wallet?.status === "not-created" &&
+        privyUser
+      ) {
+        //console.log("Privy user created begin embedded wallet creation");
+        wallet.create!();
+      }
+
+      //If new user has been created and wallet is connected, create smart account and login
+      if (
+        loginWithEmailState?.status === "done" &&
+        wallet?.status === "connected" &&
+        privyUser &&
+        isNewUser
+      ) {
+        if (loginOrCreateMutationPending.current) return;
+        asyncLoginOrCreate();
+      }
+
+      //If returning user
+      if (
+        loginWithEmailState?.status === "done" &&
+        wallet?.status === "connected" &&
+        privyUser &&
+        !isNewUser
+      ) {
+        asyncFetch();
+      }
+    }
+  }, [
+    isFocussed,
+    loginWithEmailState?.status,
+    wallet?.status,
+    privyUser,
+    isNewUser,
+    user,
+  ]);
+
+  const handleLoginError = (err: Error) => {
+    toast({
+      title: err.message,
+      preset: "error",
+    });
+  };
 
   const submitEmail = async () => {
     /* if (email === TEST_EMAIL) {
@@ -156,29 +193,7 @@ const useUserServices = () => {
     navigation.navigate("EmailOtpValidation");
   };
 
-  const onLogout = async () => {
-    try {
-      await logout();
-      nextLogout();
-    } catch (err) {
-      const e = err as Error;
-      toast({
-        title: e?.message ?? "Login Error",
-        preset: "error",
-      });
-    }
-  };
-
-  const nextLogout = () => {
-    navigation.navigate("Login");
-  };
-
-  const logout = async () => {
-    privyLogout();
-  };
-
   return {
-    logout,
     submitEmail,
     isLoading,
     setIsLoading,
@@ -186,7 +201,6 @@ const useUserServices = () => {
     error,
     loginWithCode,
     loginWithEmailState,
-    initUser,
     fetchUserData,
   };
 };

@@ -22,6 +22,7 @@ import Send from "@/screens/Send";
 import SendConfirmation from "@/screens/SendConfirmation";
 import SendSuccessScreen from "@/screens/SendSuccess";
 import TransactionReceiptScreen from "@/screens/TransactionReceipt";
+import { useUserStore } from "@/storage/userStore";
 import { usePrivy } from "@privy-io/expo";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MainTabs from "./MainTabs";
@@ -29,9 +30,7 @@ import MainTabs from "./MainTabs";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const MainNavigation = () => {
-  const { user } = usePrivy();
-
-  console.log(usePrivy());
+  const { user } = useUserStore();
 
   return (
     <Stack.Navigator initialRouteName={user === null ? "Login" : "Home"}>

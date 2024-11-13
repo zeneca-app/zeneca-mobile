@@ -1,18 +1,22 @@
 import "./polyfills";
-import { BalanceProvider } from "@/context/BalanceContext";
-import useUserServices from "@/hooks/useUserServices";
 import { MyPermissiveSecureStorageAdapter } from "@/lib/storage-adapter";
 import { useUserStore } from "@/storage/userStore";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { PrivyProvider, usePrivy } from "@privy-io/expo";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { PrivyProvider, useEmbeddedWallet, usePrivy } from "@privy-io/expo";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
 import * as SplashScreen from "expo-splash-screen";
 import { PostHogProvider } from "posthog-react-native";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { createConfig, http, WagmiProvider } from "wagmi";
 import { base, baseSepolia, sepolia } from "wagmi/chains";
+import { usersMeOptions } from "../client/@tanstack/react-query.gen";
+import client from "../client/client";
 
 const queryClient = new QueryClient();
 
@@ -49,9 +53,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
             >
               <QueryClientProvider client={queryClient}>
                 <WagmiProvider config={wagmiConfig}>
-                  <BalanceProvider>
-                    <AwaitPrivyProvider>{children}</AwaitPrivyProvider>
-                  </BalanceProvider>
+                  <AwaitPrivyProvider>{children}</AwaitPrivyProvider>
                 </WagmiProvider>
               </QueryClientProvider>
             </PostHogProvider>
@@ -63,22 +65,62 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
 };
 
 function AwaitPrivyProvider({ children }: { children: ReactNode }) {
-  const { isReady, privyUser, ...rest } = usePrivy();
-  const { fetchUserData } = useUserServices();
-  const { user, setUser } = useUserStore((state) => state);
+  const [isReady, setIsReady] = React.useState<boolean>(false);
+  const { isReady: isPrivyReady, user: privyUser, logout } = usePrivy();
+  const wallet = useEmbeddedWallet();
+  const { setUser } = useUserStore((state) => state);
 
-  rest.getAccessToken().then((token) => {
-    //console.log("GET ACCESS TOKEN", token);
+  const {
+    data: userData,
+    isPending,
+    error,
+  } = useQuery({
+    ...usersMeOptions({
+      client,
+    }),
+    enabled: (!!privyUser && isPrivyReady) || !isReady,
   });
-  if (!user && privyUser) {
-    fetchUserData().then((userData) => {
-      setUser(userData);
-    });
-  }
-  if (!isReady) {
-    return null;
-  }
-  SplashScreen.hideAsync(); //console.log("Privy is ready", isReady, rest.user);
 
-  return <>{children}</>;
+  useEffect(() => {
+    const asyncLogout = async () => {
+      await logout();
+    };
+
+    if (!isReady) {
+      if (isPrivyReady && userData) {
+        setUser(userData);
+        setIsReady(true);
+      }
+
+      if (isPrivyReady && privyUser && error) {
+        console.error(
+          "Error fetching user data from backend",
+          privyUser.id,
+          "\nPerforming Privy Logout\n",
+          error,
+        );
+        asyncLogout();
+      }
+
+      if (isPrivyReady && !privyUser) {
+        setIsReady(true);
+      }
+    }
+  }, [
+    userData,
+    privyUser,
+    isPrivyReady,
+    wallet,
+    isReady,
+    error,
+    logout,
+    setUser,
+  ]);
+
+  if (isReady) {
+    SplashScreen.hideAsync();
+    return <>{children}</>;
+  }
+
+  return null;
 }

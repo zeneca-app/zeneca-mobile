@@ -9,6 +9,9 @@ import { useUserStore } from "@/storage/userStore";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { FlatList, Text, View } from "react-native";
+import SkeletonLoadingView, {
+  SkeletonOrderListItem,
+} from "../Loading/SkeletonLoadingView";
 
 const OrdersListCard = () => {
   const { t } = useTranslation();
@@ -48,7 +51,7 @@ const OrdersListCard = () => {
   const separator = () => <Separator />;
 
   const renderItem = ({ item }) => {
-    console.log("orderlist item", item);
+    //console.log("orderlist item", item);
     return <OrderListItem order={item} />;
   };
 
@@ -59,7 +62,14 @@ const OrdersListCard = () => {
           {t("ordersListCard.myAssets")}
         </Text>
       </View>
-      {hasOrders ? (
+      {isPending && !data ? (
+        <SkeletonLoadingView className="flex-1 flex">
+          <SkeletonOrderListItem />
+          <SkeletonOrderListItem />
+          <SkeletonOrderListItem />
+          <SkeletonOrderListItem />
+        </SkeletonLoadingView>
+      ) : hasOrders ? (
         <FlatList
           data={data}
           renderItem={renderItem}

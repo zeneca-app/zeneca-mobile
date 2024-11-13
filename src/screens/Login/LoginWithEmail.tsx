@@ -98,7 +98,7 @@ const LoginWithEmail = () => {
           </View>
           <View className="px-layout">
             <Button disabled={isSubmitDisabled} onPress={handleSubmit}>
-              <Text className="text-inherit text-button-mbjggj">
+              <Text className="text-inherit text-button-m">
                 {t("loginWithEmail.continueButton")}
               </Text>
             </Button>

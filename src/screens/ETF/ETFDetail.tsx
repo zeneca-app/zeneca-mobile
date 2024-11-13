@@ -85,7 +85,9 @@ const ETFDetail = ({ route }: Stock) => {
       client: client,
       path: {
         asset_id: etf.id,
-        timespan: timeframe,
+      },
+      query: {
+        timespan: CHART_TIMEFRAMES[timeframe],
       },
     }),
     enabled: Boolean(etf?.id),

@@ -6,6 +6,7 @@ import BottomSheet, {
   BottomSheetView,
 } from "@/components/BottomSheet/BottomSheet";
 import Button from "@/components/Button";
+import Text from "@/components/Text";
 import config from "@/config";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -14,7 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import { cssInterop } from "nativewind";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { SafeAreaView, Text, View } from "react-native";
+import { SafeAreaView, View } from "react-native";
 
 const Login = () => {
   const { t } = useTranslation();
@@ -23,8 +24,6 @@ const Login = () => {
   const { login: loginWithOAuth, state } = useLoginWithOAuth();
 
   const loginOptionsRef = useRef<BottomSheetModal>(null);
-
-  console.log(state);
 
   const loginWithOptions = () => {
     loginOptionsRef.current?.present();
@@ -86,13 +85,13 @@ const Login = () => {
       <BottomSheet ref={loginOptionsRef}>
         <BottomSheetView className="px-layout items-stretch rounded-card m-2 flex gap-buttons pb-14">
           <Button onPress={loginWithEmail}>
-            <Ionicons name="mail" size={24} color="black" />
+            <Ionicons name="mail" size={20} color="black" />
             <Text className="text-button-m">
               {t("loginOptions.emailOption")}
             </Text>
           </Button>
           <Button onPress={loginWithGmail}>
-            <AntDesign name="google" size={24} color="black" />
+            <AntDesign name="google" size={20} color="black" />
             <Text className="text-button-m">
               {t("loginOptions.googleOption")}
             </Text>

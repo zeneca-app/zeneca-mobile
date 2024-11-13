@@ -1,8 +1,9 @@
 import BaseIcon from "@/assets/base-logo.svg";
 import FaceIdIcon from "@/assets/face-id.svg";
 import USDCIcon from "@/assets/usdc.svg";
+import { usersMyBalanceOptions } from "@/client/@tanstack/react-query.gen";
+import client from "@/client/client";
 import LoadingScreen from "@/components/Loading";
-import { useBalance } from "@/context/BalanceContext";
 import { getPimlicoSmartAccountClient, transferUSDC } from "@/lib/pimlico";
 import { useChainStore } from "@/storage/chainStore";
 import useRecipientStore from "@/storage/recipientStore";
@@ -39,7 +40,16 @@ const SendConfirmationScreen = () => {
     setTxHash: state.setTxHash,
   }));
 
-  const { refetchBalance } = useBalance();
+  const {
+    isPending,
+    error,
+    data,
+    refetch: refetchBalance,
+  } = useQuery({
+    ...usersMyBalanceOptions({
+      client: client,
+    }),
+  });
 
   const chain = useChainStore((state) => state.chain);
   const wallet = useEmbeddedWallet();

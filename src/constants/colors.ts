@@ -10,6 +10,7 @@ const COLORS = {
     70: "#21194C",
   },
   dark: {
+    skeleton: "#313036",
     content: {
       active: "#F7F7F8",
       disabled: "#D7BFFA2B",

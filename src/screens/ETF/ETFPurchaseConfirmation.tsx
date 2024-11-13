@@ -22,7 +22,6 @@ import { Address } from "viem";
 
 const ETFPurchaseConfirmation = ({ route }) => {
   const { etf, amount = "0" } = route.params;
-  console.log("amount", amount);
 
   const amountToOrder = formatNumber(amount, 2, 6);
 
@@ -62,7 +61,6 @@ const ETFPurchaseConfirmation = ({ route }) => {
         throw new Error("Quote not found");
       }
       setTransactionInitiated(true);
-      console.log("quote", quote);
 
       const signerAddress = wallet?.account?.address as Address;
       const smartAccountClient = await getPimlicoSmartAccountClient(

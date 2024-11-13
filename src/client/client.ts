@@ -13,7 +13,8 @@ let token: string | null = null;
 
 client.interceptors.request.use(async (request, options) => {
   token = await privy.getAccessToken();
-  console.log("URL", request.url);
+  //console.log("URL", request.url);
+  //console.log("TOKEN", token);
   request.headers.set("Authorization", "Bearer " + token);
   return request;
 });

@@ -1,5 +1,8 @@
 import { usersMyBalanceOptions } from "@/client/@tanstack/react-query.gen";
 import client from "@/client/client";
+import SkeletonLoadingView, {
+  SkeletonView,
+} from "@/components/Loading/SkeletonLoadingView";
 import Config from "@/config";
 import { currencyFormatter } from "@/utils/currencyUtils";
 import { useQuery } from "@tanstack/react-query";
@@ -44,12 +47,28 @@ const Balance = ({
       >
         {t("balance.equity")}
       </Text>
-      <View className="flex-row flex-1 text-white items-start">
-        <Text className="text-heading-l text-white font-sans">{equity}</Text>
-        {displayCurrencyName && (
-          <Text className="text-white text-base font-semibold">
-            {t("home.currency")}
-          </Text>
+      <View className="flex-row flex-1 text-white items-start ">
+        {isPending ? (
+          <SkeletonLoadingView className="flex-1 flex-row gap-1 h-16">
+            <SkeletonView className="w-10 h-16" />
+            <SkeletonView className="w-10 h-16" />
+            <SkeletonView className="w-10 h-16" />
+            <SkeletonView className="w-10 h-16" />
+            <SkeletonView className="w-10 h-16" />
+            <SkeletonView className="w-10 h-16" />
+            <SkeletonView className="w-10 h-16" />
+          </SkeletonLoadingView>
+        ) : (
+          <>
+            <Text className="text-heading-l text-white font-sans">
+              {equity}
+            </Text>
+            {displayCurrencyName && (
+              <Text className="text-white text-base font-semibold">
+                {t("home.currency")}
+              </Text>
+            )}
+          </>
         )}
       </View>
       <Text
@@ -57,11 +76,17 @@ const Balance = ({
       >
         {t("balance.available_funds")}
       </Text>
-      <Text
-        className={`caption-xl text-white pb-3${captionClasses ? " " + captionClasses : ""}`}
-      >
-        {available}
-      </Text>
+      {isPending ? (
+        <SkeletonLoadingView className="flex-1">
+          <SkeletonView className="w-20 h-4" />
+        </SkeletonLoadingView>
+      ) : (
+        <Text
+          className={`caption-xl text-white pb-3${captionClasses ? " " + captionClasses : ""}`}
+        >
+          {available}
+        </Text>
+      )}
     </View>
   );
 };

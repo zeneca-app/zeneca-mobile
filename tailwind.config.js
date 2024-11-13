@@ -67,17 +67,17 @@ module.exports = {
           },
         ],
         "button-s": [
-          "1rem",
+          14,
           {
-            lineHeight: "1.15",
-            fontWeight: "600",
+            lineHeight: "0",
+            fontWeight: "700",
           },
         ],
         "button-m": [
           16,
           {
-            lineHeight: "1.15",
-            fontWeight: "600",
+            lineHeight: "0",
+            fontWeight: "700",
           },
         ],
         "heading-l": [

@@ -42,18 +42,15 @@ const LoginOtpScreen = ({ route }) => {
   const [modalState, setModalState] = useState<ModalState>("dismissed");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { getAccessToken } = usePrivy();
-  type PrivyUser = typeof user;
-
   const { loginWithCode, loginWithEmailState } = useUserServices();
 
-  /* › */
-
-  const goToNextScreen = () => {
-    navigation.navigate("Home");
-  };
-
   const isCodeFilled = code.length === 6;
+
+  useEffect(() => {
+    console.log("====================================");
+    console.log("LOGIN STATE", loginWithEmailState);
+    console.log("====================================");
+  }, [loginWithEmailState]);
 
   const handleOtpFilled = (otp: string) => {
     setCode(otp as `${number | ""}`);
@@ -62,14 +59,10 @@ const LoginOtpScreen = ({ route }) => {
   const handleConfirmCode = async () => {
     try {
       await loginWithCode({ code, email });
-      navigation.navigate("Home");
+      //navigation.navigate("Home");
     } catch (error) {
       console.error("Error confirming code", error);
     }
-  };
-
-  const dismissScreen = () => {
-    navigation.navigate("LoginWithEmail");
   };
 
   return (
@@ -139,51 +132,6 @@ const LoginOtpScreen = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    backgroundColor: "#0D0B0D",
-  },
-  safeAreaContainer: {
-    flex: 1,
-  },
-  topContent: {
-    padding: 20,
-  },
-  backButton: {
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 32,
-    color: "#fff",
-    marginBottom: 20,
-    fontFamily: "Manrope_500Medium",
-  },
-  subtitle: {
-    fontSize: 16,
-    color: "#95929F",
-    marginBottom: 30,
-    fontFamily: "Manrope_400Regular",
-  },
-  inputContainer: {
-    marginTop: 20,
-  },
-  inputLineError: {
-    borderColor: "red",
-  },
-  label: {
-    color: "#95929F",
-    fontSize: 14,
-    marginBottom: 4,
-    fontFamily: "Manrope_300Light",
-  },
-  codeInputContainer: {
-    marginBottom: 30,
-  },
-  input: {
-    color: "#fff",
-    fontSize: 16,
-    paddingVertical: 8,
-  },
   otpContainer: {
     width: "100%",
   },
@@ -210,40 +158,6 @@ const styles = StyleSheet.create({
   otpActivePinCodeContainer: {
     borderBottomColor: "#5A10EF",
     borderBottomWidth: 2,
-  },
-  errorText: {
-    color: "red",
-    fontSize: 12,
-    marginTop: 4,
-    fontFamily: "Manrope_300Light",
-  },
-  inputLine: {
-    height: 1,
-    backgroundColor: "#333",
-    marginTop: 8,
-  },
-  bottomContent: {
-    padding: 20,
-    marginTop: "auto",
-  },
-  continueButton: {
-    borderRadius: 35,
-    backgroundColor: "white",
-    padding: 16,
-    alignItems: "center",
-  },
-  continueButtonDisabled: {
-    backgroundColor: "rgba(215, 191, 250, 0.17)",
-  },
-  continueButtonText: {
-    color: "black",
-    fontSize: 18,
-    fontFamily: "Manrope_500Medium",
-  },
-  continueButtonTextDisabled: {
-    color: "rgba(233, 220, 251, 0.45)",
-    fontSize: 18,
-    fontFamily: "Manrope_500Medium",
   },
 });
 

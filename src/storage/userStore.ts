@@ -2,7 +2,7 @@ import { DBUser } from "@/storage/interfaces";
 import { create } from "zustand";
 
 type UserStore = {
-  user?: DBUser;
+  user?: DBUser & { isNewUser: boolean };
   setUser: (user?: DBUser) => void;
 };
 
