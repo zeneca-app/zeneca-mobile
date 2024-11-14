@@ -5,7 +5,7 @@ const Text = ({ ...props }: TextProps & { className?: string }) => {
   return (
     <RNText
       {...props}
-      className={`font-sans transition-colors duration-300 ${className}`}
+      className={`font-sans transition-colors duration-300 text-inherit ${className}`}
     />
   );
 };
