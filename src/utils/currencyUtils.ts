@@ -1,4 +1,5 @@
 import { Country, Currency } from "@/client";
+import BigNumber from "bignumber.js";
 import numeral from "numeral";
 
 export type CurrencyCode = "USD" | "COP" | "MXN" | "EUR";
@@ -10,9 +11,47 @@ export const currencyLocales: Record<CurrencyCode, string> = {
   EUR: "de-DE",
 };
 
-export const currencyFormatter = (value: number | string) => {
+export const generateZeros = (length: number): string => {
+  return "0".repeat(length);
+};
+
+export const truncateDecimals = (value: string, decimals: number): string => {
+  const [integerPart, decimalPart] = value.split(".");
+  if (!decimalPart || decimalPart.length <= decimals) {
+    return value;
+  }
+  return `${integerPart}.${decimalPart.substring(0, decimals)}`;
+};
+
+export const formatNumber = (
+  value: number | string,
+  decimals: number = 2,
+  precision: number | string = 0,
+  truncate: boolean = false,
+): string => {
+  const parsedPrecision =
+    typeof precision === "string" ? parseInt(precision) : precision;
+
+  const parsedValue = BigNumber(value)
+    .dividedBy(Math.pow(10, parsedPrecision))
+    .toFixed(parsedPrecision)
+    .toString();
+
+  if (truncate) {
+    return `${truncateDecimals(parsedValue, decimals)}`;
+  }
+  const decimalMask = generateZeros(decimals);
+  return numeral(parsedValue).format(`0,0.${decimalMask}`);
+};
+
+export const currencyFormatter = (
+  value: number | string,
+  decimals: number = 2,
+  precision: number | string = 0,
+  truncate: boolean = false,
+) => {
   try {
-    return numeral(value).format("$0,0.00");
+    return `$${formatNumber(value, decimals, precision, truncate)}`;
   } catch (error) {
     console.error("Error formatting currency for value ", value, "\n", error);
     return "0.00";

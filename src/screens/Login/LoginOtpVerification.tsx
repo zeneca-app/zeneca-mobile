@@ -9,7 +9,7 @@ import { useLoginStore } from "@/storage/loginStore";
 import { useUserStore } from "@/storage/userStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {
-  getUserEmbeddedWallet,
+  getUserEmbeddedEthereumWallet,
   isNotCreated,
   useEmbeddedWallet,
   useLoginWithEmail,
@@ -70,7 +70,7 @@ const LoginOtpScreen = () => {
   const handleConnection = useCallback(
     async (user: PrivyUser): Promise<void> => {
       setModalState("loading");
-      let address = getUserEmbeddedWallet(user)?.address;
+      let address = getUserEmbeddedEthereumWallet(user)?.address;
       const accessToken = await getAccessToken();
 
       if (isNotCreated(wallet)) {

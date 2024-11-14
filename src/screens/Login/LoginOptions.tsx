@@ -9,7 +9,7 @@ import { useUserStore } from "@/storage/userStore";
 import { colors } from "@/styles/colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {
-  getUserEmbeddedWallet,
+  getUserEmbeddedEthereumWallet,
   isNotCreated,
   useEmbeddedWallet,
   useLoginWithOAuth,
@@ -66,7 +66,7 @@ const LoginOptions = () => {
         return;
       }
 
-      const userAddress = getUserEmbeddedWallet(user)?.address;
+      const userAddress = getUserEmbeddedEthereumWallet(user)?.address;
 
       if (isNotCreated(wallet)) {
         await wallet.create!();

@@ -12,9 +12,14 @@ export type RootStackParamList = {
   LoginOptions: undefined;
   LoginWithEmail: undefined;
   EmailOtpValidation: undefined;
+  ExploreETFs: undefined;
+  ETFPurchaseConfirmation: undefined;
+  ETFPurchase: undefined;
+  ETFDetail: undefined;
   KYCPreview: undefined;
   KYCProvider: undefined;
   KYCSuccess: undefined;
+  DepositWithBank: undefined;
   DepositCrypto: undefined;
   Send: undefined;
   SendConfirmation: undefined;
