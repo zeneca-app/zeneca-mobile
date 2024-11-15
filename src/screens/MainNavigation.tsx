@@ -27,10 +27,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const MainNavigation = () => {
-    //const { user } = useUserStore();
+    const { user } = useUserStore();
 
     return (
-        <Stack.Navigator initialRouteName={"Login"}>
+        <Stack.Navigator initialRouteName={user! ? "Login" : "Home"}>
             <Stack.Group>
                 <Stack.Screen
                     options={{ headerShown: false }}
