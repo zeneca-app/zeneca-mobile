@@ -3,6 +3,7 @@ import { MyPermissiveSecureStorageAdapter } from "@/lib/storage-adapter";
 import { useUserStore } from "@/storage/userStore";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { PrivyProvider, useEmbeddedWallet, usePrivy } from "@privy-io/expo";
+import { SmartWalletsProvider } from "@privy-io/expo/smart-wallets";
 import {
   QueryClient,
   QueryClientProvider,
@@ -17,6 +18,7 @@ import { createConfig, http, WagmiProvider } from "wagmi";
 import { base, baseSepolia, sepolia } from "wagmi/chains";
 import { usersMeOptions } from "@/client/@tanstack/react-query.gen";
 import client from "@/client/client";
+
 
 const queryClient = new QueryClient();
 
@@ -37,29 +39,33 @@ const POSTHOG_HOST = process.env.EXPO_PUBLIC_POSTHOG_HOST!;
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <GestureHandlerRootView className="flex-1 text-white font-sans">
-      <PrivyProvider
-        storage={MyPermissiveSecureStorageAdapter}
-        appId={APP_ID}
-        clientId={CLIENT_ID}
-        supportedChains={[sepolia, baseSepolia, base]}
+      <PostHogProvider
+        apiKey={POSTHOG_API_KEY}
+        options={{
+          host: POSTHOG_HOST,
+        }}
       >
-        <SafeAreaProvider>
-          <BottomSheetModalProvider>
-            <PostHogProvider
-              apiKey={POSTHOG_API_KEY}
-              options={{
-                host: POSTHOG_HOST,
-              }}
-            >
-              <QueryClientProvider client={queryClient}>
-                <WagmiProvider config={wagmiConfig}>
-                  {children}
-                </WagmiProvider>
-              </QueryClientProvider>
-            </PostHogProvider>
-          </BottomSheetModalProvider>
-        </SafeAreaProvider>
-      </PrivyProvider>
+        <PrivyProvider
+          storage={MyPermissiveSecureStorageAdapter}
+          appId={APP_ID}
+          clientId={CLIENT_ID}
+          supportedChains={[sepolia, baseSepolia, base]}
+        >
+          <SmartWalletsProvider>
+            <SafeAreaProvider>
+              <BottomSheetModalProvider>
+                <QueryClientProvider client={queryClient}>
+
+                  <WagmiProvider config={wagmiConfig}>
+                    {children}
+                  </WagmiProvider>
+
+                </QueryClientProvider>
+              </BottomSheetModalProvider>
+            </SafeAreaProvider>
+          </SmartWalletsProvider>
+        </PrivyProvider>
+      </PostHogProvider>
     </GestureHandlerRootView>
   );
 };
