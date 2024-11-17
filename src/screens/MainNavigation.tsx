@@ -14,6 +14,7 @@ import Login from "@/screens/Login/Login";
 import LoginOptions from "@/screens/Login/LoginOptions";
 import LoginOtpVerification from "@/screens/Login/LoginOtpVerification";
 import LoginWithEmail from "@/screens/Login/LoginWithEmail";
+import OnBoarding from "@/screens/OnBoarding/OnBoarding";
 import QuoteScreen from "@/screens/Quote";
 import QuoteConfirmationScreen from "@/screens/QuoteConfirmation";
 import RecipientsScreen from "@/screens/Recipients";
@@ -27,134 +28,139 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const MainNavigation = () => {
-    const { user } = useUserStore();
+  const { user } = useUserStore();
 
-    return (
-        <Stack.Navigator initialRouteName={!user ? "Login" : "Home"}>
-            <Stack.Group>
-                <Stack.Screen
-                    options={{ headerShown: false }}
-                    name="Login"
-                    component={Login}
-                />
-                <Stack.Screen
-                    options={{ headerShown: false }}
-                    name="EmailOtpValidation"
-                    component={LoginOtpVerification}
-                />
-                <Stack.Screen
-                    options={{ headerShown: false }}
-                    name="LoginWithEmail"
-                    component={LoginWithEmail}
-                />
-                <Stack.Screen
-                    options={{ headerShown: false }}
-                    name="LoginOptions"
-                    component={LoginOptions}
-                />
-            </Stack.Group>
-            <Stack.Screen
-                options={{ headerShown: false }}
-                name="Home"
-                component={HomeScreen}
-            />
-            <Stack.Screen
-                options={{ headerShown: false }}
-                name="Recipients"
-                component={RecipientsScreen}
-            />
-            <Stack.Screen
-                options={{ headerShown: false }}
-                name="Quote"
-                component={QuoteScreen}
-            />
-            <Stack.Screen
-                options={{ headerShown: false }}
-                name="QuoteConfirmation"
-                component={QuoteConfirmationScreen}
-            />
-            <Stack.Group screenOptions={{ presentation: "modal" }}>
-                <Stack.Screen
-                    name="TransactionReceipt"
-                    options={{ headerShown: false }}
-                    component={TransactionReceiptScreen}
-                />
-            </Stack.Group>
-            <Stack.Screen
-                options={{ headerShown: false }}
-                name="DepositCrypto"
-                component={DepositCrypto}
-            />
-            <Stack.Screen
-                options={{ headerShown: false }}
-                name="DepositWithBank"
-                component={DepositWithBank}
-            />
+  return (
+    <Stack.Navigator initialRouteName={!user ? "Login" : "Home"}>
+      <Stack.Group>
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Login"
+          component={Login}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="EmailOtpValidation"
+          component={LoginOtpVerification}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="LoginWithEmail"
+          component={LoginWithEmail}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="LoginOptions"
+          component={LoginOptions}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="OnBoarding"
+          component={OnBoarding}
+        />
+      </Stack.Group>
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="Home"
+        component={HomeScreen}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="Recipients"
+        component={RecipientsScreen}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="Quote"
+        component={QuoteScreen}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="QuoteConfirmation"
+        component={QuoteConfirmationScreen}
+      />
+      <Stack.Group screenOptions={{ presentation: "modal" }}>
+        <Stack.Screen
+          name="TransactionReceipt"
+          options={{ headerShown: false }}
+          component={TransactionReceiptScreen}
+        />
+      </Stack.Group>
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="DepositCrypto"
+        component={DepositCrypto}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="DepositWithBank"
+        component={DepositWithBank}
+      />
 
-            <Stack.Screen
-                options={{ headerShown: false }}
-                name="ExploreETFs"
-                component={ExploreETFs}
-            />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="ExploreETFs"
+        component={ExploreETFs}
+      />
 
-            <Stack.Screen
-                options={{ headerShown: false }}
-                name="ETFDetail"
-                component={ETFDetail}
-            />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="ETFDetail"
+        component={ETFDetail}
+      />
 
-            <Stack.Screen
-                options={{ headerShown: false }}
-                name="ETFPurchase"
-                component={ETFPurchase}
-            />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="ETFPurchase"
+        component={ETFPurchase}
+      />
 
-            <Stack.Screen
-                options={{ headerShown: false }}
-                name="ETFPurchaseConfirmation"
-                component={ETFPurchaseConfirmation}
-            />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="ETFPurchaseConfirmation"
+        component={ETFPurchaseConfirmation}
+      />
 
-            <Stack.Screen
-                options={{ headerShown: false }}
-                name="ETFPurchaseSuccess"
-                component={ETFPurchaseSuccess}
-            />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="ETFPurchaseSuccess"
+        component={ETFPurchaseSuccess}
+      />
 
-            <Stack.Screen
-                options={{ headerShown: false }}
-                name="KYCPreview"
-                component={KYCPreview}
-            />
-            <Stack.Screen
-                options={{
-                    headerShown: false,
-                }}
-                name="KYCProvider"
-                component={KYCProvider}
-            />
-            <Stack.Screen
-                options={{ headerShown: false }}
-                name="KYCSuccess"
-                component={KYCSuccess}
-            />
-            <Stack.Screen
-                options={{ headerShown: false }}
-                name="Send"
-                component={Send}
-            />
-            <Stack.Screen
-                options={{ headerShown: false }}
-                name="SendSuccess"
-                component={SendSuccessScreen}
-            />
-            <Stack.Screen
-                options={{ headerShown: false }}
-                name="SendConfirmation"
-                component={SendConfirmation}
-            />
-        </Stack.Navigator>
-    );
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="KYCPreview"
+        component={KYCPreview}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="KYCProvider"
+        component={KYCProvider}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="KYCSuccess"
+        component={KYCSuccess}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="Send"
+        component={Send}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="SendSuccess"
+        component={SendSuccessScreen}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="SendConfirmation"
+        component={SendConfirmation}
+      />
+    </Stack.Navigator>
+  );
 };
 
 MainNavigation.displayName = "MainNavigation";
