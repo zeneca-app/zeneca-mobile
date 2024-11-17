@@ -10,29 +10,42 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { TextInput, TouchableOpacity, View } from "react-native";
-
-interface OnBoardingStep2Props {
-  error: { country_code?: string; tax_id_number?: string };
-  formValues: { country_code?: string; tax_id_number?: string };
-  focused: string;
-  handleChange: (field: string, value: string) => void;
-  handleFocus: (field: string) => void;
-  handleValidation?: () => void;
-  handleBlur: (field: string) => void;
-}
+import { z } from "zod";
+import type { OnBoardingStepProps } from "../OnBoarding";
 
 const OnBoardingStep2 = ({
-  error,
   formValues,
   focused,
   handleChange,
   handleFocus,
-  handleValidation,
+  dirtyFields,
   handleBlur,
-}: OnBoardingStep2Props) => {
+  onValidationChange,
+}: OnBoardingStepProps) => {
   const { t } = useTranslation();
 
   const countriesModal = useRef<BottomSheetModal>(null);
+
+  const validationSchema = z.object({
+    country_code: z.string().min(1, t("onBoarding.country_code_field.error")),
+    tax_id_number: z.string().min(1, t("onBoarding.tax_id_number_field.error")),
+  });
+
+  const formErrors = validationSchema.safeParse(formValues);
+
+  if (onValidationChange) {
+    onValidationChange(formErrors.success);
+  }
+
+  const getError = (field: string) => {
+    if (dirtyFields[field]) {
+      const error = formErrors.error?.errors.find(
+        (e) => e.path[0] === field,
+      )?.message;
+      return error || "";
+    }
+    return "";
+  };
 
   const handleShowCountries = () => {
     countriesModal.current?.present();
@@ -46,8 +59,6 @@ const OnBoardingStep2 = ({
     handleChange("country_code", value);
     handleHideCountries();
   };
-
-  console.log("COUNTRY LIST", JSON.stringify(COUNTRIES_LIST, null, 2));
 
   const renderCountryItem = (item: { code: string; name: string }) => {
     return (
@@ -66,7 +77,7 @@ const OnBoardingStep2 = ({
       <InputWrapper
         label={t("onBoarding.country_field.label")}
         isFocused={Boolean(formValues.country_code)}
-        error={error?.country_code}
+        error={getError("country_code")}
         hint={t("onBoarding.country_field.hint")}
         leftSlot={
           Boolean(formValues.country_code) ? (
@@ -93,7 +104,7 @@ const OnBoardingStep2 = ({
         isFocused={
           focused === "tax_id_number" || Boolean(formValues.tax_id_number)
         }
-        error={error?.tax_id_number}
+        error={getError("tax_id_number")}
       >
         <TextInput
           className="text-white text-body-m pb-4"

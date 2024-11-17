@@ -5,21 +5,50 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TextInput, TouchableOpacity } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { z } from "zod";
+import type { OnBoardingStepProps } from "../OnBoarding";
 
 const OnBoardingStep1 = ({
-  error,
   formValues,
   focused,
   handleChange,
   handleFocus,
-  handleValidation,
+  dirtyFields,
   handleBlur,
-}) => {
+  onValidationChange,
+}: OnBoardingStepProps) => {
   const [showDateTimePicker, setShowDateTimePicker] = useState(false);
   const { t } = useTranslation();
 
+  const validationSchema = z.object({
+    first_name: z.string().min(1, t("onBoarding.first_name_field.error")),
+    middle_name: z.string().optional(),
+    last_name: z.string().min(1, t("onBoarding.last_name_field.error")),
+    birth_date: z
+      .date()
+      .max(new Date(new Date().setFullYear(new Date().getFullYear() - 18)), {
+        message: t("onBoarding.birth_date_field.error.min_age", { age: 18 }),
+      }),
+  });
+
+  const formErrors = validationSchema.safeParse(formValues);
+
+  if (onValidationChange) {
+    onValidationChange(formErrors.success);
+  }
+
+  const getError = (field: string) => {
+    if (dirtyFields[field]) {
+      const error = formErrors.error?.errors.find(
+        (e) => e.path[0] === field,
+      )?.message;
+      return error || "";
+    }
+    return "";
+  };
+
   const handleDobChange = (date: Date) => {
-    handleChange("dob", new Date(date));
+    handleChange("birth_date", new Date(date));
     setShowDateTimePicker(false);
   };
 
@@ -28,7 +57,7 @@ const OnBoardingStep1 = ({
       <InputWrapper
         label={t("onBoarding.first_name_field.label")}
         isFocused={focused === "first_name" || Boolean(formValues.first_name)}
-        error={error?.first_name}
+        error={getError("first_name")}
         hint={t("onBoarding.first_name_field.hint")}
         required={true}
       >
@@ -48,7 +77,7 @@ const OnBoardingStep1 = ({
       <InputWrapper
         label={t("onBoarding.middle_name_field.label")}
         isFocused={focused === "middle_name" || Boolean(formValues.middle_name)}
-        error={error?.middle_name}
+        error={getError("middle_name")}
         hint={t("onBoarding.middle_name_field.hint")}
       >
         <TextInput
@@ -58,34 +87,35 @@ const OnBoardingStep1 = ({
           autoComplete="off"
           autoCorrect={false}
           clearButtonMode="while-editing"
-          keyboardType="middle_name-phone-pad"
+          keyboardType="name-phone-pad"
           autoCapitalize="none"
           onFocus={() => handleFocus("middle_name")}
           onBlur={() => handleBlur("middle_name")}
         />
       </InputWrapper>
       <InputWrapper
-        label={t("onBoarding.lastname_field.label")}
-        isFocused={focused === "lastname" || Boolean(formValues.lastname)}
-        error={error?.lastname}
+        label={t("onBoarding.last_name_field.label")}
+        isFocused={focused === "last_name" || Boolean(formValues.last_name)}
+        error={getError("last_name")}
+        hint={t("onBoarding.last_name_field.hint")}
       >
         <TextInput
           className="text-white text-body-m pb-4"
-          value={formValues.lastname}
-          onChangeText={(e) => handleChange("lastname", e)}
+          value={formValues.last_name}
+          onChangeText={(e) => handleChange("last_name", e)}
           autoComplete="off"
           autoCorrect={false}
           clearButtonMode="while-editing"
           keyboardType="name-phone-pad"
           autoCapitalize="none"
-          onFocus={() => handleFocus("lastname")}
-          onBlur={() => handleBlur("lastname")}
+          onFocus={() => handleFocus("last_name")}
+          onBlur={() => handleBlur("last_name")}
         />
       </InputWrapper>
       <InputWrapper
         label={t("onBoarding.birth_date_field.label")}
-        isFocused={focused === "birth_date" || Boolean(formValues.birth_date)}
-        error={error?.birth_date}
+        isFocused={focused === "birth_date" || Boolean(dirtyFields?.birth_date)}
+        error={getError("birth_date")}
         required={true}
       >
         <TouchableOpacity
@@ -93,7 +123,8 @@ const OnBoardingStep1 = ({
           onPress={() => setShowDateTimePicker(!showDateTimePicker)}
         >
           <Text className="text-white text-body-s h-6">
-            {formValues.birth_date.toLocaleDateString()}
+            {Boolean(dirtyFields?.birth_date) &&
+              formValues.birth_date.toLocaleDateString()}
           </Text>
           <Feather
             name="calendar"

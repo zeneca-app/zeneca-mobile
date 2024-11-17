@@ -1,30 +1,42 @@
-import BottomSheet, {
-  BottomSheetButton,
-  BottomSheetFlatList,
-  BottomSheetModal,
-  BottomSheetView,
-} from "@/components/BottomSheet/BottomSheet";
 import InputWrapper from "@/components/Forms/InputWrapper";
-import Flag from "@/components/RoundFlags";
-import Text from "@/components/Text";
-import Feather from "@expo/vector-icons/Feather";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { continents, countries, languages } from "countries-list";
-import { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { TextInput, TouchableOpacity, View } from "react-native";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { TextInput } from "react-native";
+import { z } from "zod";
+import type { OnBoardingStepProps } from "../OnBoarding";
 
 const OnBoardingStep3 = ({
-  error,
   formValues,
   focused,
   handleChange,
   handleFocus,
-  handleValidation,
+  dirtyFields,
   handleBlur,
-}) => {
+  onValidationChange,
+}: OnBoardingStepProps) => {
   const { t } = useTranslation();
+
+  const validationSchema = z.object({
+    address_street_1: z
+      .string()
+      .min(1, t("onBoarding.address_street_1_field.error")),
+    address_city: z.string().min(1, t("onBoarding.address_city_field.error")),
+  });
+
+  const formErrors = validationSchema.safeParse(formValues);
+
+  if (onValidationChange) {
+    onValidationChange(formErrors.success);
+  }
+
+  const getError = (field: string) => {
+    if (dirtyFields[field]) {
+      const error = formErrors.error?.errors.find(
+        (e) => e.path[0] === field,
+      )?.message;
+      return error || "";
+    }
+    return "";
+  };
 
   return (
     <>
@@ -33,7 +45,7 @@ const OnBoardingStep3 = ({
         isFocused={
           focused === "address_street_1" || Boolean(formValues.address_street_1)
         }
-        error={error?.address_street_1}
+        error={getError("address_street_1")}
         hint={t("onBoarding.address_street_1_field.hint")}
         required={true}
       >
@@ -55,7 +67,7 @@ const OnBoardingStep3 = ({
         isFocused={
           focused === "address_street_2" || Boolean(formValues.address_street_2)
         }
-        error={error?.address_street_2}
+        error={getError("address_street_2")}
         hint={t("onBoarding.address_street_2_field.hint")}
       >
         <TextInput
@@ -76,8 +88,9 @@ const OnBoardingStep3 = ({
         isFocused={
           focused === "address_city" || Boolean(formValues.address_city)
         }
-        error={error?.address_city}
+        error={getError("address_city")}
         hint={t("onBoarding.address_city_field.hint")}
+        required={true}
       >
         <TextInput
           className="text-white text-body-m pb-4"

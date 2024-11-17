@@ -186,25 +186,60 @@
   },
   "onBoarding": {
     "title": "Completa tu \ninformación",
-    "name_field": {
+    "first_name_field": {
       "label": "Nombre(s)",
-      "placeholder": "Nombre",
+      "hint": "Como aparece en tu identificación",
       "error": "Este campo es requerido"
     },
-    "lastname_field": {
+    "middle_name_field": {
+      "label": "Segundo nombre",
+      "hint": "Como aparece en tu identificación",
+      "error": "Este campo es requerido"
+    },
+    "last_name_field": {
       "label": "Apellido paterno",
-      "placeholder": "Apellido paterno",
+      "hint": "Como aparece en tu identificación",
       "error": "Este campo es requerido"
     },
-    "dob_field": {
+    "birth_date_field": {
       "label": "Fecha de nacimiento",
-      "placeholder": "Fecha de nacimiento",
-      "error": "Este campo es requerido"
+      "error": {
+        "min_age": "Debes ser mayor de {{age}} años para registrarte"
+      }
     },
     "country_field": {
       "label": "País de residencia",
-      "placeholder": "País de residencia",
-      "error": "Este campo es requerido"
+      "error": "Este campo es requerido",
+      "hint": ""
+    },
+    "tax_id_number_field": {
+      "label": "Numero de identificación fiscal",
+      "error": "Este campo es requerido",
+      "hint": ""
+    },
+    "address_street_1_field": {
+      "label": "Calle linea 1",
+      "error": "Este campo es requerido",
+      "hint": "Como aparece en un recibo servicio público"
+    },
+    "address_street_2_field": {
+      "label": "Calle linea 2",
+      "hint": "Como aparece en un recibo servicio público"
+    },
+    "address_city_field": {
+      "label": "Ciudad",
+      "error": "Este campo es requerido",
+      "hint": "Como aparece en un recibo servicio público"
+    },
+    "address_subdivision_field": {
+      "label": "Provincia/Estado",
+      "error": "Este campo es requerido",
+      "hint": "Como aparece en un recibo servicio público"
+    },
+    "address_postal_code_field": {
+      "label": "Código postal",
+      "error": "Este campo es requerido",
+      "hint": "Como aparece en un recibo servicio público"
     },
     "continue_button": "Continuar"
   }

@@ -1,18 +1,20 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Animated, View } from "react-native";
 
 const ProgressBar = ({ progress }: { progress: number }) => {
-  const scaleX = new Animated.Value(progress);
+  const scaleX = useRef(new Animated.Value(progress)).current;
 
-  console.log("progress", progress);
+  const previousProgress = useRef(progress);
 
   useEffect(() => {
     Animated.timing(scaleX, {
       toValue: progress,
       duration: 500,
       useNativeDriver: true,
-    }).start();
+    }).start(() => {
+      previousProgress.current = progress;
+    });
   }, [progress]);
 
   return (

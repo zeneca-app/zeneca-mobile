@@ -1,4 +1,5 @@
 import Button from "@/components/Button";
+import FullScreenLoader from "@/components/FullScreenLoader";
 import LoggedLayout, { LeftNav } from "@/components/LoggedLayout";
 import ProgressBar from "@/components/ProgressBar";
 import Text from "@/components/Text";
@@ -18,13 +19,13 @@ const steps = [
 ];
 
 export type OnBoardingStepProps = {
-  error: { country_code?: string; tax_id_number?: string };
   formValues: { country_code?: string; tax_id_number?: string };
-  focused: string;
+  focused: string | boolean;
   handleChange: (field: string, value: string) => void;
   handleFocus: (field: string) => void;
-  handleValidation?: () => void;
   handleBlur: (field: string) => void;
+  onValidationChange: (isValid: boolean) => void;
+  dirtyFields: { [key: string]: boolean };
 };
 
 const OnBoarding = () => {
@@ -48,12 +49,16 @@ const OnBoarding = () => {
   const [error, setError] = useState<Partial<FormValues>>({});
   const [focused, setFocused] = useState<keyof FormValues | null>(null);
   const [dirtyFields, setDirtyFields] = useState({});
-  const [activeStep, setActiveStep] = useState(1);
+  const [activeStep, setActiveStep] = useState(2);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCurrentStepValid, setIsCurrentStepValid] = useState(false);
 
   const handleSubmit = () => {
+    setIsSubmitting(true);
     console.log("submitting form");
+    setTimeout(() => {
+      setIsSubmitting(false);
+    }, 3000);
   };
 
   const handleNext = () => {
@@ -69,12 +74,16 @@ const OnBoarding = () => {
     setActiveStep((prev) => prev - 1);
   };
 
-  const handleChange = (fieldName: keyof initialFormValues, value: string) => {
+  const handleChange = (fieldName: string, value: string) => {
+    markFieldDirty(fieldName);
     setFormValues((prev) => ({ ...prev, [fieldName]: value }));
   };
 
   const markFieldDirty = (fieldName: string) => {
-    setDirtyFields((prev) => ({ ...prev, [fieldName]: true }));
+    if (!dirtyFields[fieldName]) {
+      setDirtyFields((prev) => ({ ...prev, [fieldName]: true }));
+    }
+    return;
   };
 
   const isFieldDirty = (fieldName: string) => {
@@ -140,6 +149,7 @@ const OnBoarding = () => {
           </Button>
         </View>
       </LoggedLayout>
+      <FullScreenLoader visible={isSubmitting} />
     </KeyboardAvoidingView>
   );
 };

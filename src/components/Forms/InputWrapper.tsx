@@ -1,11 +1,7 @@
 import JumpingInputLabel from "@/components/Forms/JumpingInputLabel";
 import Text from "@/components/Text";
-import COLORS from "@/constants/colors";
 import { useCallback, useEffect, useRef } from "react";
 import { Animated, View } from "react-native";
-
-const errorColor = COLORS.semantic.danger;
-const defaultColor = COLORS.gray[50];
 
 export type InputWrapperProps = {
   label: string;
@@ -22,13 +18,14 @@ const InputWrapper = ({
   isFocused,
   error,
   children,
-  labelClasses = "",
   leftSlot = null,
   hint = "",
   required = false,
 }: InputWrapperProps) => {
   const colorAnim = useRef(new Animated.Value(0)).current;
   const colorOpacity = useRef(new Animated.Value(0)).current;
+
+  const isErrored = Boolean(error);
 
   const renderError = useCallback(() => {
     Animated.parallel([
@@ -66,12 +63,7 @@ const InputWrapper = ({
     } else {
       renderDefault();
     }
-  });
-
-  const color = colorAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [defaultColor, errorColor], // Colors: Tomato to DodgerBlue
-  });
+  }, [error, renderError, renderDefault]);
 
   return (
     <View className="flex items-stretch">
@@ -84,8 +76,7 @@ const InputWrapper = ({
             <JumpingInputLabel
               label={required ? `${label}*` : label}
               isFocused={isFocused}
-              isErrored={Boolean(error)}
-              className={labelClasses}
+              isErrored={isErrored}
             >
               {children}
             </JumpingInputLabel>
@@ -93,17 +84,16 @@ const InputWrapper = ({
         </View>
       </View>
 
-      <Animated.View
-        className="h-px rounded-full"
-        style={{ backgroundColor: color }}
+      <View
+        className={`h-px rounded-full ${isErrored ? "bg-semantic-danger" : "bg-gray-50"}`}
       />
-      <Animated.View className="h-6 w-full">
+      <View className="h-6 w-full">
         {Boolean(error) ? (
           <Text className="text-semantic-danger text-caption-l">{error}</Text>
         ) : (
           <Text className="text-gray-50 text-caption-l">{hint}</Text>
         )}
-      </Animated.View>
+      </View>
     </View>
   );
 };

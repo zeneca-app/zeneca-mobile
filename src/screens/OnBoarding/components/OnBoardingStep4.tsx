@@ -1,30 +1,44 @@
-import BottomSheet, {
-  BottomSheetButton,
-  BottomSheetFlatList,
-  BottomSheetModal,
-  BottomSheetView,
-} from "@/components/BottomSheet/BottomSheet";
 import InputWrapper from "@/components/Forms/InputWrapper";
-import Flag from "@/components/RoundFlags";
-import Text from "@/components/Text";
-import Feather from "@expo/vector-icons/Feather";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { continents, countries, languages } from "countries-list";
-import { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { TextInput, TouchableOpacity, View } from "react-native";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { TextInput } from "react-native";
+import { z } from "zod";
+import type { OnBoardingStepProps } from "../OnBoarding";
 
 const OnBoardingStep4 = ({
-  error,
   formValues,
   focused,
   handleChange,
   handleFocus,
-  handleValidation,
+  dirtyFields,
   handleBlur,
-}) => {
+  onValidationChange,
+}: OnBoardingStepProps) => {
   const { t } = useTranslation();
+
+  const validationSchema = z.object({
+    address_subdivision: z
+      .string()
+      .min(1, t("onBoarding.address_subdivision_field.error")),
+    address_postal_code: z
+      .string()
+      .min(1, t("onBoarding.address_postal_code_field.error")),
+  });
+
+  const formErrors = validationSchema.safeParse(formValues);
+
+  if (onValidationChange) {
+    onValidationChange(formErrors.success);
+  }
+
+  const getError = (field: string) => {
+    if (dirtyFields[field]) {
+      const error = formErrors.error?.errors.find(
+        (e) => e.path[0] === field,
+      )?.message;
+      return error || "";
+    }
+    return "";
+  };
 
   return (
     <>
@@ -34,7 +48,7 @@ const OnBoardingStep4 = ({
           focused === "address_subdivision" ||
           Boolean(formValues.address_subdivision)
         }
-        error={error?.address_subdivision}
+        error={getError("address_subdivision")}
         hint={t("onBoarding.address_subdivision_field.hint")}
         required={true}
       >
@@ -57,7 +71,7 @@ const OnBoardingStep4 = ({
           focused === "address_postal_code" ||
           Boolean(formValues.address_postal_code)
         }
-        error={error?.address_postal_code}
+        error={getError("address_postal_code")}
         hint={t("onBoarding.address_postal_code_field.hint")}
       >
         <TextInput
