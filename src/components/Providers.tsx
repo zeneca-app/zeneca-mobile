@@ -1,22 +1,18 @@
 import "./polyfills";
 import { MyPermissiveSecureStorageAdapter } from "@/lib/storage-adapter";
-import { useUserStore } from "@/storage/userStore";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { PrivyProvider, useEmbeddedWallet, usePrivy } from "@privy-io/expo";
+import { PrivyProvider } from "@privy-io/expo";
 import {
   QueryClient,
   QueryClientProvider,
-  useQuery,
 } from "@tanstack/react-query";
-import * as SplashScreen from "expo-splash-screen";
 import { PostHogProvider } from "posthog-react-native";
-import React, { ReactNode, useEffect } from "react";
+import React from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { createConfig, http, WagmiProvider } from "wagmi";
 import { base, baseSepolia, sepolia } from "wagmi/chains";
-import { usersMeOptions } from "@/client/@tanstack/react-query.gen";
-import client from "@/client/client";
+import { AwaitPrivyProvider } from "@/components/AwaitPrivyProvider";
 
 const queryClient = new QueryClient();
 
@@ -43,22 +39,22 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
         clientId={CLIENT_ID}
         supportedChains={[sepolia, baseSepolia, base]}
       >
-        <SafeAreaProvider>
-          <BottomSheetModalProvider>
-            <PostHogProvider
-              apiKey={POSTHOG_API_KEY}
-              options={{
-                host: POSTHOG_HOST,
-              }}
-            >
+        <PostHogProvider
+          apiKey={POSTHOG_API_KEY}
+          options={{
+            host: POSTHOG_HOST,
+          }}
+        >
+          <SafeAreaProvider>
+            <BottomSheetModalProvider>
               <QueryClientProvider client={queryClient}>
                 <WagmiProvider config={wagmiConfig}>
-                  {children}
+                  <AwaitPrivyProvider>{children}</AwaitPrivyProvider>
                 </WagmiProvider>
               </QueryClientProvider>
-            </PostHogProvider>
-          </BottomSheetModalProvider>
-        </SafeAreaProvider>
+            </BottomSheetModalProvider>
+          </SafeAreaProvider>
+        </PostHogProvider>
       </PrivyProvider>
     </GestureHandlerRootView>
   );

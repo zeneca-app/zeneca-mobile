@@ -23,13 +23,10 @@ const ProfileButton = ({
   children = undefined,
   className,
 }: ProfileButtonProps) => {
-  const [isLoading, setIsLoading] = useState(false);
-
   const navigation = useNavigation();
-
   const { t } = useTranslation();
-
-  const { setUser } = useUserStore();
+  const [isLoading, setIsLoading] = useState(false);
+  const { setUser } = useUserStore((state) => state);
 
   const profileOptionsRef = useRef<BottomSheetModal>(null);
 
