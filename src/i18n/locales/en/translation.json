@@ -183,5 +183,29 @@
       "done_button": "Understood",
       "view_order_button": "View order"
     }
+  },
+  "onBoarding": {
+    "title": "Completa tu \ninformación",
+    "name_field": {
+      "label": "Nombre(s)",
+      "placeholder": "Nombre",
+      "error": "Este campo es requerido"
+    },
+    "lastname_field": {
+      "label": "Apellido paterno",
+      "placeholder": "Apellido paterno",
+      "error": "Este campo es requerido"
+    },
+    "dob_field": {
+      "label": "Fecha de nacimiento",
+      "placeholder": "Fecha de nacimiento",
+      "error": "Este campo es requerido"
+    },
+    "country_field": {
+      "label": "País de residencia",
+      "placeholder": "País de residencia",
+      "error": "Este campo es requerido"
+    },
+    "continue_button": "Continuar"
   }
 }

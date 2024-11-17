@@ -26,6 +26,7 @@ export type BottomSheetProps = {
   backgroundClasses?: string;
   backdropClasses?: string;
   snapPoints?: (number | `${number}%`)[];
+  detached?: boolean;
 };
 
 /**
@@ -42,13 +43,14 @@ const BottomSheet = forwardRef<BottomSheetModal, BottomSheetProps>(
       backgroundClasses = "",
       backdropClasses = "",
       snapPoints = undefined, // Passing an array of values will disable dinamic sizing
+      detached = true,
     },
     ref,
   ) => {
     const insets = useSafeAreaInsets();
 
     const indicatorDefaultClasses = "bg-dark-background-80 w-12 my-2";
-    const backgroundDefaultClasses = "bg-dark-background-100 rounded m-2";
+    const backgroundDefaultClasses = `bg-dark-background-100 ${detached ? "rounded" : "rounded-t"} m-2`;
     const backdropDefaultClasses = "bg-gray-alpha-90";
 
     const renderBackdrop = useCallback(
@@ -79,9 +81,9 @@ const BottomSheet = forwardRef<BottomSheetModal, BottomSheetProps>(
         snapPoints={snapPoints}
         index={0}
         //Raise it from the bottom using the safe view bottom inset
-        bottomInset={insets.bottom}
+        bottomInset={detached ? insets.bottom : 0}
         // set `detached` to true to lift it from bottom of view port to follow design
-        detached={true}
+        detached={detached}
         backdropComponent={renderBackdrop}
         indicatorClasses={`${indicatorDefaultClasses} ${indicatorClasses}`}
         backgroundClasses={`${backgroundDefaultClasses} ${backgroundClasses}`}

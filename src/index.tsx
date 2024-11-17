@@ -1,7 +1,6 @@
 import "@/i18n";
-import { useEffect } from "react";
-import { useAuthInterceptor } from "@/hooks/apiInterceptor";
 import { Providers } from "@/components/Providers";
+import { useAuthInterceptor } from "@/hooks/apiInterceptor";
 import { RootStackParamList } from "@/navigation/types";
 import DepositCrypto from "@/screens/Deposit/DepositCrypto";
 import DepositWithBank from "@/screens/Deposit/DepositWithBank";
@@ -43,7 +42,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as Sentry from "@sentry/react-native";
 import { QueryClient } from "@tanstack/react-query";
 import { isRunningInExpoGo } from "expo";
-import { Suspense, useCallback } from "react";
+import { Suspense, useCallback, useEffect } from "react";
 import { LogBox, StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "./styles/global.css";
@@ -51,6 +50,7 @@ import ETFDetail from "@/screens/ETF/ETFDetail";
 import ETFPurchase from "@/screens/ETF/ETFPurchase";
 import ETFPurchaseConfirmation from "@/screens/ETF/ETFPurchaseConfirmation";
 import ETFPurchaseSuccess from "@/screens/ETF/ETFPurchaseSuccess";
+import Onboarding from "@/screens/OnBoarding/OnBoarding";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
@@ -154,7 +154,7 @@ const AppIndex = () => {
           <SafeAreaProvider>
             <NavigationContainer>
               <Providers>
-                <Stack.Navigator initialRouteName={"Login"}>
+                <Stack.Navigator initialRouteName={"Onboarding"}>
                   <Stack.Group>
                     <Stack.Screen
                       options={{ headerShown: false }}
@@ -175,6 +175,11 @@ const AppIndex = () => {
                       options={{ headerShown: false }}
                       name="LoginOptions"
                       component={LoginOptions}
+                    />
+                    <Stack.Screen
+                      options={{ headerShown: false }}
+                      name="Onboarding"
+                      component={Onboarding}
                     />
                   </Stack.Group>
                   <Stack.Screen
