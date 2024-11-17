@@ -1,6 +1,7 @@
 import KeypadButton from "@/components/Buttons/KeypadButton";
 import PillButton from "@/components/Buttons/PillButton";
 import Text from "@/components/Text";
+import config from "@/config";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import BigNumber from "bignumber.js";
 import React from "react";
@@ -13,15 +14,36 @@ export type KeypadProps = {
   decimals?: number;
 };
 
+const KEYPAD_PRESETS_ACTION = config.KEYPAD_PRESETS_ACTION;
+
 const Keypad = ({ onChange, value, maximun, decimals = 2 }: KeypadProps) => {
   const resetAmount = () => {
     onChange("0");
   };
 
-  const addAmount = (amount: number) => {
+  const addAmount = (amount: number, maxAmount = maximun) => {
+    const keepPeriod = value.slice(-1) === ".";
+    const newValue = new BigNumber(value).plus(amount);
+    const exceededMax = newValue.isGreaterThan(maxAmount);
+    if (exceededMax) {
+      onChange(adjustToMax(newValue.toString()));
+      return;
+    }
+    onChange(`${newValue.toString()}${keepPeriod ? "." : ""}`);
+  };
+
+  const setAmount = (amount: number, maxAmount = maximun) => {
     const newValue = new BigNumber(amount);
+    const exceededMax = newValue.isGreaterThan(maxAmount);
+    if (exceededMax) {
+      onChange(adjustToMax(newValue.toString()));
+      return;
+    }
     onChange(newValue.toString());
   };
+
+  const handlePreset =
+    KEYPAD_PRESETS_ACTION === "replace" ? setAmount : addAmount;
 
   const adjustToMax = (amount: string, maxAmount = maximun) => {
     const newValue = new BigNumber(amount);
@@ -34,7 +56,6 @@ const Keypad = ({ onChange, value, maximun, decimals = 2 }: KeypadProps) => {
 
   const backspace = () => {
     const newValue = value.slice(0, -1);
-    console.log("BACKSPACE: ", newValue, typeof newValue);
     if (newValue === "") {
       resetAmount();
       return;
@@ -65,25 +86,25 @@ const Keypad = ({ onChange, value, maximun, decimals = 2 }: KeypadProps) => {
     <View className="px-layout-l flex gap-l pb-layout-s">
       <View className="flex-row justify-between">
         <PillButton
-          onPress={() => addAmount(5)}
+          onPress={() => handlePreset(5)}
           className="border border-gray-90 w-20 text-white  flex justify-center items-center"
         >
           <Text className="text-caption-l text-white">$5</Text>
         </PillButton>
         <PillButton
-          onPress={() => addAmount(10)}
+          onPress={() => handlePreset(10)}
           className="border border-gray-90 w-20 text-white flex justify-center items-center"
         >
           <Text className="text-caption-l text-white">$10</Text>
         </PillButton>
         <PillButton
-          onPress={() => addAmount(20)}
+          onPress={() => handlePreset(20)}
           className="border border-gray-90 w-20 text-white flex justify-center items-center"
         >
           <Text className="text-caption-l text-white">$20</Text>
         </PillButton>
         <PillButton
-          onPress={() => addAmount(maximun)}
+          onPress={() => handlePreset(maximun)}
           className="border border-gray-90 w-20 text-white flex justify-center items-center"
         >
           <Text className="text-caption-l text-white">MAX</Text>

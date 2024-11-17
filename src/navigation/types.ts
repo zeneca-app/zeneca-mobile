@@ -7,7 +7,6 @@ export type RootStackParamList = {
   Quote: undefined;
   QuoteConfirmation: undefined;
   TransactionReceipt: undefined;
-  MainTabs: undefined;
   SendSuccess: undefined;
   LoginOptions: undefined;
   LoginWithEmail: undefined;

@@ -1,5 +1,7 @@
 import Keypad from "@/components/KeypadOld";
-import { useBalance } from "@/context/BalanceContext";
+import client from "@/client/client";
+import { usersMyBalanceOptions } from "@/client/@tanstack/react-query.gen";
+import { useQuery } from "@tanstack/react-query";
 import useRecipientStore from "@/storage/recipientStore";
 import useTransferStore from "@/storage/transferStore";
 import { useUserStore } from "@/storage/userStore";
@@ -34,7 +36,16 @@ const SendScreen = () => {
     recipientCrypto: state.recipientCrypto,
   }));
 
-  const { balanceFormatted: balance } = useBalance();
+  const {
+    isPending,
+    error,
+    data: balance,
+    refetch: refetchBalance,
+  } = useQuery({
+    ...usersMyBalanceOptions({
+      client: client,
+    }),
+  });
 
   const handleKeyPress = (key: string | number) => {
     if (key === "backspace") {
@@ -103,7 +114,7 @@ const SendScreen = () => {
             </Text>
             <Text style={styles.balanceText}>
               {" "}
-              ${formatCurrency(balance, "USD")}
+              ${formatCurrency(balance?.available || 0, "USD")}
             </Text>
           </View>
           <View style={styles.amountContainer}>
