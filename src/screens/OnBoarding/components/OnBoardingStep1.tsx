@@ -13,7 +13,7 @@ const OnBoardingStep1 = ({
   focused,
   handleChange,
   handleFocus,
-  dirtyFields,
+  touchedFields,
   handleBlur,
   onValidationChange,
 }: OnBoardingStepProps) => {
@@ -38,7 +38,7 @@ const OnBoardingStep1 = ({
   }
 
   const getError = (field: string) => {
-    if (dirtyFields[field]) {
+    if (touchedFields[field]) {
       const error = formErrors.error?.errors.find(
         (e) => e.path[0] === field,
       )?.message;
@@ -114,7 +114,9 @@ const OnBoardingStep1 = ({
       </InputWrapper>
       <InputWrapper
         label={t("onBoarding.birth_date_field.label")}
-        isFocused={focused === "birth_date" || Boolean(dirtyFields?.birth_date)}
+        isFocused={
+          focused === "birth_date" || Boolean(touchedFields?.birth_date)
+        }
         error={getError("birth_date")}
         required={true}
       >
@@ -123,7 +125,7 @@ const OnBoardingStep1 = ({
           onPress={() => setShowDateTimePicker(!showDateTimePicker)}
         >
           <Text className="text-white text-body-s h-6">
-            {Boolean(dirtyFields?.birth_date) &&
+            {Boolean(touchedFields?.birth_date) &&
               formValues.birth_date.toLocaleDateString()}
           </Text>
           <Feather

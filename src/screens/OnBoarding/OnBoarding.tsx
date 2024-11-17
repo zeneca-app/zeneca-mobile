@@ -18,14 +18,28 @@ const steps = [
   OnBoardingStep4,
 ];
 
+type FormValues = {
+  first_name: string;
+  middle_name: string;
+  last_name: string;
+  birth_date: Date;
+  country_code: string;
+  tax_id_number: string;
+  address_street_1: string;
+  address_street_2: string;
+  address_city: string;
+  address_subdivision: string;
+  address_postal_code: string;
+};
+
 export type OnBoardingStepProps = {
-  formValues: { country_code?: string; tax_id_number?: string };
-  focused: string | boolean;
-  handleChange: (field: string, value: string) => void;
+  formValues: FormValues;
+  focused: string | boolean | null;
+  handleChange: (field: keyof FormValues, value: string | Date) => void;
   handleFocus: (field: string) => void;
   handleBlur: (field: string) => void;
   onValidationChange: (isValid: boolean) => void;
-  dirtyFields: { [key: string]: boolean };
+  touchedFields: { [key: string]: boolean };
 };
 
 const OnBoarding = () => {
@@ -45,13 +59,16 @@ const OnBoarding = () => {
     address_postal_code: "",
   };
 
-  const [formValues, setFormValues] = useState(initialFormValues);
-  const [error, setError] = useState<Partial<FormValues>>({});
+  const [formValues, setFormValues] = useState<FormValues>(initialFormValues);
   const [focused, setFocused] = useState<keyof FormValues | null>(null);
-  const [dirtyFields, setDirtyFields] = useState({});
-  const [activeStep, setActiveStep] = useState(2);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isCurrentStepValid, setIsCurrentStepValid] = useState(false);
+  const [touchedFields, setTouchedFields] = useState<
+    Partial<Record<keyof FormValues, boolean>>
+  >({});
+  const [activeStep, setActiveStep] = useState<number>(0); //This is used to render the current step
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isCurrentStepValid, setIsCurrentStepValid] = useState<boolean>(false);
+
+  //const [error, setError] = useState<string | undefined>(""); //This can be used to render errors from submit
 
   const handleSubmit = () => {
     setIsSubmitting(true);
@@ -74,32 +91,24 @@ const OnBoarding = () => {
     setActiveStep((prev) => prev - 1);
   };
 
-  const handleChange = (fieldName: string, value: string) => {
+  const handleChange = (fieldName: keyof FormValues, value: string | Date) => {
     markFieldDirty(fieldName);
     setFormValues((prev) => ({ ...prev, [fieldName]: value }));
   };
 
-  const markFieldDirty = (fieldName: string) => {
-    if (!dirtyFields[fieldName]) {
-      setDirtyFields((prev) => ({ ...prev, [fieldName]: true }));
+  const markFieldDirty = (fieldName: keyof FormValues) => {
+    if (!touchedFields[fieldName]) {
+      setTouchedFields((prev) => ({ ...prev, [fieldName]: true }));
     }
     return;
   };
 
-  const isFieldDirty = (fieldName: string) => {
-    return dirtyFields[fieldName] ? true : false;
+  const handleFocus = (field: string) => {
+    setFocused(field as keyof FormValues);
   };
 
-  const onError: SubmitErrorHandler<FormValues> = (errors, e) => {
-    return console.log(errors);
-  };
-
-  const handleFocus = (fieldName) => {
-    setFocused(fieldName);
-  };
-
-  const handleBlur = (fieldName) => {
-    if (fieldName === focused) setFocused(null);
+  const handleBlur = (field: string) => {
+    if (field === focused) setFocused(null);
   };
 
   const Step = steps[activeStep];
@@ -123,13 +132,9 @@ const OnBoarding = () => {
             <View className="flex-1 justify-start items-stretch gap">
               <Step
                 formValues={formValues}
-                error={error}
                 focused={focused}
-                dirtyFields={dirtyFields}
+                touchedFields={touchedFields}
                 handleChange={handleChange}
-                onError={onError}
-                markFieldDirty={markFieldDirty}
-                isFieldDirty={isFieldDirty}
                 handleFocus={handleFocus}
                 handleBlur={handleBlur}
                 onValidationChange={setIsCurrentStepValid}

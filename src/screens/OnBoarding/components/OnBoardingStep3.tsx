@@ -9,7 +9,7 @@ const OnBoardingStep3 = ({
   focused,
   handleChange,
   handleFocus,
-  dirtyFields,
+  touchedFields,
   handleBlur,
   onValidationChange,
 }: OnBoardingStepProps) => {
@@ -29,7 +29,7 @@ const OnBoardingStep3 = ({
   }
 
   const getError = (field: string) => {
-    if (dirtyFields[field]) {
+    if (touchedFields[field]) {
       const error = formErrors.error?.errors.find(
         (e) => e.path[0] === field,
       )?.message;

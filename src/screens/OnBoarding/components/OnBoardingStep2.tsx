@@ -18,7 +18,7 @@ const OnBoardingStep2 = ({
   focused,
   handleChange,
   handleFocus,
-  dirtyFields,
+  touchedFields,
   handleBlur,
   onValidationChange,
 }: OnBoardingStepProps) => {
@@ -38,7 +38,7 @@ const OnBoardingStep2 = ({
   }
 
   const getError = (field: string) => {
-    if (dirtyFields[field]) {
+    if (touchedFields[field]) {
       const error = formErrors.error?.errors.find(
         (e) => e.path[0] === field,
       )?.message;
@@ -92,7 +92,10 @@ const OnBoardingStep2 = ({
           onPress={handleShowCountries}
         >
           <Text className="text-white flex-1 text-body-s">
-            {COUNTRIES?.[formValues.country_code]?.name}
+            {
+              COUNTRIES?.[formValues.country_code as keyof typeof COUNTRIES]
+                ?.name
+            }
           </Text>
           <View>
             <Ionicons name="chevron-down" size={16} color="white" />
