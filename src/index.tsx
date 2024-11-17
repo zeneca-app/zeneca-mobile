@@ -14,7 +14,6 @@ import { LogBox } from "react-native";
 import "./styles/global.css";
 import MainNavigation from "@/screens/MainNavigation";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
 
 
 const navigationIntegration = Sentry.reactNavigationIntegration({
@@ -45,14 +44,9 @@ const AppIndex = () => {
     Manrope_700Bold,
   });
 
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-
+  if (!loaded) {
+    return null;
+  }
   return (
     <NavigationContainer>
       <Providers>

@@ -1,10 +1,11 @@
 import BaseLogo from "@/assets/base-logo.svg";
+import USDCLogo from "@/assets/usdc.svg";
 import CopyIcon from "@/assets/copy.svg";
 import CryptoNetworkButton from "@/components/Buttons/CryptoNetworkButton";
 import Card from "@/components/Card";
 import LoggedLayout from "@/components/LoggedLayout";
 import { useUserStore } from "@/storage/userStore";
-import { shortenAddress } from "@/utils/address";
+import { shortenAddressLonger } from "@/utils/address";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { toast } from "burnt";
 import { cssInterop } from "nativewind";
@@ -13,7 +14,7 @@ import { useTranslation } from "react-i18next";
 import { Text, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
-// TODO: Retrieve wallet address from smart contract
+
 
 const DepositCrypto = () => {
   const { t } = useTranslation();
@@ -43,8 +44,15 @@ const DepositCrypto = () => {
           <Card className="py-layout-s">
             <CryptoNetworkButton
               token="USDC"
+              iconSlot={<USDCLogo width={40} height={40} />}
+              onPress={() => { }}
+            />
+          </Card>
+          <Card className="py-layout-s">
+            <CryptoNetworkButton
+              token="BASE"
               iconSlot={<BaseLogo width={40} height={40} />}
-              onPress={() => {}}
+              onPress={() => { }}
             />
           </Card>
 
@@ -54,7 +62,7 @@ const DepositCrypto = () => {
             </Text>
             <View className="flex flex-row justify-between items-center">
               <Text className="text-dark-content-white text-body-s flex-1">
-                {shortenAddress(walletAddress)}
+                {shortenAddressLonger(walletAddress)}
               </Text>
               <TouchableOpacity
                 className="w-10 h-10 flex items-center justify-center"
@@ -67,11 +75,11 @@ const DepositCrypto = () => {
           <View className="h-px bg-dark-background-100" />
         </View>
         <View className="text-center flex gap items-stretch pt-layout-l px-layout-l">
-          <Text className="text-caption-xl text-gray-50 text-center">
+          <Text className="text-caption-xs text-gray-50 text-left">
             {t("depositCrypto.infoText")}
           </Text>
 
-          <Text className="text-caption-xl text-gray-50 text-center">
+          <Text className="text-caption-xs text-gray-50 text-left">
             {t("depositCrypto.disclaimerText")}
           </Text>
         </View>

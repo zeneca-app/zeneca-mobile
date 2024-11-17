@@ -24,6 +24,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 
 const Login = () => {
+
   const { t } = useTranslation();
   const navigation = useNavigation();
 
@@ -36,7 +37,6 @@ const Login = () => {
   const [isFetchingUser, setIsFetchingUser] = useState(false);
 
   const token = SecureStore.getItem(`token-${address}`);
-  console.log("token", token);
 
   useEffect(() => {
     if (address) {
