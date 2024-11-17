@@ -30,7 +30,7 @@ const MainNavigation = () => {
     const { user } = useUserStore();
 
     return (
-        <Stack.Navigator initialRouteName={user! ? "Login" : "Home"}>
+        <Stack.Navigator initialRouteName={!user ? "Login" : "Home"}>
             <Stack.Group>
                 <Stack.Screen
                     options={{ headerShown: false }}
