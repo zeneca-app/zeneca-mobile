@@ -1,9 +1,7 @@
 import { OrderQuote } from "@/client";
 import {
   ordersCreateQuoteOrderMutation,
-  ordersCreateQuoteOrderOptions,
 } from "@/client/@tanstack/react-query.gen";
-import client from "@/client/client";
 import Button from "@/components/Button";
 import LoggedLayout from "@/components/LoggedLayout";
 import Text from "@/components/Text";
@@ -21,8 +19,10 @@ import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { Address } from "viem";
 
+
+
 const ETFPurchaseConfirmation = ({ route }) => {
-  const { etf, amount = "0" } = route.params;
+  const { etf, amount } = route.params;
 
   const amountToOrder = formatNumber(amount, 2, 6);
 
@@ -46,7 +46,6 @@ const ETFPurchaseConfirmation = ({ route }) => {
       setQuote(data);
     },
   });
-
 
   const executeTransaction = async () => {
     try {
@@ -103,9 +102,9 @@ const ETFPurchaseConfirmation = ({ route }) => {
     .precision(4)
     .toString();
 
-
   const isLoading = isCreateQuotePending || transactionInitiated;
   const isDisabled = isCreateQuotePending || !quote || transactionInitiated;
+  
   return (
     <LoggedLayout>
       <View className="flex pb-layout">
@@ -133,7 +132,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
             {t("etfPurchase.price")}
           </Text>
           <Text className="text-caption-xl text-dark-content-white">
-            {etf.price}
+            ${etf.price}
           </Text>
         </View>
         <View className="flex-row items-center justify-between gap-s">
@@ -141,7 +140,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
             {t("etfPurchase.fee")}
           </Text>
           <Text className="text-caption-xl text-dark-content-white">
-            {currencyFormatter(quote?.fee, 4, quote?.precision)}
+            {currencyFormatter(quote?.fee, 2, quote?.precision)}
           </Text>
         </View>
         <View className="flex-row items-center justify-between gap-s">
@@ -149,7 +148,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
             {t("etfPurchase.total")}
           </Text>
           <Text className="text-caption-xl text-dark-content-white">
-            {currencyFormatter(quote?.total, 4, quote?.precision)}
+            {currencyFormatter(quote?.total, 2, quote?.precision)}
           </Text>
         </View>
         <View className="h-px rounded-full bg-dark-background-100" />
