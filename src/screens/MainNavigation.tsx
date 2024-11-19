@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { RootStackParamList } from "@/navigation/types";
 import DepositCrypto from "@/screens/Deposit/DepositCrypto";
 import DepositWithBank from "@/screens/Deposit/DepositWithBank";
@@ -23,11 +24,19 @@ import SendSuccessScreen from "@/screens/SendSuccess";
 import TransactionReceiptScreen from "@/screens/TransactionReceipt";
 import { useUserStore } from "@/storage/userStore";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useCheckUpdate } from "@/hooks/useCheckUpdate";
+
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const MainNavigation = () => {
   const { user } = useUserStore();
+  const { checkUpdate } = useCheckUpdate();
+
+  useEffect(() => {
+    if (__DEV__) return;
+    checkUpdate();
+  }, []);
 
   return (
     <Stack.Navigator initialRouteName={!user ? "Login" : "Home"}>
