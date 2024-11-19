@@ -31,7 +31,7 @@ const windowWidth = Dimensions.get("window").width;
 const chartWidth = windowWidth - 48;
 const chartHeight = chartWidth;
 
-type Stock = {
+type Asset = {
   etf: {
     id: string;
     name: string;
@@ -44,8 +44,8 @@ type Stock = {
   };
 };
 
-const ETFDetail = ({ route }: Stock) => {
-  const etf = route.params.etf as Stock["etf"];
+const ETFDetail = ({ route }: Asset) => {
+  const asset = route.params.etf as Asset["etf"];
 
   const navigation = useNavigation();
 
@@ -54,44 +54,44 @@ const ETFDetail = ({ route }: Stock) => {
 
   const { t } = useTranslation();
 
-  const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo || null;
+  const Logo = STOCKS?.[asset.symbol as keyof typeof STOCKS]?.logo || null;
 
   cssInterop(CopyIcon, { className: "style" });
 
   const {
-    isPending: assetLoading,
-    error: assetError,
-    data: assetData,
-    refetch: assetRefetch,
+    isPending: assetDetailLoading,
+    error: assetDetailError,
+    data: assetDetailData,
+    refetch: assetDetailRefetch,
   } = useQuery({
     ...assetsGetAssetDetailOptions({
       client: client,
       path: {
-        asset_id: etf.id,
+        asset_id: asset.id,
       },
     }),
   });
 
   const {
     isPending: chartLoading,
-    error,
-    data,
-    refetch,
+    error: chartError,
+    data: stockPointsData,
+    refetch: stockPointsRefetch,
   } = useQuery({
     ...assetsGetAssetTicksOptions({
       client: client,
       path: {
-        asset_id: etf.id,
+        asset_id: asset.id,
       },
       query: {
         timespan: CHART_TIMEFRAMES[timeframe] as Timespan,
       },
     }),
-    enabled: Boolean(etf?.id),
+    enabled: Boolean(asset?.id),
   });
 
-  const normalizedData = (data) => {
-    return data.map((item) => {
+  const normalizedStockPointsData = (data: any) => {
+    return data.map((item: any) => {
       return {
         timestamp: item.timestamp * 1000,
         value: parseFloat(item.close),
@@ -99,12 +99,12 @@ const ETFDetail = ({ route }: Stock) => {
     });
   };
 
-  const getChartChange = useCallback((data) => {
-    if (!data || !data.length) {
+  const getChartChange = useCallback((datapoints: any) => {
+    if (!datapoints || !datapoints.length) {
       return { change: 0, percentage: 0, increase: false };
     }
-    const first = BigNumber(data[0].value);
-    const last = BigNumber(data[data.length - 1].value);
+    const first = BigNumber(datapoints[0].value);
+    const last = BigNumber(datapoints[datapoints.length - 1].value);
     const change = last.minus(first);
     const percentage = change.dividedBy(first);
     const increase = change.isGreaterThanOrEqualTo(0);
@@ -113,13 +113,13 @@ const ETFDetail = ({ route }: Stock) => {
       percentage: percentage.toNumber(),
       increase,
     };
-  });
+  }, [stockPointsData]);
 
-  const chartData = normalizedData(data || []);
+  const chartData = normalizedStockPointsData(stockPointsData || []);
 
   const change = getChartChange(chartData);
 
-  const price = assetData?.price || etf.price;
+  const price = assetDetailData?.price || asset.price;
 
   const lineColor = change.increase ? "#04AE92" : "#F58989";
 
@@ -130,10 +130,10 @@ const ETFDetail = ({ route }: Stock) => {
           <Logo style={{ height: "100%", width: "100%" }} />
         </View>
         <Text className="text-gray-50 text-caption-xl flex-1">
-          {etf.symbol}
+          {asset.symbol}
         </Text>
       </View>
-      <Text className="text-heading-m text-gray-10 px-layout">{etf.name}</Text>
+      <Text className="text-heading-m text-gray-10 px-layout">{asset.display_name}</Text>
       <Text className="text-heading-m text-gray-10 px-layout">${price}</Text>
       <View className="flex-row gap-s pt-layout-s pb-layout-s items-center justify-start px-layout">
         <Text
@@ -149,7 +149,7 @@ const ETFDetail = ({ route }: Stock) => {
           className="relative w-full"
           style={{ height: chartWidth + 24, width: chartHeight }}
         >
-          {data && data.length > 0 ? (
+          {stockPointsData && stockPointsData.length > 0 ? (
             <LineChart.Provider data={chartData}>
               <LineChart height={chartHeight}>
                 <LineChart.Path color={lineColor}>
@@ -196,7 +196,7 @@ const ETFDetail = ({ route }: Stock) => {
           className=""
           onPress={() =>
             navigation.navigate("ETFPurchase", {
-              etf: { ...etf, price: price },
+              etf: { ...asset, price: price },
             })
           }
         >

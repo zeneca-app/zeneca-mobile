@@ -1,7 +1,7 @@
 {
   "login": {
-    "description_line_1": "Global money",
-    "description_line_2": "like a local",
+    "description_line_1": "Invest in the US stock market",
+    "description_line_2": "from $1 dollar with local transfer",
     "signUpButton": "Open my account!",
     "signInButton": "Sign in"
   },
@@ -161,7 +161,7 @@
     "explore": "Buy"
   },
   "explore": {
-    "title": "Stocks <0>ETFs</0>"
+    "title": "Stocks & ETFs"
   },
   "etfDetail": {
     "buy": "Buy",

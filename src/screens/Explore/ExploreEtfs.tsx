@@ -17,7 +17,12 @@ import SkeletonLoadingView, {
 const ExploreETFs = () => {
   cssInterop(CopyIcon, { className: "style" });
 
-  const { isPending, error, data, refetch } = useQuery({
+  const {
+    isPending,
+    error: allAssetsError,
+    data: allAssets,
+    refetch,
+  } = useQuery({
     ...assetsGetAssetsOptions({
       client: client,
     }),
@@ -27,7 +32,7 @@ const ExploreETFs = () => {
     return <StockListItem etf={item} />;
   };
 
-  const etfs = data || [];
+  const assets = allAssets || [];
 
   const separator = () => <Separator />;
 
@@ -36,7 +41,7 @@ const ExploreETFs = () => {
       <Text className="text-heading-s text-gray-10 px-layout pt-layout-s pb-layout-l">
         <Trans
           i18nKey="explore.title"
-          components={[<Text className="text-gray-50">segment0</Text>]}
+          components={[]}
         />
       </Text>
       <View className="flex-1 px-layout">
@@ -50,7 +55,7 @@ const ExploreETFs = () => {
           </SkeletonLoadingView>
         ) : (
           <FlatList
-            data={etfs}
+            data={assets}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
             ItemSeparatorComponent={separator}

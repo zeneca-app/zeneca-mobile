@@ -1,9 +1,7 @@
 import { OrderQuote } from "@/client";
 import {
   ordersCreateQuoteOrderMutation,
-  ordersCreateQuoteOrderOptions,
 } from "@/client/@tanstack/react-query.gen";
-import client from "@/client/client";
 import Button from "@/components/Button";
 import LoggedLayout from "@/components/LoggedLayout";
 import Text from "@/components/Text";
@@ -21,8 +19,10 @@ import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { Address } from "viem";
 
+
+
 const ETFPurchaseConfirmation = ({ route }) => {
-  const { etf, amount = "0" } = route.params;
+  const { etf, amount } = route.params;
 
   const amountToOrder = formatNumber(amount, 2, 6);
 
@@ -33,21 +33,12 @@ const ETFPurchaseConfirmation = ({ route }) => {
   const { chain } = useChainStore();
   const [transactionInitiated, setTransactionInitiated] = useState(false);
   const navigation = useNavigation();
-  const [tx, setTx] = useState<`0x${string}` | null>(null);
 
   const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo || null;
   const [quote, setQuote] = useState<OrderQuote | null>(null);
 
   const { mutate: createQuote, isPending: isCreateQuotePending } = useMutation({
-    ...ordersCreateQuoteOrderMutation({
-      client: client,
-      body: {
-        asset_id: etf.id,
-        side: "BUY",
-        order_type: "MARKET",
-        amount: amountToOrder,
-      },
-    }),
+    ...ordersCreateQuoteOrderMutation(),
     onError: (error) => {
       console.error("Error creating quote:", error);
     },
@@ -56,13 +47,8 @@ const ETFPurchaseConfirmation = ({ route }) => {
     },
   });
 
-  console.log("quote", quote);
-
   const executeTransaction = async () => {
     try {
-      if (!quote) {
-        throw new Error("Quote not found");
-      }
       setTransactionInitiated(true);
 
       const signerAddress = wallet?.account?.address as Address;
@@ -71,13 +57,25 @@ const ETFPurchaseConfirmation = ({ route }) => {
         chain,
         wallet,
       );
-      const transactions = await createOrder(quote, smartAccountClient);
+      const transactions = await createOrder(quote!, smartAccountClient);
       const tx = await smartAccountClient.sendTransactions({
         transactions: transactions,
       });
-      setTx(tx);
+      if (tx) {
+        const receipt = await publicClient.waitForTransactionReceipt({
+          hash: tx,
+        });
 
-      console.log("tx", tx);
+        queryClient.invalidateQueries(["usersMyBalance"]);
+        queryClient.invalidateQueries(["usersMyAssets"]);
+
+        navigation.navigate("ETFPurchaseSuccess", {
+          etf,
+          amount,
+        });
+      }
+
+
     } catch (error) {
       console.error("Error during transaction:", error);
     } finally {
@@ -104,26 +102,9 @@ const ETFPurchaseConfirmation = ({ route }) => {
     .precision(4)
     .toString();
 
-  useEffect(() => {
-    (async () => {
-      if (tx) {
-        const receipt = await publicClient.waitForTransactionReceipt({
-          hash: tx,
-        });
-
-        queryClient.invalidateQueries(["usersMyBalance"]);
-        queryClient.invalidateQueries(["usersMyAssets"]);
-
-        navigation.navigate("ETFPurchaseSuccess", {
-          etf,
-          amount,
-        });
-      }
-    })();
-  }, [tx]);
-
   const isLoading = isCreateQuotePending || transactionInitiated;
   const isDisabled = isCreateQuotePending || !quote || transactionInitiated;
+  
   return (
     <LoggedLayout>
       <View className="flex pb-layout">
@@ -151,7 +132,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
             {t("etfPurchase.price")}
           </Text>
           <Text className="text-caption-xl text-dark-content-white">
-            {etf.price}
+            ${etf.price}
           </Text>
         </View>
         <View className="flex-row items-center justify-between gap-s">
@@ -159,7 +140,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
             {t("etfPurchase.fee")}
           </Text>
           <Text className="text-caption-xl text-dark-content-white">
-            {currencyFormatter(quote?.fee, 4, quote?.precision)}
+            {currencyFormatter(quote?.fee, 2, quote?.precision)}
           </Text>
         </View>
         <View className="flex-row items-center justify-between gap-s">
@@ -167,7 +148,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
             {t("etfPurchase.total")}
           </Text>
           <Text className="text-caption-xl text-dark-content-white">
-            {currencyFormatter(quote?.total, 4, quote?.precision)}
+            {currencyFormatter(quote?.total, 2, quote?.precision)}
           </Text>
         </View>
         <View className="h-px rounded-full bg-dark-background-100" />
