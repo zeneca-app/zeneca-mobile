@@ -14,7 +14,7 @@ export function AwaitPrivyProvider({ children }: { children: ReactNode }) {
 
     const {
         data: userData,
-        isPending,
+        isPending: isUserPending,
         error,
     } = useQuery({
         ...usersMeOptions({
