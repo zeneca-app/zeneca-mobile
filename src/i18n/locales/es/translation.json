@@ -63,14 +63,14 @@
     }
   },
   "depositCrypto": {
-    "title": "Depósito con Crypto",
+    "title": "Depósito con cripto",
     "addressLabel": "Dirección de la billetera",
     "infoText": "Esta dirección solamente puede recibir USDC en Base Sepolia",
     "disclaimerText": "Asegúrate de que la red sea la misma que la de la billetera desde la que envías o podrías perder tus fondos.",
     "addressCopied": "Dirección copiada al portapapeles"
   },
   "depositWithBank": {
-    "title": "Transfer from Crypto"
+    "title": "Transferencia bancaria"
   },
   "comingSoon": {
     "title": "¡Próximamente!",

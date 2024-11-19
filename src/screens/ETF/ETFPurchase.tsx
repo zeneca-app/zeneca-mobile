@@ -11,6 +11,11 @@ import BigNumber from "bignumber.js";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
+import SkeletonLoadingView, {
+  SkeletonView,
+} from "@/components/Loading/SkeletonLoadingView";
+
+
 
 const ETFPurchase = ({ route }) => {
   const { etf } = route.params;
@@ -24,8 +29,8 @@ const ETFPurchase = ({ route }) => {
   const { t } = useTranslation();
 
   const {
-    isPending,
-    error,
+    isPending: isBalancePending,
+    error: balanceError,
     data: balance,
   } = useQuery({
     ...usersMyBalanceOptions(),
@@ -45,7 +50,7 @@ const ETFPurchase = ({ route }) => {
 
   const hasNumber = Number(amount) > 0;
   const isLessThanAvailable = Number(amount) <= Number(availableDisplayed);
-  const canContinue = !isPending && hasNumber && isLessThanAvailable;
+  const canContinue = !isBalancePending && hasNumber && isLessThanAvailable;
 
   const goToConfirmation = () => {
     const isMaxAmount = Number(amount) === Number(availableDisplayed);
@@ -72,7 +77,14 @@ const ETFPurchase = ({ route }) => {
     >
       <View className="px-layout flex justify-center items-stretch gap-s flex-1">
         <Text className="text-caption-l text-center text-gray-50">
-          {t("etfPurchase.available")} {currencyFormatter(availableDisplayed)}
+          {t("etfPurchase.available")}{" "}
+          {isBalancePending ? (
+            <SkeletonLoadingView className="flex-1">
+              <SkeletonView className="w-20 h-4" />
+            </SkeletonLoadingView>
+          ) : (
+            currencyFormatter(availableDisplayed)
+          )}
         </Text>
         <View className="flex-row items-center justify-center gap-s">
           <Text className="text-body-l text-center text-gray-10 leading-tight">

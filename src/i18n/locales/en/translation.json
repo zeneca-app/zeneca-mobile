@@ -24,14 +24,14 @@
     "errorCodeTryAgain": "Try again"
   },
   "depositCrypto": {
-    "title": "Deposit with Crypto",
+    "title": "Deposit with crypto",
     "addressLabel": "Wallet address",
     "infoText": "This address can only receive USDC on Base Sepolia",
     "disclaimerText": "Make sure the network is the same as the one from the wallet you are sending from or you could lose your funds.",
     "addressCopied": "Address copied to clipboard"
   },
   "depositWithBank": {
-    "title": "Transfer from Bank"
+    "title": "Transfer from bank"
   },
   "comingSoon": {
     "title": "Coming soon!",
