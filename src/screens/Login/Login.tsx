@@ -9,7 +9,7 @@ import { useUserStore } from "@/storage/userStore";
 import { colors } from "@/styles/colors";
 import { getUserEmbeddedEthereumWallet, usePrivy } from "@privy-io/expo";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { useQuery, UseQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import * as SecureStore from "expo-secure-store";
 import { cssInterop } from "nativewind";
 import { useEffect, useState } from "react";
@@ -35,7 +35,7 @@ const Login = () => {
   const [loadingMessage, setLoadingMessage] = useState("");
   const [isFetchingUser, setIsFetchingUser] = useState(false);
 
-  const queryClient = UseQueryClient();
+  const queryClient = useQueryClient();
 
   const token = SecureStore.getItem(`token-${address}`);
 

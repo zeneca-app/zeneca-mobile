@@ -68,8 +68,8 @@ const ETFPurchaseConfirmation = ({ route }) => {
           hash: tx,
         });
 
-        queryClient.invalidateQueries(["usersMyBalance"]);
-        queryClient.invalidateQueries(["usersMyAssets"]);
+        queryClient.invalidateQueries({ queryKey: ["usersMyBalance"] });
+        queryClient.invalidateQueries({ queryKey: ["usersMyAssets"] });
 
         navigation.navigate("ETFPurchaseSuccess", {
           etf,
