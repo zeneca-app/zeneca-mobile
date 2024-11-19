@@ -1,9 +1,9 @@
+import { OrderQuote } from "@/client";
 import {
   ordersCreateQuoteOrderMutation,
   ordersCreateQuoteOrderOptions,
 } from "@/client/@tanstack/react-query.gen";
 import client from "@/client/client";
-import { OrderQuote } from "@/client";
 import Button from "@/components/Button";
 import LoggedLayout from "@/components/LoggedLayout";
 import Text from "@/components/Text";
@@ -14,7 +14,7 @@ import { useChainStore } from "@/storage/chainStore";
 import { currencyFormatter, formatNumber } from "@/utils/currencyUtils";
 import { useEmbeddedWallet } from "@privy-io/expo";
 import { useNavigation } from "@react-navigation/native";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import BigNumber from "bignumber.js";
 import React, { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
@@ -25,6 +25,8 @@ const ETFPurchaseConfirmation = ({ route }) => {
   const { etf, amount = "0" } = route.params;
 
   const amountToOrder = formatNumber(amount, 2, 6);
+
+  const queryClient = useQueryClient();
 
   const { t } = useTranslation();
   const wallet = useEmbeddedWallet();
@@ -108,6 +110,9 @@ const ETFPurchaseConfirmation = ({ route }) => {
         const receipt = await publicClient.waitForTransactionReceipt({
           hash: tx,
         });
+
+        queryClient.invalidateQueries(["usersMyBalance"]);
+        queryClient.invalidateQueries(["usersMyAssets"]);
 
         navigation.navigate("ETFPurchaseSuccess", {
           etf,

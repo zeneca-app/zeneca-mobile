@@ -2,13 +2,14 @@ import GradientCircle from "@/assets/zeneca-gradient-circle.svg";
 import Logo from "@/assets/zeneca-logo-bright.svg";
 import LogoLetter from "@/assets/zeneca-logo-letters.svg";
 import { usersMe } from "@/client";
+import { usersMeQueryKey } from "@/client/@tanstack/react-query.gen";
+import Button from "@/components/Button";
 import { DBUser } from "@/storage/interfaces";
 import { useUserStore } from "@/storage/userStore";
-import { usersMeQueryKey } from "@/client/@tanstack/react-query.gen";
 import { colors } from "@/styles/colors";
 import { getUserEmbeddedEthereumWallet, usePrivy } from "@privy-io/expo";
-import Button from "@/components/Button";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useQuery, UseQueryClient } from "@tanstack/react-query";
 import * as SecureStore from "expo-secure-store";
 import { cssInterop } from "nativewind";
 import { useEffect, useState } from "react";
@@ -21,10 +22,8 @@ import {
   Text,
   View,
 } from "react-native";
-import { useQuery } from "@tanstack/react-query";
 
 const Login = () => {
-
   const { t } = useTranslation();
   const navigation = useNavigation();
 
@@ -36,7 +35,14 @@ const Login = () => {
   const [loadingMessage, setLoadingMessage] = useState("");
   const [isFetchingUser, setIsFetchingUser] = useState(false);
 
+  const queryClient = UseQueryClient();
+
   const token = SecureStore.getItem(`token-${address}`);
+
+  useFocusEffect(() => {
+    //If this route gets focus on load or after logout clear the cache
+    queryClient.clear();
+  });
 
   useEffect(() => {
     if (address) {
@@ -168,7 +174,4 @@ const Login = () => {
   );
 };
 
-
 export default Login;
-
-
