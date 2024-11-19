@@ -18,7 +18,9 @@ import React, { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { Address } from "viem";
-
+import {
+  SkeletonView,
+} from "@/components/Loading/SkeletonLoadingView";
 
 
 const ETFPurchaseConfirmation = ({ route }) => {
@@ -37,7 +39,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
   const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo || null;
   const [quote, setQuote] = useState<OrderQuote | null>(null);
 
-  const { mutate: createQuote, isPending: isCreateQuotePending } = useMutation({
+  const { mutate: createQuote, isPending: isQuotePending } = useMutation({
     ...ordersCreateQuoteOrderMutation(),
     onError: (error) => {
       console.error("Error creating quote:", error);
@@ -102,9 +104,9 @@ const ETFPurchaseConfirmation = ({ route }) => {
     .precision(4)
     .toString();
 
-  const isLoading = isCreateQuotePending || transactionInitiated;
-  const isDisabled = isCreateQuotePending || !quote || transactionInitiated;
-  
+  const isLoading = isQuotePending || transactionInitiated;
+  const isDisabled = isQuotePending || !quote || transactionInitiated;
+
   return (
     <LoggedLayout>
       <View className="flex pb-layout">
@@ -140,7 +142,11 @@ const ETFPurchaseConfirmation = ({ route }) => {
             {t("etfPurchase.fee")}
           </Text>
           <Text className="text-caption-xl text-dark-content-white">
-            {currencyFormatter(quote?.fee, 2, quote?.precision)}
+            {isQuotePending ? (
+              <SkeletonView className="w-20 h-4" />
+            ) : (
+              currencyFormatter(quote?.fee, 2, quote?.precision)
+            )}
           </Text>
         </View>
         <View className="flex-row items-center justify-between gap-s">
@@ -148,7 +154,11 @@ const ETFPurchaseConfirmation = ({ route }) => {
             {t("etfPurchase.total")}
           </Text>
           <Text className="text-caption-xl text-dark-content-white">
-            {currencyFormatter(quote?.total, 2, quote?.precision)}
+            {isQuotePending ? (
+              <SkeletonView className="w-20 h-4" />
+            ) : (
+              currencyFormatter(quote?.total, 2, quote?.precision)
+            )}
           </Text>
         </View>
         <View className="h-px rounded-full bg-dark-background-100" />
