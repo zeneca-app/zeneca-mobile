@@ -13,6 +13,7 @@ import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TouchableOpacity } from "react-native";
 import FullScreenLoader from "./FullScreenLoader";
+import { useQueryClient } from "@tanstack/react-query";
 
 export type ProfileButtonProps = {
   children?: React.ReactNode;
@@ -27,6 +28,7 @@ const ProfileButton = ({
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const { setUser } = useUserStore((state) => state);
+  const queryClient = useQueryClient();
 
   const profileOptionsRef = useRef<BottomSheetModal>(null);
 
@@ -44,6 +46,7 @@ const ProfileButton = ({
       setIsLoading(true);
       setUser(undefined);
       await logout();
+      queryClient.clear();
       navigation.navigate("Login");
     } catch (error) {
       console.error("ERRRORRRR", error);

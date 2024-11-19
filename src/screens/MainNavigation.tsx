@@ -23,28 +23,11 @@ import SendSuccessScreen from "@/screens/SendSuccess";
 import TransactionReceiptScreen from "@/screens/TransactionReceipt";
 import { useUserStore } from "@/storage/userStore";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { AppState } from "react-native";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const MainNavigation = () => {
   const { user } = useUserStore();
-
-  const queryClient = useQueryClient();
-
-  useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextAppState) => {
-      if (nextAppState === "active") {
-        queryClient.clear();
-      }
-    });
-
-    return () => {
-      subscription.remove();
-    };
-  }, []);
 
   return (
     <Stack.Navigator initialRouteName={!user ? "Login" : "Home"}>

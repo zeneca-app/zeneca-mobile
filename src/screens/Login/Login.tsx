@@ -35,14 +35,8 @@ const Login = () => {
   const [loadingMessage, setLoadingMessage] = useState("");
   const [isFetchingUser, setIsFetchingUser] = useState(false);
 
-  const queryClient = useQueryClient();
-
   const token = SecureStore.getItem(`token-${address}`);
 
-  useFocusEffect(() => {
-    //If this route gets focus on load or after logout clear the cache
-    queryClient.clear();
-  });
 
   useEffect(() => {
     if (address) {
