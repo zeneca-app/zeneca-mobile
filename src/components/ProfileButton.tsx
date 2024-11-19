@@ -45,8 +45,8 @@ const ProfileButton = ({
     try {
       setIsLoading(true);
       setUser(undefined);
-      await logout();
       queryClient.clear();
+      await logout();
       navigation.navigate("Login");
     } catch (error) {
       console.error("ERRRORRRR", error);
