@@ -33,21 +33,12 @@ const ETFPurchaseConfirmation = ({ route }) => {
   const { chain } = useChainStore();
   const [transactionInitiated, setTransactionInitiated] = useState(false);
   const navigation = useNavigation();
-  const [tx, setTx] = useState<`0x${string}` | null>(null);
 
   const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo || null;
   const [quote, setQuote] = useState<OrderQuote | null>(null);
 
   const { mutate: createQuote, isPending: isCreateQuotePending } = useMutation({
-    ...ordersCreateQuoteOrderMutation({
-      client: client,
-      body: {
-        asset_id: etf.id,
-        side: "BUY",
-        order_type: "MARKET",
-        amount: amountToOrder,
-      },
-    }),
+    ...ordersCreateQuoteOrderMutation(),
     onError: (error) => {
       console.error("Error creating quote:", error);
     },
@@ -56,13 +47,9 @@ const ETFPurchaseConfirmation = ({ route }) => {
     },
   });
 
-  console.log("quote", quote);
 
   const executeTransaction = async () => {
     try {
-      if (!quote) {
-        throw new Error("Quote not found");
-      }
       setTransactionInitiated(true);
 
       const signerAddress = wallet?.account?.address as Address;
@@ -71,13 +58,25 @@ const ETFPurchaseConfirmation = ({ route }) => {
         chain,
         wallet,
       );
-      const transactions = await createOrder(quote, smartAccountClient);
+      const transactions = await createOrder(quote!, smartAccountClient);
       const tx = await smartAccountClient.sendTransactions({
         transactions: transactions,
       });
-      setTx(tx);
+      if (tx) {
+        const receipt = await publicClient.waitForTransactionReceipt({
+          hash: tx,
+        });
 
-      console.log("tx", tx);
+        queryClient.invalidateQueries(["usersMyBalance"]);
+        queryClient.invalidateQueries(["usersMyAssets"]);
+
+        navigation.navigate("ETFPurchaseSuccess", {
+          etf,
+          amount,
+        });
+      }
+
+
     } catch (error) {
       console.error("Error during transaction:", error);
     } finally {
@@ -104,23 +103,6 @@ const ETFPurchaseConfirmation = ({ route }) => {
     .precision(4)
     .toString();
 
-  useEffect(() => {
-    (async () => {
-      if (tx) {
-        const receipt = await publicClient.waitForTransactionReceipt({
-          hash: tx,
-        });
-
-        queryClient.invalidateQueries(["usersMyBalance"]);
-        queryClient.invalidateQueries(["usersMyAssets"]);
-
-        navigation.navigate("ETFPurchaseSuccess", {
-          etf,
-          amount,
-        });
-      }
-    })();
-  }, [tx]);
 
   const isLoading = isCreateQuotePending || transactionInitiated;
   const isDisabled = isCreateQuotePending || !quote || transactionInitiated;
