@@ -1,7 +1,7 @@
 {
   "login": {
-    "description_line_1": "Dinero global",
-    "description_line_2": "como un local",
+    "description_line_1": "Invierte en la Bolsa de Valores de EEUU",
+    "description_line_2": "desde $1 dolar con transferencias locales",
     "signUpButton": "¡Abrir mi cuenta!",
     "signInButton": "Iniciar sesión"
   },
@@ -161,7 +161,7 @@
     "explore": "Comprar"
   },
   "explore": {
-    "title": "Acciones <0>ETFs</0>"
+    "title": "Acciones e Índices"
   },
   "etfDetail": {
     "buy": "Comprar",

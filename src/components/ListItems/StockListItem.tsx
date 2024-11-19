@@ -5,11 +5,11 @@ import { Text, TouchableOpacity, View } from "react-native";
 
 export type StockListItemProps = {
   etf: {
+    id: string;
     price: string;
     display_name: string;
     symbol: string;
     name: string;
-    id: string;
     external_id: string;
     description: string;
   };
@@ -20,8 +20,6 @@ const StockListItem = ({ etf }: StockListItemProps) => {
 
   const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo || null;
 
-  const symbolName =
-    STOCKS?.[etf.symbol as keyof typeof STOCKS]?.name || etf.symbol;
 
   const handlePress = () => {
     navigation.navigate("ETFDetail", { etf });
@@ -33,7 +31,7 @@ const StockListItem = ({ etf }: StockListItemProps) => {
         <Logo style={{ height: "100%", width: "100%" }} />
       </View>
       <View className="flex-1 flex justify-center items-stretch">
-        <Text className="text-gray-10 text-caption-xl">{symbolName}</Text>
+        <Text className="text-gray-10 text-caption-xl">{etf.display_name}</Text>
         <Text className="text-gray-50 text-caption-xl">{etf.symbol}</Text>
       </View>
       <View className="flex-1 flex justify-center items-end">
