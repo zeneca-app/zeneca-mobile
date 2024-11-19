@@ -99,12 +99,12 @@ const ETFDetail = ({ route }: Asset) => {
     });
   };
 
-  const getChartChange = useCallback((data: any) => {
-    if (!data || !data.length) {
+  const getChartChange = useCallback((datapoints: any) => {
+    if (!datapoints || !datapoints.length) {
       return { change: 0, percentage: 0, increase: false };
     }
-    const first = BigNumber(data[0].value);
-    const last = BigNumber(data[data.length - 1].value);
+    const first = BigNumber(datapoints[0].value);
+    const last = BigNumber(datapoints[datapoints.length - 1].value);
     const change = last.minus(first);
     const percentage = change.dividedBy(first);
     const increase = change.isGreaterThanOrEqualTo(0);
@@ -196,7 +196,7 @@ const ETFDetail = ({ route }: Asset) => {
           className=""
           onPress={() =>
             navigation.navigate("ETFPurchase", {
-              etf: { ...etf, price: price },
+              etf: { ...asset, price: price },
             })
           }
         >
