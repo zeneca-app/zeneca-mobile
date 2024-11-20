@@ -62,7 +62,7 @@ const ProfileScreen = () => {
                 <View className="space-y-2">
                     <TouchableOpacity
                         key={"history"}
-                        //onPress={() => navigation.navigate('TransactionHistory')}
+                        onPress={() => navigation.navigate('OrderHistory')}
                         className="flex-row items-center bg-[#19181B] rounded-[40px] px-8 py-14 my-0.5"
                     >
                         <Ionicons name={"receipt-outline"} size={24} color="white" className="mr-3" />

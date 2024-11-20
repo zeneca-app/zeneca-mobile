@@ -23,6 +23,7 @@ export type RootStackParamList = {
   Send: undefined;
   SendConfirmation: undefined;
   Profile: undefined;
+  OrderHistory: undefined;
 };
 
 declare global {

@@ -18,6 +18,7 @@ import LoginWithEmail from "@/screens/Login/LoginWithEmail";
 import QuoteScreen from "@/screens/Quote";
 import QuoteConfirmationScreen from "@/screens/QuoteConfirmation";
 import RecipientsScreen from "@/screens/Recipients";
+import OrderHistory from "@/screens/OrderHistory";
 import Send from "@/screens/Send";
 import SendConfirmation from "@/screens/SendConfirmation";
 import SendSuccessScreen from "@/screens/SendSuccess";
@@ -110,6 +111,12 @@ const MainNavigation = () => {
         options={{ headerShown: false }}
         name="ExploreETFs"
         component={ExploreETFs}
+      />
+
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="OrderHistory"
+        component={OrderHistory}
       />
 
       <Stack.Screen
