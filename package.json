@@ -9,7 +9,9 @@
     "web": "expo start --web",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "generate-client": "npx openapi-ts"
+    "generate-client": "npx openapi-ts",
+    "publish:preview": "expo publish --release-channel preview",
+    "publish:production": "expo publish --release-channel production"
   },
   "dependencies": {
     "@ethersproject/shims": "^5.7.0",
@@ -81,7 +83,8 @@
     "viem": "^2.21.29",
     "wagmi": "^2.12.20",
     "zod": "^3.23.8",
-    "zustand": "^4.5.5"
+    "zustand": "^4.5.5",
+    "expo-updates": "~0.25.27"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
