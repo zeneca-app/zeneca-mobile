@@ -163,6 +163,13 @@
   "explore": {
     "title": "Acciones e Índices"
   },
+  "profile": {
+    "history": "Historial de movimientos",
+    "withdraw": "Retirar",
+    "settings": "Configuración",
+    "logout": "Cerrar sesión",
+    "version": "VERSIÓN"
+  },
   "etfDetail": {
     "buy": "Comprar",
     "from": "from: ",
