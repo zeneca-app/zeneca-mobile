@@ -41,7 +41,7 @@ const ProfileButton = ({
     profileOptionsRef.current?.present();
   };
 
-  const handleLogout = async () => {
+ /*  const handleLogout = async () => {
     try {
       setIsLoading(true);
       setUser(undefined);
@@ -52,13 +52,13 @@ const ProfileButton = ({
       console.error("ERRRORRRR", error);
     }
     setIsLoading(false);
-  };
+  }; */
 
   return (
     <>
       <TouchableOpacity
         className={`${defaultClasses} ${className}`}
-        onPress={handleOpenProfileOptions}
+        onPress={() => navigation.navigate("Profile")}
       >
         {children ? (
           children
@@ -66,14 +66,14 @@ const ProfileButton = ({
           <Ionicons name="person-sharp" size={20} color="white" />
         )}
       </TouchableOpacity>
-      <BottomSheet ref={profileOptionsRef}>
+      {/* <BottomSheet ref={profileOptionsRef}>
         <BottomSheetView className="px-layout items-stretch rounded-card m-2 flex gap-buttons pb-14">
           <Button onPress={handleLogout}>
             <AntDesign name="logout" size={16} color="black" />
             <Text className="text-button-m">{t("home.logout.title")}</Text>
           </Button>
         </BottomSheetView>
-      </BottomSheet>
+      </BottomSheet> */}
       <FullScreenLoader visible={isLoading} />
     </>
   );

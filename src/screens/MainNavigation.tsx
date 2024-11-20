@@ -22,6 +22,7 @@ import Send from "@/screens/Send";
 import SendConfirmation from "@/screens/SendConfirmation";
 import SendSuccessScreen from "@/screens/SendSuccess";
 import TransactionReceiptScreen from "@/screens/TransactionReceipt";
+import ProfileScreen from "@/screens/ProfileScreen";
 import { useUserStore } from "@/storage/userStore";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useCheckUpdate } from "@/hooks/useCheckUpdate";
@@ -41,6 +42,11 @@ const MainNavigation = () => {
   return (
     <Stack.Navigator initialRouteName={!user ? "Login" : "Home"}>
       <Stack.Group>
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Profile"
+          component={ProfileScreen}
+        />
         <Stack.Screen
           options={{ headerShown: false }}
           name="Login"

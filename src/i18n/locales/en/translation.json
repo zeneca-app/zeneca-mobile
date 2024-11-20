@@ -163,6 +163,12 @@
   "explore": {
     "title": "Stocks & ETFs"
   },
+  "profile": {
+    "history": "Transaction history",
+    "withdraw": "Withdraw",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
   "etfDetail": {
     "buy": "Buy",
     "from": "from: ",
