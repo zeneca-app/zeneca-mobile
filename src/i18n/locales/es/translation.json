@@ -167,7 +167,8 @@
     "history": "Historial de movimientos",
     "withdraw": "Retirar",
     "settings": "Configuración",
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "version": "VERSIÓN"
   },
   "etfDetail": {
     "buy": "Comprar",

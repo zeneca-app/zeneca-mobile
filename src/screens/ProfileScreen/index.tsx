@@ -88,7 +88,7 @@ const ProfileScreen = () => {
                 {/* Version Number */}
                 <View className="absolute bottom-8 w-full items-center">
                     <Text className="text-sm text-gray-400">
-                        version {Application.nativeApplicationVersion}
+                        {t("profile.version")} {Application.nativeApplicationVersion}
                     </Text>
                 </View>
             </View>

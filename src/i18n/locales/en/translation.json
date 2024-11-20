@@ -167,7 +167,8 @@
     "history": "Transaction history",
     "withdraw": "Withdraw",
     "settings": "Settings",
-    "logout": "Logout"
+    "logout": "Logout",
+    "version": "VERSION"
   },
   "etfDetail": {
     "buy": "Buy",
