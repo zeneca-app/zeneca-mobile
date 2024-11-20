@@ -7,6 +7,9 @@ import { useQuery } from '@tanstack/react-query';
 import { ordersGetOrdersOptions } from '@/client/@tanstack/react-query.gen';
 import { currencyFormatter, formatNumber } from "@/utils/currencyUtils";
 import { format, formatDistanceToNow } from 'date-fns';
+import SkeletonLoadingView, {
+    SkeletonOrderListItem,
+} from "@/components/Loading/SkeletonLoadingView";
 
 type OrderHistoryItemProps = {
     order: any; // Replace 'any' with your order type
@@ -46,10 +49,10 @@ const OrderHistoryItem = ({ order, onPress }: OrderHistoryItemProps) => {
         const now = new Date();
         const diffInHours = Math.abs(now.getTime() - date.getTime()) / 36e5;
 
-        // If less than 24 hours ago, show relative time
+        /* // If less than 24 hours ago, show relative time
         if (diffInHours < 24) {
             return formatDistanceToNow(date, { addSuffix: true });
-        }
+        } */
         // Otherwise show formatted date
         return format(date, "MMM d, h:mm a");
     };
@@ -114,16 +117,30 @@ const OrderHistory = () => {
     return (
         <SafeAreaView className="flex-1 bg-basic-black">
             <View className="flex-1 px-4">
-                <FlatList
-                    data={orders}
-                    renderItem={renderItem}
-                    keyExtractor={(item) => item.id}
-                    ListHeaderComponent={ListHeader}
-                    onRefresh={refetch}
-                    refreshing={isPending}
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ paddingTop: 16 }}
-                />
+                {isPending && !orders ? (
+                    <SkeletonLoadingView className="flex-1 flex">
+                        <SkeletonOrderListItem />
+                        <SkeletonOrderListItem />
+                        <SkeletonOrderListItem />
+                        <SkeletonOrderListItem />
+                        <SkeletonOrderListItem />
+                        <SkeletonOrderListItem />
+                        <SkeletonOrderListItem />
+                        <SkeletonOrderListItem />
+                        <SkeletonOrderListItem />
+                    </SkeletonLoadingView>
+                ) : (
+                    <FlatList
+                        data={orders}
+                        renderItem={renderItem}
+                        keyExtractor={(item) => item.id}
+                        ListHeaderComponent={ListHeader}
+                        onRefresh={refetch}
+                        refreshing={isPending}
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{ paddingTop: 16 }}
+                    />
+                )}
             </View>
         </SafeAreaView>
     );
