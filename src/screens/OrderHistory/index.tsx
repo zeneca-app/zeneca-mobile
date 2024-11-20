@@ -7,20 +7,21 @@ import { useQuery } from '@tanstack/react-query';
 import { ordersGetOrdersOptions } from '@/client/@tanstack/react-query.gen';
 import { currencyFormatter, formatNumber } from "@/utils/currencyUtils";
 import { format, formatDistanceToNow } from 'date-fns';
+import { Order } from '@/client/';
 import SkeletonLoadingView, {
     SkeletonOrderListItem,
 } from "@/components/Loading/SkeletonLoadingView";
 import LoggedLayout from "@/components/LoggedLayout";
 import { Trans } from "react-i18next";
 
+
 type OrderHistoryItemProps = {
-    order: any; // Replace 'any' with your order type
-    onPress?: (order: any) => void;
+    order: Order;
+    onPress?: (order: Order) => void;
 };
 
 
 const OrderHistoryItem = ({ order, onPress }: OrderHistoryItemProps) => {
-    console.log("order", order);
 
     // Option 1: Using date-fns formatDistanceToNow (e.g., "2 hours ago")
     const getRelativeTime = (dateString: string) => {
@@ -60,7 +61,6 @@ const OrderHistoryItem = ({ order, onPress }: OrderHistoryItemProps) => {
     };
 
     return (
-
         <TouchableOpacity
             className="flex-row justify-between items-center py-4 border-b border-[#1C1C1E]"
             onPress={() => onPress?.(order)}
@@ -96,7 +96,7 @@ const OrderHistory = () => {
         ...ordersGetOrdersOptions(),
     });
 
-    const renderItem = ({ item: order }) => (
+    const renderItem = ({ item: order }: { item: Order }) => (
         <OrderHistoryItem
             order={order}
             onPress={(order) => {
@@ -124,8 +124,6 @@ const OrderHistory = () => {
                         <SkeletonOrderListItem />
                         <SkeletonOrderListItem />
                         <SkeletonOrderListItem />
-                        <SkeletonOrderListItem />
-                        <SkeletonOrderListItem />
                     </SkeletonLoadingView>
                 ) : (
                     <FlatList
@@ -134,6 +132,7 @@ const OrderHistory = () => {
                         keyExtractor={(item) => item.id}
                         onRefresh={refetch}
                         refreshing={isPending}
+                        showsVerticalScrollIndicator={false}
                     />
                 )}
             </View>
