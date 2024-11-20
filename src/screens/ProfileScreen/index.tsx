@@ -2,12 +2,15 @@ import { View, TouchableOpacity, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import Text from '@/components/Text';
+import { cssInterop } from "nativewind";
 import { useTranslation } from 'react-i18next';
 import * as Application from 'expo-application';
 import { useUserStore } from '@/storage/userStore';
 import { usePrivy } from "@privy-io/expo";
 import { useState, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import Avatar from "@/assets/avatar.svg";
+
 
 
 const ProfileScreen = () => {
@@ -32,6 +35,7 @@ const ProfileScreen = () => {
         }
         setIsLoading(false);
     };
+    cssInterop(Avatar, { className: "style" });
 
     return (
         <SafeAreaView className="flex-1 bg-black">
@@ -48,8 +52,8 @@ const ProfileScreen = () => {
 
                 {/* Profile Avatar and Name */}
                 <View className="items-center mt-4 mb-12">
-                    <View className="w-16 h-16 rounded-full bg-gray-800 items-center justify-center mb-4">
-                        <Ionicons name="person" size={32} color="#95929F" />
+                    <View className="w-24 h-24 rounded-full items-center justify-center mb-4">
+                        <Avatar className="h-24 w-full" />
                     </View>
                     <Text className="text-xl text-white">{user?.email}</Text>
                 </View>
