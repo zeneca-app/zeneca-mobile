@@ -1,4 +1,3 @@
-import "./polyfills";
 import { MyPermissiveSecureStorageAdapter } from "@/lib/storage-adapter";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { PrivyProvider } from "@privy-io/expo";

@@ -173,6 +173,60 @@
   "orderHistory": {
     "title": "Order history"
   },
+  "onBoarding": {
+    "title": "Complete your \ninformation",
+    "first_name_field": {
+      "label": "Full Name",
+      "hint": "As it appears on your ID",
+      "error": "This field is required"
+    },
+    "last_name_field": {
+      "label": "Last Name",
+      "hint": "As it appears on your ID",
+      "error": "This field is required"
+    },
+    "birth_date_field": {
+      "label": "Date of Birth",
+      "error": {
+        "min_age": "You must be older than {{age}} years to register"
+      }
+    },
+    "country_field": {
+      "label": "Country of Residence",
+      "error": "This field is required",
+      "hint": ""
+    },
+    "tax_id_number_field": {
+      "label": "Tax Identification Number",
+      "error": "This field is required",
+      "hint": ""
+    },
+    "address_street_1_field": {
+      "label": "Street Address Line 1",
+      "error": "This field is required",
+      "hint": "As it appears on a utility bill"
+    },
+    "address_street_2_field": {
+      "label": "Street Address Line 2",
+      "hint": "As it appears on a utility bill"
+    },
+    "address_city_field": {
+      "label": "City",
+      "error": "This field is required",
+      "hint": "As it appears on a utility bill"
+    },
+    "address_subdivision_field": {
+      "label": "State/Province",
+      "error": "This field is required",
+      "hint": "As it appears on a utility bill"
+    },
+    "address_postal_code_field": {
+      "label": "Postal Code",
+      "error": "This field is required",
+      "hint": "As it appears on a utility bill"
+    },
+    "continue_button": "Continue"
+  },
   "etfDetail": {
     "buy": "Buy",
     "from": "from: ",
