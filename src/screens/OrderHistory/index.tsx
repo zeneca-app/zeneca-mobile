@@ -10,6 +10,8 @@ import { format, formatDistanceToNow } from 'date-fns';
 import SkeletonLoadingView, {
     SkeletonOrderListItem,
 } from "@/components/Loading/SkeletonLoadingView";
+import LoggedLayout from "@/components/LoggedLayout";
+import { Trans } from "react-i18next";
 
 type OrderHistoryItemProps = {
     order: any; // Replace 'any' with your order type
@@ -58,6 +60,7 @@ const OrderHistoryItem = ({ order, onPress }: OrderHistoryItemProps) => {
     };
 
     return (
+
         <TouchableOpacity
             className="flex-row justify-between items-center py-4 border-b border-[#1C1C1E]"
             onPress={() => onPress?.(order)}
@@ -103,20 +106,15 @@ const OrderHistory = () => {
         />
     );
 
-    const ListHeader = () => (
-        <>
-            <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                className="mb-4"
-            >
-                <Ionicons name="arrow-back" size={24} color="white" />
-            </TouchableOpacity>
-        </>
-    );
-
     return (
-        <SafeAreaView className="flex-1 bg-basic-black">
-            <View className="flex-1 px-4">
+        <LoggedLayout>
+            <Text className="text-heading-s text-gray-10 px-layout pt-layout-s pb-layout-l">
+                <Trans
+                    i18nKey="orderHistory.title"
+                    components={[]}
+                />
+            </Text>
+            <View className="flex-1 px-layout">
                 {isPending && !orders ? (
                     <SkeletonLoadingView className="flex-1 flex">
                         <SkeletonOrderListItem />
@@ -134,15 +132,12 @@ const OrderHistory = () => {
                         data={orders}
                         renderItem={renderItem}
                         keyExtractor={(item) => item.id}
-                        ListHeaderComponent={ListHeader}
                         onRefresh={refetch}
                         refreshing={isPending}
-                        showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{ paddingTop: 16 }}
                     />
                 )}
             </View>
-        </SafeAreaView>
+        </LoggedLayout>
     );
 };
 

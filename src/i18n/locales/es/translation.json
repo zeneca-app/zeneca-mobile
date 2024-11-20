@@ -170,6 +170,9 @@
     "logout": "Cerrar sesión",
     "version": "VERSIÓN"
   },
+  "orderHistory": {
+    "title": "Historial de transacciones"
+  },
   "etfDetail": {
     "buy": "Comprar",
     "from": "from: ",

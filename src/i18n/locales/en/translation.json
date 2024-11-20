@@ -170,6 +170,9 @@
     "logout": "Logout",
     "version": "VERSION"
   },
+  "orderHistory": {
+    "title": "Order history"
+  },
   "etfDetail": {
     "buy": "Buy",
     "from": "from: ",
