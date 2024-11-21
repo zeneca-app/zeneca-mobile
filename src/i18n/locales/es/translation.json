@@ -179,22 +179,40 @@
     "to": "to: "
   },
   "onBoarding": {
+    "steps" : {
+      "step_1": {
+        "subtitle": "Nombre como aparece en tu identificación"
+      },
+      "step_2": {
+        "subtitle": "Selecciona tu país de residencia"
+      },
+      "step_3": {
+        "subtitle": "Ingresa tu dirección completa"
+      },
+      "step_4": {
+        "subtitle": "Ingresa tu fecha de nacimiento"
+      }
+    },
     "title": "Completa tu \ninformación",
     "first_name_field": {
-      "label": "Nombres",
+      "label": "Primer nombre",
       "hint": "Como aparece en tu identificación",
       "error": "Este campo es requerido"
     },
-
+    "middle_name_field": {
+      "label": "Segundo nombre",
+      "hint": "Como aparece en tu identificación",
+      "error": "Este campo es requerido"
+    },
     "last_name_field": {
-      "label": "Apellidos",
+      "label": "Apellido(s)",
       "hint": "Como aparece en tu identificación",
       "error": "Este campo es requerido"
     },
     "birth_date_field": {
       "label": "Fecha de nacimiento",
       "error": {
-        "min_age": "Debes ser mayor de {{age}} años para registrarte"
+        "min_age": "Debes ser mayor de {{age}} años"
       }
     },
     "country_field": {
@@ -208,12 +226,12 @@
       "hint": ""
     },
     "address_street_1_field": {
-      "label": "Calle linea 1",
+      "label": "Dirección principal",
       "error": "Este campo es requerido",
       "hint": "Como aparece en un recibo servicio público"
     },
     "address_street_2_field": {
-      "label": "Calle linea 2",
+      "label": "Apartamento, unidad o piso",
       "hint": "Como aparece en un recibo servicio público"
     },
     "address_city_field": {

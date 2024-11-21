@@ -14,11 +14,11 @@ const OnBoarding = () => {
     const { t } = useTranslation();
 
     const initialFormValues = {
-        names: "",
-        last_names: "",
+        first_name: "",
+        middle_name: "",
+        last_name: "",
         birth_date: new Date(),
         country_code: "",
-        tax_id_number: "",
         address_street_1: "",
         address_street_2: "",
         address_city: "",
@@ -94,7 +94,10 @@ const OnBoarding = () => {
                 <View className="flex-1">
                     <View className="flex-1 justify-center items-stretch gap-l px-layout">
                         <Text className="text-heading-s text-gray-10">
-                            {t("onBoarding.title")}
+                            {t(`onBoarding.title`)}
+                        </Text>
+                        <Text className="text-body-s text-gray-40 font-light">
+                            {t(`onBoarding.steps.step_${activeStep + 1}.subtitle`)}
                         </Text>
                         <View className="flex-1 justify-start items-stretch gap">
                             <Step

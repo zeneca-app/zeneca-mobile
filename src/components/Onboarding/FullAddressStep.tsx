@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import InputWrapper from "@/components/Forms/InputWrapper";
 import { useTranslation } from "react-i18next";
 import { TextInput } from "react-native";
@@ -5,7 +6,7 @@ import { z } from "zod";
 import { OnBoardingStepProps } from "./config";
 
 
-const OnBoardingStep3 = ({
+const FullAddressStep = ({
     formValues,
     focused,
     handleChange,
@@ -19,18 +20,22 @@ const OnBoardingStep3 = ({
     const validationSchema = z.object({
         address_street_1: z
             .string()
-            .min(1, t("onBoarding.address_street_1_field.error")),
+            .min(5, t("onBoarding.address_street_1_field.error")),
         address_city: z.string().min(1, t("onBoarding.address_city_field.error")),
         address_subdivision: z
             .string()
             .min(1, t("onBoarding.address_subdivision_field.error")),
+        address_postal_code: z.string().optional(),
     });
 
     const formErrors = validationSchema.safeParse(formValues);
 
-    if (onValidationChange) {
-        onValidationChange(formErrors.success);
-    }
+    useEffect(() => {
+        const formErrors = validationSchema.safeParse(formValues);
+        if (onValidationChange) {
+          onValidationChange(formErrors.success);
+        }
+    }, [formValues, onValidationChange]);
 
     const getError = (field: string) => {
         if (touchedFields[field]) {
@@ -50,7 +55,6 @@ const OnBoardingStep3 = ({
                     focused === "address_street_1" || Boolean(formValues.address_street_1)
                 }
                 error={getError("address_street_1")}
-
                 required={true}
             >
                 <TextInput
@@ -72,7 +76,7 @@ const OnBoardingStep3 = ({
                     focused === "address_street_2" || Boolean(formValues.address_street_2)
                 }
                 error={getError("address_street_2")}
-
+                hint="Optional"
             >
                 <TextInput
                     className="text-white text-body-m pb-4"
@@ -116,7 +120,6 @@ const OnBoardingStep3 = ({
                     Boolean(formValues.address_subdivision)
                 }
                 error={getError("address_subdivision")}
-
                 required={true}
             >
                 <TextInput
@@ -138,6 +141,7 @@ const OnBoardingStep3 = ({
                     focused === "address_postal_code" ||
                     Boolean(formValues.address_postal_code)
                 }
+                hint="Optional"
                 error={getError("address_postal_code")}
 
             >
@@ -158,6 +162,6 @@ const OnBoardingStep3 = ({
     );
 };
 
-OnBoardingStep3.displayName = "OnBoardingStep3";
+FullAddressStep.displayName = "FullAddressStep";
 
-export default OnBoardingStep3;
+export default FullAddressStep;

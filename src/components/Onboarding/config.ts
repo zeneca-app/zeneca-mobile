@@ -1,18 +1,19 @@
-import OnBoardingStep1 from "@/components/Onboarding/OnBoardingStep1";
-import OnBoardingStep2 from "@/components/Onboarding/OnBoardingStep2";
-import OnBoardingStep3 from "@/components/Onboarding/OnBoardingStep3";
-import OnBoardingStep4 from "@/components/Onboarding/OnBoardingStep4";
+import CountryStep from "@/components/Onboarding/CountryStep";
+import DateOfBirthStep from "@/components/Onboarding/DateOfBirthStep";
+import FullAddressStep from "@/components/Onboarding/FullAddressStep";
+import FullNameStep from "@/components/Onboarding/FullNameStep";
 
 export const steps = [
-  OnBoardingStep1,
-  OnBoardingStep2,
-  OnBoardingStep3,
-  OnBoardingStep4,
+  FullNameStep,
+  DateOfBirthStep,
+  CountryStep,
+  FullAddressStep,
 ];
 
 export type FormValues = {
-  names: string;
-  last_names: string;
+  first_name: string;
+  middle_name: string;
+  last_name: string;
   birth_date: Date;
   country_code: string;
   address_street_1: string;

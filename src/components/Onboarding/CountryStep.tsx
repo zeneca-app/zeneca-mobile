@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import BottomSheet, {
     BottomSheetFlatList,
     BottomSheetModal,
@@ -20,7 +21,7 @@ import { z } from "zod";
 import { OnBoardingStepProps } from "./config";
 
 
-const OnBoardingStep2 = ({
+const CountryStep = ({
     formValues,
     focused,
     handleChange,
@@ -35,14 +36,16 @@ const OnBoardingStep2 = ({
 
     const validationSchema = z.object({
         country_code: z.string().min(1, t("onBoarding.country_code_field.error")),
-
     });
 
     const formErrors = validationSchema.safeParse(formValues);
 
-    if (onValidationChange) {
-        onValidationChange(formErrors.success);
-    }
+    useEffect(() => {
+        const formErrors = validationSchema.safeParse(formValues);
+        if (onValidationChange) {
+          onValidationChange(formErrors.success);
+        }
+    }, [formValues, onValidationChange]);
 
     const getError = (field: string) => {
         if (touchedFields[field]) {
@@ -123,6 +126,6 @@ const OnBoardingStep2 = ({
     );
 };
 
-OnBoardingStep2.displayName = "OnBoardingStep2";
+CountryStep.displayName = "CountryStep";
 
-export default OnBoardingStep2;
+export default CountryStep;

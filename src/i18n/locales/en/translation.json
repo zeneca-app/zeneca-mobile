@@ -188,7 +188,7 @@
     "birth_date_field": {
       "label": "Date of Birth",
       "error": {
-        "min_age": "You must be older than {{age}} years to register"
+        "min_age": "You must be older than {{age}} years"
       }
     },
     "country_field": {
@@ -202,12 +202,12 @@
       "hint": ""
     },
     "address_street_1_field": {
-      "label": "Street Address Line 1",
+      "label": "Address 1",
       "error": "This field is required",
       "hint": "As it appears on a utility bill"
     },
     "address_street_2_field": {
-      "label": "Street Address Line 2",
+      "label": "Address 2",
       "hint": "As it appears on a utility bill"
     },
     "address_city_field": {

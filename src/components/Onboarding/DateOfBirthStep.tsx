@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { z } from "zod";
 import InputWrapper from "@/components/Forms/InputWrapper";
 import { useTranslation } from "react-i18next";
 import { Text, TouchableOpacity } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
-//import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { z } from "zod";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+
+
 import { OnBoardingStepProps } from "./config";
 
-
-const OnBoardingStep4 = ({
+const DateOfBirthStep = ({
   formValues,
   focused,
   handleChange,
@@ -30,9 +31,12 @@ const OnBoardingStep4 = ({
 
   const formErrors = validationSchema.safeParse(formValues);
 
-  if (onValidationChange) {
-    onValidationChange(formErrors.success);
-  }
+  useEffect(() => {
+    const formErrors = validationSchema.safeParse(formValues);
+    if (onValidationChange) {
+      onValidationChange(formErrors.success);
+    }
+}, [formValues, onValidationChange]);
 
   const getError = (field: string) => {
     if (touchedFields[field]) {
@@ -74,18 +78,18 @@ const OnBoardingStep4 = ({
             style={{ marginTop: -16 }}
           />
         </TouchableOpacity>
-        {/* <DateTimePickerModal
+        <DateTimePickerModal
           isVisible={showDateTimePicker}
           mode="date"
           date={formValues.birth_date}
           onConfirm={handleDobChange}
           onCancel={() => setShowDateTimePicker(false)}
-        /> */}
+        />
       </InputWrapper>
     </>
   );
 };
 
-OnBoardingStep4.displayName = "OnBoardingStep4";
+DateOfBirthStep.displayName = "DateOfBirthStep";
 
-export default OnBoardingStep4;
+export default DateOfBirthStep;

@@ -1,26 +1,25 @@
 import { Country, ICountry } from "country-state-city";
 
 export const LATIN_AMERICA_FLAGS: { [key: string]: string } = {
-    AR: "🇦🇷", // Argentina
-    BO: "🇧🇴", // Bolivia
-    BR: "🇧🇷", // Brazil
-    CL: "🇨🇱", // Chile
-    CO: "🇨🇴", // Colombia
-    CR: "🇨🇷", // Costa Rica
-    DO: "🇩🇴", // Dominican Republic
-    EC: "🇪🇨", // Ecuador
-    SV: "🇸🇻", // El Salvador
-    GT: "🇬🇹", // Guatemala
-    HN: "🇭🇳", // Honduras
-    MX: "🇲🇽", // Mexico
-    PA: "🇵🇦", // Panama
-    PY: "🇵🇾", // Paraguay
-    PE: "🇵🇪", // Peru
-    PR: "🇵🇷", // Puerto Rico
-    UY: "🇺🇾", // Uruguay
-  };
+  AR: "🇦🇷", // Argentina
+  BO: "🇧🇴", // Bolivia
+  BR: "🇧🇷", // Brazil
+  CL: "🇨🇱", // Chile
+  CO: "🇨🇴", // Colombia
+  CR: "🇨🇷", // Costa Rica
+  DO: "🇩🇴", // Dominican Republic
+  EC: "🇪🇨", // Ecuador
+  SV: "🇸🇻", // El Salvador
+  GT: "🇬🇹", // Guatemala
+  HN: "🇭🇳", // Honduras
+  MX: "🇲🇽", // Mexico
+  PA: "🇵🇦", // Panama
+  PY: "🇵🇾", // Paraguay
+  PE: "🇵🇪", // Peru
+  PR: "🇵🇷", // Puerto Rico
+  UY: "🇺🇾", // Uruguay
+};
 
-  
 export const EXCLUDED_COUNTRY_CODE: string[] = [
   "AF", // Afghanistan
   "BY", // Belarus
@@ -56,24 +55,25 @@ export const EXCLUDED_COUNTRY_CODE: string[] = [
 ];
 
 export const LATIN_AMERICA_COUNTRY_CODE: string[] = [
-  /* "AR", // Argentina
-  "BO", // Bolivia
-  "BR", // Brazil
-  "CL", // Chile
-  "CO", // Colombia
-  "CR", // Costa Rica
-  "DO", // Dominican Republic
-  "EC", // Ecuador
-  "SV", // El Salvador
-  "GT", // Guatemala
-  "HN", // Honduras
-  "MX", // Mexico */
+  //"AR", // Argentina
+  //"BO", // Bolivia
+  //"BR", // Brazil
+  //"CL", // Chile
   "PA", // Panama
   "CO", // Colombia
- /*  "PY", // Paraguay
+  "CR", // Costa Rica
+  //"DO", // Dominican Republic
+  //"EC", // Ecuador
+  //"SV", // El Salvador
+  "GT",
+  "HN", // Honduras
+  "MX", // Mexico */
+  
+  "CO", // Colombia
+  // "PY", // Paraguay
   "PE", // Peru
-  "PR", // Puerto Rico
-  "UY", // Uruguay */
+  //"PR", // Puerto Rico
+  //"UY", // Uruguay */
 ];
 
 export const PRIORITY_COUNTRY_CODE: string[] = [
@@ -90,10 +90,10 @@ export const COUNTRIES_LIST = COUNTRIES.filter(
     !EXCLUDED_COUNTRY_CODE.includes(country.isoCode) &&
     LATIN_AMERICA_COUNTRY_CODE.includes(country.isoCode),
 ).sort((a: ICountry, b: ICountry) => {
-    // First check for priority countries
-    if (
-      PRIORITY_COUNTRY_CODE.includes(a.isoCode) &&
-      !PRIORITY_COUNTRY_CODE.includes(b.isoCode)
+  // First check for priority countries
+  if (
+    PRIORITY_COUNTRY_CODE.includes(a.isoCode) &&
+    !PRIORITY_COUNTRY_CODE.includes(b.isoCode)
   )
     return -1;
   if (
