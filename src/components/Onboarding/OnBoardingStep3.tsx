@@ -1,0 +1,163 @@
+import InputWrapper from "@/components/Forms/InputWrapper";
+import { useTranslation } from "react-i18next";
+import { TextInput } from "react-native";
+import { z } from "zod";
+import { OnBoardingStepProps } from "./config";
+
+
+const OnBoardingStep3 = ({
+    formValues,
+    focused,
+    handleChange,
+    handleFocus,
+    touchedFields,
+    handleBlur,
+    onValidationChange,
+}: OnBoardingStepProps) => {
+    const { t } = useTranslation();
+
+    const validationSchema = z.object({
+        address_street_1: z
+            .string()
+            .min(1, t("onBoarding.address_street_1_field.error")),
+        address_city: z.string().min(1, t("onBoarding.address_city_field.error")),
+        address_subdivision: z
+            .string()
+            .min(1, t("onBoarding.address_subdivision_field.error")),
+    });
+
+    const formErrors = validationSchema.safeParse(formValues);
+
+    if (onValidationChange) {
+        onValidationChange(formErrors.success);
+    }
+
+    const getError = (field: string) => {
+        if (touchedFields[field]) {
+            const error = formErrors.error?.errors.find(
+                (e) => e.path[0] === field,
+            )?.message;
+            return error || "";
+        }
+        return "";
+    };
+
+    return (
+        <>
+            <InputWrapper
+                label={t("onBoarding.address_street_1_field.label")}
+                isFocused={
+                    focused === "address_street_1" || Boolean(formValues.address_street_1)
+                }
+                error={getError("address_street_1")}
+
+                required={true}
+            >
+                <TextInput
+                    className="text-white text-body-m pb-4"
+                    value={formValues.address_street_1}
+                    onChangeText={(e) => handleChange("address_street_1", e)}
+                    autoComplete="off"
+                    autoCorrect={false}
+                    clearButtonMode="while-editing"
+                    keyboardType="name-phone-pad"
+                    autoCapitalize="none"
+                    onFocus={() => handleFocus("address_street_1")}
+                    onBlur={() => handleBlur("address_street_1")}
+                />
+            </InputWrapper>
+            <InputWrapper
+                label={t("onBoarding.address_street_2_field.label")}
+                isFocused={
+                    focused === "address_street_2" || Boolean(formValues.address_street_2)
+                }
+                error={getError("address_street_2")}
+
+            >
+                <TextInput
+                    className="text-white text-body-m pb-4"
+                    value={formValues.address_street_2}
+                    onChangeText={(e) => handleChange("address_street_2", e)}
+                    autoComplete="off"
+                    autoCorrect={false}
+                    clearButtonMode="while-editing"
+                    keyboardType="name-phone-pad"
+                    autoCapitalize="none"
+                    onFocus={() => handleFocus("address_street_2")}
+                    onBlur={() => handleBlur("address_street_2")}
+                />
+            </InputWrapper>
+            <InputWrapper
+                label={t("onBoarding.address_city_field.label")}
+                isFocused={
+                    focused === "address_city" || Boolean(formValues.address_city)
+                }
+                error={getError("address_city")}
+
+                required={true}
+            >
+                <TextInput
+                    className="text-white text-body-m pb-4"
+                    value={formValues.address_city}
+                    onChangeText={(e) => handleChange("address_city", e)}
+                    autoComplete="off"
+                    autoCorrect={false}
+                    clearButtonMode="while-editing"
+                    keyboardType="name-phone-pad"
+                    autoCapitalize="none"
+                    onFocus={() => handleFocus("address_city")}
+                    onBlur={() => handleBlur("address_city")}
+                />
+            </InputWrapper>
+            <InputWrapper
+                label={t("onBoarding.address_subdivision_field.label")}
+                isFocused={
+                    focused === "address_subdivision" ||
+                    Boolean(formValues.address_subdivision)
+                }
+                error={getError("address_subdivision")}
+
+                required={true}
+            >
+                <TextInput
+                    className="text-white text-body-m pb-4"
+                    value={formValues.address_subdivision}
+                    onChangeText={(e) => handleChange("address_subdivision", e)}
+                    autoComplete="off"
+                    autoCorrect={false}
+                    clearButtonMode="while-editing"
+                    keyboardType="name-phone-pad"
+                    autoCapitalize="none"
+                    onFocus={() => handleFocus("address_subdivision")}
+                    onBlur={() => handleBlur("address_subdivision")}
+                />
+            </InputWrapper>
+            <InputWrapper
+                label={t("onBoarding.address_postal_code_field.label")}
+                isFocused={
+                    focused === "address_postal_code" ||
+                    Boolean(formValues.address_postal_code)
+                }
+                error={getError("address_postal_code")}
+
+            >
+                <TextInput
+                    className="text-white text-body-m pb-4"
+                    value={formValues.address_postal_code}
+                    onChangeText={(e) => handleChange("address_postal_code", e)}
+                    autoComplete="off"
+                    autoCorrect={false}
+                    clearButtonMode="while-editing"
+                    keyboardType="name-phone-pad"
+                    autoCapitalize="none"
+                    onFocus={() => handleFocus("address_postal_code")}
+                    onBlur={() => handleBlur("address_postal_code")}
+                />
+            </InputWrapper>
+        </>
+    );
+};
+
+OnBoardingStep3.displayName = "OnBoardingStep3";
+
+export default OnBoardingStep3;

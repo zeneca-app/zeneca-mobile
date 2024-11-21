@@ -19,6 +19,7 @@ import QuoteScreen from "@/screens/Quote";
 import QuoteConfirmationScreen from "@/screens/QuoteConfirmation";
 import RecipientsScreen from "@/screens/Recipients";
 import OrderHistory from "@/screens/OrderHistory";
+import OnBoarding from "@/screens/Onboarding/OnBoarding";
 import Send from "@/screens/Send";
 import SendConfirmation from "@/screens/SendConfirmation";
 import SendSuccessScreen from "@/screens/SendSuccess";
@@ -41,7 +42,7 @@ const MainNavigation = () => {
   }, []);
 
   return (
-    <Stack.Navigator initialRouteName={!user ? "Login" : "Home"}>
+    <Stack.Navigator initialRouteName={!user ? "Login" : "OnBoarding"}>
       <Stack.Group>
         <Stack.Screen
           options={{ headerShown: false }}
@@ -117,6 +118,12 @@ const MainNavigation = () => {
         options={{ headerShown: false }}
         name="OrderHistory"
         component={OrderHistory}
+      />
+
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="OnBoarding"
+        component={OnBoarding}
       />
 
       <Stack.Screen
