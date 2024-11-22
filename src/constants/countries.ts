@@ -21,6 +21,9 @@ export const LATIN_AMERICA_FLAGS: { [key: string]: string } = {
 };
 
 export const EXCLUDED_COUNTRY_CODE: string[] = [
+  // Also, in cooperation with U.S. Office of Foreign Assets Control (OFAC),
+  // Financial Action Task Force (FATF), and other U.S. and international regulatory bodies,
+  // we regretfully cannot support business activities in some countries:
   "AF", // Afghanistan
   "BY", // Belarus
   "BA", // Bosnia and Herzegovina
@@ -52,6 +55,9 @@ export const EXCLUDED_COUNTRY_CODE: string[] = [
   "VE", // Venezuela
   "YE", // Yemen
   "ZW", // Zimbabwe
+  //Dinari is in the process of securing proper licensing to operate:
+  "US", // United States
+  "CA", // Canada
 ];
 
 export const LATIN_AMERICA_COUNTRY_CODE: string[] = [
@@ -62,13 +68,12 @@ export const LATIN_AMERICA_COUNTRY_CODE: string[] = [
   "PA", // Panama
   "CO", // Colombia
   "CR", // Costa Rica
-  //"DO", // Dominican Republic
-  //"EC", // Ecuador
+  "DO", // Dominican Republic
+  "EC", // Ecuador
   //"SV", // El Salvador
   "GT",
   "HN", // Honduras
   "MX", // Mexico */
-
   "CO", // Colombia
   // "PY", // Paraguay
   "PE", // Peru
@@ -104,4 +109,3 @@ export const COUNTRIES_LIST = COUNTRIES.filter(
   // If neither or both are priority countries, sort alphabetically by name
   return a.name.localeCompare(b.name);
 });
-
