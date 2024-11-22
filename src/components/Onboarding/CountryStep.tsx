@@ -35,7 +35,7 @@ const CountryStep = ({
     const countriesModal = useRef<BottomSheetModal>(null);
 
     const validationSchema = z.object({
-        country_code: z.string().min(1, t("onBoarding.country_code_field.error")),
+        country_code: z.string().min(2, t("onBoarding.country_code_field.error")),
     });
 
     const formErrors = validationSchema.safeParse(formValues);
