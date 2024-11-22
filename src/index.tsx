@@ -1,3 +1,4 @@
+import "@/lib/polyfills";
 import "@/i18n";
 import { Providers } from "@/components/Providers";
 import {

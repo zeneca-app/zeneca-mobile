@@ -173,6 +173,97 @@
   "orderHistory": {
     "title": "Order history"
   },
+  "onBoarding": {
+    "steps": {
+      "step_1": {
+        "subtitle": "Name as it appears on your ID"
+      },
+      "step_2": {
+        "subtitle": "Enter your date of birth"
+      },
+      "step_3": {
+        "subtitle": "Select your country of residence"
+      },
+      "step_4": {
+        "subtitle": "Enter your complete address"
+      }
+    },
+    "title": "Complete your \ninformation",
+    "first_name_field": {
+      "label": "First Name",
+      "hint": "As it appears on your ID",
+      "error_required": "This field is required"
+    },
+    "middle_name_field": {
+      "label": "Middle Name",
+      "hint": "As it appears on your ID",
+      "error_required": "This field is required",
+      "error_min_length": "This field must be at least {{min}} characters long"
+    },
+    "last_name_field": {
+      "label": "Last Name",
+      "hint": "As it appears on your ID",
+      "error_required": "This field is required"
+    },
+    "second_last_name_field": {
+      "label": "Surname",
+      "hint": "As it appears on your ID",
+      "error_required": "This field is required",
+      "error_min_length": "This field must be at least {{min}} characters long"
+    },
+    "birth_date_field": {
+      "label": "Date of Birth",
+      "month": "Month",
+      "day": "Day",
+      "year": "Year",
+      "error": {
+        "min_age": "You must be older than {{age}} years"
+      }
+    },
+    "country_field": {
+      "label": "Country of Residence",
+      "error": "This field is required",
+      "hint": ""
+    },
+    "tax_id_number_field": {
+      "label": "Tax Identification Number",
+      "error_required": "Required",
+      "hint": ""
+    },
+    "full_address": {
+      "address_street_1_field": {
+        "label": "Address 1",
+        "hint": "As it appears on a utility bill",
+        "error_required": "This field is required",
+        "error_invalid": "Invalid address"
+      },
+      "address_street_2_field": {
+        "label": "Address 2",
+        "hint": "As it appears on a utility bill",
+        "error_invalid": "Invalid address",
+        "error_required": "This field is required"
+      },
+      "address_city_field": {
+        "label": "City",
+        "error_required": "This field is required",
+        "error_invalid": "Invalid city",
+        "hint": "As it appears on a utility bill"
+      },
+      "address_state_field": {
+        "label": "State/Province",
+        "hint": "As it appears on a utility bill",
+        "error_required": "This field is required",
+        "error_invalid": "Invalid state/province"
+      },
+      "address_postal_code_field": {
+        "label": "Postal Code",
+        "hint": "As it appears on a utility bill",
+        "error_required": "This field is required",
+        "error_invalid": "Invalid postal code"
+      }
+    },
+    "continue_button": "Continue"
+  },
   "etfDetail": {
     "buy": "Buy",
     "from": "from: ",

@@ -14,7 +14,9 @@ import {
 const TEMPLATE_ID = process.env.EXPO_PUBLIC_AIPRISE_TEMPLATE_ID ?? ""; // TODO: Add this api call to the backend
 const MODE = "SANDBOX"; // TODO: Add this api call to the backend
 
-const KYCProvider = () => {
+
+const KYCProvider = ({ route }) => {
+  const { country_code, full_address } = route.params;
   const navigation = useNavigation();
   const { height, width } = Dimensions.get("window");
 
@@ -27,12 +29,6 @@ const KYCProvider = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerContent}>
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Ionicons name="close" size={24} color="white" />
-          </TouchableOpacity>
         </View>
       </View>
 
@@ -43,6 +39,14 @@ const KYCProvider = () => {
         }}
         mode={MODE}
         templateID={TEMPLATE_ID}
+        uiOptions={{
+          id_verification_module: {
+            allowed_country_code: country_code, // 2-Letter Country Code. Disables all other countries.
+          }
+        }}
+        userData={{
+          address: full_address,
+        }}
         theme={{
           background: "dark",
           layout_border_radius: "0px",

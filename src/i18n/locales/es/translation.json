@@ -178,6 +178,95 @@
     "from": "from: ",
     "to": "to: "
   },
+  "onBoarding": {
+    "steps": {
+      "step_1": {
+        "subtitle": "Nombre como aparece en tu identificación"
+      },
+      "step_2": {
+        "subtitle": "Ingresa tu fecha de nacimiento"
+      },
+      "step_3": {
+        "subtitle": "Selecciona tu país de residencia"
+      },
+      "step_4": {
+        "subtitle": "Ingresa tu dirección completa"
+      }
+    },
+    "title": "Completa tu \ninformación",
+    "first_name_field": {
+      "label": "Primer nombre",
+      "hint": "Como aparece en tu identificación",
+      "error_required": "Es requerido"
+    },
+    "middle_name_field": {
+      "label": "Segundo nombre",
+      "hint": "Como aparece en tu identificación",
+      "error_required": "Es requerido"
+    },
+    "last_name_field": {
+      "label": "Primer apellido",
+      "hint": "Como aparece en tu identificación",
+      "error_required": "Es requerido"
+    },
+    "second_last_name_field": {
+      "label": "Segundo apellido",
+      "hint": "Como aparece en tu identificación",
+      "error_required": "Es requerido"
+    },
+    "birth_date_field": {
+      "label": "Fecha de nacimiento",
+      "month": "Mes",
+      "day": "Día",
+      "year": "Año",
+      "error": {
+        "min_age": "Debes ser mayor de {{age}} años"
+      }
+    },
+    "country_field": {
+      "label": "País de residencia",
+      "error_required": "Es requerido",
+      "hint": ""
+    },
+    "tax_id_number_field": {
+      "label": "Numero de identificación fiscal",
+      "error_required": "Es requerido",
+      "hint": ""
+    },
+    "full_address": {
+      "address_street_1_field": {
+        "label": "Dirección principal",
+        "hint": "Como aparece en un recibo servicio público",
+        "error_required": "Es requerido",
+        "error_invalid": "Dirección inválida"
+      },
+      "address_street_2_field": {
+        "label": "Apartamento, unidad o piso",
+        "hint": "Como aparece en un recibo servicio público",
+        "error_invalid": "Dirección inválida",
+        "error_required": "Es requerido"
+      },
+      "address_city_field": {
+        "label": "Ciudad",
+        "hint": "Como aparece en un recibo servicio público",
+        "error_required": "Es requerido",
+        "error_invalid": "La ciudad es inválida"
+      },
+      "address_state_field": {
+        "label": "Provincia/Estado",
+        "hint": "Como aparece en un recibo servicio público",
+        "error_required": "Es requerido",
+        "error_invalid": "La provincia/estado es inválida"
+      },
+      "address_postal_code_field": {
+        "label": "Código postal",
+        "hint": "Como aparece en un recibo servicio público",
+        "error_required": "Es requerido",
+        "error_invalid": "Código postal inválido"
+      }
+    },
+    "continue_button": "Continuar"
+  },
   "etfPurchase": {
     "continue": "Continuar",
     "max": "MAX",

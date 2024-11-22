@@ -19,6 +19,7 @@ import QuoteScreen from "@/screens/Quote";
 import QuoteConfirmationScreen from "@/screens/QuoteConfirmation";
 import RecipientsScreen from "@/screens/Recipients";
 import OrderHistory from "@/screens/OrderHistory";
+import OnBoarding from "@/screens/Onboarding/OnBoarding";
 import Send from "@/screens/Send";
 import SendConfirmation from "@/screens/SendConfirmation";
 import SendSuccessScreen from "@/screens/SendSuccess";
@@ -44,7 +45,7 @@ const MainNavigation = () => {
     <Stack.Navigator initialRouteName={!user ? "Login" : "Home"}>
       <Stack.Group>
         <Stack.Screen
-          options={{ headerShown: false }}
+          options={{ headerShown: false, presentation: "modal" }}
           name="Profile"
           component={ProfileScreen}
         />
@@ -121,6 +122,12 @@ const MainNavigation = () => {
 
       <Stack.Screen
         options={{ headerShown: false }}
+        name="OnBoarding"
+        component={OnBoarding}
+      />
+
+      <Stack.Screen
+        options={{ headerShown: false }}
         name="ETFDetail"
         component={ETFDetail}
       />
@@ -132,7 +139,7 @@ const MainNavigation = () => {
       />
 
       <Stack.Screen
-        options={{ headerShown: false }}
+        options={{ headerShown: false, presentation: "modal" }}
         name="ETFPurchaseConfirmation"
         component={ETFPurchaseConfirmation}
       />
