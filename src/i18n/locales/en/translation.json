@@ -215,32 +215,40 @@
     },
     "tax_id_number_field": {
       "label": "Tax Identification Number",
-      "error": "This field is required",
+      "error_required": "Required",
       "hint": ""
     },
-    "address_street_1_field": {
-      "label": "Address 1",
-      "error": "This field is required",
-      "hint": "As it appears on a utility bill"
-    },
-    "address_street_2_field": {
-      "label": "Address 2",
-      "hint": "As it appears on a utility bill"
-    },
-    "address_city_field": {
-      "label": "City",
-      "error": "This field is required",
-      "hint": "As it appears on a utility bill"
-    },
-    "address_subdivision_field": {
-      "label": "State/Province",
-      "error": "This field is required",
-      "hint": "As it appears on a utility bill"
-    },
-    "address_postal_code_field": {
-      "label": "Postal Code",
-      "error": "This field is required",
-      "hint": "As it appears on a utility bill"
+    "full_address": {
+      "address_street_1_field": {
+        "label": "Address 1",
+        "hint": "As it appears on a utility bill",
+        "error_required": "Required",
+        "error_invalid": "Invalid address"
+      },
+      "address_street_2_field": {
+        "label": "Address 2",
+        "hint": "As it appears on a utility bill",
+        "error_invalid": "Invalid address",
+        "error_required": "Required"
+      },
+      "address_city_field": {
+        "label": "City",
+        "error_required": "Required",
+        "error_invalid": "Invalid city",
+        "hint": "As it appears on a utility bill"
+      },
+      "address_subdivision_field": {
+        "label": "State/Province",
+        "hint": "As it appears on a utility bill",
+        "error_required": "Required",
+        "error_invalid": "Invalid state/province"
+      },
+      "address_postal_code_field": {
+        "label": "Postal Code",
+        "hint": "As it appears on a utility bill",
+        "error_required": "Required",
+        "error_invalid": "Invalid postal code"
+      }
     },
     "continue_button": "Continue"
   },

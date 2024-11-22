@@ -1,13 +1,14 @@
+
 import Button from "@/components/Button";
 import FullScreenLoader from "@/components/FullScreenLoader";
 import LoggedLayout, { LeftNav } from "@/components/LoggedLayout";
 import ProgressBar from "@/components/ProgressBar";
 import Text from "@/components/Text";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { KeyboardAvoidingView, Platform, View } from "react-native";
+import { KeyboardAvoidingView, Platform, View, Keyboard, TouchableOpacity, ScrollView } from "react-native";
 import { FormValues, steps } from "@/components/Onboarding/config";
-
+import { Ionicons } from "@expo/vector-icons";
 
 
 const OnBoarding = () => {
@@ -34,8 +35,25 @@ const OnBoarding = () => {
     const [activeStep, setActiveStep] = useState<number>(0); //This is used to render the current step
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [isCurrentStepValid, setIsCurrentStepValid] = useState<boolean>(false);
-
     //const [error, setError] = useState<string | undefined>(""); //This can be used to render errors from submit
+
+    const [keyboardVisible, setKeyboardVisible] = useState(false);
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+            () => setKeyboardVisible(true)
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => setKeyboardVisible(false)
+        );
+
+        return () => {
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+        };
+    }, []);
 
     const handleSubmit = () => {
         setIsSubmitting(true);
@@ -91,7 +109,7 @@ const OnBoarding = () => {
                 navLeft={<LeftNav onPress={handleBack} />}
                 navCenter={<ProgressBar progress={progress} />}
             >
-                <View className="flex-1">
+                <ScrollView className="flex-1">
                     <View className="flex-1 justify-center items-stretch gap-l px-layout">
                         <Text className="text-heading-s text-gray-10">
                             {t(`onBoarding.title`)}
@@ -111,18 +129,30 @@ const OnBoarding = () => {
                             />
                         </View>
                     </View>
-                </View>
-                <View className="flex justify-center items-stretch gap-l px-layout">
-                    <Button
+                </ScrollView>
 
+                {keyboardVisible && (
+                    <View className="flex-row justify-end px-layout pb-s">
+                        <TouchableOpacity
+                            onPress={() => Keyboard.dismiss()}
+                            className="bg-electric-50 rounded-full w-[48px] h-[48px] items-center justify-center shadow-md"
+                        >
+                            <Ionicons name="chevron-forward" size={24} color="#FFFFFF" />
+                        </TouchableOpacity>
+                    </View>
+                )}
 
-                        onPress={handleNext}
-                        disabled={!isCurrentStepValid}
-                    >
-                        <Text className="text-body-m">
-                            {t("onBoarding.continue_button")}
-                        </Text>
-                    </Button>
+                <View className="flex justify-center items-stretch gap-l px-layout pb-layout">
+                    {!keyboardVisible && (
+                        <Button
+                            onPress={handleNext}
+                            disabled={!isCurrentStepValid}
+                        >
+                            <Text className="text-body-m">
+                                {t("onBoarding.continue_button")}
+                            </Text>
+                        </Button>
+                    )}
                 </View>
             </LoggedLayout>
             <FullScreenLoader visible={isSubmitting} />

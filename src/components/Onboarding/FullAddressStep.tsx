@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import InputWrapper from "@/components/Forms/InputWrapper";
 import { useTranslation } from "react-i18next";
-import { TextInput } from "react-native";
+import { TextInput, ScrollView } from "react-native";
 import { z } from "zod";
 import { OnBoardingStepProps } from "./config";
 
@@ -20,12 +20,38 @@ const FullAddressStep = ({
     const validationSchema = z.object({
         address_street_1: z
             .string()
-            .min(5, t("onBoarding.address_street_1_field.error")),
-        address_city: z.string().min(1, t("onBoarding.address_city_field.error")),
+            .min(5, t("onBoarding.full_address.address_street_1_field.error_required")),
+        address_city: z.string().min(1, t("onBoarding.full_address.address_city_field.error_required")),
         address_subdivision: z
             .string()
-            .min(1, t("onBoarding.address_subdivision_field.error")),
-        address_postal_code: z.string().optional(),
+            .min(1, t("onBoarding.full_address.address_subdivision_field.error_required")),
+        address_postal_code: z.string()
+            .optional()
+            .refine((val) => {
+                if (!val) return true; // Optional field, empty is OK
+
+                // Common postal code patterns by country
+                const patterns = {
+                    // Latin America
+                    AR: /^[A-Z]?\d{4}[A-Z]{0,3}$/, // Argentina
+                    BR: /^\d{5}-?\d{3}$/, // Brazil
+                    CL: /^\d{7}$/, // Chile
+                    CO: /^\d{6}$/, // Colombia
+                    MX: /^\d{5}$/, // Mexico
+                    PE: /^\d{5}$/, // Peru
+
+                    // Other major regions
+                    US: /^\d{5}(-\d{4})?$/, // USA
+                    CA: /^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z]\s?\d[ABCEGHJ-NPRSTV-Z]\d$/i, // Canada
+                    GB: /^[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}$/i, // UK
+
+                    // Generic pattern for other countries
+                    DEFAULT: /^[A-Z0-9\s-]{3,10}$/i
+                };
+
+                // Try all patterns
+                return Object.values(patterns).some(pattern => pattern.test(val));
+            }, t("onBoarding.full_address.address_postal_code_field.error_invalid"))
     });
 
     const formErrors = validationSchema.safeParse(formValues);
@@ -33,7 +59,7 @@ const FullAddressStep = ({
     useEffect(() => {
         const formErrors = validationSchema.safeParse(formValues);
         if (onValidationChange) {
-          onValidationChange(formErrors.success);
+            onValidationChange(formErrors.success);
         }
     }, [formValues, onValidationChange]);
 
@@ -50,7 +76,7 @@ const FullAddressStep = ({
     return (
         <>
             <InputWrapper
-                label={t("onBoarding.address_street_1_field.label")}
+                label={t("onBoarding.full_address.address_street_1_field.label")}
                 isFocused={
                     focused === "address_street_1" || Boolean(formValues.address_street_1)
                 }
@@ -71,7 +97,7 @@ const FullAddressStep = ({
                 />
             </InputWrapper>
             <InputWrapper
-                label={t("onBoarding.address_street_2_field.label")}
+                label={t("onBoarding.full_address.address_street_2_field.label")}
                 isFocused={
                     focused === "address_street_2" || Boolean(formValues.address_street_2)
                 }
@@ -92,7 +118,7 @@ const FullAddressStep = ({
                 />
             </InputWrapper>
             <InputWrapper
-                label={t("onBoarding.address_city_field.label")}
+                label={t("onBoarding.full_address.address_city_field.label")}
                 isFocused={
                     focused === "address_city" || Boolean(formValues.address_city)
                 }
@@ -114,7 +140,7 @@ const FullAddressStep = ({
                 />
             </InputWrapper>
             <InputWrapper
-                label={t("onBoarding.address_subdivision_field.label")}
+                label={t("onBoarding.full_address.address_subdivision_field.label")}
                 isFocused={
                     focused === "address_subdivision" ||
                     Boolean(formValues.address_subdivision)
@@ -136,7 +162,7 @@ const FullAddressStep = ({
                 />
             </InputWrapper>
             <InputWrapper
-                label={t("onBoarding.address_postal_code_field.label")}
+                label={t("onBoarding.full_address.address_postal_code_field.label")}
                 isFocused={
                     focused === "address_postal_code" ||
                     Boolean(formValues.address_postal_code)

@@ -197,17 +197,17 @@
     "first_name_field": {
       "label": "Primer nombre",
       "hint": "Como aparece en tu identificación",
-      "error": "Este campo es requerido"
+      "error_required": "Es requerido"
     },
     "middle_name_field": {
       "label": "Segundo nombre",
       "hint": "Como aparece en tu identificación",
-      "error": "Este campo es requerido"
+      "error_required": "Es requerido"
     },
     "last_name_field": {
       "label": "Apellido(s)",
       "hint": "Como aparece en tu identificación",
-      "error": "Este campo es requerido"
+      "error_required": "Es requerido"
     },
     "birth_date_field": {
       "label": "Fecha de nacimiento",
@@ -220,37 +220,45 @@
     },
     "country_field": {
       "label": "País de residencia",
-      "error": "Este campo es requerido",
+      "error_required": "Es requerido",
       "hint": ""
     },
     "tax_id_number_field": {
       "label": "Numero de identificación fiscal",
-      "error": "Este campo es requerido",
+      "error_required": "Es requerido",
       "hint": ""
     },
-    "address_street_1_field": {
-      "label": "Dirección principal",
-      "error": "Este campo es requerido",
-      "hint": "Como aparece en un recibo servicio público"
-    },
-    "address_street_2_field": {
-      "label": "Apartamento, unidad o piso",
-      "hint": "Como aparece en un recibo servicio público"
-    },
-    "address_city_field": {
-      "label": "Ciudad",
-      "error": "Este campo es requerido",
-      "hint": "Como aparece en un recibo servicio público"
-    },
-    "address_subdivision_field": {
-      "label": "Provincia/Estado",
-      "error": "Este campo es requerido",
-      "hint": "Como aparece en un recibo servicio público"
-    },
-    "address_postal_code_field": {
-      "label": "Código postal",
-      "error": "Este campo es requerido",
-      "hint": "Como aparece en un recibo servicio público"
+    "full_address": {
+      "address_street_1_field": {
+        "label": "Dirección principal",
+        "hint": "Como aparece en un recibo servicio público",
+        "error_required": "Es requerido",
+        "error_invalid": "Dirección inválida"
+      },
+      "address_street_2_field": {
+        "label": "Apartamento, unidad o piso",
+        "hint": "Como aparece en un recibo servicio público",
+        "error_invalid": "Dirección inválida",
+        "error_required": "Es requerido"
+      },
+      "address_city_field": {
+        "label": "Ciudad",
+        "hint": "Como aparece en un recibo servicio público",
+        "error_required": "Es requerido",
+        "error_invalid": "La ciudad es inválida"
+      },
+      "address_subdivision_field": {
+        "label": "Provincia/Estado",
+        "hint": "Como aparece en un recibo servicio público",
+        "error_required": "Es requerido",
+        "error_invalid": "La provincia/estado es inválida"
+      },
+      "address_postal_code_field": {
+        "label": "Código postal",
+        "hint": "Como aparece en un recibo servicio público",
+        "error_required": "Es requerido",
+        "error_invalid": "Código postal inválido"
+      }
     },
     "continue_button": "Continuar"
   },

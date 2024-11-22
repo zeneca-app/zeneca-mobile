@@ -15,9 +15,8 @@ const DateOfBirthStep = ({
   handleFocus,
   touchedFields,
   handleBlur,
-  onValidationChange,
+  onValidationChange
 }: OnBoardingStepProps) => {
-  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
   const { t } = useTranslation();
 
   const [month, setMonth] = useState("");
