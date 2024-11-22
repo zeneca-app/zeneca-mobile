@@ -105,4 +105,3 @@ export const COUNTRIES_LIST = COUNTRIES.filter(
   return a.name.localeCompare(b.name);
 });
 
-console.log(COUNTRIES_LIST[0]);
