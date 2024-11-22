@@ -68,7 +68,7 @@ export const LATIN_AMERICA_COUNTRY_CODE: string[] = [
   "GT",
   "HN", // Honduras
   "MX", // Mexico */
-  
+
   "CO", // Colombia
   // "PY", // Paraguay
   "PE", // Peru
@@ -78,7 +78,6 @@ export const LATIN_AMERICA_COUNTRY_CODE: string[] = [
 
 export const PRIORITY_COUNTRY_CODE: string[] = [
   "PA", // Panama
-  "CO", // Colombia
 ];
 
 // Get all countries

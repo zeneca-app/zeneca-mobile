@@ -19,9 +19,9 @@ const FullNameStep = ({
 
   const validationSchema = z.object({
     first_name: z.string().min(1, t("onBoarding.first_name_field.error_required")),
-    middle_name: z.string().min(1, t("onBoarding.middle_name_field.error_required")).optional(),
+    middle_name: z.string().optional(),
     last_name: z.string().min(1, t("onBoarding.last_name_field.error_required")),
-    second_last_name: z.string().min(1, t("onBoarding.second_last_name_field.error_required")).optional(),
+    second_last_name: z.string().optional(),
   });
 
   const formErrors = validationSchema.safeParse(formValues);
@@ -70,7 +70,7 @@ const FullNameStep = ({
         label={t("onBoarding.middle_name_field.label")}
         isFocused={focused === "middle_name" || Boolean(formValues.middle_name)}
         error={getError("middle_name")}
-        required={true}
+        required={false}
       >
         <TextInput
           className="text-white text-body-m pb-4"
@@ -90,6 +90,7 @@ const FullNameStep = ({
         isFocused={
           focused === "last_name" || Boolean(formValues.last_name)
         }
+        required={true}
         error={getError("last_name")}
       >
         <TextInput
@@ -106,6 +107,7 @@ const FullNameStep = ({
         />
       </InputWrapper>
       <InputWrapper
+        required={false}
         label={t("onBoarding.second_last_name_field.label")}
         isFocused={
           focused === "second_last_name" || Boolean(formValues.second_last_name)

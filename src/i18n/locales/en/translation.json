@@ -190,19 +190,26 @@
     },
     "title": "Complete your \ninformation",
     "first_name_field": {
-      "label": "Full Name",
+      "label": "First Name",
       "hint": "As it appears on your ID",
-      "error": "This field is required"
+      "error_required": "This field is required"
+    },
+    "middle_name_field": {
+      "label": "Middle Name",
+      "hint": "As it appears on your ID",
+      "error_required": "This field is required",
+      "error_min_length": "This field must be at least {{min}} characters long"
     },
     "last_name_field": {
-      "label": "First Last Name",
+      "label": "Last Name",
       "hint": "As it appears on your ID",
-      "error": "This field is required"
+      "error_required": "This field is required"
     },
     "second_last_name_field": {
-      "label": "Second Last Name",
+      "label": "Surname",
       "hint": "As it appears on your ID",
-      "error": "This field is required"
+      "error_required": "This field is required",
+      "error_min_length": "This field must be at least {{min}} characters long"
     },
     "birth_date_field": {
       "label": "Date of Birth",
