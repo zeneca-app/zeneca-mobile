@@ -206,7 +206,7 @@
       "error_required": "This field is required"
     },
     "second_last_name_field": {
-      "label": "Surname",
+      "label": "Second Last Name",
       "hint": "As it appears on your ID",
       "error_required": "This field is required",
       "error_min_length": "This field must be at least {{min}} characters long"
