@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import InputWrapper from "@/components/Forms/InputWrapper";
 import { useTranslation } from "react-i18next";
-import { TextInput, ScrollView } from "react-native";
+import { TextInput } from "react-native";
 import { z } from "zod";
 import { OnBoardingStepProps } from "./config";
 
@@ -20,11 +20,15 @@ const FullAddressStep = ({
     const validationSchema = z.object({
         address_street_1: z
             .string()
-            .min(5, t("onBoarding.full_address.address_street_1_field.error_required")),
-        address_city: z.string().min(1, t("onBoarding.full_address.address_city_field.error_required")),
+            .min(5, t("onBoarding.full_address.address_street_1_field.error_required"))
+            .max(50, t("onBoarding.full_address.address_street_1_field.error_invalid")),
+        address_city: z.string()
+            .min(1, t("onBoarding.full_address.address_city_field.error_required"))
+            .max(50, t("onBoarding.full_address.address_city_field.error_invalid")),
         address_subdivision: z
             .string()
-            .min(1, t("onBoarding.full_address.address_subdivision_field.error_required")),
+            .min(1, t("onBoarding.full_address.address_subdivision_field.error_required"))
+            .max(50, t("onBoarding.full_address.address_subdivision_field.error_invalid")),
         address_postal_code: z.string()
             .optional()
             .refine((val) => {
