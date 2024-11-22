@@ -31,6 +31,7 @@ const OnBoarding = () => {
         first_name: "",
         middle_name: "",
         last_name: "",
+        second_last_name: "",
         birth_date: new Date(),
         country_code: "",
         address_street_1: "",
@@ -190,7 +191,7 @@ const OnBoarding = () => {
                     </Animated.View>
                 </View>
             </LoggedLayout>
-            <FullScreenLoader visible={isSubmitting} />
+            {/* <FullScreenLoader visible={isSubmitting} /> */}
         </KeyboardAvoidingView>
     );
 };
