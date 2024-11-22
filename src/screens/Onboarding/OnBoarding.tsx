@@ -75,7 +75,7 @@ const OnBoarding = () => {
         setTimeout(() => {
             setIsSubmitting(false);
         }, 3000);
-        console.log(formValues);
+        console.log("formValues", formValues);
         navigation.navigate("KYCProvider", {
             country_code: formValues.country_code,
             full_address: {
@@ -83,7 +83,7 @@ const OnBoarding = () => {
                 address_street_2: formValues.address_street_2,
                 address_city: formValues.address_city,
                 address_state: formValues.address_state,
-                address_zip_code: formValues.address_postal_code,
+                address_zip_code: formValues.address_postal_code || "00000",
                 address_country: formValues.country_code,
             },
         });
