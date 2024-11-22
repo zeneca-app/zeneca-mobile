@@ -12,7 +12,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import Avatar from "@/assets/avatar.svg";
 
 
-
 const ProfileScreen = () => {
     const navigation = useNavigation();
     const { t } = useTranslation();
@@ -21,7 +20,6 @@ const ProfileScreen = () => {
     const { user } = useUserStore();
     const [isLoading, setIsLoading] = useState(false);
     const { setUser } = useUserStore((state) => state);
-
 
     const handleLogout = async () => {
         try {
@@ -36,6 +34,10 @@ const ProfileScreen = () => {
         setIsLoading(false);
     };
     cssInterop(Avatar, { className: "style" });
+
+    const handleHistory = () => {
+        navigation.navigate("OrderHistory");
+    }
 
     return (
         <SafeAreaView className="flex-1 bg-black">
@@ -62,7 +64,7 @@ const ProfileScreen = () => {
                 <View className="space-y-2">
                     <TouchableOpacity
                         key={"history"}
-                        onPress={() => navigation.navigate('OrderHistory')}
+                        onPress={handleHistory}
                         className="flex-row items-center bg-[#19181B] rounded-[40px] px-8 py-14 my-0.5"
                     >
                         <Ionicons name={"receipt-outline"} size={24} color="white" className="mr-3" />
