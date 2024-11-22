@@ -115,7 +115,7 @@ const MainNavigation = () => {
       />
 
       <Stack.Screen
-        options={{ headerShown: false }}
+        options={{ headerShown: false, presentation: "modal" }}
         name="OrderHistory"
         component={OrderHistory}
       />
@@ -145,7 +145,7 @@ const MainNavigation = () => {
       />
 
       <Stack.Screen
-        options={{ headerShown: false }}
+        options={{ headerShown: false, presentation: "modal" }}
         name="ETFPurchaseSuccess"
         component={ETFPurchaseSuccess}
       />
