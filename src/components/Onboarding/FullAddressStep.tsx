@@ -24,11 +24,11 @@ const FullAddressStep = ({
             .max(50, t("onBoarding.full_address.address_street_1_field.error_invalid")),
         address_city: z.string()
             .min(1, t("onBoarding.full_address.address_city_field.error_required"))
-            .max(50, t("onBoarding.full_address.address_city_field.error_invalid")),
+            .max(20, t("onBoarding.full_address.address_city_field.error_invalid")),
         address_subdivision: z
             .string()
             .min(1, t("onBoarding.full_address.address_subdivision_field.error_required"))
-            .max(50, t("onBoarding.full_address.address_subdivision_field.error_invalid")),
+            .max(20, t("onBoarding.full_address.address_subdivision_field.error_invalid")),
         address_postal_code: z.string()
             .optional()
             .refine((val) => {
@@ -94,7 +94,7 @@ const FullAddressStep = ({
                     autoComplete="off"
                     autoCorrect={false}
                     clearButtonMode="while-editing"
-                    keyboardType="name-phone-pad"
+                    keyboardType="default"
                     autoCapitalize="none"
                     onFocus={() => handleFocus("address_street_1")}
                     onBlur={() => handleBlur("address_street_1")}
@@ -115,7 +115,7 @@ const FullAddressStep = ({
                     autoComplete="off"
                     autoCorrect={false}
                     clearButtonMode="while-editing"
-                    keyboardType="name-phone-pad"
+                    keyboardType="default"
                     autoCapitalize="none"
                     onFocus={() => handleFocus("address_street_2")}
                     onBlur={() => handleBlur("address_street_2")}
@@ -137,7 +137,7 @@ const FullAddressStep = ({
                     autoComplete="off"
                     autoCorrect={false}
                     clearButtonMode="while-editing"
-                    keyboardType="name-phone-pad"
+                    keyboardType="default"
                     autoCapitalize="none"
                     onFocus={() => handleFocus("address_city")}
                     onBlur={() => handleBlur("address_city")}
@@ -159,7 +159,7 @@ const FullAddressStep = ({
                     autoComplete="off"
                     autoCorrect={false}
                     clearButtonMode="while-editing"
-                    keyboardType="name-phone-pad"
+                    keyboardType="default"
                     autoCapitalize="none"
                     onFocus={() => handleFocus("address_subdivision")}
                     onBlur={() => handleBlur("address_subdivision")}
@@ -182,7 +182,7 @@ const FullAddressStep = ({
                     autoComplete="off"
                     autoCorrect={false}
                     clearButtonMode="while-editing"
-                    keyboardType="name-phone-pad"
+                    keyboardType="default"
                     autoCapitalize="none"
                     onFocus={() => handleFocus("address_postal_code")}
                     onBlur={() => handleBlur("address_postal_code")}

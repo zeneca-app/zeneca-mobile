@@ -205,7 +205,12 @@
       "error_required": "Es requerido"
     },
     "last_name_field": {
-      "label": "Apellido(s)",
+      "label": "Primer apellido",
+      "hint": "Como aparece en tu identificación",
+      "error_required": "Es requerido"
+    },
+    "second_last_name_field": {
+      "label": "Segundo apellido",
       "hint": "Como aparece en tu identificación",
       "error_required": "Es requerido"
     },

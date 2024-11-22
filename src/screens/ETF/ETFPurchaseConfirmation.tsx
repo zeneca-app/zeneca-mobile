@@ -106,6 +106,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
 
   const isLoading = isQuotePending || transactionInitiated;
   const isDisabled = isQuotePending || !quote || transactionInitiated;
+  const showButtonConfirmation = !isQuotePending && quote;
 
   return (
     <LoggedLayout>
@@ -189,14 +190,16 @@ const ETFPurchaseConfirmation = ({ route }) => {
         </Text>
       </View>
       <View className="px-layout">
-        <Button
-          className=""
-          onPress={executeTransaction}
-          disabled={isDisabled}
-          isLoading={isLoading}
-        >
-          <Text className="text-button-m">{t("etfPurchase.confirm")}</Text>
-        </Button>
+        {showButtonConfirmation && (
+          <Button
+            className=""
+            onPress={executeTransaction}
+            disabled={isDisabled}
+            isLoading={isLoading}
+          >
+            <Text className="text-button-m">{t("etfPurchase.confirm")}</Text>
+          </Button>
+        )}
       </View>
     </LoggedLayout>
   );

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { z } from "zod";
 import InputWrapper from "@/components/Forms/InputWrapper";
 import { useTranslation } from "react-i18next";
@@ -18,6 +18,10 @@ const DateOfBirthStep = ({
   onValidationChange
 }: OnBoardingStepProps) => {
   const { t } = useTranslation();
+
+  const dayRef = useRef<TextInput>(null);
+  const monthRef = useRef<TextInput>(null);
+  const yearRef = useRef<TextInput>(null);
 
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
@@ -72,19 +76,21 @@ const DateOfBirthStep = ({
     const numericValue = value.replace(/[^0-9]/g, '');
 
     switch (field) {
-      case 'month':
-        if (numericValue.length <= 2) {
-          const num = parseInt(numericValue);
-          if (numericValue === '' || (num > 0 && num <= 12)) {
-            setMonth(numericValue);
-          }
-        }
-        break;
       case 'day':
         if (numericValue.length <= 2) {
           const num = parseInt(numericValue);
           if (numericValue === '' || (num > 0 && num <= 31)) {
             setDay(numericValue);
+            if (numericValue.length === 2) monthRef.current?.focus();
+          }
+        }
+        break;
+      case 'month':
+        if (numericValue.length <= 2) {
+          const num = parseInt(numericValue);
+          if (numericValue === '' || (num > 0 && num <= 12)) {
+            setMonth(numericValue);
+            if (numericValue.length === 2) yearRef.current?.focus();
           }
         }
         break;
@@ -127,6 +133,7 @@ const DateOfBirthStep = ({
           <View className="flex-1 rounded-lg px-4 py-2">
             <Text className="text-gray-400 text-s mb-1">{t("onBoarding.birth_date_field.day")}</Text>
             <TextInput
+              ref={dayRef}
               className="text-white text-lg"
               keyboardType="number-pad"
               maxLength={2}
@@ -139,6 +146,7 @@ const DateOfBirthStep = ({
           <View className="flex-1 rounded-lg px-4 py-2">
             <Text className="text-gray-400 text-s mb-1">{t("onBoarding.birth_date_field.month")}</Text>
             <TextInput
+              ref={monthRef}
               className="text-white text-lg"
               keyboardType="number-pad"
               maxLength={2}
@@ -151,6 +159,7 @@ const DateOfBirthStep = ({
           <View className="flex-1  rounded-lg px-4 py-2">
             <Text className="text-gray-400 text-s mb-1">{t("onBoarding.birth_date_field.year")}</Text>
             <TextInput
+              ref={yearRef}
               className="text-white text-lg"
               keyboardType="number-pad"
               maxLength={4}

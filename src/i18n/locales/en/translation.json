@@ -195,7 +195,12 @@
       "error": "This field is required"
     },
     "last_name_field": {
-      "label": "Last Name",
+      "label": "First Last Name",
+      "hint": "As it appears on your ID",
+      "error": "This field is required"
+    },
+    "second_last_name_field": {
+      "label": "Second Last Name",
       "hint": "As it appears on your ID",
       "error": "This field is required"
     },

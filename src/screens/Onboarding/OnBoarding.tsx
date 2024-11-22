@@ -9,10 +9,23 @@ import { useTranslation } from "react-i18next";
 import { KeyboardAvoidingView, Platform, View, Keyboard, TouchableOpacity, ScrollView } from "react-native";
 import { FormValues, steps } from "@/components/Onboarding/config";
 import { Ionicons } from "@expo/vector-icons";
-
+import { useNavigation } from "@react-navigation/native";
+import Animated, {
+    FadeIn,
+    FadeOut,
+    SlideInDown,
+    withTiming,
+    withSpring,
+    SlideInRight,
+    LinearTransition,
+    SlideOutRight,
+    SlideInLeft,
+    SlideOutLeft
+} from 'react-native-reanimated';
 
 const OnBoarding = () => {
     const { t } = useTranslation();
+    const navigation = useNavigation();
 
     const initialFormValues = {
         first_name: "",
@@ -61,6 +74,18 @@ const OnBoarding = () => {
         setTimeout(() => {
             setIsSubmitting(false);
         }, 3000);
+        console.log(formValues);
+        navigation.navigate("KYCProvider", {
+            country_code: formValues.country_code,
+            full_address: {
+                address_street_1: formValues.address_street_1,
+                address_street_2: formValues.address_street_2,
+                address_city: formValues.address_city,
+                address_state: formValues.address_subdivision,
+                address_zip_code: formValues.address_postal_code,
+                address_country: formValues.country_code,
+            },
+        });
     };
 
     const handleNext = () => {
@@ -131,28 +156,38 @@ const OnBoarding = () => {
                     </View>
                 </ScrollView>
 
-                {keyboardVisible && (
-                    <View className="flex-row justify-end px-layout pb-s">
-                        <TouchableOpacity
-                            onPress={() => Keyboard.dismiss()}
-                            className="bg-electric-50 rounded-full w-[48px] h-[48px] items-center justify-center shadow-md"
-                        >
-                            <Ionicons name="chevron-forward" size={24} color="#FFFFFF" />
-                        </TouchableOpacity>
-                    </View>
-                )}
-
                 <View className="flex justify-center items-stretch gap-l px-layout pb-layout">
-                    {!keyboardVisible && (
-                        <Button
-                            onPress={handleNext}
-                            disabled={!isCurrentStepValid}
-                        >
-                            <Text className="text-body-m">
-                                {t("onBoarding.continue_button")}
-                            </Text>
-                        </Button>
-                    )}
+                    <Animated.View
+                        layout={LinearTransition
+                            .springify()
+                            .mass(1.5)
+                            .damping(25)
+                            .duration(500)
+                        }
+                        entering={FadeIn.duration(200)}
+                        exiting={FadeOut.duration(200)}
+                        className={`flex ${keyboardVisible ? 'flex-row justify-end' : ''}`}
+                    >
+                        {keyboardVisible ? (
+                            <TouchableOpacity
+                                onPress={() => Keyboard.dismiss()}
+                                className="bg-electric-50 rounded-full w-[48px] h-[48px] items-center justify-center shadow-md"
+                            >
+                                <Ionicons name="chevron-forward" size={24} color="#FFFFFF" />
+                            </TouchableOpacity>
+
+                        ) : (
+                            <Button
+                                onPress={handleNext}
+                                disabled={!isCurrentStepValid}
+                            >
+                                <Text className="text-body-m">
+                                    {t("onBoarding.continue_button")}
+                                </Text>
+                            </Button>
+                        )}
+
+                    </Animated.View>
                 </View>
             </LoggedLayout>
             <FullScreenLoader visible={isSubmitting} />

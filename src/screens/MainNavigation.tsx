@@ -139,7 +139,7 @@ const MainNavigation = () => {
       />
 
       <Stack.Screen
-        options={{ headerShown: false }}
+        options={{ headerShown: false, presentation: "modal" }}
         name="ETFPurchaseConfirmation"
         component={ETFPurchaseConfirmation}
       />
