@@ -252,7 +252,7 @@
         "error_required": "Es requerido",
         "error_invalid": "La ciudad es inválida"
       },
-      "address_subdivision_field": {
+      "address_state_field": {
         "label": "Provincia/Estado",
         "hint": "Como aparece en un recibo servicio público",
         "error_required": "Es requerido",

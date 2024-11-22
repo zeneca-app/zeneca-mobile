@@ -36,7 +36,7 @@ const OnBoarding = () => {
         address_street_1: "",
         address_street_2: "",
         address_city: "",
-        address_subdivision: "",
+        address_state: "",
         address_postal_code: "",
     };
 
@@ -81,7 +81,7 @@ const OnBoarding = () => {
                 address_street_1: formValues.address_street_1,
                 address_street_2: formValues.address_street_2,
                 address_city: formValues.address_city,
-                address_state: formValues.address_subdivision,
+                address_state: formValues.address_state,
                 address_zip_code: formValues.address_postal_code,
                 address_country: formValues.country_code,
             },

@@ -25,10 +25,10 @@ const FullAddressStep = ({
         address_city: z.string()
             .min(1, t("onBoarding.full_address.address_city_field.error_required"))
             .max(20, t("onBoarding.full_address.address_city_field.error_invalid")),
-        address_subdivision: z
+        address_state: z
             .string()
-            .min(1, t("onBoarding.full_address.address_subdivision_field.error_required"))
-            .max(20, t("onBoarding.full_address.address_subdivision_field.error_invalid")),
+            .min(1, t("onBoarding.full_address.address_state_field.error_required"))
+            .max(20, t("onBoarding.full_address.address_state_field.error_invalid")),
         address_postal_code: z.string()
             .optional()
             .refine((val) => {
@@ -144,25 +144,25 @@ const FullAddressStep = ({
                 />
             </InputWrapper>
             <InputWrapper
-                label={t("onBoarding.full_address.address_subdivision_field.label")}
+                label={t("onBoarding.full_address.address_state_field.label")}
                 isFocused={
-                    focused === "address_subdivision" ||
-                    Boolean(formValues.address_subdivision)
+                    focused === "address_state" ||
+                    Boolean(formValues.address_state)
                 }
-                error={getError("address_subdivision")}
+                error={getError("address_state")}
                 required={true}
             >
                 <TextInput
                     className="text-white text-body-m pb-4"
-                    value={formValues.address_subdivision}
-                    onChangeText={(e) => handleChange("address_subdivision", e)}
+                    value={formValues.address_state}
+                    onChangeText={(e) => handleChange("address_state", e)}
                     autoComplete="off"
                     autoCorrect={false}
                     clearButtonMode="while-editing"
                     keyboardType="default"
                     autoCapitalize="none"
-                    onFocus={() => handleFocus("address_subdivision")}
-                    onBlur={() => handleBlur("address_subdivision")}
+                    onFocus={() => handleFocus("address_state")}
+                    onBlur={() => handleBlur("address_state")}
                 />
             </InputWrapper>
             <InputWrapper

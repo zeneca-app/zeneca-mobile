@@ -242,7 +242,7 @@
         "error_invalid": "Invalid city",
         "hint": "As it appears on a utility bill"
       },
-      "address_subdivision_field": {
+      "address_state_field": {
         "label": "State/Province",
         "hint": "As it appears on a utility bill",
         "error_required": "Required",

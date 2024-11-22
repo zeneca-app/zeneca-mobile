@@ -20,7 +20,7 @@ export type FormValues = {
   address_street_1: string;
   address_street_2: string;
   address_city: string;
-  address_subdivision: string;
+  address_state: string;
   address_postal_code: string;
 };
 

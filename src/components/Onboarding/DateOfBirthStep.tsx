@@ -2,8 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { z } from "zod";
 import InputWrapper from "@/components/Forms/InputWrapper";
 import { useTranslation } from "react-i18next";
-import { Text, TouchableOpacity, View, TextInput } from "react-native";
-import Feather from "@expo/vector-icons/Feather";
+import { Text, View, TextInput } from "react-native";
 import { OnBoardingStepProps } from "./config";
 
 

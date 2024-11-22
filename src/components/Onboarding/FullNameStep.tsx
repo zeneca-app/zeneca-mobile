@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { TextInput } from "react-native";
 import { z } from "zod";
 import { OnBoardingStepProps } from "./config";
-import Text from "@/components/Text";
 
 
 const FullNameStep = ({
