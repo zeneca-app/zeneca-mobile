@@ -179,18 +179,18 @@
     "to": "to: "
   },
   "onBoarding": {
-    "steps" : {
+    "steps": {
       "step_1": {
         "subtitle": "Nombre como aparece en tu identificación"
       },
       "step_2": {
-        "subtitle": "Selecciona tu país de residencia"
+        "subtitle": "Ingresa tu fecha de nacimiento"
       },
       "step_3": {
-        "subtitle": "Ingresa tu dirección completa"
+        "subtitle": "Selecciona tu país de residencia"
       },
       "step_4": {
-        "subtitle": "Ingresa tu fecha de nacimiento"
+        "subtitle": "Ingresa tu dirección completa"
       }
     },
     "title": "Completa tu \ninformación",
@@ -211,6 +211,9 @@
     },
     "birth_date_field": {
       "label": "Fecha de nacimiento",
+      "month": "Mes",
+      "day": "Día",
+      "year": "Año",
       "error": {
         "min_age": "Debes ser mayor de {{age}} años"
       }

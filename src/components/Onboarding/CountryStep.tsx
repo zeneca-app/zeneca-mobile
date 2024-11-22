@@ -66,7 +66,6 @@ const CountryStep = ({
     };
 
     const handleCountryChange = (value: string) => {
-        console.log(value);
         handleChange("country_code", value);
         handleHideCountries();
     };
