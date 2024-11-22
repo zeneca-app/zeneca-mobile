@@ -42,10 +42,10 @@ const MainNavigation = () => {
   }, []);
 
   return (
-    <Stack.Navigator initialRouteName={!user ? "Login" : "OnBoarding"}>
+    <Stack.Navigator initialRouteName={!user ? "Login" : "Home"}>
       <Stack.Group>
         <Stack.Screen
-          options={{ headerShown: false }}
+          options={{ headerShown: false, presentation: "modal" }}
           name="Profile"
           component={ProfileScreen}
         />

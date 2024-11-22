@@ -24,6 +24,7 @@ export type RootStackParamList = {
   SendConfirmation: undefined;
   Profile: undefined;
   OrderHistory: undefined;
+  OnBoarding: undefined;
 };
 
 declare global {

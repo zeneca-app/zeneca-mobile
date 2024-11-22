@@ -98,7 +98,10 @@ const OnBoarding = () => {
     };
 
     const handleBack = () => {
-        if (activeStep === 0) return;
+        if (activeStep === 0) {
+            navigation.goBack();
+            return;
+        }
         setActiveStep((prev) => prev - 1);
     };
 

@@ -106,7 +106,7 @@ const FullAddressStep = ({
                     focused === "address_street_2" || Boolean(formValues.address_street_2)
                 }
                 error={getError("address_street_2")}
-                hint="Optional"
+                hint=""
             >
                 <TextInput
                     className="text-white text-body-m pb-4"
@@ -171,7 +171,7 @@ const FullAddressStep = ({
                     focused === "address_postal_code" ||
                     Boolean(formValues.address_postal_code)
                 }
-                hint="Optional"
+                hint=""
                 error={getError("address_postal_code")}
 
             >

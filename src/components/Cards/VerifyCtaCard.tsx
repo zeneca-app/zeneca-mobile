@@ -10,11 +10,10 @@ const VerifyCTACard = () => {
   const navigation = useNavigation();
 
   const handlePress = () => {
-    console.log("Navigate to KYC");
-    navigation.navigate("KYCPreview");
+    navigation.navigate("OnBoarding");
   };
 
-  const isVerifyed = true;
+  const isVerifyed = false;
 
   if (!isVerifyed) {
     return (
