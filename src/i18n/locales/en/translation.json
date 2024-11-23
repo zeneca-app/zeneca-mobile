@@ -279,8 +279,9 @@
     "disclaimer": "You are initiating a purchase order for <0>{{etf_amount}}</0> shares of <1>{{display_name}} {{symbol}}</1> for <2>${{amount}}</2> at <3>${{etf_price}}</3> per share.",
     "confirm": "Purchase",
     "success": {
-      "title": "Success!",
+      "title": "Order Received!",
       "subtitle": "Your purchase was successful",
+      "summary": "We are processing your purchase of <0>${{amount}}</0> of \n<1>{{display_name}} {{symbol}}</1> at <2>${{etf_price}}</2> per share.",
       "done_button": "Understood",
       "view_order_button": "View order"
     }

@@ -277,7 +277,8 @@
     "disclaimer": "Estas iniciando una orden de compra de <0>{{etf_amount}}</0> acciones de <1>{{display_name}} {{symbol}}</1> por <2>${{amount}}</2> a <3>${{etf_price}}</3> por acción.",
     "confirm": "Comprar",
     "success": {
-      "title": "¡Listo!",
+      "title": "¡Orden Recibida!",
+      "summary": "Estamos procesando tu compra de <0>${{amount}}</0> de <1>{{display_name}} {{symbol}}</1> a <2>${{etf_price}}</2> por acción.",
       "subtitle": "Tu inversión se realizó con éxito",
       "done_button": "Entendido",
       "view_order_button": "Ver orden"
