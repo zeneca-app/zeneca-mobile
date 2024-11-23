@@ -60,6 +60,7 @@ const OrderHistoryItem = ({ order, onPress }: OrderHistoryItemProps) => {
         return format(date, "MMM d, h:mm a");
     };
 
+    const paymentQuantity = order.payment_quantity
     return (
         <TouchableOpacity
             className="flex-row justify-between items-center py-4 border-b border-[#1C1C1E]"
@@ -75,7 +76,7 @@ const OrderHistoryItem = ({ order, onPress }: OrderHistoryItemProps) => {
             </View>
             <View className="items-end">
                 <Text className="text-white text-base font-medium">
-                    {currencyFormatter(order.payment_quantity, 2, 6)}
+                    {currencyFormatter(paymentQuantity, 2, 6)}
                 </Text>
                 <Text className="text-[#95929F] text-sm">
                     {order.order_type}
