@@ -1,8 +1,7 @@
 import { OrderQuote } from "@/client";
-import {
-  ordersCreateQuoteOrderMutation,
-} from "@/client/@tanstack/react-query.gen";
+import { ordersCreateQuoteOrderMutation } from "@/client/@tanstack/react-query.gen";
 import Button from "@/components/Button";
+import { SkeletonView } from "@/components/Loading/SkeletonLoadingView";
 import LoggedLayout from "@/components/LoggedLayout";
 import Text from "@/components/Text";
 import { STOCKS } from "@/constants/stocks";
@@ -18,10 +17,6 @@ import React, { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { Address } from "viem";
-import {
-  SkeletonView,
-} from "@/components/Loading/SkeletonLoadingView";
-
 
 const ETFPurchaseConfirmation = ({ route }) => {
   const { etf, amount } = route.params;
@@ -74,10 +69,9 @@ const ETFPurchaseConfirmation = ({ route }) => {
         navigation.navigate("ETFPurchaseSuccess", {
           etf,
           amount,
+          quote,
         });
       }
-
-
     } catch (error) {
       console.error("Error during transaction:", error);
     } finally {
