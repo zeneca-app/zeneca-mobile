@@ -1,19 +1,14 @@
 import CopyIcon from "@/assets/copy.svg";
+import { Timespan } from "@/client";
 import {
   assetsGetAssetDetailOptions,
   assetsGetAssetTicksOptions,
 } from "@/client/@tanstack/react-query.gen";
 import client from "@/client/client";
-import LoggedLayout from "@/components/LoggedLayout";
-import { useQuery } from "@tanstack/react-query";
-import { cssInterop } from "nativewind";
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { Animated, Dimensions, View } from "react-native";
-import { Timespan } from "@/client";
 import Button from "@/components/Button";
 import PillButtonProps from "@/components/Buttons/PillButton";
 import LoaderSpinner from "@/components/LoaderSpinner";
+import LoggedLayout from "@/components/LoggedLayout";
 import Text from "@/components/Text";
 import {
   CHART_TIMEFRAMES,
@@ -22,14 +17,19 @@ import {
 } from "@/constants/stocks";
 import { currencyFormatter, percentageFormatter } from "@/utils/currencyUtils";
 import { useNavigation } from "@react-navigation/native";
+import { useQuery } from "@tanstack/react-query";
 import BigNumber from "bignumber.js";
-import { useCallback } from "react";
+import { cssInterop } from "nativewind";
+import React, { useCallback } from "react";
+import { useTranslation } from "react-i18next";
+import { Animated, Dimensions, View } from "react-native";
 import { LineChart } from "react-native-wagmi-charts";
 
 const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 const chartWidth = windowWidth - 48;
-const chartHeight = chartWidth;
+const chartHeight = windowHeight - 600;
 
 type Asset = {
   etf: {
@@ -99,21 +99,24 @@ const ETFDetail = ({ route }: Asset) => {
     });
   };
 
-  const getChartChange = useCallback((datapoints: any) => {
-    if (!datapoints || !datapoints.length) {
-      return { change: 0, percentage: 0, increase: false };
-    }
-    const first = BigNumber(datapoints[0].value);
-    const last = BigNumber(datapoints[datapoints.length - 1].value);
-    const change = last.minus(first);
-    const percentage = change.dividedBy(first);
-    const increase = change.isGreaterThanOrEqualTo(0);
-    return {
-      change: change.toNumber(),
-      percentage: percentage.toNumber(),
-      increase,
-    };
-  }, [stockPointsData]);
+  const getChartChange = useCallback(
+    (datapoints: any) => {
+      if (!datapoints || !datapoints.length) {
+        return { change: 0, percentage: 0, increase: false };
+      }
+      const first = BigNumber(datapoints[0].value);
+      const last = BigNumber(datapoints[datapoints.length - 1].value);
+      const change = last.minus(first);
+      const percentage = change.dividedBy(first);
+      const increase = change.isGreaterThanOrEqualTo(0);
+      return {
+        change: change.toNumber(),
+        percentage: percentage.toNumber(),
+        increase,
+      };
+    },
+    [stockPointsData],
+  );
 
   const chartData = normalizedStockPointsData(stockPointsData || []);
 
@@ -133,7 +136,13 @@ const ETFDetail = ({ route }: Asset) => {
           {asset.symbol}
         </Text>
       </View>
-      <Text className="text-heading-m text-gray-10 px-layout">{asset.display_name}</Text>
+      <Text
+        className="text-heading-m text-gray-10 px-layout"
+        numberOfLines={2}
+        ellipsizeMode="tail"
+      >
+        {asset.display_name}
+      </Text>
       <Text className="text-heading-m text-gray-10 px-layout">${price}</Text>
       <View className="flex-row gap-s pt-layout-s pb-layout-s items-center justify-start px-layout">
         <Text
@@ -144,64 +153,68 @@ const ETFDetail = ({ route }: Asset) => {
           {percentageFormatter(change.percentage)})
         </Text>
       </View>
-      <View className="flex-1 flex gap-s">
-        <Animated.View
-          className="relative w-full"
-          style={{ height: chartWidth + 24, width: chartHeight }}
-        >
-          {stockPointsData && stockPointsData.length > 0 ? (
-            <LineChart.Provider data={chartData}>
-              <LineChart height={chartHeight}>
-                <LineChart.Path color={lineColor}>
-                  <LineChart.Gradient />
-                </LineChart.Path>
-                <LineChart.CursorCrosshair color={"#F7F7F8"}>
-                  <LineChart.Tooltip
-                    textStyle={{
-                      backgroundColor: "#19181B",
-                      borderRadius: 4,
-                      color: "white",
-                      fontSize: 18,
-                      padding: 4,
-                    }}
-                  />
-                </LineChart.CursorCrosshair>
-              </LineChart>
-            </LineChart.Provider>
-          ) : (
-            <View className="flex-1 flex justify-center items-center absolute w-full h-full">
-              <LoaderSpinner />
-            </View>
-          )}
-        </Animated.View>
-        <View className="flex flex-row justify-between items-center px-layout-l w-full">
-          {Object.entries(CHART_TIMEFRAMES).map(([key, value]) => (
-            <PillButtonProps
-              key={key}
-              onPress={() => setTimeframe(key as keyof typeof CHART_TIMEFRAMES)}
-              activeClasses="!bg-gray-90"
-              isActive={timeframe === key}
-            >
-              <Text
-                className={`text-caption-m ${timeframe === key ? "text-white" : "text-gray-50"}`}
+      <View className="flex flex-1 gap-l">
+        <View className="flex-1 flex gap-s justify-end ">
+          <Animated.View
+            className="relative w-full"
+            style={{ height: chartHeight + 24, width: chartWidth }}
+          >
+            {stockPointsData && stockPointsData.length > 0 ? (
+              <LineChart.Provider data={chartData}>
+                <LineChart height={chartHeight}>
+                  <LineChart.Path color={lineColor}>
+                    <LineChart.Gradient />
+                  </LineChart.Path>
+                  <LineChart.CursorCrosshair color={"#F7F7F8"}>
+                    <LineChart.Tooltip
+                      textStyle={{
+                        backgroundColor: "#19181B",
+                        borderRadius: 4,
+                        color: "white",
+                        fontSize: 18,
+                        padding: 4,
+                      }}
+                    />
+                  </LineChart.CursorCrosshair>
+                </LineChart>
+              </LineChart.Provider>
+            ) : (
+              <View className="flex-1 flex justify-center items-center absolute w-full h-full mx-layout">
+                <LoaderSpinner />
+              </View>
+            )}
+          </Animated.View>
+          <View className="flex flex-row justify-between items-center px-layout-l w-full">
+            {Object.entries(CHART_TIMEFRAMES).map(([key, value]) => (
+              <PillButtonProps
+                key={key}
+                onPress={() =>
+                  setTimeframe(key as keyof typeof CHART_TIMEFRAMES)
+                }
+                activeClasses="!bg-gray-90"
+                isActive={timeframe === key}
               >
-                {key}
-              </Text>
-            </PillButtonProps>
-          ))}
+                <Text
+                  className={`text-caption-m ${timeframe === key ? "text-white" : "text-gray-50"}`}
+                >
+                  {key}
+                </Text>
+              </PillButtonProps>
+            ))}
+          </View>
         </View>
-      </View>
-      <View className="px-layout">
-        <Button
-          className=""
-          onPress={() =>
-            navigation.navigate("ETFPurchase", {
-              etf: { ...asset, price: price },
-            })
-          }
-        >
-          <Text className="text-button-m">{t("etfDetail.buy")}</Text>
-        </Button>
+        <View className="px-layout pt-layout">
+          <Button
+            className=""
+            onPress={() =>
+              navigation.navigate("ETFPurchase", {
+                etf: { ...asset, price: price },
+              })
+            }
+          >
+            <Text className="text-button-m">{t("etfDetail.buy")}</Text>
+          </Button>
+        </View>
       </View>
     </LoggedLayout>
   );
