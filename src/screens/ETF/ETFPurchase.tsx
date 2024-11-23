@@ -16,7 +16,6 @@ import SkeletonLoadingView, {
 } from "@/components/Loading/SkeletonLoadingView";
 
 
-
 const ETFPurchase = ({ route }) => {
   const { etf } = route.params;
 
@@ -36,12 +35,14 @@ const ETFPurchase = ({ route }) => {
     ...usersMyBalanceOptions(),
   });
 
-  const availableDisplayed = formatNumber(
-    balance?.available || 0,
-    2,
-    balance?.precision || 6,
-    true,
-  );
+  const available = balance?.available
+    ? formatNumber(balance?.available, 2, balance?.precision || 6, true)
+    : "0.00";
+  
+  const availableDisplayed = balance?.available
+    ? currencyFormatter(balance?.available, 2, balance?.precision || 6, true)
+    : "0.00";
+  
 
   const amountInEtf = new BigNumber(amount)
     .dividedBy(etf.price)
@@ -49,11 +50,11 @@ const ETFPurchase = ({ route }) => {
     .toString();
 
   const hasNumber = Number(amount) > 0;
-  const isLessThanAvailable = Number(amount) <= Number(availableDisplayed);
+  const isLessThanAvailable = Number(amount) <= Number(available);
   const canContinue = !isBalancePending && hasNumber && isLessThanAvailable;
 
   const goToConfirmation = () => {
-    const isMaxAmount = Number(amount) === Number(availableDisplayed);
+    const isMaxAmount = Number(amount) === Number(available);
     const amountToBuy = isMaxAmount
       ? new BigNumber(balance?.available || 0).toString()
       : new BigNumber(amount).multipliedBy(1_000_000).toString();
@@ -83,7 +84,7 @@ const ETFPurchase = ({ route }) => {
               <SkeletonView className="w-20 h-4" />
             </SkeletonLoadingView>
           ) : (
-            currencyFormatter(availableDisplayed)
+            availableDisplayed
           )}
         </Text>
         <View className="flex-row items-center justify-center gap-s">
@@ -101,7 +102,7 @@ const ETFPurchase = ({ route }) => {
       <Keypad
         value={amount}
         onChange={setAmount}
-        maximun={Number(availableDisplayed)}
+        maximun={Number(available)}
       />
       <View className="px-layout">
         <Button className="" disabled={!canContinue} onPress={goToConfirmation}>
