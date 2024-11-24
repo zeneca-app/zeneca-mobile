@@ -19,7 +19,6 @@ import { View } from "react-native";
 import { Address } from "viem";
 
 const ETFPurchaseConfirmation = ({ route }) => {
-  
   const navigation = useNavigation();
   const queryClient = useQueryClient();
   const { t } = useTranslation();
