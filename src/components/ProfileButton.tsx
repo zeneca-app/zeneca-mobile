@@ -9,11 +9,11 @@ import Ionicons from "@expo/vector-icons//Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { usePrivy } from "@privy-io/expo";
 import { useNavigation } from "@react-navigation/native";
+import { useQueryClient } from "@tanstack/react-query";
 import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TouchableOpacity } from "react-native";
 import FullScreenLoader from "./FullScreenLoader";
-import { useQueryClient } from "@tanstack/react-query";
 
 export type ProfileButtonProps = {
   children?: React.ReactNode;
@@ -41,7 +41,7 @@ const ProfileButton = ({
     profileOptionsRef.current?.present();
   };
 
- /*  const handleLogout = async () => {
+  /*  const handleLogout = async () => {
     try {
       setIsLoading(true);
       setUser(undefined);

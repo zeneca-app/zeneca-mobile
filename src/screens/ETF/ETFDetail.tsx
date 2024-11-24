@@ -1,19 +1,14 @@
 import CopyIcon from "@/assets/copy.svg";
+import { Timespan } from "@/client";
 import {
   assetsGetAssetDetailOptions,
   assetsGetAssetTicksOptions,
 } from "@/client/@tanstack/react-query.gen";
 import client from "@/client/client";
-import LoggedLayout from "@/components/LoggedLayout";
-import { useQuery } from "@tanstack/react-query";
-import { cssInterop } from "nativewind";
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { Animated, Dimensions, View } from "react-native";
-import { Timespan } from "@/client";
 import Button from "@/components/Button";
 import PillButtonProps from "@/components/Buttons/PillButton";
 import LoaderSpinner from "@/components/LoaderSpinner";
+import LoggedLayout from "@/components/LoggedLayout";
 import Text from "@/components/Text";
 import {
   CHART_TIMEFRAMES,
@@ -22,8 +17,12 @@ import {
 } from "@/constants/stocks";
 import { currencyFormatter, percentageFormatter } from "@/utils/currencyUtils";
 import { useNavigation } from "@react-navigation/native";
+import { useQuery } from "@tanstack/react-query";
 import BigNumber from "bignumber.js";
-import { useCallback } from "react";
+import { cssInterop } from "nativewind";
+import React, { useCallback } from "react";
+import { useTranslation } from "react-i18next";
+import { Animated, Dimensions, View } from "react-native";
 import { LineChart } from "react-native-wagmi-charts";
 
 const windowWidth = Dimensions.get("window").width;
@@ -99,21 +98,24 @@ const ETFDetail = ({ route }: Asset) => {
     });
   };
 
-  const getChartChange = useCallback((datapoints: any) => {
-    if (!datapoints || !datapoints.length) {
-      return { change: 0, percentage: 0, increase: false };
-    }
-    const first = BigNumber(datapoints[0].value);
-    const last = BigNumber(datapoints[datapoints.length - 1].value);
-    const change = last.minus(first);
-    const percentage = change.dividedBy(first);
-    const increase = change.isGreaterThanOrEqualTo(0);
-    return {
-      change: change.toNumber(),
-      percentage: percentage.toNumber(),
-      increase,
-    };
-  }, [stockPointsData]);
+  const getChartChange = useCallback(
+    (datapoints: any) => {
+      if (!datapoints || !datapoints.length) {
+        return { change: 0, percentage: 0, increase: false };
+      }
+      const first = BigNumber(datapoints[0].value);
+      const last = BigNumber(datapoints[datapoints.length - 1].value);
+      const change = last.minus(first);
+      const percentage = change.dividedBy(first);
+      const increase = change.isGreaterThanOrEqualTo(0);
+      return {
+        change: change.toNumber(),
+        percentage: percentage.toNumber(),
+        increase,
+      };
+    },
+    [stockPointsData],
+  );
 
   const chartData = normalizedStockPointsData(stockPointsData || []);
 
@@ -133,7 +135,9 @@ const ETFDetail = ({ route }: Asset) => {
           {asset.symbol}
         </Text>
       </View>
-      <Text className="text-heading-m text-gray-10 px-layout">{asset.display_name}</Text>
+      <Text className="text-heading-m text-gray-10 px-layout">
+        {asset.display_name}
+      </Text>
       <Text className="text-heading-m text-gray-10 px-layout">${price}</Text>
       <View className="flex-row gap-s pt-layout-s pb-layout-s items-center justify-start px-layout">
         <Text

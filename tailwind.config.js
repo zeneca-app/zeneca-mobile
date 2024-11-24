@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require("tailwindcss/plugin");
 const COLORS = require("./src/constants/colors");
 module.exports = {
   // NOTE: Update this to include the paths to all of your component files.
@@ -13,6 +14,11 @@ module.exports = {
       },
       fontFamily: {
         sans: ['"manrope"'],
+        "manrope-Light": ['"Manrope_300Light"', '"manrope"'],
+        "manrope-Regular": ['"Manrope_400Regular"', '"manrope"'],
+        "manrope-Medium": ['"Manrope_500Medium"', '"manrope"'],
+        "manrope-SemiBold": ['"Manrope_600SemiBold"', '"manrope"'],
+        "manrope-Bold": ['"Manrope_700Bold"', '"manrope"'],
       },
       height: {
         "bottom-actions": 110,
@@ -28,111 +34,6 @@ module.exports = {
           {
             lineHeight: "1.31",
             letterSpacing: "-0.02em",
-            fontWeight: "500",
-          },
-        ],
-        "caption-xl": [
-          16,
-          {
-            lineHeight: "1.46",
-            fontWeight: "500",
-          },
-        ],
-        "caption-l": [
-          14,
-          {
-            lineHeight: "1.46",
-            fontWeight: "500",
-          },
-        ],
-        "caption-m": [
-          12,
-          {
-            lineHeight: "1.46",
-            fontWeight: "500",
-          },
-        ],
-        "caption-s": [
-          10,
-          {
-            lineHeight: "1.46",
-            fontWeight: "500",
-          },
-        ],
-        "chart-s": [
-          10,
-          {
-            lineHeight: "1.46",
-            fontWeight: "300",
-          },
-        ],
-        "button-s": [
-          14,
-          {
-            lineHeight: "0",
-            fontWeight: "700",
-          },
-        ],
-        "button-m": [
-          16,
-          {
-            lineHeight: "0",
-            fontWeight: "700",
-          },
-        ],
-        "heading-l": [
-          56,
-          {
-            lineHeight: "1.125",
-            letterSpacing: "-0.01em",
-            fontWeight: "400",
-          },
-        ],
-        "heading-m": [
-          40,
-          {
-            lineHeight: "1.1",
-            letterSpacing: "-0.01em",
-            fontWeight: "500",
-          },
-        ],
-        "heading-s": [
-          32,
-          {
-            lineHeight: "1.3125",
-            letterSpacing: "-0.01em",
-            fontWeight: "500",
-          },
-        ],
-        "body-xl": [
-          24,
-          {
-            lineHeight: 1.5,
-            letterSpacing: "0",
-            fontWeight: "500",
-          },
-        ],
-        "body-l": [
-          20,
-          {
-            lineHeight: 1.4,
-            letterSpacing: "0",
-            fontWeight: "500",
-          },
-        ],
-        "body-m": [
-          18,
-          {
-            lineHeight: 1.4,
-            letterSpacing: "0",
-            fontWeight: "500",
-          },
-        ],
-        "body-s": [
-          16,
-          {
-            lineHeight: 1.5,
-            letterSpacing: "0",
             fontWeight: "500",
           },
         ],
@@ -154,5 +55,120 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function ({ addComponents }) {
+      addComponents({
+        ".text-button-m": {
+          fontFamily: '"Manrope_700Bold"',
+          fontWeight: 700,
+          fontSize: 16,
+          letterSpacing: "-0.02em",
+          lineHeight: "1.5",
+        },
+        ".text-button-s": {
+          fontFamily: '"Manrope_700Bold"',
+          fontWeight: 700,
+          fontSize: 14,
+          letterSpacing: "-0.02em",
+          lineHeight: "1.5",
+        },
+        ".text-caption-xl": {
+          fontFamily: '"Manrope_500Medium"',
+          fontWeight: 500,
+          fontSize: 16,
+          lineHeight: "1.46",
+        },
+        ".text-caption-l": {
+          fontFamily: '"Manrope_500Medium"',
+          fontWeight: 500,
+          fontSize: 14,
+          lineHeight: "1.46",
+        },
+        ".text-caption-m": {
+          fontFamily: '"Manrope_500Medium"',
+          fontWeight: 500,
+          fontSize: 12,
+          lineHeight: "1.46",
+        },
+        ".text-caption-s": {
+          fontFamily: '"Manrope_500Medium"',
+          fontWeight: 500,
+          fontSize: 10,
+          lineHeight: "1.46",
+        },
+        ".text-caption-xl-bold": {
+          fontFamily: '"Manrope_700Bold"',
+          fontWeight: 700,
+          fontSize: 16,
+          lineHeight: "1.46",
+        },
+        ".text-caption-l-bold": {
+          fontFamily: '"Manrope_700Bold"',
+          fontWeight: 700,
+          fontSize: 14,
+          lineHeight: "1.46",
+        },
+        ".text-caption-m-bold": {
+          fontFamily: '"Manrope_700Bold"',
+          fontWeight: 700,
+          fontSize: 12,
+          lineHeight: "1.46",
+        },
+        ".text-caption-s-bold": {
+          fontFamily: '"Manrope_700Bold"',
+          fontWeight: 700,
+          fontSize: 10,
+          lineHeight: "1.46",
+        },
+        ".text-chart-s": {
+          fontFamily: '"Manrope_300Light"',
+          fontWeight: 300,
+          fontSize: 10,
+          lineHeight: "1.46",
+        },
+        ".text-heading-l": {
+          fontFamily: '"Manrope_500Medium"',
+          fontWeight: 500,
+          fontSize: 56,
+          lineHeight: "1.125",
+        },
+        ".text-heading-m": {
+          fontFamily: '"Manrope_500Medium"',
+          fontWeight: 500,
+          fontSize: 40,
+          lineHeight: "1.125",
+        },
+        ".text-heading-s": {
+          fontFamily: '"Manrope_500Medium"',
+          fontWeight: 500,
+          fontSize: 32,
+          lineHeight: "1.125",
+        },
+        ".text-body-xl": {
+          fontFamily: '"Manrope_500Medium"',
+          fontWeight: 500,
+          fontSize: 24,
+          lineHeight: "1.5",
+        },
+        ".text-body-l": {
+          fontFamily: '"Manrope_500Medium"',
+          fontWeight: 500,
+          fontSize: 20,
+          lineHeight: "1.4",
+        },
+        ".text-body-m": {
+          fontFamily: '"Manrope_500Medium"',
+          fontWeight: 500,
+          fontSize: 18,
+          lineHeight: "1.4",
+        },
+        ".text-body-s": {
+          fontFamily: '"Manrope_500Medium"',
+          fontWeight: 500,
+          fontSize: 16,
+          lineHeight: "1.5",
+        },
+      });
+    }),
+  ],
 };

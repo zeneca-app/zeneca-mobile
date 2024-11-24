@@ -1,5 +1,5 @@
-import React, { cloneElement } from "react";
-import { ActivityIndicator, TouchableOpacity } from "react-native";
+import React, { cloneElement, useRef } from "react";
+import { ActivityIndicator, Animated, TouchableOpacity } from "react-native";
 
 export type buttonProps = {
   onPress: () => void;
@@ -71,7 +71,8 @@ const Button = ({
     >
       {isLoading &&
         (loadingSlot || <ActivityIndicator size="small" color="#ffffff" />)}
-      {renderChildrenWithDefaultClasses(children)}
+      {children}
+      {/* {renderChildrenWithDefaultClasses(children)} */}
     </TouchableOpacity>
   );
 };

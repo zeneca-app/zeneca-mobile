@@ -1,8 +1,7 @@
 import { OrderQuote } from "@/client";
-import {
-  ordersCreateQuoteOrderMutation,
-} from "@/client/@tanstack/react-query.gen";
+import { ordersCreateQuoteOrderMutation } from "@/client/@tanstack/react-query.gen";
 import Button from "@/components/Button";
+import { SkeletonView } from "@/components/Loading/SkeletonLoadingView";
 import LoggedLayout from "@/components/LoggedLayout";
 import Text from "@/components/Text";
 import { STOCKS } from "@/constants/stocks";
@@ -18,10 +17,6 @@ import React, { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { Address } from "viem";
-import {
-  SkeletonView,
-} from "@/components/Loading/SkeletonLoadingView";
-
 
 const ETFPurchaseConfirmation = ({ route }) => {
   const { etf, amount } = route.params;
@@ -76,8 +71,6 @@ const ETFPurchaseConfirmation = ({ route }) => {
           amount,
         });
       }
-
-
     } catch (error) {
       console.error("Error during transaction:", error);
     } finally {
@@ -175,16 +168,10 @@ const ETFPurchaseConfirmation = ({ route }) => {
               etf_price: etf.price,
             }}
             components={[
-              <Text className="text-caption-l text-white font-bold"></Text>,
-              <Text className="text-caption-l text-white font-bold">
-                segment2
-              </Text>,
-              <Text className="text-caption-l text-white font-bold">
-                segment3
-              </Text>,
-              <Text className="text-caption-l text-white font-bold">
-                segment3
-              </Text>,
+              <Text className="text-caption-l-bold text-white">segment1</Text>,
+              <Text className="text-caption-l-bold text-white">segment2</Text>,
+              <Text className="text-caption-l-bold text-white">segment3</Text>,
+              <Text className="text-caption-l-bold text-white">segment3</Text>,
             ]}
           />
         </Text>

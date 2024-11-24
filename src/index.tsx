@@ -16,7 +16,6 @@ import "./styles/global.css";
 import MainNavigation from "@/screens/MainNavigation";
 import * as SplashScreen from "expo-splash-screen";
 
-
 const navigationIntegration = Sentry.reactNavigationIntegration({
   enableTimeToInitialDisplay: true,
 });
@@ -38,11 +37,11 @@ LogBox.ignoreLogs([new RegExp("TypeError:.*")]);
 
 const AppIndex = () => {
   const [loaded] = useFonts({
-    Manrope_300Light,
-    Manrope_400Regular,
-    Manrope_500Medium,
-    Manrope_600SemiBold,
-    Manrope_700Bold,
+    Manrope_300Light: Manrope_300Light,
+    Manrope_400Regular: Manrope_400Regular,
+    Manrope_500Medium: Manrope_500Medium,
+    Manrope_600SemiBold: Manrope_600SemiBold,
+    Manrope_700Bold: Manrope_700Bold,
   });
 
   if (!loaded) {

@@ -1,6 +1,9 @@
 import { usersMyBalanceOptions } from "@/client/@tanstack/react-query.gen";
 import Button from "@/components/Button";
 import Keypad from "@/components/Keypad";
+import SkeletonLoadingView, {
+  SkeletonView,
+} from "@/components/Loading/SkeletonLoadingView";
 import LoggedLayout from "@/components/LoggedLayout";
 import Text from "@/components/Text";
 import { STOCKS } from "@/constants/stocks";
@@ -11,11 +14,6 @@ import BigNumber from "bignumber.js";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
-import SkeletonLoadingView, {
-  SkeletonView,
-} from "@/components/Loading/SkeletonLoadingView";
-
-
 
 const ETFPurchase = ({ route }) => {
   const { etf } = route.params;

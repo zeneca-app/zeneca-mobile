@@ -4,6 +4,7 @@ import LogoLetter from "@/assets/zeneca-logo-letters.svg";
 import { usersMe } from "@/client";
 import { usersMeQueryKey } from "@/client/@tanstack/react-query.gen";
 import Button from "@/components/Button";
+import Text from "@/components/Text";
 import { DBUser } from "@/storage/interfaces";
 import { useUserStore } from "@/storage/userStore";
 import { colors } from "@/styles/colors";
@@ -19,7 +20,6 @@ import {
   Pressable,
   SafeAreaView,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
 
@@ -36,7 +36,6 @@ const Login = () => {
   const [isFetchingUser, setIsFetchingUser] = useState(false);
 
   const token = SecureStore.getItem(`token-${address}`);
-
 
   useEffect(() => {
     if (address) {
@@ -132,7 +131,9 @@ const Login = () => {
           </View>
           <View className="flex items-stretch justify-start gap-buttons">
             <Button onPress={loginWithOptions} className="w-full">
-              <Text className="text-button-m">{t("login.signUpButton")}</Text>
+              <Text className="text-buttom-m text-black">
+                {t("login.signUpButton")}
+              </Text>
             </Button>
             {/* {showSignUp && (
               <Button
