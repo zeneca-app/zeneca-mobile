@@ -132,18 +132,16 @@ const ETFDetail = ({ route }: Asset) => {
         <View className="w-12 h-12 bg-gray-90 rounded-full overflow-hidden">
           <Logo style={{ height: "100%", width: "100%" }} />
         </View>
-        <Text className="text-gray-50 text-caption-xl flex-1">
-          {asset.symbol}
-        </Text>
+        <Text className="text-gray-50 caption-xl flex-1">{asset.symbol}</Text>
       </View>
       <Text
-        className="text-heading-m text-gray-10 px-layout"
+        className="heading-m text-gray-10 px-layout"
         numberOfLines={2}
         ellipsizeMode="tail"
       >
         {asset.display_name}
       </Text>
-      <Text className="text-heading-m text-gray-10 px-layout">${price}</Text>
+      <Text className="heading-m text-gray-10 px-layout">${price}</Text>
       <View className="flex-row gap-s pt-layout-s pb-layout-s items-center justify-start px-layout">
         <Text
           className={`text-caption-m ${change.increase ? "text-semantic-success" : "text-red-20"}`}
@@ -212,7 +210,7 @@ const ETFDetail = ({ route }: Asset) => {
               })
             }
           >
-            <Text className="text-button-m">{t("etfDetail.buy")}</Text>
+            <Text className="button-m">{t("etfDetail.buy")}</Text>
           </Button>
         </View>
       </View>

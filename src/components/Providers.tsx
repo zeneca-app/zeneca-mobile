@@ -1,17 +1,14 @@
+import { AwaitPrivyProvider } from "@/components/AwaitPrivyProvider";
 import { MyPermissiveSecureStorageAdapter } from "@/lib/storage-adapter";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { PrivyProvider } from "@privy-io/expo";
-import {
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PostHogProvider } from "posthog-react-native";
 import React from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { createConfig, http, WagmiProvider } from "wagmi";
 import { base, baseSepolia, sepolia } from "wagmi/chains";
-import { AwaitPrivyProvider } from "@/components/AwaitPrivyProvider";
 
 const queryClient = new QueryClient();
 
@@ -31,7 +28,7 @@ const POSTHOG_HOST = process.env.EXPO_PUBLIC_POSTHOG_HOST!;
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
-    <GestureHandlerRootView className="flex-1 text-white font-sans">
+    <GestureHandlerRootView className="flex-1 text-white ">
       <PrivyProvider
         storage={MyPermissiveSecureStorageAdapter}
         appId={APP_ID}

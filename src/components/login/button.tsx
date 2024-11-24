@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 16,
-    fontFamily: "Manrope_500Medium",
+    fontFamily: '"Manrope_500Medium"',
   },
   primaryText: {
     color: colors.darkHighlight,

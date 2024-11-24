@@ -45,7 +45,7 @@ const ETFPurchaseSuccess = ({ route }) => {
             </View>
           </View>
           <View className="absolute flex flex-1 pb-layout top-1/2 pt-20">
-            <Text className="text-heading-m text-gray-10 px-layout text-center">
+            <Text className="heading-m text-gray-10 px-layout text-center">
               {t("etfPurchase.success.title")}
             </Text>
             <Text className="body-s text-gray-50 text-center px-layout">
@@ -90,7 +90,7 @@ const ETFPurchaseSuccess = ({ route }) => {
 
         <View className="px-layout">
           <Button className="" onPress={handleContinue}>
-            <Text className="text-button-m">
+            <Text className="button-m">
               {t("etfPurchase.success.done_button")}
             </Text>
           </Button>

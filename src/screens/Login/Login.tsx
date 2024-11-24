@@ -2,12 +2,10 @@ import GradientCircle from "@/assets/zeneca-gradient-circle.svg";
 import Logo from "@/assets/zeneca-logo-bright.svg";
 import LogoLetter from "@/assets/zeneca-logo-letters.svg";
 import { usersMe } from "@/client";
-import { usersMeQueryKey } from "@/client/@tanstack/react-query.gen";
 import Button from "@/components/Button";
-import Text from "@/components/Text";
+import ZenecaSafeAreaView from "@/components/ZenecaSafeAreaView";
 import { DBUser } from "@/storage/interfaces";
 import { useUserStore } from "@/storage/userStore";
-import { colors } from "@/styles/colors";
 import { getUserEmbeddedEthereumWallet, usePrivy } from "@privy-io/expo";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -18,8 +16,8 @@ import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Pressable,
-  SafeAreaView,
   StyleSheet,
+  Text,
   View,
 } from "react-native";
 
@@ -109,7 +107,7 @@ const Login = () => {
   cssInterop(LogoLetter, { className: "style" });
 
   return (
-    <SafeAreaView className="flex-1 justify-start items-stretch bg-basic-black">
+    <ZenecaSafeAreaView className="flex-1 justify-start items-stretch bg-basic-black">
       <View className="flex flex-1 justify-between items-stretch px-layout">
         <View className="relative flex justify-center items-center w-full">
           <GradientCircle className="relative" />
@@ -121,17 +119,17 @@ const Login = () => {
           <View className="flex flex-1 justify-center items-center gap-6">
             <LogoLetter className="h-8 w-full" />
             <View>
-              <Text className="text-caption-xl text-gray-50 text-center">
+              <Text className="caption-xl text-gray-50 text-center">
                 {t("login.description_line_1")}
               </Text>
-              <Text className="text-caption-xl text-gray-50 text-center">
+              <Text className="caption-xl text-gray-50 text-center">
                 {t("login.description_line_2")}
               </Text>
             </View>
           </View>
           <View className="flex items-stretch justify-start gap-buttons">
             <Button onPress={loginWithOptions} className="w-full">
-              <Text className="text-buttom-m text-black">
+              <Text className="button-m text-content-dark-content">
                 {t("login.signUpButton")}
               </Text>
             </Button>
@@ -141,7 +139,7 @@ const Login = () => {
                 className="w-full"
                 variant="link"
               >
-                <Text className="text-button-m text-white">
+                <Text className="button-m text-white">
                   {t("login.signInButton")}
                 </Text>
               </Button>
@@ -153,19 +151,19 @@ const Login = () => {
         <BottomSheetView className="px-layout items-stretch rounded-card m-2 flex gap-buttons pb-14">
           <Button onPress={loginWithEmail}>
             <Ionicons name="mail" size={20} color="black" />
-            <Text className="text-button-m">
+            <Text className="button-m">
               {t("loginOptions.emailOption")}
             </Text>
           </Button>
           <Button onPress={loginWithGmail}>
             <AntDesign name="google" size={20} color="black" />
-            <Text className="text-button-m">
+            <Text className="button-m">
               {t("loginOptions.googleOption")}
             </Text>
           </Button>
         </BottomSheetView>
       </BottomSheet> */}
-    </SafeAreaView>
+    </ZenecaSafeAreaView>
   );
 };
 

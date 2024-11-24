@@ -4,13 +4,13 @@ import client from "@/client/client";
 import Card from "@/components/Card";
 import OrderListItem from "@/components/ListItems/OrderListItem"; // Import OrderListItem
 import Separator from "@/components/ListItems/Separator";
+import SkeletonLoadingView, {
+  SkeletonOrderListItem,
+} from "@/components/Loading/SkeletonLoadingView";
 import Config from "@/config";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { FlatList, Text, View } from "react-native";
-import SkeletonLoadingView, {
-  SkeletonOrderListItem,
-} from "@/components/Loading/SkeletonLoadingView";
 
 const OrdersListCard = () => {
   const { t } = useTranslation();
@@ -32,15 +32,15 @@ const OrdersListCard = () => {
       <View className="pb-6">
         <ChartArrowUp className="h-40 w-40" />
       </View>
-      <Text className="text-center text-caption-xl text-gray-50">
+      <Text className="text-center caption-xl text-gray-50">
         {t("ordersListCard.empty_transactions")}
       </Text>
       {canTrade ? (
-        <Text className="text-center text-caption-xl text-gray-50">
+        <Text className="text-center caption-xl text-gray-50">
           {t("ordersListCard.empty_transactions_no_assets")}
         </Text>
       ) : (
-        <Text className="text-center text-caption-xl text-gray-50">
+        <Text className="text-center caption-xl text-gray-50">
           {t("ordersListCard.empty_transactions_no_funds")}
         </Text>
       )}
@@ -57,7 +57,7 @@ const OrdersListCard = () => {
   return (
     <Card className="flex-1">
       <View className="pb-4">
-        <Text className="text-caption-xl text-gray-50">
+        <Text className="caption-xl text-gray-50">
           {t("ordersListCard.myAssets")}
         </Text>
       </View>

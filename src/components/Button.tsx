@@ -1,5 +1,6 @@
+import { cssInterop } from "nativewind";
 import React, { cloneElement, useRef } from "react";
-import { ActivityIndicator, Animated, TouchableOpacity } from "react-native";
+import { ActivityIndicator, Pressable, Text } from "react-native";
 
 export type buttonProps = {
   onPress: () => void;
@@ -32,13 +33,13 @@ const Button = ({
   };
 
   const defaultContentClasses = {
-    solid: "text-dark-content-dark text-button-m",
+    solid: "text-dark-content-dark",
     outline: "text-white",
     link: "text-white",
   };
 
   const defaultContentDisabledClasses = {
-    solid: "text-dark-content-30  text-button-m",
+    solid: "text-dark-content-30",
     outline: "text-white",
     link: "text-white",
   };
@@ -64,16 +65,32 @@ const Button = ({
     });
   };
 
+  cssInterop(ActivityIndicator, {
+    colorClass: {
+      target: false,
+      nativeStyleToProp: {
+        color: "color",
+      },
+    },
+  });
+
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={handlePress}
       className={`${defaultClasses[variant]} ${className}`}
     >
-      {isLoading &&
-        (loadingSlot || <ActivityIndicator size="small" color="#ffffff" />)}
-      {children}
+      <Text className={conditionalContentClasses}>
+        {isLoading &&
+          (loadingSlot || (
+            <ActivityIndicator
+              size="small"
+              colorClass={defaultContentClasses[variant]}
+            />
+          ))}
+        {children}
+      </Text>
       {/* {renderChildrenWithDefaultClasses(children)} */}
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

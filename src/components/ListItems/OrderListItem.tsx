@@ -1,7 +1,8 @@
 import { STOCKS } from "@/constants/stocks";
 import { currencyFormatter, percentageFormatter } from "@/utils/currencyUtils";
-import { Text, View } from "react-native";
 import BigNumber from "bignumber.js";
+import { Text, View } from "react-native";
+
 export type OrderListItemProps = {
   order: {
     amount: string;
@@ -25,20 +26,22 @@ const OrderListItem = ({ order }: OrderListItemProps) => {
         <Logo style={{ height: "100%", width: "100%" }} />
       </View>
       <View className="flex-1 flex justify-center items-stretch">
-        <Text className="text-gray-10 text-caption-xl">{symbolName}</Text>
-        <Text className="text-gray-50 text-caption-xl">{new BigNumber(order.amount).dividedBy(1_000_000).toString()}</Text>
+        <Text className="text-gray-10 caption-xl">{symbolName}</Text>
+        <Text className="text-gray-50 caption-xl">
+          {new BigNumber(order.amount).dividedBy(1_000_000).toString()}
+        </Text>
       </View>
       <View className="flex-1 flex justify-center items-end">
-        <Text className="text-gray-10 text-caption-xl">
+        <Text className="text-gray-10 caption-xl">
           {currencyFormatter(
             new BigNumber(order.equity)
               .dividedBy(1_000_000)
               .decimalPlaces(2, BigNumber.ROUND_DOWN)
-              .toString()
+              .toString(),
           )}
         </Text>
         <Text
-          className={`text-caption-xl ${increased ? "text-semantic-success" : "text-red-20"}`}
+          className={`caption-xl ${increased ? "text-semantic-success" : "text-red-20"}`}
         >
           {percentageFormatter(order.change_percent)}
         </Text>

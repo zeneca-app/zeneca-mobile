@@ -120,32 +120,28 @@ const ETFPurchaseConfirmation = ({ route }) => {
           <View className="w-12 h-12 bg-gray-90 rounded-full overflow-hidden">
             <Logo style={{ height: "100%", width: "100%" }} />
           </View>
-          <Text className="text-gray-50 text-caption-xl flex-1">
-            {etf.symbol}
-          </Text>
+          <Text className="text-gray-50 caption-xl flex-1">{etf.symbol}</Text>
         </View>
-        <Text className="text-heading-l text-gray-10 px-layout">
+        <Text className="heading-l text-gray-10 px-layout">
           {amountDisplayed}
         </Text>
         <View className="flex flex-row items-center justify-start gap-s px-layout">
-          <Text className="text-caption-xl text-gray-50">{etfAmount}</Text>
-          <Text className="text-caption-xl text-gray-50">{etf.symbol}</Text>
+          <Text className="caption-xl text-gray-50">{etfAmount}</Text>
+          <Text className="caption-xl text-gray-50">{etf.symbol}</Text>
         </View>
       </View>
       <View className="px-layout pb-layout flex justify-start items-stretch gap flex-1">
         <View className="flex-row items-center justify-between gap-s">
-          <Text className="text-caption-l text-gray-50">
+          <Text className="caption-l text-gray-50">
             {t("etfPurchase.price")}
           </Text>
-          <Text className="text-caption-xl text-dark-content-white">
+          <Text className="caption-xl text-dark-content-white">
             ${etf.price}
           </Text>
         </View>
         <View className="flex-row items-center justify-between gap-s">
-          <Text className="text-caption-l text-gray-50">
-            {t("etfPurchase.fee")}
-          </Text>
-          <Text className="text-caption-xl text-dark-content-white">
+          <Text className="caption-l text-gray-50">{t("etfPurchase.fee")}</Text>
+          <Text className="caption-xl text-dark-content-white">
             {isQuotePending ? (
               <SkeletonView className="w-20 h-4" />
             ) : (
@@ -154,10 +150,10 @@ const ETFPurchaseConfirmation = ({ route }) => {
           </Text>
         </View>
         <View className="flex-row items-center justify-between gap-s">
-          <Text className="text-caption-l text-gray-50">
+          <Text className="caption-l text-gray-50">
             {t("etfPurchase.total")}
           </Text>
-          <Text className="text-caption-xl text-dark-content-white">
+          <Text className="caption-xl text-dark-content-white">
             {isQuotePending ? (
               <SkeletonView className="w-20 h-4" />
             ) : (
@@ -166,7 +162,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
           </Text>
         </View>
         <View className="h-px rounded-full bg-dark-background-100" />
-        <Text className="text-caption-l text-gray-50">
+        <Text className="caption-l text-gray-50">
           <Trans
             i18nKey="etfPurchase.disclaimer"
             values={{
@@ -178,10 +174,10 @@ const ETFPurchaseConfirmation = ({ route }) => {
               etf_price: etf.price,
             }}
             components={[
-              <Text className="text-caption-l-bold text-white">segment1</Text>,
-              <Text className="text-caption-l-bold text-white">segment2</Text>,
-              <Text className="text-caption-l-bold text-white">segment3</Text>,
-              <Text className="text-caption-l-bold text-white">segment3</Text>,
+              <Text className="caption-l-bold text-white">segment1</Text>,
+              <Text className="caption-l-bold text-white">segment2</Text>,
+              <Text className="caption-l-bold text-white">segment3</Text>,
+              <Text className="caption-l-bold text-white">segment3</Text>,
             ]}
           />
         </Text>
@@ -194,7 +190,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
             disabled={isDisabled}
             isLoading={isLoading}
           >
-            <Text className="text-button-m">{t("etfPurchase.confirm")}</Text>
+            <Text className="button-m">{t("etfPurchase.confirm")}</Text>
           </Button>
         )}
       </View>

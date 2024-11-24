@@ -12,7 +12,7 @@ const KeypadButton = ({ children, onPress }: KeypadButtonProps) => {
       onPress={onPress}
       className="w-12 h-12 rounded-full flex items-center justify-center"
     >
-      <Text className="text-dark-content-white text-body-xl">{children}</Text>
+      <Text className="text-dark-content-white body-xl">{children}</Text>
     </TouchableOpacity>
   );
 };

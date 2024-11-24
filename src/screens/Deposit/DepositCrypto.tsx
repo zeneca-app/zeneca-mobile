@@ -1,6 +1,6 @@
 import BaseLogo from "@/assets/base-logo.svg";
-import USDCLogo from "@/assets/usdc.svg";
 import CopyIcon from "@/assets/copy.svg";
+import USDCLogo from "@/assets/usdc.svg";
 import CryptoNetworkButton from "@/components/Buttons/CryptoNetworkButton";
 import Card from "@/components/Card";
 import LoggedLayout from "@/components/LoggedLayout";
@@ -13,8 +13,6 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Text, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-
-
 
 const DepositCrypto = () => {
   const { t } = useTranslation();
@@ -35,7 +33,7 @@ const DepositCrypto = () => {
 
   return (
     <LoggedLayout>
-      <Text className="text-heading-s text-gray-10 px-layout pb-layout-l pt-layout-s">
+      <Text className="heading-s text-gray-10 px-layout pb-layout-l pt-layout-s">
         {t("depositCrypto.title")}
       </Text>
 
@@ -45,23 +43,23 @@ const DepositCrypto = () => {
             <CryptoNetworkButton
               token="USDC"
               iconSlot={<USDCLogo width={40} height={40} />}
-              onPress={() => { }}
+              onPress={() => {}}
             />
           </Card>
           <Card className="py-layout-s">
             <CryptoNetworkButton
               token="BASE"
               iconSlot={<BaseLogo width={40} height={40} />}
-              onPress={() => { }}
+              onPress={() => {}}
             />
           </Card>
 
           <Card className="flex items-stretch justify-start gap-xs py-layout">
-            <Text className="text-gray-50 text-caption-l">
+            <Text className="text-gray-50 caption-l">
               {t("depositCrypto.addressLabel")}
             </Text>
             <View className="flex flex-row justify-between items-center">
-              <Text className="text-dark-content-white text-body-s flex-1">
+              <Text className="text-dark-content-white body-s flex-1">
                 {shortenAddressLonger(walletAddress)}
               </Text>
               <TouchableOpacity

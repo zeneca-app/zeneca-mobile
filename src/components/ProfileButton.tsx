@@ -70,7 +70,7 @@ const ProfileButton = ({
         <BottomSheetView className="px-layout items-stretch rounded-card m-2 flex gap-buttons pb-14">
           <Button onPress={handleLogout}>
             <AntDesign name="logout" size={16} color="black" />
-            <Text className="text-button-m">{t("home.logout.title")}</Text>
+            <Text className="button-m">{t("home.logout.title")}</Text>
           </Button>
         </BottomSheetView>
       </BottomSheet> */}

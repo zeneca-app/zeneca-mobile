@@ -1,6 +1,7 @@
 import { loginLoginOrCreate, usersMe } from "@/client/";
 import LoadingScreen from "@/components/Loading";
 import LoginButton from "@/components/login/button";
+import ZenecaSafeAreaView from "@/components/ZenecaSafeAreaView";
 import { getPimlicoSmartAccountClient } from "@/lib/pimlico";
 import { LoginStatus } from "@/lib/types/login";
 import { useChainStore } from "@/storage/chainStore";
@@ -20,14 +21,7 @@ import { toast } from "burnt";
 import * as SecureStore from "expo-secure-store";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const LoginOptions = () => {
   const { t } = useTranslation();
@@ -162,7 +156,7 @@ const LoginOptions = () => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <ZenecaSafeAreaView style={styles.safeArea}>
       <View style={styles.modalOverlay}>
         <View style={styles.topContent}>
           <TouchableOpacity
@@ -204,7 +198,7 @@ const LoginOptions = () => {
       </View>
 
       <LoadingScreen isVisible={isLoading} text={loadingMessage} />
-    </SafeAreaView>
+    </ZenecaSafeAreaView>
   );
 };
 

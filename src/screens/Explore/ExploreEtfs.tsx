@@ -38,11 +38,8 @@ const ExploreETFs = () => {
 
   return (
     <LoggedLayout>
-      <Text className="text-heading-s text-gray-10 px-layout pt-layout-s pb-layout-l">
-        <Trans
-          i18nKey="explore.title"
-          components={[]}
-        />
+      <Text className="heading-s text-gray-10 px-layout pt-layout-s pb-layout-l">
+        <Trans i18nKey="explore.title" components={[]} />
       </Text>
       <View className="flex-1 px-layout">
         {isPending ? (

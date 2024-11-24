@@ -1,143 +1,135 @@
-import { View, TouchableOpacity, SafeAreaView, FlatList } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
-import Text from '@/components/Text';
-import { useTranslation } from 'react-i18next';
-import { useQuery } from '@tanstack/react-query';
-import { ordersGetOrdersOptions } from '@/client/@tanstack/react-query.gen';
-import { currencyFormatter, formatNumber } from "@/utils/currencyUtils";
-import { format, formatDistanceToNow } from 'date-fns';
-import { Order } from '@/client/';
+import { Order } from "@/client/";
+import { ordersGetOrdersOptions } from "@/client/@tanstack/react-query.gen";
 import SkeletonLoadingView, {
-    SkeletonOrderListItem,
+  SkeletonOrderListItem,
 } from "@/components/Loading/SkeletonLoadingView";
 import LoggedLayout from "@/components/LoggedLayout";
-import { Trans } from "react-i18next";
-
+import Text from "@/components/Text";
+import { currencyFormatter, formatNumber } from "@/utils/currencyUtils";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { useQuery } from "@tanstack/react-query";
+import { format, formatDistanceToNow } from "date-fns";
+import { Trans, useTranslation } from "react-i18next";
+import { FlatList, SafeAreaView, TouchableOpacity, View } from "react-native";
 
 type OrderHistoryItemProps = {
-    order: Order;
-    onPress?: (order: Order) => void;
+  order: Order;
+  onPress?: (order: Order) => void;
 };
 
-
 const OrderHistoryItem = ({ order, onPress }: OrderHistoryItemProps) => {
+  // Option 1: Using date-fns formatDistanceToNow (e.g., "2 hours ago")
+  const getRelativeTime = (dateString: string) => {
+    const date = new Date(dateString);
+    return formatDistanceToNow(date, { addSuffix: true });
+  };
 
-    // Option 1: Using date-fns formatDistanceToNow (e.g., "2 hours ago")
-    const getRelativeTime = (dateString: string) => {
-        const date = new Date(dateString);
-        return formatDistanceToNow(date, { addSuffix: true });
-    };
+  // Option 2: Using date-fns format (e.g., "Mar 15, 2:30 PM")
+  const getFormattedDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return format(date, "MMM d, h:mm a");
+  };
 
-    // Option 2: Using date-fns format (e.g., "Mar 15, 2:30 PM")
-    const getFormattedDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return format(date, "MMM d, h:mm a");
-    };
+  // Option 3: Using Intl.DateTimeFormat (e.g., "3/15/24, 2:30 PM")
+  const getLocalizedDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    }).format(date);
+  };
 
-    // Option 3: Using Intl.DateTimeFormat (e.g., "3/15/24, 2:30 PM")
-    const getLocalizedDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return new Intl.DateTimeFormat('en-US', {
-            month: 'short',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true
-        }).format(date);
-    };
+  const getSmartDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInHours = Math.abs(now.getTime() - date.getTime()) / 36e5;
 
-    const getSmartDate = (dateString: string) => {
-        const date = new Date(dateString);
-        const now = new Date();
-        const diffInHours = Math.abs(now.getTime() - date.getTime()) / 36e5;
-
-        /* // If less than 24 hours ago, show relative time
+    /* // If less than 24 hours ago, show relative time
         if (diffInHours < 24) {
             return formatDistanceToNow(date, { addSuffix: true });
         } */
-        // Otherwise show formatted date
-        return format(date, "MMM d, h:mm a");
-    };
+    // Otherwise show formatted date
+    return format(date, "MMM d, h:mm a");
+  };
 
-    return (
-        <TouchableOpacity
-            className="flex-row justify-between items-center py-4 border-b border-[#1C1C1E]"
-            onPress={() => onPress?.(order)}
-        >
-            <View>
-                <Text className="text-[#95929F] text-sm mb-1">
-                    {order.status}
-                </Text>
-                <Text className="text-white text-base font-medium">
-                    {order.symbol}
-                </Text>
-            </View>
-            <View className="items-end">
-                <Text className="text-white text-base font-medium">
-                    {currencyFormatter(order.payment_quantity, 2, 6)}
-                </Text>
-                <Text className="text-[#95929F] text-sm">
-                    {order.order_type}
-                </Text>
-                <Text className="text-[#95929F] text-sm">
-                    {getSmartDate(order.created_at)}
-                </Text>
-            </View>
-        </TouchableOpacity>
-    );
+  return (
+    <TouchableOpacity
+      className="flex-row justify-between items-center py-4 border-b border-[#1C1C1E]"
+      onPress={() => onPress?.(order)}
+    >
+      <View>
+        <Text className="text-[#95929F] text-sm mb-1">{order.status}</Text>
+        <Text className="text-white text-base font-medium">{order.symbol}</Text>
+      </View>
+      <View className="items-end">
+        <Text className="text-white text-base font-medium">
+          {currencyFormatter(order.payment_quantity, 2, 6)}
+        </Text>
+        <Text className="text-[#95929F] text-sm">{order.order_type}</Text>
+        <Text className="text-[#95929F] text-sm">
+          {getSmartDate(order.created_at)}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
 };
 
 const OrderHistory = () => {
-    const navigation = useNavigation();
-    const { t } = useTranslation();
+  const navigation = useNavigation();
+  const { t } = useTranslation();
 
-    const { isPending, error, data: orders, refetch } = useQuery({
-        ...ordersGetOrdersOptions(),
-    });
+  const {
+    isPending,
+    error,
+    data: orders,
+    refetch,
+  } = useQuery({
+    ...ordersGetOrdersOptions(),
+  });
 
-    const renderItem = ({ item: order }: { item: Order }) => (
-        <OrderHistoryItem
-            order={order}
-            onPress={(order) => {
-                // Handle order press
-                console.log('Order pressed:', order);
-            }}
-        />
-    );
+  const renderItem = ({ item: order }: { item: Order }) => (
+    <OrderHistoryItem
+      order={order}
+      onPress={(order) => {
+        // Handle order press
+        console.log("Order pressed:", order);
+      }}
+    />
+  );
 
-    return (
-        <LoggedLayout>
-            <Text className="text-heading-s text-gray-10 px-layout pt-layout-s pb-layout-l">
-                <Trans
-                    i18nKey="orderHistory.title"
-                    components={[]}
-                />
-            </Text>
-            <View className="flex-1 px-layout">
-                {isPending && !orders ? (
-                    <SkeletonLoadingView className="flex-1 flex">
-                        <SkeletonOrderListItem />
-                        <SkeletonOrderListItem />
-                        <SkeletonOrderListItem />
-                        <SkeletonOrderListItem />
-                        <SkeletonOrderListItem />
-                        <SkeletonOrderListItem />
-                        <SkeletonOrderListItem />
-                    </SkeletonLoadingView>
-                ) : (
-                    <FlatList
-                        data={orders}
-                        renderItem={renderItem}
-                        keyExtractor={(item) => item.id}
-                        onRefresh={refetch}
-                        refreshing={isPending}
-                        showsVerticalScrollIndicator={false}
-                    />
-                )}
-            </View>
-        </LoggedLayout>
-    );
+  return (
+    <LoggedLayout>
+      <Text className="heading-s text-gray-10 px-layout pt-layout-s pb-layout-l">
+        <Trans i18nKey="orderHistory.title" components={[]} />
+      </Text>
+      <View className="flex-1 px-layout">
+        {isPending && !orders ? (
+          <SkeletonLoadingView className="flex-1 flex">
+            <SkeletonOrderListItem />
+            <SkeletonOrderListItem />
+            <SkeletonOrderListItem />
+            <SkeletonOrderListItem />
+            <SkeletonOrderListItem />
+            <SkeletonOrderListItem />
+            <SkeletonOrderListItem />
+          </SkeletonLoadingView>
+        ) : (
+          <FlatList
+            data={orders}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            onRefresh={refetch}
+            refreshing={isPending}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
+      </View>
+    </LoggedLayout>
+  );
 };
 
 export default OrderHistory;

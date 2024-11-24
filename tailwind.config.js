@@ -5,6 +5,14 @@ module.exports = {
   // NOTE: Update this to include the paths to all of your component files.
   content: ["./app/**/*.{js,jsx,ts,tsx}", "./src/**/*.{js,jsx,ts,tsx}"],
   presets: [require("nativewind/preset")],
+  fontFamily: {
+    sans: ['"manrope"', "sans-serif"],
+    Manrope_700Bold: ['"Manrope_700Bold"'],
+    Manrope_600SemiBold: ['"Manrope_600SemiBold"'],
+    Manrope_500Medium: ['"Manrope_500Medium"'],
+    Manrope_400Light: ['"Manrope_400Regular"'],
+    Manrope_300Light: ['"Manrope_300Light"'],
+  },
   theme: {
     extend: {
       colors: COLORS,
@@ -12,31 +20,12 @@ module.exports = {
         card: "2.5rem",
         DEFAULT: "2.5rem",
       },
-      fontFamily: {
-        sans: ['"manrope"'],
-        "manrope-Light": ['"Manrope_300Light"', '"manrope"'],
-        "manrope-Regular": ['"Manrope_400Regular"', '"manrope"'],
-        "manrope-Medium": ['"Manrope_500Medium"', '"manrope"'],
-        "manrope-SemiBold": ['"Manrope_600SemiBold"', '"manrope"'],
-        "manrope-Bold": ['"Manrope_700Bold"', '"manrope"'],
-      },
       height: {
         "bottom-actions": 110,
         separator: 24,
       },
       width: {
         char: "1em",
-      },
-      fontSize: {
-        base: 16,
-        headline: [
-          32,
-          {
-            lineHeight: "1.31",
-            letterSpacing: "-0.02em",
-            fontWeight: "500",
-          },
-        ],
       },
       spacing: {
         layout: 24,
@@ -58,94 +47,94 @@ module.exports = {
   plugins: [
     plugin(function ({ addComponents }) {
       addComponents({
-        ".text-button-m": {
+        ".button-m": {
           fontFamily: '"Manrope_700Bold"',
           fontSize: 16,
           letterSpacing: "-0.02em",
           lineHeight: "1.5",
         },
-        ".text-button-s": {
+        ".button-s": {
           fontFamily: '"Manrope_700Bold"',
           fontSize: 14,
           letterSpacing: "-0.02em",
           lineHeight: "1.5",
         },
-        ".text-caption-xl": {
+        ".caption-xl": {
           fontFamily: '"Manrope_500Medium"',
           fontSize: 16,
           lineHeight: "1.46",
         },
-        ".text-caption-l": {
+        ".caption-l": {
           fontFamily: '"Manrope_500Medium"',
           fontSize: 14,
           lineHeight: "1.46",
         },
-        ".text-caption-m": {
+        ".caption-m": {
           fontFamily: '"Manrope_500Medium"',
           fontSize: 12,
           lineHeight: "1.46",
         },
-        ".text-caption-s": {
+        ".caption-s": {
           fontFamily: '"Manrope_500Medium"',
           fontSize: 10,
           lineHeight: "1.46",
         },
-        ".text-caption-xl-bold": {
+        ".caption-xl-bold": {
           fontFamily: '"Manrope_700Bold"',
           fontSize: 16,
           lineHeight: "1.46",
         },
-        ".text-caption-l-bold": {
+        ".caption-l-bold": {
           fontFamily: '"Manrope_700Bold"',
           fontSize: 14,
           lineHeight: "1.46",
         },
-        ".text-caption-m-bold": {
+        ".caption-m-bold": {
           fontFamily: '"Manrope_700Bold"',
           fontSize: 12,
           lineHeight: "1.46",
         },
-        ".text-caption-s-bold": {
+        ".caption-s-bold": {
           fontFamily: '"Manrope_700Bold"',
           fontSize: 10,
           lineHeight: "1.46",
         },
-        ".text-chart-s": {
+        ".chart-s": {
           fontFamily: '"Manrope_300Light"',
           fontSize: 10,
           lineHeight: "1.46",
         },
-        ".text-heading-l": {
+        ".heading-l": {
           fontFamily: '"Manrope_500Medium"',
           fontSize: 56,
           lineHeight: "1.125",
         },
-        ".text-heading-m": {
+        ".heading-m": {
           fontFamily: '"Manrope_500Medium"',
           fontSize: 40,
           lineHeight: "1.125",
         },
-        ".text-heading-s": {
+        ".heading-s": {
           fontFamily: '"Manrope_500Medium"',
           fontSize: 32,
           lineHeight: "1.125",
         },
-        ".text-body-xl": {
+        ".body-xl": {
           fontFamily: '"Manrope_500Medium"',
           fontSize: 24,
           lineHeight: "1.5",
         },
-        ".text-body-l": {
+        ".body-l": {
           fontFamily: '"Manrope_500Medium"',
           fontSize: 20,
           lineHeight: "1.4",
         },
-        ".text-body-m": {
+        ".body-m": {
           fontFamily: '"Manrope_500Medium"',
           fontSize: 18,
           lineHeight: "1.4",
         },
-        ".text-body-s": {
+        ".body-s": {
           fontFamily: '"Manrope_500Medium"',
           fontSize: 16,
           lineHeight: "1.5",

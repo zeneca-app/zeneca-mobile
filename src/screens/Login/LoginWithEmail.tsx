@@ -1,4 +1,5 @@
 import LoadingScreen from "@/components/Loading";
+import ZenecaSafeAreaView from "@/components/ZenecaSafeAreaView";
 import { LoginStatus } from "@/lib/types/login";
 import { useLoginStore } from "@/storage/loginStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -9,7 +10,6 @@ import { useTranslation } from "react-i18next";
 import {
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
@@ -86,7 +86,7 @@ const LoginWithEmail = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.mainContainer}
     >
-      <SafeAreaView style={styles.safeAreaContainer}>
+      <ZenecaSafeAreaView style={styles.safeAreaContainer}>
         <View style={styles.topContent}>
           <TouchableOpacity onPress={dismissScreen} style={styles.backButton}>
             <Ionicons name="chevron-back" size={24} color="white" />
@@ -130,7 +130,7 @@ const LoginWithEmail = () => {
           </TouchableOpacity>
         </View>
         <LoadingScreen isVisible={isLoading} text={loadingMessage} />
-      </SafeAreaView>
+      </ZenecaSafeAreaView>
     </KeyboardAvoidingView>
   );
 };

@@ -1,10 +1,9 @@
-import { useEffect } from "react";
 import InputWrapper from "@/components/Forms/InputWrapper";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { TextInput } from "react-native";
 import { z } from "zod";
 import { OnBoardingStepProps } from "./config";
-
 
 const FullNameStep = ({
   formValues,
@@ -18,9 +17,13 @@ const FullNameStep = ({
   const { t } = useTranslation();
 
   const validationSchema = z.object({
-    first_name: z.string().min(1, t("onBoarding.first_name_field.error_required")),
+    first_name: z
+      .string()
+      .min(1, t("onBoarding.first_name_field.error_required")),
     middle_name: z.string().optional(),
-    last_name: z.string().min(1, t("onBoarding.last_name_field.error_required")),
+    last_name: z
+      .string()
+      .min(1, t("onBoarding.last_name_field.error_required")),
     second_last_name: z.string().optional(),
   });
 
@@ -44,7 +47,6 @@ const FullNameStep = ({
     return "";
   };
 
-
   return (
     <>
       <InputWrapper
@@ -54,7 +56,7 @@ const FullNameStep = ({
         required={true}
       >
         <TextInput
-          className="text-white text-body-m pb-4"
+          className="text-white body-m pb-4"
           value={formValues.first_name}
           onChangeText={(e) => handleChange("first_name", e)}
           autoComplete="off"
@@ -73,7 +75,7 @@ const FullNameStep = ({
         required={false}
       >
         <TextInput
-          className="text-white text-body-m pb-4"
+          className="text-white body-m pb-4"
           value={formValues.middle_name}
           onChangeText={(e) => handleChange("middle_name", e)}
           autoComplete="off"
@@ -87,14 +89,12 @@ const FullNameStep = ({
       </InputWrapper>
       <InputWrapper
         label={t("onBoarding.last_name_field.label")}
-        isFocused={
-          focused === "last_name" || Boolean(formValues.last_name)
-        }
+        isFocused={focused === "last_name" || Boolean(formValues.last_name)}
         required={true}
         error={getError("last_name")}
       >
         <TextInput
-          className="text-white text-body-m pb-4"
+          className="text-white body-m pb-4"
           value={formValues.last_name}
           onChangeText={(e) => handleChange("last_name", e)}
           autoComplete="off"
@@ -115,7 +115,7 @@ const FullNameStep = ({
         error={getError("second_last_name")}
       >
         <TextInput
-          className="text-white text-body-m pb-4"
+          className="text-white body-m pb-4"
           value={formValues.second_last_name}
           onChangeText={(e) => handleChange("second_last_name", e)}
           autoComplete="off"
@@ -127,7 +127,6 @@ const FullNameStep = ({
           onBlur={() => handleBlur("second_last_name")}
         />
       </InputWrapper>
-
     </>
   );
 };

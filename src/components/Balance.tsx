@@ -60,9 +60,7 @@ const Balance = ({
           </SkeletonLoadingView>
         ) : (
           <>
-            <Text className="text-heading-l text-white font-sans">
-              {equity}
-            </Text>
+            <Text className="heading-l text-white ">{equity}</Text>
             {displayCurrencyName && (
               <Text className="text-white text-base font-semibold">
                 {t("home.currency")}
