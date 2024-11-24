@@ -1,17 +1,17 @@
+import GradientCircle from "@/assets/green-gradient-circle.svg";
 import Button from "@/components/Button";
 import LoggedLayout from "@/components/LoggedLayout";
 import Text from "@/components/Text";
 import { STOCKS } from "@/constants/stocks";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { formatNumber } from "@/utils/currencyUtils";
 import { useNavigation } from "@react-navigation/native";
 import BigNumber from "bignumber.js";
-import { cssInterop } from "nativewind";
 import React from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
 
 const ETFPurchaseSuccess = ({ route }) => {
-  const { etf, amount = 0 } = route.params;
+  const { etf, amount = 0, quote } = route.params;
 
   const navigation = useNavigation();
 
@@ -25,31 +25,76 @@ const ETFPurchaseSuccess = ({ route }) => {
     });
   };
 
+  const amountToOrder = formatNumber(amount, 2, 6);
+
+  const etfAmount = new BigNumber(amountToOrder)
+    .dividedBy(etf.price)
+    .precision(4)
+    .toString();
+
+  const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo || null;
+
   return (
-    <LoggedLayout
-      wrapperClasses=" h-24"
-      navLeft={
-        <View className="w-14 h-14 border border-solid border-semantic-success rounded-full flex justify-center items-center">
-          <Ionicons name="checkmark" size={24} color="#04AE92" />
+    <LoggedLayout wrapperClasses=" h-24" navLeft={<></>}>
+      <View className="flex-1 gap justify-between">
+        <View className="relative flex justify-center items-center w-full">
+          <GradientCircle className="relative" />
+          <View className="absolute flex justify-center items-center">
+            <View className="w-16 h-16 bg-gray-90 rounded-full overflow-hidden">
+              <Logo style={{ height: "100%", width: "100%" }} />
+            </View>
+          </View>
+          <View className="absolute flex flex-1 pb-layout top-1/2 pt-20">
+            <Text className="text-heading-m text-gray-10 px-layout text-center">
+              {t("etfPurchase.success.title")}
+            </Text>
+            <Text className="body-s text-gray-50 text-center px-layout">
+              <Trans
+                i18nKey="etfPurchase.success.summary"
+                values={{
+                  etf_amount: etfAmount,
+                  etf_symbol: etf.symbol,
+                  display_name: etf.name,
+                  symbol: etf.symbol,
+                  amount: amountToOrder,
+                  etf_price: quote.price,
+                }}
+                components={[
+                  <Text
+                    className="body-s text-white font-bold"
+                    numberOfLines={1}
+                  ></Text>,
+                  <Text
+                    className="body-s text-white font-bold"
+                    numberOfLines={1}
+                  >
+                    segment2
+                  </Text>,
+                  <Text
+                    className="body-s text-white font-bold"
+                    numberOfLines={1}
+                  >
+                    segment3
+                  </Text>,
+                  <Text
+                    className="body-s text-white font-bold"
+                    numberOfLines={1}
+                  >
+                    segment3
+                  </Text>,
+                ]}
+              />
+            </Text>
+          </View>
         </View>
-      }
-    >
-      <View className="flex flex-1 pb-layout">
-        <Text className="text-heading-s text-gray-10 px-layout">
-          {t("etfPurchase.success.title")}
-        </Text>
-        <View className="flex flex-row items-center justify-start gap-s px-layout">
-          <Text className="text-body-s text-gray-50">
-            {t("etfPurchase.success.subtitle")}
-          </Text>
+
+        <View className="px-layout">
+          <Button className="" onPress={handleContinue}>
+            <Text className="text-button-m">
+              {t("etfPurchase.success.done_button")}
+            </Text>
+          </Button>
         </View>
-      </View>
-      <View className="px-layout">
-        <Button className="" onPress={handleContinue}>
-          <Text className="text-button-m">
-            {t("etfPurchase.success.done_button")}
-          </Text>
-        </Button>
       </View>
     </LoggedLayout>
   );

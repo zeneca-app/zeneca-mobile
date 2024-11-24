@@ -19,17 +19,21 @@ import { View } from "react-native";
 import { Address } from "viem";
 
 const ETFPurchaseConfirmation = ({ route }) => {
-  const { etf, amount } = route.params;
-
-  const amountToOrder = formatNumber(amount, 2, 6);
-
+  
+  const navigation = useNavigation();
   const queryClient = useQueryClient();
-
   const { t } = useTranslation();
   const wallet = useEmbeddedWallet();
   const { chain } = useChainStore();
   const [transactionInitiated, setTransactionInitiated] = useState(false);
-  const navigation = useNavigation();
+
+  const { etf, amount } = route.params;
+
+  const amountDisplayed = amount
+    ? currencyFormatter(amount, 2, 6, true)
+    : "0.00";
+
+  const amountToOrder = formatNumber(amount, 2, 6, true);
 
   const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo || null;
   const [quote, setQuote] = useState<OrderQuote | null>(null);
@@ -69,6 +73,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
         navigation.navigate("ETFPurchaseSuccess", {
           etf,
           amount,
+          quote,
         });
       }
     } catch (error) {
@@ -101,6 +106,14 @@ const ETFPurchaseConfirmation = ({ route }) => {
   const isDisabled = isQuotePending || !quote || transactionInitiated;
   const showButtonConfirmation = !isQuotePending && quote;
 
+  const feeDisplayed = quote?.fee
+    ? currencyFormatter(quote?.fee, 2, 6, true)
+    : "0.00";
+
+  const totalDisplayed = quote?.total
+    ? currencyFormatter(quote?.total, 2, 6, true)
+    : "0.00";
+
   return (
     <LoggedLayout>
       <View className="flex pb-layout">
@@ -113,9 +126,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
           </Text>
         </View>
         <Text className="text-heading-l text-gray-10 px-layout">
-          {currencyFormatter(
-            new BigNumber(amount).dividedBy(1_000_000).toFormat(2),
-          )}
+          {amountDisplayed}
         </Text>
         <View className="flex flex-row items-center justify-start gap-s px-layout">
           <Text className="text-caption-xl text-gray-50">{etfAmount}</Text>
@@ -139,7 +150,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
             {isQuotePending ? (
               <SkeletonView className="w-20 h-4" />
             ) : (
-              currencyFormatter(quote?.fee, 2, quote?.precision)
+              feeDisplayed
             )}
           </Text>
         </View>
@@ -151,7 +162,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
             {isQuotePending ? (
               <SkeletonView className="w-20 h-4" />
             ) : (
-              currencyFormatter(quote?.total, 2, quote?.precision)
+              totalDisplayed
             )}
           </Text>
         </View>
