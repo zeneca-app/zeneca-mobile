@@ -22,9 +22,11 @@ import {
   http,
 } from "viem";
 import { entryPoint07Address } from "viem/account-abstraction";
-
-const transportUrl = (chain: Chain) =>
-  `https://api.pimlico.io/v2/${chain.id}/rpc?apikey=${process.env.EXPO_PUBLIC_PIMLICO_API_KEY}`;
+import {
+  transportUrl,
+  RPC_BASE_SEPOLIA_URL,
+  RPC_SEPOLIA_URL,
+} from "@/constants/blockchain";
 
 export function getChainPublicClient(chain: Chain) {
   return createPublicClient({
@@ -32,8 +34,6 @@ export function getChainPublicClient(chain: Chain) {
     transport: http(),
   });
 }
-const RPC_BASE_SEPOLIA_URL = "https://rpc.ankr.com/base_sepolia";
-const RPC_SEPOLIA_URL = "https://eth-sepolia.g.alchemy.com/v2/b9I66i0I3RI4gVU3oaO8N1Vs2KNgzjry";
 
 export const publicClient = createPublicClient({
   transport: http(RPC_SEPOLIA_URL),

@@ -162,7 +162,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
             {isQuotePending ? (
               <SkeletonView className="w-20 h-4" />
             ) : (
-              totalDisplayed
+              amountDisplayed
             )}
           </Text>
         </View>

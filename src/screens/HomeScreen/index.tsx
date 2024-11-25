@@ -2,19 +2,19 @@ import Balance from "@/components/Balance";
 import OrdersListCard from "@/components/Cards/OrdersListCard";
 import VerifyCtaCard from "@/components/Cards/VerifyCtaCard";
 import LoggedLayout from "@/components/LoggedLayout";
-import { View } from "react-native";
+import { View, ScrollView } from "react-native";
 import HomeActions from "./components/HomeActions";
 
 const HomeScreen = () => {
 
   return (
     <LoggedLayout>
-      <View className="pt-12 pb-6">
-        <Balance />
-      </View>
-      <VerifyCtaCard />
-      <OrdersListCard />
-      <HomeActions />
+        <View className="pt-12 pb-6">
+          <Balance />
+        </View>
+        <VerifyCtaCard />
+        <OrdersListCard />
+        <HomeActions />
     </LoggedLayout>
   );
 };
