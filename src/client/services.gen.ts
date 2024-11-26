@@ -14,6 +14,8 @@ import type {
   AssetsGetAssetTicksData,
   AssetsGetAssetTicksError,
   AssetsGetAssetTicksResponse,
+  AssetsGetMarketHoursError,
+  AssetsGetMarketHoursResponse,
   BanksGetBanksData,
   BanksGetBanksError,
   BanksGetBanksResponse,
@@ -390,6 +392,22 @@ export const assetsGetAssetDetail = <ThrowOnError extends boolean = false>(
   >({
     ...options,
     url: "/v0/assets/{asset_id}/",
+  });
+};
+
+/**
+ * Get Market Hours
+ */
+export const assetsGetMarketHours = <ThrowOnError extends boolean = false>(
+  options?: Options<unknown, ThrowOnError>,
+) => {
+  return (options?.client ?? client).get<
+    AssetsGetMarketHoursResponse,
+    AssetsGetMarketHoursError,
+    ThrowOnError
+  >({
+    ...options,
+    url: "/v0/assets/market_hours",
   });
 };
 

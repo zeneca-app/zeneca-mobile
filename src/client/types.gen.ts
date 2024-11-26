@@ -55,8 +55,9 @@ export type AssetPrice = {
 export type Balance = {
   available?: string;
   pending?: string;
-  equity?: string;
-  readonly precision: string;
+  portfolio_market_value?: string;
+  readonly precision: number;
+  readonly equity: string;
 };
 
 export type Bank = {
@@ -141,29 +142,44 @@ export type HTTPValidationError = {
   detail?: Array<ValidationError>;
 };
 
+export type MarketHours = {
+  is_market_open: boolean;
+  current_session_close_dt: string | null;
+  current_session_open_dt: string | null;
+  next_session_close_dt: string | null;
+  next_session_open_dt: string | null;
+};
+
 export type MyAsset = {
   id?: string;
   symbol: string;
-  amount: string;
+  quantity_in_wei: number;
+  external_id: number;
   equity: string;
   change_percent: string;
-  readonly precision: string;
+  readonly precision: number;
+  /**
+   * Convert from 18 decimals to 6 decimals Wei
+   */
+  readonly amount: string;
 };
 
 export type MyAssets = Array<MyAsset>;
 
 export type Order = {
-  id: string;
-  status: OrderStatus;
-  transaction_hash: string | null;
+  external_id: string;
   symbol: string;
   name: string;
+  status: OrderStatus;
   order_side: OrderSide;
   order_type: OrderType;
-  asset_quantity: string;
   payment_quantity: string;
-  network_fee: string;
+  fee: string;
+  total: string;
+  transaction_hash: string | null;
+  asset_token_filled: string | null;
   created_at: string;
+  filled_at: string;
 };
 
 export type OrderQuote = {
@@ -173,8 +189,10 @@ export type OrderQuote = {
   order_type: OrderType;
   quantity?: string | null;
   amount?: string | null;
+  asset_price?: string;
   fee: string;
   total: string;
+  amount_to_receive: string;
   external_order_id: string;
   smart_account_address: string;
   signature: string;
@@ -182,6 +200,7 @@ export type OrderQuote = {
   chain_id: number;
   deadline: number;
   created_at: number;
+  readonly precision: number;
 };
 
 export type OrderQuoteData = {
@@ -575,6 +594,10 @@ export type AssetsGetAssetDetailData = {
 export type AssetsGetAssetDetailResponse = AssetDetail;
 
 export type AssetsGetAssetDetailError = HTTPValidationError;
+
+export type AssetsGetMarketHoursResponse = MarketHours;
+
+export type AssetsGetMarketHoursError = unknown;
 
 export type OrdersGetOrdersResponse = Array<Order>;
 
