@@ -6,6 +6,7 @@ import {
   assetsGetAssetDetail,
   assetsGetAssets,
   assetsGetAssetTicks,
+  assetsGetMarketHours,
   banksGetBanks,
   client,
   countriesGetCountries,
@@ -583,6 +584,24 @@ export const assetsGetAssetDetailOptions = (
       return data;
     },
     queryKey: assetsGetAssetDetailQueryKey(options),
+  });
+};
+
+export const assetsGetMarketHoursQueryKey = (options?: Options) => [
+  createQueryKey("assetsGetMarketHours", options),
+];
+
+export const assetsGetMarketHoursOptions = (options?: Options) => {
+  return queryOptions({
+    queryFn: async ({ queryKey }) => {
+      const { data } = await assetsGetMarketHours({
+        ...options,
+        ...queryKey[0],
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: assetsGetMarketHoursQueryKey(options),
   });
 };
 

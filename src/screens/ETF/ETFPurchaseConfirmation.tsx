@@ -139,7 +139,11 @@ const ETFPurchaseConfirmation = ({ route }) => {
             {t("etfPurchase.price")}
           </Text>
           <Text className="text-caption-xl text-dark-content-white">
-            ${etf.price}
+            {isQuotePending ? (
+              <SkeletonView className="w-20 h-4" />
+            ) : (
+              <>${quote?.asset_price}</>
+            )}
           </Text>
         </View>
         <View className="flex-row items-center justify-between gap-s">
@@ -162,7 +166,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
             {isQuotePending ? (
               <SkeletonView className="w-20 h-4" />
             ) : (
-              amountDisplayed
+              totalDisplayed
             )}
           </Text>
         </View>

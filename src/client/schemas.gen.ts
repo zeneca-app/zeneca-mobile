@@ -236,19 +236,24 @@ export const BalanceSchema = {
       title: "Pending",
       default: "0",
     },
-    equity: {
+    portfolio_market_value: {
       type: "string",
-      title: "Equity",
+      title: "Portfolio Market Value",
       default: "0",
     },
     precision: {
-      type: "string",
+      type: "integer",
       title: "Precision",
+      readOnly: true,
+    },
+    equity: {
+      type: "string",
+      title: "Equity",
       readOnly: true,
     },
   },
   type: "object",
-  required: ["precision"],
+  required: ["precision", "equity"],
   title: "Balance",
 } as const;
 
@@ -550,6 +555,72 @@ export const HTTPValidationErrorSchema = {
   title: "HTTPValidationError",
 } as const;
 
+export const MarketHoursSchema = {
+  properties: {
+    is_market_open: {
+      type: "boolean",
+      title: "Is Market Open",
+    },
+    current_session_close_dt: {
+      anyOf: [
+        {
+          type: "string",
+          format: "date-time",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Current Session Close Dt",
+    },
+    current_session_open_dt: {
+      anyOf: [
+        {
+          type: "string",
+          format: "date-time",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Current Session Open Dt",
+    },
+    next_session_close_dt: {
+      anyOf: [
+        {
+          type: "string",
+          format: "date-time",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Next Session Close Dt",
+    },
+    next_session_open_dt: {
+      anyOf: [
+        {
+          type: "string",
+          format: "date-time",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Next Session Open Dt",
+    },
+  },
+  type: "object",
+  required: [
+    "is_market_open",
+    "current_session_close_dt",
+    "current_session_open_dt",
+    "next_session_close_dt",
+    "next_session_open_dt",
+  ],
+  title: "MarketHours",
+} as const;
+
 export const MyAssetSchema = {
   properties: {
     id: {
@@ -560,9 +631,13 @@ export const MyAssetSchema = {
       type: "string",
       title: "Symbol",
     },
-    amount: {
-      type: "string",
-      title: "Amount",
+    quantity_in_wei: {
+      type: "integer",
+      title: "Quantity In Wei",
+    },
+    external_id: {
+      type: "integer",
+      title: "External Id",
     },
     equity: {
       type: "string",
@@ -573,13 +648,27 @@ export const MyAssetSchema = {
       title: "Change Percent",
     },
     precision: {
-      type: "string",
+      type: "integer",
       title: "Precision",
+      readOnly: true,
+    },
+    amount: {
+      type: "string",
+      title: "Amount",
+      description: "Convert from 18 decimals to 6 decimals Wei",
       readOnly: true,
     },
   },
   type: "object",
-  required: ["symbol", "amount", "equity", "change_percent", "precision"],
+  required: [
+    "symbol",
+    "quantity_in_wei",
+    "external_id",
+    "equity",
+    "change_percent",
+    "precision",
+    "amount",
+  ],
   title: "MyAsset",
 } as const;
 
@@ -593,12 +682,38 @@ export const MyAssetsSchema = {
 
 export const OrderSchema = {
   properties: {
-    id: {
+    external_id: {
       type: "string",
-      title: "Id",
+      title: "External Id",
+    },
+    symbol: {
+      type: "string",
+      title: "Symbol",
+    },
+    name: {
+      type: "string",
+      title: "Name",
     },
     status: {
       $ref: "#/components/schemas/OrderStatus",
+    },
+    order_side: {
+      $ref: "#/components/schemas/OrderSide",
+    },
+    order_type: {
+      $ref: "#/components/schemas/OrderType",
+    },
+    payment_quantity: {
+      type: "string",
+      title: "Payment Quantity",
+    },
+    fee: {
+      type: "string",
+      title: "Fee",
+    },
+    total: {
+      type: "string",
+      title: "Total",
     },
     transaction_hash: {
       anyOf: [
@@ -611,51 +726,43 @@ export const OrderSchema = {
       ],
       title: "Transaction Hash",
     },
-    symbol: {
-      type: "string",
-      title: "Symbol",
-    },
-    name: {
-      type: "string",
-      title: "Name",
-    },
-    order_side: {
-      $ref: "#/components/schemas/OrderSide",
-    },
-    order_type: {
-      $ref: "#/components/schemas/OrderType",
-    },
-    asset_quantity: {
-      type: "string",
-      title: "Asset Quantity",
-    },
-    payment_quantity: {
-      type: "string",
-      title: "Payment Quantity",
-    },
-    network_fee: {
-      type: "string",
-      title: "Network Fee",
+    asset_token_filled: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Asset Token Filled",
     },
     created_at: {
       type: "string",
       format: "date-time",
       title: "Created At",
     },
+    filled_at: {
+      type: "string",
+      format: "date-time",
+      title: "Filled At",
+    },
   },
   type: "object",
   required: [
-    "id",
-    "status",
-    "transaction_hash",
+    "external_id",
     "symbol",
     "name",
+    "status",
     "order_side",
     "order_type",
-    "asset_quantity",
     "payment_quantity",
-    "network_fee",
+    "fee",
+    "total",
+    "transaction_hash",
+    "asset_token_filled",
     "created_at",
+    "filled_at",
   ],
   title: "Order",
 } as const;
@@ -702,6 +809,11 @@ export const OrderQuoteSchema = {
       title: "Amount",
       default: "0",
     },
+    asset_price: {
+      type: "string",
+      title: "Asset Price",
+      default: "0",
+    },
     fee: {
       type: "string",
       title: "Fee",
@@ -709,6 +821,10 @@ export const OrderQuoteSchema = {
     total: {
       type: "string",
       title: "Total",
+    },
+    amount_to_receive: {
+      type: "string",
+      title: "Amount To Receive",
     },
     external_order_id: {
       type: "string",
@@ -737,6 +853,11 @@ export const OrderQuoteSchema = {
       type: "integer",
       title: "Created At",
     },
+    precision: {
+      type: "integer",
+      title: "Precision",
+      readOnly: true,
+    },
   },
   type: "object",
   required: [
@@ -746,6 +867,7 @@ export const OrderQuoteSchema = {
     "order_type",
     "fee",
     "total",
+    "amount_to_receive",
     "external_order_id",
     "smart_account_address",
     "signature",
@@ -753,6 +875,7 @@ export const OrderQuoteSchema = {
     "chain_id",
     "deadline",
     "created_at",
+    "precision",
   ],
   title: "OrderQuote",
 } as const;

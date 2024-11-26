@@ -57,7 +57,7 @@ const ETFPurchaseSuccess = ({ route }) => {
                   display_name: etf.name,
                   symbol: etf.symbol,
                   amount: amountToOrder,
-                  etf_price: quote.price,
+                  etf_price: quote.asset_price,
                 }}
                 components={[
                   <Text
