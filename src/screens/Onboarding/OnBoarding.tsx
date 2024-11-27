@@ -29,10 +29,7 @@ const OnBoarding = () => {
 
     const initialFormValues = {
         first_name: "",
-        middle_name: "",
         last_name: "",
-        second_last_name: "",
-        birth_date: new Date(),
         country_code: "",
         address_street_1: "",
         address_street_2: "",

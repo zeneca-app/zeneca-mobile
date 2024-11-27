@@ -171,7 +171,7 @@ const FullAddressStep = ({
                     focused === "address_postal_code" ||
                     Boolean(formValues.address_postal_code)
                 }
-                hint=""
+                hint="Optional"
                 error={getError("address_postal_code")}
 
             >
