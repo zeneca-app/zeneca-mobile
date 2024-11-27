@@ -22,10 +22,75 @@ import Animated, {
     SlideInLeft,
     SlideOutLeft
 } from 'react-native-reanimated';
+import {
+    onboardingOnboardingNamesStepMutation,
+    onboardingOnboardingCountryStepMutation,
+    onboardingOnboardingAddressStepMutation,
+    usersMeOptions
+} from "@/client/@tanstack/react-query.gen";
+import { useMutation, useQuery } from "@tanstack/react-query";
+
+
+const STEPS = {
+    NAMES_STEP: 0,
+    COUNTRY_STEP: 1,
+    ADDRESS_STEP: 2,
+    KYC_PROVIDER_STEP: 3,
+}
 
 const OnBoarding = () => {
     const { t } = useTranslation();
     const navigation = useNavigation();
+
+    const {
+        data: user,
+        isPending: isUserPending,
+        error,
+    } = useQuery({
+        ...usersMeOptions(),
+    });
+
+    
+    const currentStep = STEPS[user?.account?.ob_status as keyof typeof STEPS] || STEPS.NAMES_STEP;
+
+    const {
+        mutate: updateNamesStep,
+        isPending: isOnboardingNamesStepPending
+    } = useMutation({
+        ...onboardingOnboardingNamesStepMutation(),
+        onError: (error) => {
+            console.error("Error updating names:", error);
+        },
+        onSuccess: (data) => {
+            setActiveStep((prev) => prev + 1);
+        },
+    });
+
+    const {
+        mutate: updateCountryStep,
+        isPending: isOnboardingCountryStepPending
+    } = useMutation({
+        ...onboardingOnboardingCountryStepMutation(),
+        onError: (error) => {
+            console.error("Error updating country:", error);
+        },
+        onSuccess: (data) => {
+            setActiveStep((prev) => prev + 1);
+        },
+    });
+
+    const {
+        mutate: updateAddressStep,
+        isPending: isOnboardingAddressStepPending
+    } = useMutation({
+        ...onboardingOnboardingAddressStepMutation(),
+        onError: (error) => {
+            console.error("Error updating address:", error);
+        },
+        onSuccess: (data) => {
+            setActiveStep((prev) => prev + 1);
+        },
+    });
 
     const initialFormValues = {
         first_name: "",
@@ -43,7 +108,7 @@ const OnBoarding = () => {
     const [touchedFields, setTouchedFields] = useState<
         Partial<Record<keyof FormValues, boolean>>
     >({});
-    const [activeStep, setActiveStep] = useState<number>(0); //This is used to render the current step
+    const [activeStep, setActiveStep] = useState<number>(currentStep + 1); //This is used to render the current step
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [isCurrentStepValid, setIsCurrentStepValid] = useState<boolean>(false);
     //const [error, setError] = useState<string | undefined>(""); //This can be used to render errors from submit
@@ -66,32 +131,39 @@ const OnBoarding = () => {
         };
     }, []);
 
-    const handleSubmit = () => {
-        setIsSubmitting(true);
-        console.log("submitting form");
-        setTimeout(() => {
-            setIsSubmitting(false);
-        }, 3000);
-        console.log("formValues", formValues);
-        navigation.navigate("KYCProvider", {
-            country_code: formValues.country_code,
-            full_address: {
-                address_street_1: formValues.address_street_1,
-                address_street_2: formValues.address_street_2,
-                address_city: formValues.address_city,
-                address_state: formValues.address_state,
-                address_zip_code: formValues.address_postal_code || "00000",
-                address_country: formValues.country_code,
-            },
-        });
-    };
 
     const handleNext = () => {
+        console.log("handleNext", activeStep, steps.length - 1)
         if (activeStep === steps.length - 1) {
-            handleSubmit();
+            console.log("last step")
             return;
         }
-        setActiveStep((prev) => prev + 1);
+        if (activeStep === 0) {
+            updateNamesStep({
+                body: {
+                    name: formValues.first_name,
+                    last_name: formValues.last_name,
+                }
+            });
+        }
+        if (activeStep === 1) {
+            updateCountryStep({
+                body: {
+                    country: formValues.country_code
+                }
+            });
+        }
+        if (activeStep === 2) {
+            console.log("address step", formValues.country_code)
+            updateAddressStep({
+                body: {
+                    street_line_1: formValues.address_street_1,
+                    city: formValues.address_city,
+                    state: formValues.address_state,
+                    postal_code: formValues.address_postal_code || "00000",
+                }
+            });
+        }
     };
 
     const handleBack = () => {
@@ -99,7 +171,6 @@ const OnBoarding = () => {
             navigation.goBack();
             return;
         }
-        setActiveStep((prev) => prev - 1);
     };
 
     const handleChange = (fieldName: keyof FormValues, value: string | Date) => {
@@ -122,9 +193,19 @@ const OnBoarding = () => {
         if (field === focused) setFocused(null);
     };
 
+    // Update the useEffect that handles KYC navigation
+    useEffect(() => {
+        if (activeStep === steps.length) {
+            navigation.navigate("Home");
+        }
+    }, [activeStep]);
+
+    console.log("activeStep", activeStep)
+
     const Step = steps[activeStep];
 
     const progress = activeStep / steps.length;
+    const isPending = isOnboardingNamesStepPending || isOnboardingCountryStepPending || isOnboardingAddressStepPending || isUserPending;
 
     return (
         <KeyboardAvoidingView
@@ -180,7 +261,7 @@ const OnBoarding = () => {
                         ) : (
                             <Button
                                 onPress={handleNext}
-                                disabled={!isCurrentStepValid}
+                                disabled={!isCurrentStepValid || isPending}
                             >
                                 <Text className="text-body-m">
                                     {t("onBoarding.continue_button")}

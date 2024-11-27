@@ -2,10 +2,11 @@
 
 export type AccountRead = {
   id: string;
-  name: string;
+  name?: string | null;
+  last_name?: string | null;
   status: AccountStatus;
-  country: string;
-  category: string | null;
+  ob_status: OnboardingStatus;
+  country?: string | null;
   person_type: PersonType;
 };
 
@@ -165,6 +166,32 @@ export type MyAsset = {
 };
 
 export type MyAssets = Array<MyAsset>;
+
+export type OnboardingAddressStep = {
+  street_line_1: string;
+  street_line_2?: string | null;
+  city: string;
+  state: string;
+  postal_code: string;
+};
+
+export type OnboardingCountryStep = {
+  /**
+   * ISO 2-letter country code
+   */
+  country: string;
+};
+
+export type OnboardingNamesStep = {
+  name: string;
+  last_name: string;
+};
+
+export type OnboardingStatus =
+  | "NAMES_STEP"
+  | "COUNTRY_STEP"
+  | "ADDRESS_STEP"
+  | "KYC_PROVIDER_STEP";
 
 export type Order = {
   external_id: string;
@@ -610,3 +637,27 @@ export type OrdersCreateQuoteOrderData = {
 export type OrdersCreateQuoteOrderResponse = OrderQuote;
 
 export type OrdersCreateQuoteOrderError = HTTPValidationError;
+
+export type OnboardingOnboardingNamesStepData = {
+  body: OnboardingNamesStep;
+};
+
+export type OnboardingOnboardingNamesStepResponse = AccountRead;
+
+export type OnboardingOnboardingNamesStepError = HTTPValidationError;
+
+export type OnboardingOnboardingCountryStepData = {
+  body: OnboardingCountryStep;
+};
+
+export type OnboardingOnboardingCountryStepResponse = AccountRead;
+
+export type OnboardingOnboardingCountryStepError = HTTPValidationError;
+
+export type OnboardingOnboardingAddressStepData = {
+  body: OnboardingAddressStep;
+};
+
+export type OnboardingOnboardingAddressStepResponse = AccountRead;
+
+export type OnboardingOnboardingAddressStepError = HTTPValidationError;

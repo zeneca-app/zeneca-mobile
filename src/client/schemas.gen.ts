@@ -8,17 +8,6 @@ export const AccountReadSchema = {
       title: "Id",
     },
     name: {
-      type: "string",
-      title: "Name",
-    },
-    status: {
-      $ref: "#/components/schemas/AccountStatus",
-    },
-    country: {
-      type: "string",
-      title: "Country",
-    },
-    category: {
       anyOf: [
         {
           type: "string",
@@ -27,14 +16,42 @@ export const AccountReadSchema = {
           type: "null",
         },
       ],
-      title: "Category",
+      title: "Name",
+    },
+    last_name: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Last Name",
+    },
+    status: {
+      $ref: "#/components/schemas/AccountStatus",
+    },
+    ob_status: {
+      $ref: "#/components/schemas/OnboardingStatus",
+    },
+    country: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Country",
     },
     person_type: {
       $ref: "#/components/schemas/PersonType",
     },
   },
   type: "object",
-  required: ["id", "name", "status", "country", "category", "person_type"],
+  required: ["id", "status", "ob_status", "person_type"],
   title: "AccountRead",
 } as const;
 
@@ -678,6 +695,79 @@ export const MyAssetsSchema = {
   },
   type: "array",
   title: "MyAssets",
+} as const;
+
+export const OnboardingAddressStepSchema = {
+  properties: {
+    street_line_1: {
+      type: "string",
+      title: "Street Line 1",
+    },
+    street_line_2: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Street Line 2",
+    },
+    city: {
+      type: "string",
+      title: "City",
+    },
+    state: {
+      type: "string",
+      title: "State",
+    },
+    postal_code: {
+      type: "string",
+      title: "Postal Code",
+    },
+  },
+  type: "object",
+  required: ["street_line_1", "city", "state", "postal_code"],
+  title: "OnboardingAddressStep",
+} as const;
+
+export const OnboardingCountryStepSchema = {
+  properties: {
+    country: {
+      type: "string",
+      maxLength: 2,
+      minLength: 2,
+      pattern: "^[A-Z]{2}$",
+      title: "Country",
+      description: "ISO 2-letter country code",
+    },
+  },
+  type: "object",
+  required: ["country"],
+  title: "OnboardingCountryStep",
+} as const;
+
+export const OnboardingNamesStepSchema = {
+  properties: {
+    name: {
+      type: "string",
+      title: "Name",
+    },
+    last_name: {
+      type: "string",
+      title: "Last Name",
+    },
+  },
+  type: "object",
+  required: ["name", "last_name"],
+  title: "OnboardingNamesStep",
+} as const;
+
+export const OnboardingStatusSchema = {
+  type: "string",
+  enum: ["NAMES_STEP", "COUNTRY_STEP", "ADDRESS_STEP", "KYC_PROVIDER_STEP"],
+  title: "OnboardingStatus",
 } as const;
 
 export const OrderSchema = {

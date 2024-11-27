@@ -24,6 +24,15 @@ import type {
   LoginLoginOrCreateData,
   LoginLoginOrCreateError,
   LoginLoginOrCreateResponse,
+  OnboardingOnboardingAddressStepData,
+  OnboardingOnboardingAddressStepError,
+  OnboardingOnboardingAddressStepResponse,
+  OnboardingOnboardingCountryStepData,
+  OnboardingOnboardingCountryStepError,
+  OnboardingOnboardingCountryStepResponse,
+  OnboardingOnboardingNamesStepData,
+  OnboardingOnboardingNamesStepError,
+  OnboardingOnboardingNamesStepResponse,
   OrdersCreateQuoteOrderData,
   OrdersCreateQuoteOrderError,
   OrdersCreateQuoteOrderResponse,
@@ -440,5 +449,59 @@ export const ordersCreateQuoteOrder = <ThrowOnError extends boolean = false>(
   >({
     ...options,
     url: "/v0/orders/quote",
+  });
+};
+
+/**
+ * Onboarding Names Step
+ */
+export const onboardingOnboardingNamesStep = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<OnboardingOnboardingNamesStepData, ThrowOnError>,
+) => {
+  return (options?.client ?? client).post<
+    OnboardingOnboardingNamesStepResponse,
+    OnboardingOnboardingNamesStepError,
+    ThrowOnError
+  >({
+    ...options,
+    url: "/v0/onboarding/names-step",
+  });
+};
+
+/**
+ * Onboarding Country Step
+ */
+export const onboardingOnboardingCountryStep = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<OnboardingOnboardingCountryStepData, ThrowOnError>,
+) => {
+  return (options?.client ?? client).post<
+    OnboardingOnboardingCountryStepResponse,
+    OnboardingOnboardingCountryStepError,
+    ThrowOnError
+  >({
+    ...options,
+    url: "/v0/onboarding/country-step",
+  });
+};
+
+/**
+ * Onboarding Address Step
+ */
+export const onboardingOnboardingAddressStep = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<OnboardingOnboardingAddressStepData, ThrowOnError>,
+) => {
+  return (options?.client ?? client).post<
+    OnboardingOnboardingAddressStepResponse,
+    OnboardingOnboardingAddressStepError,
+    ThrowOnError
+  >({
+    ...options,
+    url: "/v0/onboarding/address-step",
   });
 };
