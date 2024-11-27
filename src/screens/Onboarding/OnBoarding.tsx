@@ -50,7 +50,7 @@ const OnBoarding = () => {
         ...usersMeOptions(),
     });
 
-    
+
     const currentStep = STEPS[user?.account?.ob_status as keyof typeof STEPS] || STEPS.NAMES_STEP;
 
     const {
@@ -135,7 +135,7 @@ const OnBoarding = () => {
     const handleNext = () => {
         console.log("handleNext", activeStep, steps.length - 1)
         if (activeStep === steps.length - 1) {
-            console.log("last step")
+
             return;
         }
         if (activeStep === 0) {
@@ -154,7 +154,6 @@ const OnBoarding = () => {
             });
         }
         if (activeStep === 2) {
-            console.log("address step", formValues.country_code)
             updateAddressStep({
                 body: {
                     street_line_1: formValues.address_street_1,
@@ -199,8 +198,6 @@ const OnBoarding = () => {
             navigation.navigate("Home");
         }
     }, [activeStep]);
-
-    console.log("activeStep", activeStep)
 
     const Step = steps[activeStep];
 
