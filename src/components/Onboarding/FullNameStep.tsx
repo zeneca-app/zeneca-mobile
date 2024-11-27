@@ -19,9 +19,7 @@ const FullNameStep = ({
 
   const validationSchema = z.object({
     first_name: z.string().min(1, t("onBoarding.first_name_field.error_required")),
-    middle_name: z.string().optional(),
     last_name: z.string().min(1, t("onBoarding.last_name_field.error_required")),
-    second_last_name: z.string().optional(),
   });
 
   const formErrors = validationSchema.safeParse(formValues);
@@ -66,25 +64,7 @@ const FullNameStep = ({
           onBlur={() => handleBlur("first_name")}
         />
       </InputWrapper>
-      <InputWrapper
-        label={t("onBoarding.middle_name_field.label")}
-        isFocused={focused === "middle_name" || Boolean(formValues.middle_name)}
-        error={getError("middle_name")}
-        required={false}
-      >
-        <TextInput
-          className="text-white text-body-m pb-4"
-          value={formValues.middle_name}
-          onChangeText={(e) => handleChange("middle_name", e)}
-          autoComplete="off"
-          autoCorrect={false}
-          clearButtonMode="while-editing"
-          keyboardType="name-phone-pad"
-          autoCapitalize="words"
-          onFocus={() => handleFocus("middle_name")}
-          onBlur={() => handleBlur("middle_name")}
-        />
-      </InputWrapper>
+
       <InputWrapper
         label={t("onBoarding.last_name_field.label")}
         isFocused={
@@ -106,28 +86,6 @@ const FullNameStep = ({
           onBlur={() => handleBlur("last_name")}
         />
       </InputWrapper>
-      <InputWrapper
-        required={false}
-        label={t("onBoarding.second_last_name_field.label")}
-        isFocused={
-          focused === "second_last_name" || Boolean(formValues.second_last_name)
-        }
-        error={getError("second_last_name")}
-      >
-        <TextInput
-          className="text-white text-body-m pb-4"
-          value={formValues.second_last_name}
-          onChangeText={(e) => handleChange("second_last_name", e)}
-          autoComplete="off"
-          autoCorrect={false}
-          clearButtonMode="while-editing"
-          keyboardType="name-phone-pad"
-          autoCapitalize="words"
-          onFocus={() => handleFocus("second_last_name")}
-          onBlur={() => handleBlur("second_last_name")}
-        />
-      </InputWrapper>
-
     </>
   );
 };
