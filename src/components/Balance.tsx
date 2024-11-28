@@ -13,30 +13,36 @@ export type balanceProps = {
   displayCurrencyName?: boolean;
   containerClasses?: string;
   captionClasses?: string;
+  isRefetching?: boolean;
 };
 
 const Balance = ({
   displayCurrencyName = false,
   containerClasses = undefined,
   captionClasses = undefined,
+  isRefetching = false,
 }: balanceProps) => {
   const { t } = useTranslation();
 
-  const { isPending, error, data } = useQuery({
+  const { isPending, error, data: balance, refetch: refetchBalance } = useQuery({
     ...usersMyBalanceOptions({
       client: client,
     }),
     refetchInterval: Config.REFETCH_INTERVAL,
   });
 
-  const equity = data?.equity
-    ? currencyFormatter(data?.equity, 2, data?.precision || 6)
+  if (isRefetching) {
+    refetchBalance();
+  }
+
+  const equity = balance?.equity
+    ? currencyFormatter(balance?.equity, 2, balance?.precision || 6)
     : "0.00";
-  const available = data?.available
-    ? currencyFormatter(data?.available, 2, data?.precision || 6, true)
+  const available = balance?.available
+    ? currencyFormatter(balance?.available, 2, balance?.precision || 6, true)
     : "0.00";
 
-  const pending = data?.pending ? currencyFormatter(data?.pending) : "0.00";
+  const pending = balance?.pending ? currencyFormatter(balance?.pending) : "0.00";
 
   return (
     <View
