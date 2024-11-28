@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ChartArrowUp from "@/assets/chart-arrow-up.svg";
 import { usersMyAssetsOptions } from "@/client/@tanstack/react-query.gen";
-import Card from "@/components/Card";
+import CardHeader from "@/components/CardHeader";
 import OrderListItem from "@/components/ListItems/OrderListItem";
 import Separator from "@/components/ListItems/Separator";
 import Config from "@/config";
@@ -13,6 +13,7 @@ import SkeletonLoadingView, {
 } from "@/components/Loading/SkeletonLoadingView";
 import Balance from "@/components/Balance";
 import VerifyCtaCard from "@/components/Cards/VerifyCtaCard";
+import CardFooter from "@/components/CardFooter";
 
 const OrdersListCard = () => {
   const { t } = useTranslation();
@@ -27,7 +28,7 @@ const OrdersListCard = () => {
 
   // Component to render if no transactions
   const Empty = ({ canTrade = false }: { canTrade?: boolean }) => (
-    <View className="flex-1 justify-center items-center">
+    <CardFooter className="flex-1 justify-center items-center bg-dark-background-100">
       <View className="pb-6">
         <ChartArrowUp className="h-40 w-40" />
       </View>
@@ -43,12 +44,12 @@ const OrdersListCard = () => {
           {t("ordersListCard.empty_transactions_no_funds")}
         </Text>
       )}
-    </View>
+    </CardFooter>
   );
 
-  const separator = () => <Separator />;
+  const separator = () => <Separator className="bg-dark-background-100 pb-1" />;
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item }: { item: any }) => {
     //console.log("orderlist item", item);
     return <OrderListItem order={item} />;
   };
@@ -58,33 +59,36 @@ const OrdersListCard = () => {
       <FlatList
         data={my_assets}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        style={{ paddingBottom: 20 }}
+        className="flex-1"
+        keyExtractor={(item) => `${item.id}`}
         ListHeaderComponent={
           <View className="flex-1">
             <View className="pt-12 pb-6">
               <Balance isRefetching={isRefetching} />
             </View>
             <VerifyCtaCard />
-            <View className="flex-1 px-layout py-2 m-px">
-              <View className="pb-4">
-                <Text className="text-caption-xl text-gray-50">
-                  {t("ordersListCard.myAssets")}
-                </Text>
-              </View>
-            </View>
+            <CardHeader>
+              <Text className="text-caption-xl text-gray-50">
+                {t("ordersListCard.myAssets")}
+              </Text>
+            </CardHeader>
             {isPending && !my_assets && (
-              <SkeletonLoadingView className="flex-1 flex">
-                <SkeletonOrderListItem />
+              <SkeletonLoadingView className="flex-1 flex bg-dark-background-100">
                 <SkeletonOrderListItem />
                 <SkeletonOrderListItem />
                 <SkeletonOrderListItem />
               </SkeletonLoadingView>
             )}
-            {!hasAssets && <Empty canTrade={true} />}
+            {!isPending && !hasAssets && <Empty canTrade={true} />}
           </View>
         }
         ItemSeparatorComponent={separator}
+        ListFooterComponent={
+          <CardFooter>
+            <Text className="text-caption-x"></Text>
+            <Text className="text-caption-xl"></Text>
+          </CardFooter>
+        }
         showsVerticalScrollIndicator={false}
         onRefresh={refetch}
         refreshing={isPending}
