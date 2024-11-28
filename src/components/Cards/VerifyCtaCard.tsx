@@ -40,12 +40,11 @@ const VerifyCTACard = () => {
           <VerifyIcon className="h-10 w-10" />
           <View className="flex-col items-stretch justify-start pl-4">
             <Text className="text-caption-xl text-gray-50">
-              Estamos validando tu cuenta
+              {t("accountVerified.title")}
             </Text>
             <Text className="text-caption-xl text-gray-50 pb-2">
-              Pronto te avisaremos
+              {t("accountVerified.subtitle")}
             </Text>
-
           </View>
         </View>
       </Card>
@@ -59,15 +58,15 @@ const VerifyCTACard = () => {
         <VerifyIcon className="h-10 w-10" />
         <View className="flex-col items-stretch justify-start pl-4">
           <Text className="text-caption-xl text-gray-50">
-            {t("accountVerification.complete_to_continue")}
+            {t("accountNotVerified.title")}
           </Text>
           <Text className="text-caption-xl text-gray-50 pb-2">
-            {t("accountVerification.quick_and_easy")}
+            {t("accountNotVerified.subtitle")}
           </Text>
           <TouchableOpacity onPress={handlePress}>
             <View className="flex-row items-center">
               <Text className="text-button-s text-white pr-2">
-                {t("accountVerification.verify_my_account")}
+                {t("accountNotVerified.action")}
               </Text>
               <AntDesign name="arrowright" size={14} color="white" />
             </View>
