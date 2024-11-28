@@ -1,7 +1,8 @@
+import { useState } from "react";
 import ChartArrowUp from "@/assets/chart-arrow-up.svg";
 import { usersMyAssetsOptions } from "@/client/@tanstack/react-query.gen";
 import Card from "@/components/Card";
-import OrderListItem from "@/components/ListItems/OrderListItem"; // Import OrderListItem
+import OrderListItem from "@/components/ListItems/OrderListItem";
 import Separator from "@/components/ListItems/Separator";
 import Config from "@/config";
 import { useQuery } from "@tanstack/react-query";
@@ -16,14 +17,13 @@ import VerifyCtaCard from "@/components/Cards/VerifyCtaCard";
 const OrdersListCard = () => {
   const { t } = useTranslation();
 
-  const { isPending, error, data: my_assets, refetch } = useQuery({
+  const { isPending, error, data: my_assets, refetch, isRefetching } = useQuery({
     ...usersMyAssetsOptions(),
     refetchInterval: Config.REFETCH_INTERVAL,
   });
 
-  const canTrade = true;
 
-  const hasOrders = my_assets?.length && my_assets?.length > 0;
+  const hasAssets = my_assets?.length && my_assets?.length > 0;
 
   // Component to render if no transactions
   const Empty = ({ canTrade = false }: { canTrade?: boolean }) => (
@@ -63,7 +63,7 @@ const OrdersListCard = () => {
         ListHeaderComponent={
           <View className="flex-1">
             <View className="pt-12 pb-6">
-              <Balance />
+              <Balance isRefetching={isRefetching} />
             </View>
             <VerifyCtaCard />
             <View className="flex-1 px-layout py-2 m-px">
@@ -81,6 +81,7 @@ const OrdersListCard = () => {
                 <SkeletonOrderListItem />
               </SkeletonLoadingView>
             )}
+            {!hasAssets && <Empty canTrade={true} />}
           </View>
         }
         ItemSeparatorComponent={separator}
