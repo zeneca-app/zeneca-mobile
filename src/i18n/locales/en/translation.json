@@ -145,10 +145,14 @@
     "equity": "Balance",
     "available_funds": "Available funds"
   },
-  "accountVerification": {
-    "complete_to_continue": "Verify your account to continue.",
-    "quick_and_easy": "Is quick and easy!",
-    "verify_my_account": "Verify my account"
+  "accountNotVerified": {
+    "title": "Verify your account",
+    "subtitle": "Is quick and easy!",
+    "action": "Verify my account"
+  },
+  "accountVerified": {
+    "title": "We are validating your account",
+    "subtitle": "Soon we will notify you"
   },
   "ordersListCard": {
     "myAssets": "My investments",

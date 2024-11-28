@@ -2,11 +2,15 @@ import CountryStep from "@/components/Onboarding/CountryStep";
 import DateOfBirthStep from "@/components/Onboarding/DateOfBirthStep";
 import FullAddressStep from "@/components/Onboarding/FullAddressStep";
 import FullNameStep from "@/components/Onboarding/FullNameStep";
+import KYCRedirectStep from "@/components/Onboarding/KYCRedirectStep";
+
 
 export const steps = [
   FullNameStep,
   CountryStep,
   FullAddressStep,
+  // We'll add a placeholder component that will redirect to KYC
+  KYCRedirectStep
 ];
 
 export type FormValues = {

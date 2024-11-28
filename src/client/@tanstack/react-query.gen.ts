@@ -11,6 +11,9 @@ import {
   client,
   countriesGetCountries,
   loginLoginOrCreate,
+  onboardingOnboardingAddressStep,
+  onboardingOnboardingCountryStep,
+  onboardingOnboardingNamesStep,
   ordersCreateQuoteOrder,
   ordersGetOrders,
   quotesCreateQuote,
@@ -35,6 +38,15 @@ import type {
   LoginLoginOrCreateData,
   LoginLoginOrCreateError,
   LoginLoginOrCreateResponse,
+  OnboardingOnboardingAddressStepData,
+  OnboardingOnboardingAddressStepError,
+  OnboardingOnboardingAddressStepResponse,
+  OnboardingOnboardingCountryStepData,
+  OnboardingOnboardingCountryStepError,
+  OnboardingOnboardingCountryStepResponse,
+  OnboardingOnboardingNamesStepData,
+  OnboardingOnboardingNamesStepError,
+  OnboardingOnboardingNamesStepResponse,
   OrdersCreateQuoteOrderData,
   OrdersCreateQuoteOrderError,
   OrdersCreateQuoteOrderResponse,
@@ -651,6 +663,117 @@ export const ordersCreateQuoteOrderMutation = () => {
   > = {
     mutationFn: async (options) => {
       const { data } = await ordersCreateQuoteOrder({
+        ...options,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
+export const onboardingOnboardingNamesStepQueryKey = (
+  options: Options<OnboardingOnboardingNamesStepData>,
+) => [createQueryKey("onboardingOnboardingNamesStep", options)];
+
+export const onboardingOnboardingNamesStepOptions = (
+  options: Options<OnboardingOnboardingNamesStepData>,
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey }) => {
+      const { data } = await onboardingOnboardingNamesStep({
+        ...options,
+        ...queryKey[0],
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: onboardingOnboardingNamesStepQueryKey(options),
+  });
+};
+
+export const onboardingOnboardingNamesStepMutation = () => {
+  const mutationOptions: UseMutationOptions<
+    OnboardingOnboardingNamesStepResponse,
+    OnboardingOnboardingNamesStepError,
+    Options<OnboardingOnboardingNamesStepData>
+  > = {
+    mutationFn: async (options) => {
+      const { data } = await onboardingOnboardingNamesStep({
+        ...options,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
+export const onboardingOnboardingCountryStepQueryKey = (
+  options: Options<OnboardingOnboardingCountryStepData>,
+) => [createQueryKey("onboardingOnboardingCountryStep", options)];
+
+export const onboardingOnboardingCountryStepOptions = (
+  options: Options<OnboardingOnboardingCountryStepData>,
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey }) => {
+      const { data } = await onboardingOnboardingCountryStep({
+        ...options,
+        ...queryKey[0],
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: onboardingOnboardingCountryStepQueryKey(options),
+  });
+};
+
+export const onboardingOnboardingCountryStepMutation = () => {
+  const mutationOptions: UseMutationOptions<
+    OnboardingOnboardingCountryStepResponse,
+    OnboardingOnboardingCountryStepError,
+    Options<OnboardingOnboardingCountryStepData>
+  > = {
+    mutationFn: async (options) => {
+      const { data } = await onboardingOnboardingCountryStep({
+        ...options,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
+export const onboardingOnboardingAddressStepQueryKey = (
+  options: Options<OnboardingOnboardingAddressStepData>,
+) => [createQueryKey("onboardingOnboardingAddressStep", options)];
+
+export const onboardingOnboardingAddressStepOptions = (
+  options: Options<OnboardingOnboardingAddressStepData>,
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey }) => {
+      const { data } = await onboardingOnboardingAddressStep({
+        ...options,
+        ...queryKey[0],
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: onboardingOnboardingAddressStepQueryKey(options),
+  });
+};
+
+export const onboardingOnboardingAddressStepMutation = () => {
+  const mutationOptions: UseMutationOptions<
+    OnboardingOnboardingAddressStepResponse,
+    OnboardingOnboardingAddressStepError,
+    Options<OnboardingOnboardingAddressStepData>
+  > = {
+    mutationFn: async (options) => {
+      const { data } = await onboardingOnboardingAddressStep({
         ...options,
         throwOnError: true,
       });

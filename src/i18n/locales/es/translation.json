@@ -145,10 +145,14 @@
     "equity": "Balance total",
     "available_funds": "Disponible para invertir"
   },
-  "accountVerification": {
-    "complete_to_continue": "Completa tu verificación para comenzar.",
-    "quick_and_easy": "¡Es rápido y sencillo!",
-    "verify_my_account": "Verificar mi cuenta"
+  "accountNotVerified": {
+    "title": "Verifica tu cuenta",
+    "subtitle": "¡Es rápido y sencillo!",
+    "action": "Verificar mi cuenta"
+  },
+  "accountVerified": {
+    "title": "Estamos validando tu cuenta",
+    "subtitle": "Pronto te avisaremos"
   },
   "ordersListCard": {
     "myAssets": "Mis inversiones",
