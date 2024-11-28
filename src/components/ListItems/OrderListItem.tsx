@@ -28,7 +28,7 @@ const OrderListItem = ({ order }: OrderListItemProps) => {
   const amount = order.amount ? formatNumber(order.amount, 6, 6, true) : "0.00";
 
   return (
-    <View className="flex-row gap-3 px-2">
+    <View className="flex-row gap-3 px-layout bg-dark-background-100">
       <View className="w-12 h-12 bg-gray-90 rounded-full overflow-hidden">
         <Logo style={{ height: "100%", width: "100%" }} />
       </View>

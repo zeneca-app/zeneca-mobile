@@ -6,7 +6,7 @@ const HomeScreen = () => {
   return (
     <LoggedLayout>
       <OrdersListCard />
-      <HomeActions />
+      <HomeActions /> 
     </LoggedLayout>
   );
 };
