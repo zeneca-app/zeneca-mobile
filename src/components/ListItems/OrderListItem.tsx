@@ -28,13 +28,13 @@ const OrderListItem = ({ order }: OrderListItemProps) => {
   const amount = order.amount ? formatNumber(order.amount, 6, 6, true) : "0.00";
 
   return (
-    <View className="flex-row gap-3">
+    <View className="flex-row gap-3 px-2">
       <View className="w-12 h-12 bg-gray-90 rounded-full overflow-hidden">
         <Logo style={{ height: "100%", width: "100%" }} />
       </View>
       <View className="flex-1 flex justify-center items-stretch">
         <Text className="text-gray-10 text-caption-xl">{symbolName}</Text>
-       {/*  <Text className="text-gray-50 text-caption-xl">{amount}</Text> */}
+        {/*  <Text className="text-gray-50 text-caption-xl">{amount}</Text> */}
       </View>
       <View className="flex-1 flex justify-center items-end">
         <Text className="text-gray-10 text-caption-xl">
