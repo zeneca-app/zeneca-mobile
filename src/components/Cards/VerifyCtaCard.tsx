@@ -8,22 +8,17 @@ import { useQuery } from "@tanstack/react-query";
 import {
   usersMeOptions
 } from "@/client/@tanstack/react-query.gen";
+import { useUserStore } from "@/storage/userStore";
 
 const VerifyCTACard = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const { user } = useUserStore();
 
-  const {
-    data: user,
-    isPending: isUserPending,
-    error,
-  } = useQuery({
-    ...usersMeOptions(),
-  });
+  const obStatus = user?.account?.ob_status;
+  const accountStatus = user?.account?.status;
 
   const goToOnboarding = () => {
-    const obStatus = user?.account?.ob_status;
-    // Default to OnBoarding if status is undefined/null
     if (!obStatus) {
       navigation.navigate("OnBoarding");
       return;
@@ -43,12 +38,9 @@ const VerifyCTACard = () => {
     }
   };
 
-  const obStatus = user?.account?.ob_status;
-  const accountStatus = user?.account?.status;
+  if (accountStatus === "ACTIVE") return null;
 
   const isVerifying = obStatus === "KYC_PROVIDER_STEP";
-
-  if (accountStatus === "ACTIVE") return null;
 
   if (isVerifying) {
     return (
@@ -80,7 +72,7 @@ const VerifyCTACard = () => {
           <Text className="text-caption-xl text-gray-50 pb-2">
             {t("accountNotVerified.subtitle")}
           </Text>
-          <TouchableOpacity onPress={goToOnboarding} disabled={isUserPending}>
+          <TouchableOpacity onPress={goToOnboarding}>
             <View className="flex-row items-center">
               <Text className="text-button-s text-white pr-2">
                 {t("accountNotVerified.action")}
