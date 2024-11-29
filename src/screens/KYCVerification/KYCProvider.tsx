@@ -22,7 +22,7 @@ const AI_PRISE_THEME = {
 
 
 const KYCProvider = ({ route }) => {
-  const { country_code, full_address } = route.params;
+  const { country_code } = route.params;
   const navigation = useNavigation();
   const { height, width } = Dimensions.get("window");
 
@@ -53,9 +53,9 @@ const KYCProvider = ({ route }) => {
             allowed_country_code: country,
           }
         }}
-        userData={{
+        /* userData={{
           address: full_address,
-        }}
+        }} */
         theme={AI_PRISE_THEME}
         onSuccess={handleOnComplete}
         onComplete={handleOnComplete}
