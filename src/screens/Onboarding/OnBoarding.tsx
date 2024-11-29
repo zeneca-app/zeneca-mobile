@@ -22,74 +22,44 @@ import Animated, {
     SlideInLeft,
     SlideOutLeft
 } from 'react-native-reanimated';
-import {
-    onboardingOnboardingNamesStepMutation,
-    onboardingOnboardingCountryStepMutation,
-    onboardingOnboardingAddressStepMutation,
-    usersMeOptions
-} from "@/client/@tanstack/react-query.gen";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useOnboardingMutations } from "@/components/Onboarding/useOnboardingMutations";
+import { useQuery } from "@tanstack/react-query";
+import { usersMeOptions } from "@/client/@tanstack/react-query.gen";
 
+
+export enum OnboardingStatus {
+    NAMES_STEP = "NAMES_STEP",
+    COUNTRY_STEP = "COUNTRY_STEP",
+    ADDRESS_STEP = "ADDRESS_STEP",
+    KYC_PROVIDER_STEP = "KYC_PROVIDER_STEP",
+}
 
 const STEPS = {
-    NAMES_STEP: 0,
-    COUNTRY_STEP: 1,
-    ADDRESS_STEP: 2,
-    KYC_PROVIDER_STEP: 3,
-}
+    [OnboardingStatus.NAMES_STEP]: 0,
+    [OnboardingStatus.COUNTRY_STEP]: 1,
+    [OnboardingStatus.ADDRESS_STEP]: 2,
+    [OnboardingStatus.KYC_PROVIDER_STEP]: 3,
+} as const;
+
+const getNextStep = (currentStatus: OnboardingStatus | null): OnboardingStatus => {
+    switch (currentStatus) {
+        case OnboardingStatus.NAMES_STEP:
+            return OnboardingStatus.COUNTRY_STEP;
+        case OnboardingStatus.COUNTRY_STEP:
+            return OnboardingStatus.ADDRESS_STEP;
+        case OnboardingStatus.ADDRESS_STEP:
+            return OnboardingStatus.KYC_PROVIDER_STEP;
+        default:
+            return OnboardingStatus.NAMES_STEP;
+    }
+};
 
 const OnBoarding = () => {
     const { t } = useTranslation();
     const navigation = useNavigation();
 
-    const {
-        data: user,
-        isPending: isUserPending,
-        error,
-    } = useQuery({
+    const { data: user, isPending: isUserPending } = useQuery({
         ...usersMeOptions(),
-    });
-
-
-    const currentStep = STEPS[user?.account?.ob_status as keyof typeof STEPS] || STEPS.NAMES_STEP;
-
-    const {
-        mutate: updateNamesStep,
-        isPending: isOnboardingNamesStepPending
-    } = useMutation({
-        ...onboardingOnboardingNamesStepMutation(),
-        onError: (error) => {
-            console.error("Error updating names:", error);
-        },
-        onSuccess: (data) => {
-            setActiveStep((prev) => prev + 1);
-        },
-    });
-
-    const {
-        mutate: updateCountryStep,
-        isPending: isOnboardingCountryStepPending
-    } = useMutation({
-        ...onboardingOnboardingCountryStepMutation(),
-        onError: (error) => {
-            console.error("Error updating country:", error);
-        },
-        onSuccess: (data) => {
-            setActiveStep((prev) => prev + 1);
-        },
-    });
-
-    const {
-        mutate: updateAddressStep,
-        isPending: isOnboardingAddressStepPending
-    } = useMutation({
-        ...onboardingOnboardingAddressStepMutation(),
-        onError: (error) => {
-            console.error("Error updating address:", error);
-        },
-        onSuccess: (data) => {
-            setActiveStep((prev) => prev + 1);
-        },
     });
 
     const initialFormValues = {
@@ -108,12 +78,17 @@ const OnBoarding = () => {
     const [touchedFields, setTouchedFields] = useState<
         Partial<Record<keyof FormValues, boolean>>
     >({});
-    const [activeStep, setActiveStep] = useState<number>(currentStep + 1); //This is used to render the current step
-    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-    const [isCurrentStepValid, setIsCurrentStepValid] = useState<boolean>(false);
-    //const [error, setError] = useState<string | undefined>(""); //This can be used to render errors from submit
 
     const [keyboardVisible, setKeyboardVisible] = useState(false);
+    const [isCurrentStepValid, setIsCurrentStepValid] = useState<boolean>(false);
+
+    const currentStatus = user?.account?.ob_status as OnboardingStatus;
+    const nextStep = STEPS[getNextStep(currentStatus)];
+    const [activeStep, setActiveStep] = useState<number>(nextStep);
+
+    const { mutations, isPending: isOnboardingPending } = useOnboardingMutations(() => {
+        setActiveStep((prev) => prev + 1);
+    });
 
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener(
@@ -133,28 +108,26 @@ const OnBoarding = () => {
 
 
     const handleNext = () => {
-        console.log("handleNext", activeStep, steps.length - 1)
-        if (activeStep === steps.length - 1) {
 
-            return;
-        }
-        if (activeStep === 0) {
-            updateNamesStep({
+        if (activeStep === STEPS[OnboardingStatus.NAMES_STEP]) {
+            mutations.updateNamesStep({
                 body: {
                     name: formValues.first_name,
                     last_name: formValues.last_name,
                 }
             });
         }
-        if (activeStep === 1) {
-            updateCountryStep({
+
+        if (activeStep === STEPS[OnboardingStatus.COUNTRY_STEP]) {
+            mutations.updateCountryStep({
                 body: {
                     country: formValues.country_code
                 }
             });
         }
-        if (activeStep === 2) {
-            updateAddressStep({
+
+        if (activeStep === STEPS[OnboardingStatus.ADDRESS_STEP]) {
+            mutations.updateAddressStep({
                 body: {
                     street_line_1: formValues.address_street_1,
                     city: formValues.address_city,
@@ -166,7 +139,7 @@ const OnBoarding = () => {
     };
 
     const handleBack = () => {
-        if (activeStep === 0) {
+        if (activeStep === STEPS[OnboardingStatus.NAMES_STEP]) {
             navigation.goBack();
             return;
         }
@@ -192,17 +165,11 @@ const OnBoarding = () => {
         if (field === focused) setFocused(null);
     };
 
-    // Update the useEffect that handles KYC navigation
-    useEffect(() => {
-        if (activeStep === steps.length) {
-            navigation.navigate("Home");
-        }
-    }, [activeStep]);
 
     const Step = steps[activeStep];
 
     const progress = activeStep / steps.length;
-    const isPending = isOnboardingNamesStepPending || isOnboardingCountryStepPending || isOnboardingAddressStepPending || isUserPending;
+    const isPending = isOnboardingPending || isUserPending;
 
     return (
         <KeyboardAvoidingView
@@ -269,7 +236,6 @@ const OnBoarding = () => {
                     </Animated.View>
                 </View>
             </LoggedLayout>
-            {/* <FullScreenLoader visible={isSubmitting} /> */}
         </KeyboardAvoidingView>
     );
 };
