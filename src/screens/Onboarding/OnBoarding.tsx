@@ -23,8 +23,7 @@ import Animated, {
     SlideOutLeft
 } from 'react-native-reanimated';
 import { useOnboardingMutations } from "@/components/Onboarding/useOnboardingMutations";
-import { useQuery } from "@tanstack/react-query";
-import { usersMeOptions } from "@/client/@tanstack/react-query.gen";
+import { useUserStore } from "@/storage/userStore";
 
 
 export enum OnboardingStatus {
@@ -58,9 +57,7 @@ const OnBoarding = () => {
     const { t } = useTranslation();
     const navigation = useNavigation();
 
-    const { data: user, isPending: isUserPending } = useQuery({
-        ...usersMeOptions(),
-    });
+    const { user } = useUserStore();
 
     const initialFormValues = {
         first_name: "",
@@ -169,7 +166,7 @@ const OnBoarding = () => {
     const Step = steps[activeStep];
 
     const progress = activeStep / steps.length;
-    const isPending = isOnboardingPending || isUserPending;
+    const isPending = isOnboardingPending;
 
     return (
         <KeyboardAvoidingView
