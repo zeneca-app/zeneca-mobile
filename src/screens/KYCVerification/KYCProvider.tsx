@@ -46,7 +46,7 @@ const KYCProvider = ({ route }) => {
           height: height * 0.89,
         }}
         mode={MODE}
-        clientReferenceID={user?.id}
+        clientReferenceID={user?.account?.id}
         templateID={TEMPLATE_ID}
         uiOptions={{
           id_verification_module: {
