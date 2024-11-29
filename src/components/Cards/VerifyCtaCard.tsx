@@ -22,7 +22,13 @@ const VerifyCTACard = () => {
   });
 
   const goToOnboarding = () => {
-    switch (user?.account?.ob_status) {
+    const obStatus = user?.account?.ob_status;
+    // Default to OnBoarding if status is undefined/null
+    if (!obStatus) {
+      navigation.navigate("OnBoarding");
+      return;
+    }
+    switch (obStatus) {
       case "NAMES_STEP":
       case "COUNTRY_STEP":
         navigation.navigate("OnBoarding");
@@ -74,7 +80,7 @@ const VerifyCTACard = () => {
           <Text className="text-caption-xl text-gray-50 pb-2">
             {t("accountNotVerified.subtitle")}
           </Text>
-          <TouchableOpacity onPress={goToOnboarding}>
+          <TouchableOpacity onPress={goToOnboarding} disabled={isUserPending}>
             <View className="flex-row items-center">
               <Text className="text-button-s text-white pr-2">
                 {t("accountNotVerified.action")}
