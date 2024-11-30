@@ -572,6 +572,28 @@ export const HTTPValidationErrorSchema = {
   title: "HTTPValidationError",
 } as const;
 
+export const KYCStatusSchema = {
+  type: "string",
+  enum: ["APPROVED", "REJECTED", "PENDING", "INCOMPLETE"],
+  title: "KYCStatus",
+} as const;
+
+export const KycStatusResponseSchema = {
+  properties: {
+    status: {
+      $ref: "#/components/schemas/KYCStatus",
+    },
+    attempted_dt: {
+      type: "string",
+      format: "date-time",
+      title: "Attempted Dt",
+    },
+  },
+  type: "object",
+  required: ["status", "attempted_dt"],
+  title: "KycStatusResponse",
+} as const;
+
 export const MarketHoursSchema = {
   properties: {
     is_market_open: {
@@ -647,6 +669,39 @@ export const MyAssetSchema = {
     symbol: {
       type: "string",
       title: "Symbol",
+    },
+    name: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Name",
+    },
+    display_name: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Display Name",
+    },
+    logo_url: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Logo Url",
     },
     quantity_in_wei: {
       type: "integer",

@@ -143,6 +143,13 @@ export type HTTPValidationError = {
   detail?: Array<ValidationError>;
 };
 
+export type KYCStatus = "APPROVED" | "REJECTED" | "PENDING" | "INCOMPLETE";
+
+export type KycStatusResponse = {
+  status: KYCStatus;
+  attempted_dt: string;
+};
+
 export type MarketHours = {
   is_market_open: boolean;
   current_session_close_dt: string | null;
@@ -154,6 +161,9 @@ export type MarketHours = {
 export type MyAsset = {
   id?: string;
   symbol: string;
+  name?: string | null;
+  display_name?: string | null;
+  logo_url?: string | null;
   quantity_in_wei: number;
   external_id: number;
   equity: string;
@@ -486,6 +496,10 @@ export type WithdrawalRead = {
   finished_at?: string | null;
 };
 
+export type HealthCheckResponse = unknown;
+
+export type HealthCheckError = unknown;
+
 export type LoginLoginOrCreateData = {
   body: UserCreateIn;
 };
@@ -575,9 +589,13 @@ export type WebhooksEventFromBridgeReceivedResponse = void;
 
 export type WebhooksEventFromBridgeReceivedError = unknown;
 
-export type WebhooksEventFromAipriseReceivedResponse = void;
+export type WebhooksKycEventFromAipriseResponse = void;
 
-export type WebhooksEventFromAipriseReceivedError = unknown;
+export type WebhooksKycEventFromAipriseError = unknown;
+
+export type WebhooksEventsFromAipriseResponse = void;
+
+export type WebhooksEventsFromAipriseError = unknown;
 
 export type CountriesGetCountriesResponse = Array<CountryBase>;
 
@@ -594,6 +612,10 @@ export type UsersMyBalanceError = unknown;
 export type UsersMyAssetsResponse = MyAssets;
 
 export type UsersMyAssetsError = unknown;
+
+export type UsersGetKycStatusResponse = KycStatusResponse;
+
+export type UsersGetKycStatusError = unknown;
 
 export type AssetsGetAssetsResponse = Array<AssetPrice>;
 

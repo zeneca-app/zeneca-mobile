@@ -8,6 +8,7 @@ export type StockListItemProps = {
     id: string;
     price: string;
     display_name: string;
+    logo_url: string;
     symbol: string;
     name: string;
     external_id: string;
@@ -16,9 +17,10 @@ export type StockListItemProps = {
 };
 
 const StockListItem = ({ etf }: StockListItemProps) => {
+
   const navigation = useNavigation();
 
-  const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo || null;
+  const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo;
 
 
   const handlePress = () => {

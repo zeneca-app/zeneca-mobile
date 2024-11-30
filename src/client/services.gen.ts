@@ -21,6 +21,8 @@ import type {
   BanksGetBanksResponse,
   CountriesGetCountriesError,
   CountriesGetCountriesResponse,
+  HealthCheckError,
+  HealthCheckResponse,
   LoginLoginOrCreateData,
   LoginLoginOrCreateError,
   LoginLoginOrCreateResponse,
@@ -60,21 +62,41 @@ import type {
   TransfersGetTransferResponse,
   TransfersGetTransfersError,
   TransfersGetTransfersResponse,
+  UsersGetKycStatusError,
+  UsersGetKycStatusResponse,
   UsersMeError,
   UsersMeResponse,
   UsersMyAssetsError,
   UsersMyAssetsResponse,
   UsersMyBalanceError,
   UsersMyBalanceResponse,
-  WebhooksEventFromAipriseReceivedError,
-  WebhooksEventFromAipriseReceivedResponse,
   WebhooksEventFromBridgeReceivedError,
   WebhooksEventFromBridgeReceivedResponse,
   WebhooksEventFromKoyweReceivedError,
   WebhooksEventFromKoyweReceivedResponse,
+  WebhooksEventsFromAipriseError,
+  WebhooksEventsFromAipriseResponse,
+  WebhooksKycEventFromAipriseError,
+  WebhooksKycEventFromAipriseResponse,
 } from "./types.gen";
 
 export const client = createClient(createConfig());
+
+/**
+ * Health Check
+ */
+export const healthCheck = <ThrowOnError extends boolean = false>(
+  options?: Options<unknown, ThrowOnError>,
+) => {
+  return (options?.client ?? client).get<
+    HealthCheckResponse,
+    HealthCheckError,
+    ThrowOnError
+  >({
+    ...options,
+    url: "/health",
+  });
+};
 
 /**
  * Login Or Create
@@ -273,20 +295,36 @@ export const webhooksEventFromBridgeReceived = <
 };
 
 /**
- * Event From Aiprise Received
+ * Kyc Event From Aiprise
  */
-export const webhooksEventFromAipriseReceived = <
+export const webhooksKycEventFromAiprise = <
   ThrowOnError extends boolean = false,
 >(
   options?: Options<unknown, ThrowOnError>,
 ) => {
   return (options?.client ?? client).post<
-    WebhooksEventFromAipriseReceivedResponse,
-    WebhooksEventFromAipriseReceivedError,
+    WebhooksKycEventFromAipriseResponse,
+    WebhooksKycEventFromAipriseError,
     ThrowOnError
   >({
     ...options,
-    url: "/v0/webhooks/aiprise",
+    url: "/v0/webhooks/aiprise/kyc",
+  });
+};
+
+/**
+ * Events From Aiprise
+ */
+export const webhooksEventsFromAiprise = <ThrowOnError extends boolean = false>(
+  options?: Options<unknown, ThrowOnError>,
+) => {
+  return (options?.client ?? client).post<
+    WebhooksEventsFromAipriseResponse,
+    WebhooksEventsFromAipriseError,
+    ThrowOnError
+  >({
+    ...options,
+    url: "/v0/webhooks/aiprise/events",
   });
 };
 
@@ -353,6 +391,23 @@ export const usersMyAssets = <ThrowOnError extends boolean = false>(
   >({
     ...options,
     url: "/v0/users/me/assets",
+  });
+};
+
+/**
+ * Get Kyc Status
+ * Get user's KYC status
+ */
+export const usersGetKycStatus = <ThrowOnError extends boolean = false>(
+  options?: Options<unknown, ThrowOnError>,
+) => {
+  return (options?.client ?? client).get<
+    UsersGetKycStatusResponse,
+    UsersGetKycStatusError,
+    ThrowOnError
+  >({
+    ...options,
+    url: "/v0/users/me/kyc-status",
   });
 };
 
