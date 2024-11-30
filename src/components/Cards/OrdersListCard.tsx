@@ -14,6 +14,7 @@ import SkeletonLoadingView, {
 import Balance from "@/components/Balance";
 import VerifyCtaCard from "@/components/Cards/VerifyCtaCard";
 import CardFooter from "@/components/CardFooter";
+import { MyAsset } from "@/client/";
 
 const OrdersListCard = () => {
   const { t } = useTranslation();
@@ -21,6 +22,8 @@ const OrdersListCard = () => {
   const { isPending, error, data: my_assets, refetch, isRefetching } = useQuery({
     ...usersMyAssetsOptions(),
     refetchInterval: Config.REFETCH_INTERVAL,
+    staleTime: 0, // Consider data stale immediately
+    gcTime: 1000 * 60 * 5, // Cache for 5 minutes
   });
 
   const hasAssets = my_assets?.length && my_assets?.length > 0;
@@ -48,39 +51,44 @@ const OrdersListCard = () => {
 
   const separator = () => <Separator className="bg-dark-background-100 pb-1" />;
 
-  const renderItem = ({ item }: { item: any }) => {
+  const renderItem = ({ item }: { item: MyAsset }) => {
+    if (!item) {
+      return null;
+    }
     //console.log("orderlist item", item);
     return <OrderListItem order={item} />;
   };
 
+  const ListHeader = () => (
+    <View className="flex-1">
+      <View className="pt-12 pb-6">
+        <Balance isRefetching={isRefetching} />
+      </View>
+      <VerifyCtaCard />
+      <CardHeader>
+        <Text className="text-caption-xl text-gray-50">
+          {t("ordersListCard.myAssets")}
+        </Text>
+      </CardHeader>
+      {isPending && !my_assets && (
+        <SkeletonLoadingView className="flex-1 flex bg-dark-background-100">
+          <SkeletonOrderListItem />
+          <SkeletonOrderListItem />
+          <SkeletonOrderListItem />
+        </SkeletonLoadingView>
+      )}
+      {!isPending && !hasAssets && <Empty canTrade={true} />}
+    </View>
+  )
+
   return (
     <View className="flex-1">
       <FlatList
-        data={my_assets}
+        data={my_assets || []}
         renderItem={renderItem}
         className="flex-1"
         keyExtractor={(item) => `${item.id}`}
-        ListHeaderComponent={
-          <View className="flex-1">
-            <View className="pt-12 pb-6">
-              <Balance isRefetching={isRefetching} />
-            </View>
-            <VerifyCtaCard />
-            <CardHeader>
-              <Text className="text-caption-xl text-gray-50">
-                {t("ordersListCard.myAssets")}
-              </Text>
-            </CardHeader>
-            {isPending && !my_assets && (
-              <SkeletonLoadingView className="flex-1 flex bg-dark-background-100">
-                <SkeletonOrderListItem />
-                <SkeletonOrderListItem />
-                <SkeletonOrderListItem />
-              </SkeletonLoadingView>
-            )}
-            {!isPending && !hasAssets && <Empty canTrade={true} />}
-          </View>
-        }
+        ListHeaderComponent={<ListHeader />}
         ItemSeparatorComponent={separator}
         ListFooterComponent={
           <CardFooter>
@@ -88,9 +96,19 @@ const OrdersListCard = () => {
             <Text className="text-caption-xl"></Text>
           </CardFooter>
         }
+        contentContainerStyle={{ 
+          flexGrow: 1,
+          paddingBottom: 20 // Add bottom padding for better scroll experience
+        }} // Ensure proper content spacing
         showsVerticalScrollIndicator={false}
         onRefresh={refetch}
         refreshing={isPending}
+
+        // Add these props for better update handling
+        extraData={my_assets} // Re-render when my_assets changes
+        maxToRenderPerBatch={10} // Limit batch rendering for better performance
+        windowSize={5} // Reduce window size for better memory usage
+        removeClippedSubviews={true} // Optimize memory for off-screen items
       />
     </View>
   );
