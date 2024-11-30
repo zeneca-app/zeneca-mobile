@@ -10,6 +10,7 @@ import {
   banksGetBanks,
   client,
   countriesGetCountries,
+  healthCheck,
   loginLoginOrCreate,
   onboardingOnboardingAddressStep,
   onboardingOnboardingCountryStep,
@@ -24,12 +25,14 @@ import {
   transfersCreateTransfer,
   transfersGetTransfer,
   transfersGetTransfers,
+  usersGetKycStatus,
   usersMe,
   usersMyAssets,
   usersMyBalance,
-  webhooksEventFromAipriseReceived,
   webhooksEventFromBridgeReceived,
   webhooksEventFromKoyweReceived,
+  webhooksEventsFromAiprise,
+  webhooksKycEventFromAiprise,
 } from "../services.gen";
 import type {
   AssetsGetAssetDetailData,
@@ -62,12 +65,14 @@ import type {
   TransfersCreateTransferError,
   TransfersCreateTransferResponse,
   TransfersGetTransferData,
-  WebhooksEventFromAipriseReceivedError,
-  WebhooksEventFromAipriseReceivedResponse,
   WebhooksEventFromBridgeReceivedError,
   WebhooksEventFromBridgeReceivedResponse,
   WebhooksEventFromKoyweReceivedError,
   WebhooksEventFromKoyweReceivedResponse,
+  WebhooksEventsFromAipriseError,
+  WebhooksEventsFromAipriseResponse,
+  WebhooksKycEventFromAipriseError,
+  WebhooksKycEventFromAipriseResponse,
 } from "../types.gen";
 
 type QueryKey<TOptions extends Options> = [
@@ -102,6 +107,24 @@ const createQueryKey = <TOptions extends Options>(
     params.query = options.query;
   }
   return params;
+};
+
+export const healthCheckQueryKey = (options?: Options) => [
+  createQueryKey("healthCheck", options),
+];
+
+export const healthCheckOptions = (options?: Options) => {
+  return queryOptions({
+    queryFn: async ({ queryKey }) => {
+      const { data } = await healthCheck({
+        ...options,
+        ...queryKey[0],
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: healthCheckQueryKey(options),
+  });
 };
 
 export const loginLoginOrCreateQueryKey = (
@@ -434,32 +457,67 @@ export const webhooksEventFromBridgeReceivedMutation = () => {
   return mutationOptions;
 };
 
-export const webhooksEventFromAipriseReceivedQueryKey = (options?: Options) => [
-  createQueryKey("webhooksEventFromAipriseReceived", options),
+export const webhooksKycEventFromAipriseQueryKey = (options?: Options) => [
+  createQueryKey("webhooksKycEventFromAiprise", options),
 ];
 
-export const webhooksEventFromAipriseReceivedOptions = (options?: Options) => {
+export const webhooksKycEventFromAipriseOptions = (options?: Options) => {
   return queryOptions({
     queryFn: async ({ queryKey }) => {
-      const { data } = await webhooksEventFromAipriseReceived({
+      const { data } = await webhooksKycEventFromAiprise({
         ...options,
         ...queryKey[0],
         throwOnError: true,
       });
       return data;
     },
-    queryKey: webhooksEventFromAipriseReceivedQueryKey(options),
+    queryKey: webhooksKycEventFromAipriseQueryKey(options),
   });
 };
 
-export const webhooksEventFromAipriseReceivedMutation = () => {
+export const webhooksKycEventFromAipriseMutation = () => {
   const mutationOptions: UseMutationOptions<
-    WebhooksEventFromAipriseReceivedResponse,
-    WebhooksEventFromAipriseReceivedError,
+    WebhooksKycEventFromAipriseResponse,
+    WebhooksKycEventFromAipriseError,
     Options
   > = {
     mutationFn: async (options) => {
-      const { data } = await webhooksEventFromAipriseReceived({
+      const { data } = await webhooksKycEventFromAiprise({
+        ...options,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
+export const webhooksEventsFromAipriseQueryKey = (options?: Options) => [
+  createQueryKey("webhooksEventsFromAiprise", options),
+];
+
+export const webhooksEventsFromAipriseOptions = (options?: Options) => {
+  return queryOptions({
+    queryFn: async ({ queryKey }) => {
+      const { data } = await webhooksEventsFromAiprise({
+        ...options,
+        ...queryKey[0],
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: webhooksEventsFromAipriseQueryKey(options),
+  });
+};
+
+export const webhooksEventsFromAipriseMutation = () => {
+  const mutationOptions: UseMutationOptions<
+    WebhooksEventsFromAipriseResponse,
+    WebhooksEventsFromAipriseError,
+    Options
+  > = {
+    mutationFn: async (options) => {
+      const { data } = await webhooksEventsFromAiprise({
         ...options,
         throwOnError: true,
       });
@@ -538,6 +596,24 @@ export const usersMyAssetsOptions = (options?: Options) => {
       return data;
     },
     queryKey: usersMyAssetsQueryKey(options),
+  });
+};
+
+export const usersGetKycStatusQueryKey = (options?: Options) => [
+  createQueryKey("usersGetKycStatus", options),
+];
+
+export const usersGetKycStatusOptions = (options?: Options) => {
+  return queryOptions({
+    queryFn: async ({ queryKey }) => {
+      const { data } = await usersGetKycStatus({
+        ...options,
+        ...queryKey[0],
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: usersGetKycStatusQueryKey(options),
   });
 };
 

@@ -3,6 +3,7 @@ import AMZNlogo from "@/assets/stocks/AMZN.svg";
 import APPLlogo from "@/assets/stocks/APPL.svg";
 import COINlogo from "@/assets/stocks/COIN.svg";
 import CSCOlogo from "@/assets/stocks/CSCO.svg";
+import DISlogo from "@/assets/stocks/DIS.svg";
 import GBTClogo from "@/assets/stocks/GBTC.svg";
 import GMElogo from "@/assets/stocks/GME.svg";
 import GOOGLlogo from "@/assets/stocks/GOOGL.svg";
@@ -14,7 +15,7 @@ import NVDAlogo from "@/assets/stocks/NVDA.svg";
 import PFElogo from "@/assets/stocks/PFE.svg";
 import PYPLlogo from "@/assets/stocks/PYPL.svg";
 import RDDTlogo from "@/assets/stocks/RDDT.svg";
-import SPY500logo from "@/assets/stocks/SPY500.svg";
+import SPYlogo from "@/assets/stocks/SPY.svg";
 import TSLAlogo from "@/assets/stocks/TSLA.svg";
 import UBERlogo from "@/assets/stocks/UBER.svg";
 import XOMlogo from "@/assets/stocks/XOM.svg";
@@ -38,8 +39,9 @@ type StockSymbol =
   | "GME"
   | "CSCO"
   | "COIN"
-  | "SPY500"
-  | "XOM";
+  | "SPY"
+  | "XOM"
+  | "DIS";
 
 export const STOCKS: Record<StockSymbol, { name: string; logo: any }> = {
   GOOGL: {
@@ -110,9 +112,9 @@ export const STOCKS: Record<StockSymbol, { name: string; logo: any }> = {
     name: "Coinbase Global Inc.",
     logo: COINlogo,
   },
-  SPY500: {
+  SPY: {
     name: "S&P 500 Index",
-    logo: SPY500logo,
+    logo: SPYlogo,
   },
   XOM: {
     name: "Exxon Mobil Corporation",
@@ -121,6 +123,10 @@ export const STOCKS: Record<StockSymbol, { name: string; logo: any }> = {
   CSCO: {
     name: "Cisco Systems Inc.",
     logo: CSCOlogo,
+  },
+  DIS: {
+    name: "The Walt Disney Company",
+    logo: DISlogo,
   },
 };
 

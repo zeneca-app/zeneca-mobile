@@ -23,12 +23,11 @@ const OrdersListCard = () => {
     refetchInterval: Config.REFETCH_INTERVAL,
   });
 
-
   const hasAssets = my_assets?.length && my_assets?.length > 0;
 
   // Component to render if no transactions
   const Empty = ({ canTrade = false }: { canTrade?: boolean }) => (
-    <CardFooter className="flex-1 justify-center items-center bg-dark-background-100">
+    <View className="flex-1 justify-center items-center bg-dark-background-100">
       <View className="pb-6">
         <ChartArrowUp className="h-40 w-40" />
       </View>
@@ -44,7 +43,7 @@ const OrdersListCard = () => {
           {t("ordersListCard.empty_transactions_no_funds")}
         </Text>
       )}
-    </CardFooter>
+    </View>
   );
 
   const separator = () => <Separator className="bg-dark-background-100 pb-1" />;
