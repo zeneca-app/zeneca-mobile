@@ -18,15 +18,18 @@ const OrderListItem = ({ order }: OrderListItemProps) => {
 
   return (
     <View className="flex-row gap-3 px-layout bg-dark-background-100">
-      <View className="w-12 h-12  rounded-full overflow-hidden">
+      {/* Logo container with fixed dimensions */}
+      <View className="w-12 h-12  rounded-full overflow-hidden flex-shrink-0">
         <Logo style={{ height: "100%", width: "100%" }} />
       </View>
-      <View className="flex-1 flex justify-center items-stretch">
+      {/* Name container with flex but constrained */}
+      <View className="flex-1 min-w-0 justify-center items-stretch">
         <Text className="text-gray-10 text-caption-xl">{order.display_name}</Text>
-        {/*  <Text className="text-gray-50 text-caption-xl">{amount}</Text> */}
       </View>
-      <View className="flex-1 flex justify-center items-end">
-        <Text className="text-gray-10 text-caption-xl">
+      {/* Price container with fixed width */}
+      <View className="flex-shrink-0 justify-center items-end">
+        <Text className="text-gray-10 text-caption-xl"
+          numberOfLines={1}>
           {equity}
         </Text>
       </View>
