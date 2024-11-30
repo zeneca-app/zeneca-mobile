@@ -26,10 +26,10 @@ export type country = "USA";
 export type AssetDetail = {
   id: string;
   name: string;
-  description: string;
+  description?: string | null;
   symbol: string;
   display_name: string;
-  logo_url: string;
+  logo_url?: string | null;
   external_id: string;
   price: string;
   change_percent: string;
@@ -45,10 +45,10 @@ export type AssetDetail = {
 export type AssetPrice = {
   id: string;
   name: string;
-  description: string;
+  description?: string | null;
   symbol: string;
   display_name: string;
-  logo_url: string;
+  logo_url?: string | null;
   external_id: string;
   price: string;
 };

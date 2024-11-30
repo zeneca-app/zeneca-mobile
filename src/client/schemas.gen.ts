@@ -113,7 +113,14 @@ export const AssetDetailSchema = {
       title: "Name",
     },
     description: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Description",
     },
     symbol: {
@@ -125,7 +132,14 @@ export const AssetDetailSchema = {
       title: "Display Name",
     },
     logo_url: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Logo Url",
     },
     external_id: {
@@ -173,10 +187,8 @@ export const AssetDetailSchema = {
   required: [
     "id",
     "name",
-    "description",
     "symbol",
     "display_name",
-    "logo_url",
     "external_id",
     "price",
     "change_percent",
@@ -203,7 +215,14 @@ export const AssetPriceSchema = {
       title: "Name",
     },
     description: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Description",
     },
     symbol: {
@@ -215,7 +234,14 @@ export const AssetPriceSchema = {
       title: "Display Name",
     },
     logo_url: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Logo Url",
     },
     external_id: {
@@ -228,16 +254,7 @@ export const AssetPriceSchema = {
     },
   },
   type: "object",
-  required: [
-    "id",
-    "name",
-    "description",
-    "symbol",
-    "display_name",
-    "logo_url",
-    "external_id",
-    "price",
-  ],
+  required: ["id", "name", "symbol", "display_name", "external_id", "price"],
   title: "AssetPrice",
 } as const;
 
