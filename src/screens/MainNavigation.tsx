@@ -64,14 +64,18 @@ const MainNavigation = () => {
       headerLeft: () => <ProfileButton />
     },
     modalScreen: { headerShown: false, presentation: "modal" as const },
+    profileScreen: {
+      headerShown: false,
+      presentation: 'card' as const,
+      animation: 'slide_from_left' as const,
+    }
   };
-
 
   return (
     <Stack.Navigator initialRouteName={!user ? "Login" : "Home"}>
       {/* Home Screens */}
       <Stack.Screen name="Home" component={HomeScreen} options={screenConfigs.homeHeader} />
-      <Stack.Screen name="Profile" component={ProfileScreen} options={screenConfigs.noHeader} />
+      <Stack.Screen name="Profile" component={ProfileScreen} options={screenConfigs.profileScreen} />
       <Stack.Screen name="OrderHistory" component={OrderHistory} options={screenConfigs.modalScreen} />
 
       {/* Login Screens */}
