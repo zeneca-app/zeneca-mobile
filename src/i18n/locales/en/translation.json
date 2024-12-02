@@ -45,7 +45,7 @@
   "kycPreview": {
     "title": "Almost there!",
     "subtitle": "To finish, we have to verify your identity. It will only take a few minutes.",
-    "startButton": "Verify now",
+    "startButton": "Start",
     "laterButton": "Do it later",
     "terms": "Identity verification is done through the secure and regulated provider AiPrise."
   },

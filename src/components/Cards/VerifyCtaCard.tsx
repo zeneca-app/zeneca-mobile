@@ -4,10 +4,6 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import { Text, TouchableOpacity, View } from "react-native";
-import { useQuery } from "@tanstack/react-query";
-import {
-  usersMeOptions
-} from "@/client/@tanstack/react-query.gen";
 import { useUserStore } from "@/storage/userStore";
 
 const VerifyCTACard = () => {
@@ -20,13 +16,13 @@ const VerifyCTACard = () => {
 
   const goToOnboarding = () => {
     if (!obStatus) {
-      navigation.navigate("OnBoarding");
+      navigation.navigate("KYCPreview");
       return;
     }
     switch (obStatus) {
       case "NAMES_STEP":
       case "COUNTRY_STEP":
-        navigation.navigate("OnBoarding");
+        navigation.navigate("KYCPreview");
         break;
       case "ADDRESS_STEP":
         navigation.navigate("KYCProvider", {
@@ -34,7 +30,7 @@ const VerifyCTACard = () => {
         } as any);
         break;
       default:
-        navigation.navigate("OnBoarding");
+        navigation.navigate("KYCPreview");
     }
   };
 
