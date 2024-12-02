@@ -1,5 +1,4 @@
 import VerifyIlustration from "@/assets/verify-ilustration.svg";
-import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -16,101 +15,37 @@ const KYCVerificationScreen = () => {
   const { t } = useTranslation();
 
   const launchKYCProvider = () => {
-    navigation.navigate("KYCProvider");
-  };
-
-  const goHome = () => {
-    navigation.navigate("Home");
+    navigation.navigate("OnBoarding");
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <View style={styles.illustrationContainer}>
+    <SafeAreaView className="flex-1 bg-dark-background-100">
+      <View className="flex-1 justify-center items-start px-layout-l">
+        <View className="w-full items-center mb-6">
           <VerifyIlustration width={200} height={200} />
         </View>
-        <Text style={styles.title}>{t("kycPreview.title")}</Text>
-        <Text style={styles.subtitle}>{t("kycPreview.subtitle")}</Text>
-        <Text style={styles.terms}>{t("kycPreview.terms")}</Text>
+        <Text className="text-heading-s text-dark-content-white font-sans mt-4 mb-2 text-left self-start">
+          {t("kycPreview.title")}
+        </Text>
+        <Text className="text-body-s text-gray-60 text-left self-start font-sans mb-4">
+          {t("kycPreview.subtitle")}
+        </Text>
+        <Text className="text-body-s text-gray-60 text-left self-start font-sans mb-6">
+          {t("kycPreview.terms")}
+        </Text>
       </View>
-      <View style={styles.buttonContainer}>
+      <View className="p-layout">
         <TouchableOpacity
-          style={styles.startButton}
+          className="bg-dark-content-white rounded-full py-4 items-center mb-4"
           onPress={launchKYCProvider}
         >
-          <Text style={styles.buttonText}>{t("kycPreview.startButton")}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={goHome}>
-          <Text style={styles.laterText}>{t("kycPreview.laterButton")}</Text>
+          <Text className="text-dark-content-dark text-body-s">
+            {t("kycPreview.startButton")}
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000000",
-  },
-  header: {
-    padding: 16,
-  },
-  content: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "flex-start",
-    paddingHorizontal: 32,
-  },
-  illustrationContainer: {
-    width: "100%",
-    alignItems: "center",
-    marginBottom: 24,
-  },
-  title: {
-    fontSize: 30,
-    fontFamily: "Manrope_600SemiBold",
-    color: "white",
-    marginTop: 16,
-    marginBottom: 8,
-    textAlign: "left",
-    alignSelf: "flex-start",
-  },
-  subtitle: {
-    fontSize: 16,
-    color: "#888",
-    textAlign: "left",
-    alignSelf: "flex-start",
-    fontFamily: "Manrope_400Regular",
-    marginBottom: 16,
-  },
-  terms: {
-    fontSize: 16,
-    color: "#888",
-    fontFamily: "Manrope_400Regular",
-    textAlign: "left",
-    alignSelf: "flex-start",
-    marginBottom: 24, // Add some space between terms and button
-  },
-  buttonContainer: {
-    padding: 16,
-  },
-  startButton: {
-    backgroundColor: "white",
-    borderRadius: 25,
-    paddingVertical: 16,
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  buttonText: {
-    color: "black",
-    fontSize: 16,
-  },
-  laterText: {
-    color: "white",
-    textAlign: "center",
-    fontSize: 16,
-  },
-});
 
 export default KYCVerificationScreen;

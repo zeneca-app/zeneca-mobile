@@ -44,8 +44,8 @@ const ETFPurchaseSuccess = ({ route }) => {
               <Logo style={{ height: "100%", width: "100%" }} />
             </View>
           </View>
-          <View className="absolute flex flex-1 pb-layout top-1/2 pt-20">
-            <Text className="text-heading-m text-gray-10 px-layout text-center">
+          <View className="absolute flex flex-1 bottom-1 pt-24">
+            <Text className="text-heading-s text-gray-10 px-layout text-center">
               {t("etfPurchase.success.title")}
             </Text>
             <Text className="body-s text-gray-50 text-center px-layout">

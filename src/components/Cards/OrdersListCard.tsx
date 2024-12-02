@@ -84,9 +84,8 @@ const OrdersListCard = () => {
   return (
     <View className="flex-1">
       <FlatList
-        data={my_assets || []}
+        data={my_assets}
         renderItem={renderItem}
-        className="flex-1"
         keyExtractor={(item) => `${item.id}`}
         ListHeaderComponent={<ListHeader />}
         ItemSeparatorComponent={separator}
@@ -96,10 +95,10 @@ const OrdersListCard = () => {
             <Text className="text-caption-xl"></Text>
           </CardFooter>
         }
-        contentContainerStyle={{ 
+       /*  contentContainerStyle={{
           flexGrow: 1,
           paddingBottom: 20 // Add bottom padding for better scroll experience
-        }} // Ensure proper content spacing
+        }} */ // Ensure proper content spacing
         showsVerticalScrollIndicator={false}
         onRefresh={refetch}
         refreshing={isPending}
@@ -108,7 +107,6 @@ const OrdersListCard = () => {
         extraData={my_assets} // Re-render when my_assets changes
         maxToRenderPerBatch={10} // Limit batch rendering for better performance
         windowSize={5} // Reduce window size for better memory usage
-        removeClippedSubviews={true} // Optimize memory for off-screen items
       />
     </View>
   );

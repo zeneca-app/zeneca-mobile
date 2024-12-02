@@ -27,7 +27,13 @@ const ProfileScreen = () => {
             setUser(undefined);
             queryClient.clear();
             await logout();
-            navigation.navigate("Login");
+            // Close modal first, then navigate to Login
+            navigation.goBack();
+            //navigation.navigate("Login");
+            navigation.reset({
+                index: 0,
+                routes: [{ name: "Login" }],
+            });
         } catch (error) {
             console.error("ERRRORRRR", error);
         }
