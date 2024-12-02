@@ -15,24 +15,22 @@ import Login from "@/screens/Login/Login";
 import LoginOptions from "@/screens/Login/LoginOptions";
 import LoginOtpVerification from "@/screens/Login/LoginOtpVerification";
 import LoginWithEmail from "@/screens/Login/LoginWithEmail";
-import QuoteScreen from "@/screens/Quote";
-import QuoteConfirmationScreen from "@/screens/QuoteConfirmation";
-import RecipientsScreen from "@/screens/Recipients";
 import OrderHistory from "@/screens/OrderHistory";
 import OnBoarding from "@/screens/Onboarding/OnBoarding";
-import Send from "@/screens/Send";
-import SendConfirmation from "@/screens/SendConfirmation";
-import SendSuccessScreen from "@/screens/SendSuccess";
-import TransactionReceiptScreen from "@/screens/TransactionReceipt";
 import ProfileScreen from "@/screens/ProfileScreen";
 import { useUserStore } from "@/storage/userStore";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useCheckUpdate } from "@/hooks/useCheckUpdate";
-
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import { TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import ProfileButton from "@/components/ProfileButton";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const MainNavigation = () => {
+  const navigation = useNavigation();
   const { user } = useUserStore();
   const { checkUpdate } = useCheckUpdate();
 
@@ -55,63 +53,181 @@ const MainNavigation = () => {
           component={Login}
         />
         <Stack.Screen
-          options={{ headerShown: false }}
+          options={{
+            title: '',
+            headerBackTitle: '',
+            headerStyle: { backgroundColor: Colors.basicBlack },
+            headerShadowVisible: false,
+            headerTransparent: true,
+            //headerShown: false,
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Ionicons name="chevron-back" size={22} color="white" />
+              </TouchableOpacity>
+            ),
+          }}
           name="EmailOtpValidation"
           component={LoginOtpVerification}
         />
         <Stack.Screen
-          options={{ headerShown: false }}
+          options={{
+            title: '',
+            headerBackTitle: '',
+            headerStyle: { backgroundColor: Colors.basicBlack },
+            headerShadowVisible: false,
+            headerTransparent: true,
+            //headerShown: false,
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Ionicons name="chevron-back" size={22} color="white" />
+              </TouchableOpacity>
+            ),
+          }}
           name="LoginWithEmail"
           component={LoginWithEmail}
         />
         <Stack.Screen
-          options={{ headerShown: false }}
+          options={{
+            title: '',
+            headerBackTitle: '',
+            headerStyle: { backgroundColor: Colors.basicBlack },
+            headerShadowVisible: false,
+            headerTransparent: true,
+            //headerShown: false,
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Ionicons name="chevron-back" size={22} color="white" />
+              </TouchableOpacity>
+            ),
+          }}
           name="LoginOptions"
           component={LoginOptions}
         />
       </Stack.Group>
       <Stack.Screen
-        options={{ headerShown: false }}
+        options={{
+          title: '',
+          headerBackTitle: '',
+          headerStyle: { backgroundColor: Colors.basicBlack },
+          headerShadowVisible: false,
+          headerTransparent: true,
+          headerLeft: () => <ProfileButton />
+        }}
         name="Home"
         component={HomeScreen}
       />
+
       <Stack.Screen
-        options={{ headerShown: false }}
-        name="Recipients"
-        component={RecipientsScreen}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="Quote"
-        component={QuoteScreen}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="QuoteConfirmation"
-        component={QuoteConfirmationScreen}
-      />
-      <Stack.Group screenOptions={{ presentation: "modal" }}>
-        <Stack.Screen
-          name="TransactionReceipt"
-          options={{ headerShown: false }}
-          component={TransactionReceiptScreen}
-        />
-      </Stack.Group>
-      <Stack.Screen
-        options={{ headerShown: false }}
+        options={{
+          title: '',
+          headerBackTitle: '',
+          headerStyle: { backgroundColor: Colors.basicBlack },
+          headerShadowVisible: false,
+          headerTransparent: true,
+          //headerShown: false,
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons name="chevron-back" size={22} color="white" />
+            </TouchableOpacity>
+          ),
+        }}
         name="DepositCrypto"
         component={DepositCrypto}
       />
       <Stack.Screen
-        options={{ headerShown: false }}
+        options={{
+          title: '',
+          headerBackTitle: '',
+          headerStyle: { backgroundColor: Colors.basicBlack },
+          headerShadowVisible: false,
+          headerTransparent: true,
+          //headerShown: false,
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons name="chevron-back" size={22} color="white" />
+            </TouchableOpacity>
+          ),
+        }}
         name="DepositWithBank"
         component={DepositWithBank}
       />
 
       <Stack.Screen
-        options={{ headerShown: false }}
+        options={{
+          title: '',
+          headerBackTitle: '',
+          headerStyle: { backgroundColor: Colors.basicBlack },
+          headerShadowVisible: false,
+          headerTransparent: true,
+          //headerShown: false,
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons name="chevron-back" size={22} color="white" />
+            </TouchableOpacity>
+          ),
+        }}
         name="ExploreETFs"
         component={ExploreETFs}
+      />
+
+      <Stack.Screen
+        options={{
+          title: '',
+          headerBackTitle: '',
+          headerStyle: { backgroundColor: Colors.basicBlack },
+          headerShadowVisible: false,
+          headerTransparent: true,
+          //headerShown: false,
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons name="chevron-back" size={22} color="white" />
+            </TouchableOpacity>
+          ),
+        }}
+        name="ETFDetail"
+        component={ETFDetail}
+      />
+
+      <Stack.Screen
+        options={{
+          title: '',
+          headerBackTitle: '',
+          headerStyle: { backgroundColor: Colors.basicBlack },
+          headerShadowVisible: false,
+          headerTransparent: true,
+          //headerShown: false,
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons name="chevron-back" size={22} color="white" />
+            </TouchableOpacity>
+          ),
+        }}
+        name="ETFPurchase"
+        component={ETFPurchase}
+      />
+
+      <Stack.Screen
+        options={{
+          title: '',
+          headerBackTitle: '',
+          headerStyle: { backgroundColor: Colors.basicBlack },
+          headerShadowVisible: false,
+          headerTransparent: true,
+          //headerShown: false,
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons name="chevron-back" size={22} color="white" />
+            </TouchableOpacity>
+          ),
+        }}
+        name="ETFPurchaseConfirmation"
+        component={ETFPurchaseConfirmation}
+      />
+
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="ETFPurchaseSuccess"
+        component={ETFPurchaseSuccess}
       />
 
       <Stack.Screen
@@ -124,30 +240,6 @@ const MainNavigation = () => {
         options={{ headerShown: false }}
         name="OnBoarding"
         component={OnBoarding}
-      />
-
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="ETFDetail"
-        component={ETFDetail}
-      />
-
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="ETFPurchase"
-        component={ETFPurchase}
-      />
-
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="ETFPurchaseConfirmation"
-        component={ETFPurchaseConfirmation}
-      />
-
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="ETFPurchaseSuccess"
-        component={ETFPurchaseSuccess}
       />
 
       <Stack.Screen
@@ -166,21 +258,6 @@ const MainNavigation = () => {
         options={{ headerShown: false }}
         name="KYCSuccess"
         component={KYCSuccess}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="Send"
-        component={Send}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="SendSuccess"
-        component={SendSuccessScreen}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="SendConfirmation"
-        component={SendConfirmation}
       />
     </Stack.Navigator>
   );

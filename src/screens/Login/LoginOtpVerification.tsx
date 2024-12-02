@@ -196,9 +196,6 @@ const LoginOtpScreen = () => {
     >
       <SafeAreaView style={styles.safeAreaContainer}>
         <View style={styles.topContent}>
-          <TouchableOpacity onPress={dismissScreen} style={styles.backButton}>
-            <Ionicons name="chevron-back" size={24} color="white" />
-          </TouchableOpacity>
           <Text style={styles.title}>{t("emailOtpValidation.title")}</Text>
           <Text style={styles.subtitle}>
             {t("emailOtpValidation.subtitle")} {email}
