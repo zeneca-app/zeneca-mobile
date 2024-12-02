@@ -29,15 +29,11 @@ const EmailOtpValidationScreen = ({ route }: EmailOtpValidationScreenProps) => {
   const [verificationCode, setVerificationCode] = useState("");
   const navigation = useNavigation();
 
-  /*   const { updateLogged } = useAuthStore((state) => ({
-    updateLogged: state.updateLogged,
-  })); */
 
   const { loginWithCode } = useLoginWithEmail({
     onLoginSuccess(user, isNewUser) {
       console.log("onLoginSuccess user", user);
       console.log("onLoginSuccess isNewUser", isNewUser);
-      updateLogged(true);
       navigation.navigate("Home");
     },
     onError: (error) => {
@@ -58,21 +54,19 @@ const EmailOtpValidationScreen = ({ route }: EmailOtpValidationScreenProps) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.mainContainer}
+      className="flex-1 bg-dark-background-100"
     >
-      <SafeAreaView style={styles.safeAreaContainer}>
-        <View style={styles.topContent}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}
-          >
-            <Ionicons name="arrow-back" size={24} color="white" />
-          </TouchableOpacity>
-          <Text style={styles.title}>{t("emailOtpValidation.title")}</Text>
-          <Text style={styles.subtitle}>
+      <SafeAreaView className="flex-1">
+        <View className="flex-1 p-layout">
+
+          <Text className="text-heading-s text-dark-content-white font-sans mb-2.5">
+            {t("emailOtpValidation.title")}
+          </Text>
+
+          <Text className="text-caption-xl text-gray-50 font-sans mb-7.5">
             {t("emailOtpValidation.subtitle")} {email}
           </Text>
-          <View style={styles.codeInputContainer}>
+          <View className="mb-7.5">
             <OtpInput
               numberOfDigits={6}
               focusColor="#5A10EF"
@@ -90,20 +84,16 @@ const EmailOtpValidationScreen = ({ route }: EmailOtpValidationScreenProps) => {
             />
           </View>
         </View>
-        <View style={styles.bottomContent}>
+        <View className="p-layout">
           <TouchableOpacity
-            style={[
-              styles.continueButton,
-              !isCodeFilled && styles.continueButtonDisabled,
-            ]}
+            className={`rounded-full bg-dark-content-white p-4 items-center ${!isCodeFilled ? "bg-dark-content-disabled" : ""
+              }`}
             disabled={!isCodeFilled}
             onPress={handleContinue}
           >
             <Text
-              style={[
-                styles.continueButtonText,
-                !isCodeFilled && styles.continueButtonTextDisabled,
-              ]}
+              className={`text-body-m font-sans ${!isCodeFilled ? "text-dark-content-30" : "text-dark-content-dark"
+                }`}
             >
               {t("emailOtpValidation.continueButton")}
             </Text>
@@ -115,37 +105,6 @@ const EmailOtpValidationScreen = ({ route }: EmailOtpValidationScreenProps) => {
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    backgroundColor: "#0D0B0D",
-  },
-  safeAreaContainer: {
-    flex: 1,
-  },
-  topContent: {
-    flex: 1,
-    padding: 20,
-    justifyContent: "flex-start",
-  },
-  backButton: {
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: "bold",
-    color: "#fff",
-    marginBottom: 10,
-    fontFamily: "Manrope_500Medium",
-  },
-  subtitle: {
-    fontSize: 16,
-    color: "#95929F",
-    marginBottom: 30,
-    fontFamily: "Manrope_400Regular",
-  },
-  codeInputContainer: {
-    marginBottom: 30,
-  },
   otpContainer: {
     width: "100%",
   },
@@ -172,34 +131,6 @@ const styles = StyleSheet.create({
   otpActivePinCodeContainer: {
     borderBottomColor: "#5A10EF",
     borderBottomWidth: 2,
-  },
-  bottomContent: {
-    padding: 20,
-  },
-  continueButton: {
-    borderRadius: 35,
-    backgroundColor: "white",
-    padding: 16,
-    alignItems: "center",
-  },
-  continueButtonDisabled: {
-    backgroundColor: "rgba(215, 191, 250, 0.17)",
-  },
-  continueButtonText: {
-    color: "black",
-    fontSize: 18,
-    fontFamily: "Manrope_500Medium",
-  },
-  continueButtonTextDisabled: {
-    color: "rgba(233, 220, 251, 0.45)",
-    fontSize: 18,
-    fontFamily: "Manrope_500Medium",
-  },
-  footer: {
-    color: "#888",
-    fontSize: 12,
-    textAlign: "center",
-    marginTop: 30,
   },
 });
 

@@ -165,11 +165,11 @@ const LoginOptions = () => {
     <SafeAreaView className="flex-1 bg-dark-background-100">
       <View className="flex-1 justify-between">
         <View className="flex-1">
-          <Text className="ml-6 text-headline text-white mb-5 font-sans">
+          <Text className="ml-layout text-heading-s text-dark-content-white mb-layout-s">
             {t("loginOptions.title")}
           </Text>
-          <View className="flex-1 bg-dark-background-100 rounded-[50px] items-center justify-start">
-            <View className="w-full py-15 px-7.5 items-center justify-center">
+          <View className="flex-1 bg-dark-background-100 rounded-card items-center justify-start">
+            <View className="w-full py-[60px] px-layout items-center justify-center">
               <LoginButton
                 icon="mail"
                 text={t("loginOptions.emailOption")}
@@ -188,18 +188,16 @@ const LoginOptions = () => {
             </View>
           </View>
         </View>
-        <View className="w-full px-7.5 pb-5 items-center">
-          <Text className="text-white text-caption-l font-sans mt-10">
+        <View className="w-full px-layout pb-layout-s items-center">
+          <Text className="text-dark-content-white text-caption-l font-normal mt-10">
             {t("loginOptions.terms")}{" "}
-            <Text className="text-white text-caption-l font-sans underline">
+            <Text className="text-dark-content-white text-caption-l font-medium underline">
               {t("loginOptions.termsLink")}
             </Text>
             .
           </Text>
         </View>
       </View>
-
-      <LoadingScreen isVisible={isLoading} text={loadingMessage} />
     </SafeAreaView>
   );
 };
