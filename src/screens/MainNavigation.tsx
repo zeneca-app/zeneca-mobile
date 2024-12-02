@@ -45,7 +45,7 @@ const MainNavigation = () => {
     <Stack.Navigator initialRouteName={!user ? "Login" : "Home"}>
       <Stack.Group>
         <Stack.Screen
-          options={{ headerShown: false, presentation: "modal" }}
+          options={{ headerShown: false }}
           name="Profile"
           component={ProfileScreen}
         />
@@ -139,13 +139,13 @@ const MainNavigation = () => {
       />
 
       <Stack.Screen
-        options={{ headerShown: false, presentation: "modal" }}
+        options={{ headerShown: false }}
         name="ETFPurchaseConfirmation"
         component={ETFPurchaseConfirmation}
       />
 
       <Stack.Screen
-        options={{ headerShown: false, presentation: "modal" }}
+        options={{ headerShown: false }}
         name="ETFPurchaseSuccess"
         component={ETFPurchaseSuccess}
       />

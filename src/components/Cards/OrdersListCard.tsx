@@ -59,7 +59,17 @@ const OrdersListCard = () => {
     return <OrderListItem order={item} />;
   };
 
-  const ListHeader = () => (
+  const LoadingMyAssets = () => (
+    <View className="flex-1 flex bg-dark-background-100">
+      <SkeletonLoadingView className="flex-1 flex ">
+        <SkeletonOrderListItem />
+        <SkeletonOrderListItem />
+        <SkeletonOrderListItem />
+      </SkeletonLoadingView>
+    </View>
+  )
+
+  const HomeHeader = () => (
     <View className="flex-1">
       <View className="pt-12 pb-6">
         <Balance isRefetching={isRefetching} />
@@ -70,15 +80,17 @@ const OrdersListCard = () => {
           {t("ordersListCard.myAssets")}
         </Text>
       </CardHeader>
-      {isPending && !my_assets && (
-        <SkeletonLoadingView className="flex-1 flex bg-dark-background-100">
-          <SkeletonOrderListItem />
-          <SkeletonOrderListItem />
-          <SkeletonOrderListItem />
-        </SkeletonLoadingView>
-      )}
+      {isPending && !my_assets && <LoadingMyAssets />}
       {!isPending && !hasAssets && <Empty canTrade={true} />}
     </View>
+  )
+
+  const HomeFooter = () => (
+    <CardFooter>
+      <Text className="text-caption-x"></Text>
+      <Text className="text-caption-xl"></Text>
+      <Text className="text-caption-xl"></Text>
+    </CardFooter>
   )
 
   return (
@@ -87,18 +99,9 @@ const OrdersListCard = () => {
         data={my_assets}
         renderItem={renderItem}
         keyExtractor={(item) => `${item.id}`}
-        ListHeaderComponent={<ListHeader />}
+        ListHeaderComponent={<HomeHeader />}
         ItemSeparatorComponent={separator}
-        ListFooterComponent={
-          <CardFooter>
-            <Text className="text-caption-x"></Text>
-            <Text className="text-caption-xl"></Text>
-          </CardFooter>
-        }
-       /*  contentContainerStyle={{
-          flexGrow: 1,
-          paddingBottom: 20 // Add bottom padding for better scroll experience
-        }} */ // Ensure proper content spacing
+        ListFooterComponent={<HomeFooter />}
         showsVerticalScrollIndicator={false}
         onRefresh={refetch}
         refreshing={isPending}

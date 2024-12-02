@@ -142,8 +142,8 @@
     "fallback": "Use passcode"
   },
   "balance": {
-    "equity": "Balance",
-    "available_funds": "Available funds"
+    "equity": "Total balance",
+    "available_funds": "Buying power"
   },
   "accountNotVerified": {
     "title": "Verify your account",
