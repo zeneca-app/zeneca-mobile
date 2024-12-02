@@ -96,15 +96,29 @@ const OrderHistory = () => {
         ...ordersGetOrdersOptions(),
     });
 
-    const renderItem = ({ item: order }: { item: Order }) => (
-        <OrderHistoryItem
-            order={order}
-            onPress={(order) => {
-                // Handle order press
-                console.log('Order pressed:', order);
-            }}
-        />
-    );
+    const renderItem = ({ item: order }: { item: Order }) => {
+        if (!order) return null;
+        return (
+            <OrderHistoryItem
+                order={order}
+                onPress={(order) => {
+                    // Handle order press
+                    console.log('Order pressed:', order);
+                }}
+            />
+        );
+    }
+    const LoadingOrders = () => (
+        <SkeletonLoadingView className="flex-1 flex">
+            <SkeletonOrderListItem />
+            <SkeletonOrderListItem />
+            <SkeletonOrderListItem />
+            <SkeletonOrderListItem />
+            <SkeletonOrderListItem />
+            <SkeletonOrderListItem />
+            <SkeletonOrderListItem />
+        </SkeletonLoadingView>
+    )
 
     return (
         <LoggedLayout>
@@ -116,20 +130,12 @@ const OrderHistory = () => {
             </Text>
             <View className="flex-1 px-layout">
                 {isPending && !orders ? (
-                    <SkeletonLoadingView className="flex-1 flex">
-                        <SkeletonOrderListItem />
-                        <SkeletonOrderListItem />
-                        <SkeletonOrderListItem />
-                        <SkeletonOrderListItem />
-                        <SkeletonOrderListItem />
-                        <SkeletonOrderListItem />
-                        <SkeletonOrderListItem />
-                    </SkeletonLoadingView>
+                    <LoadingOrders />
                 ) : (
                     <FlatList
                         data={orders}
                         renderItem={renderItem}
-                        keyExtractor={(item) => item.id}
+                        keyExtractor={(item) => item.external_id}
                         onRefresh={refetch}
                         refreshing={isPending}
                         showsVerticalScrollIndicator={false}
