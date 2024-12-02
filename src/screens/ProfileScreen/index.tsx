@@ -28,7 +28,6 @@ const ProfileScreen = () => {
             queryClient.clear();
             await logout();
             // Close modal first, then navigate to Login
-            navigation.goBack();
             //navigation.navigate("Login");
             navigation.reset({
                 index: 0,
@@ -36,6 +35,7 @@ const ProfileScreen = () => {
             });
         } catch (error) {
             console.error("ERRRORRRR", error);
+            
         }
         setIsLoading(false);
     };

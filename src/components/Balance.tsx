@@ -29,6 +29,8 @@ const Balance = ({
       client: client,
     }),
     refetchInterval: Config.REFETCH_INTERVAL,
+    staleTime: 0, // Consider data stale immediately
+    gcTime: 1000 * 60 * 5, // Cache for 5 minutes
   });
 
   if (isRefetching) {
@@ -42,8 +44,24 @@ const Balance = ({
     ? currencyFormatter(balance?.available, 2, balance?.precision || 6, true)
     : "0.00";
 
-  const pending = balance?.pending ? currencyFormatter(balance?.pending) : "0.00";
+  const balancePending = balance?.pending ? currencyFormatter(balance?.pending) : "0.00";
 
+  const LoadingTotalBalance = () => (
+    <SkeletonLoadingView className="flex-1 flex-row gap-1 h-16">
+      <SkeletonView className="w-10 h-16" />
+      <SkeletonView className="w-10 h-16" />
+      <SkeletonView className="w-10 h-16" />
+      <SkeletonView className="w-10 h-16" />
+      <SkeletonView className="w-10 h-16" />
+      <SkeletonView className="w-10 h-16" />
+      <SkeletonView className="w-10 h-16" />
+    </SkeletonLoadingView>
+  )
+  const LoadingAvailable = () => (
+    <SkeletonLoadingView className="flex-1">
+      <SkeletonView className="w-20 h-4" />
+    </SkeletonLoadingView>
+  )
   return (
     <View
       className={`w-full flex h-44 justify-start items-stretch px-layout${containerClasses ? " " + containerClasses : ""}`}
@@ -53,17 +71,9 @@ const Balance = ({
       >
         {t("balance.equity")}
       </Text>
-      <View className="flex-row flex-1 text-white items-start ">
+      <View className="flex-row flex-1 text-white items-start">
         {isPending ? (
-          <SkeletonLoadingView className="flex-1 flex-row gap-1 h-16">
-            <SkeletonView className="w-10 h-16" />
-            <SkeletonView className="w-10 h-16" />
-            <SkeletonView className="w-10 h-16" />
-            <SkeletonView className="w-10 h-16" />
-            <SkeletonView className="w-10 h-16" />
-            <SkeletonView className="w-10 h-16" />
-            <SkeletonView className="w-10 h-16" />
-          </SkeletonLoadingView>
+          <LoadingTotalBalance />
         ) : (
           <>
             <Text className="text-heading-l text-white font-sans">
@@ -75,25 +85,26 @@ const Balance = ({
               </Text>
             )}
           </>
-        )}
-      </View>
+        )
+        }
+      </View >
       <Text
         className={`caption-xl text-gray-50 pb-2${captionClasses ? " " + captionClasses : ""}`}
       >
         {t("balance.available_funds")}
       </Text>
-      {isPending ? (
-        <SkeletonLoadingView className="flex-1">
-          <SkeletonView className="w-20 h-4" />
-        </SkeletonLoadingView>
-      ) : (
-        <Text
-          className={`caption-xl text-white pb-3${captionClasses ? " " + captionClasses : ""}`}
-        >
-          {available}
-        </Text>
-      )}
-    </View>
+      {
+        isPending ? (
+          <LoadingAvailable />
+        ) : (
+          <Text
+            className={`caption-xl text-white pb-3${captionClasses ? " " + captionClasses : ""}`}
+          >
+            {available}
+          </Text>
+        )
+      }
+    </View >
   );
 };
 

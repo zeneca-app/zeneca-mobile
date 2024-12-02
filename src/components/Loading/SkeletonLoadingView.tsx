@@ -8,7 +8,7 @@ export const SkeletonView = ({ className }: { className?: string }) => {
 export const SkeletonOrderListItem = () => {
   return (
     <>
-      <View className="flex-row gap-3">
+      <View className="flex-row gap-3 px-layout">
         <SkeletonView className="w-12 h-12  overflow-hidden" />
         <View className="flex-1 flex justify-center items-stretch gap-2">
           <SkeletonView className="h-4 w-1/2" />

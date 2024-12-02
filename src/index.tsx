@@ -9,6 +9,7 @@ import {
   Manrope_700Bold,
   useFonts,
 } from "@expo-google-fonts/manrope";
+import { AppState, Platform } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 import * as Sentry from "@sentry/react-native";
 import { LogBox } from "react-native";
@@ -45,7 +46,7 @@ const AppIndex = () => {
     Manrope_700Bold,
   });
 
-  if (!loaded) {
+  if (!loaded || AppState.currentState === 'inactive') {
     return null;
   }
   return (
