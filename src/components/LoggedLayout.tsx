@@ -3,8 +3,9 @@ import LineHome from "@/assets/line-home.svg";
 import ProfileButton from "@/components/ProfileButton";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { ImageBackground, SafeAreaView, View } from "react-native";
+import { ImageBackground, SafeAreaView, View, Platform, StatusBar } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export type LoggedLayoutProps = {
   children: React.ReactNode;
@@ -21,9 +22,16 @@ const LoggedLayout = ({
   navRight = null,
   wrapperClasses = "",
 }: LoggedLayoutProps) => {
+  const insets = useSafeAreaInsets();
   return (
     <SafeAreaView
-      className={`flex-1 items-stretch bg-basic-black relative font-sans`}
+      className={`flex-1 items-stretch bg-basic-black relative`}
+      style={{
+        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : insets.top,
+        paddingBottom: insets.bottom,
+        paddingLeft: insets.left,
+        paddingRight: insets.right,
+      }}
     >
       <View className="flex-1">{children}</View>
     </SafeAreaView>

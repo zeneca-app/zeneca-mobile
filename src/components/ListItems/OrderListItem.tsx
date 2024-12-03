@@ -24,11 +24,11 @@ const OrderListItem = ({ order }: OrderListItemProps) => {
       </View>
       {/* Name container with flex but constrained */}
       <View className="flex-1 min-w-0 justify-center items-stretch">
-        <Text className="text-gray-10 text-caption-xl">{order.display_name}</Text>
+        <Text className="text-gray-10 caption-xl">{order.display_name}</Text>
       </View>
       {/* Price container with fixed width */}
       <View className="flex-shrink-0 justify-center items-end">
-        <Text className="text-gray-10 text-caption-xl"
+        <Text className="text-gray-10 caption-xl"
           numberOfLines={1}>
           {equity}
         </Text>

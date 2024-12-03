@@ -89,9 +89,9 @@ const InputWrapper = ({
             />
             <View className="h-6 w-full">
                 {Boolean(error) ? (
-                    <Text className="text-semantic-danger text-caption-l">{error}</Text>
+                    <Text className="text-semantic-danger caption-l">{error}</Text>
                 ) : (
-                    <Text className="text-gray-70 text-caption-l">{hint}</Text>
+                    <Text className="text-gray-70 caption-l">{hint}</Text>
                 )}
             </View>
         </View>

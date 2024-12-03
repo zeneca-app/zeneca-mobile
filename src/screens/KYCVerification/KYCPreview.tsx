@@ -24,13 +24,13 @@ const KYCVerificationScreen = () => {
         <View className="w-full items-center mb-6">
           <VerifyIlustration width={200} height={200} />
         </View>
-        <Text className="text-heading-s text-dark-content-white font-sans mt-4 mb-2 text-left self-start">
+        <Text className="heading-s text-dark-content-white font-sans mt-4 mb-2 text-left self-start">
           {t("kycPreview.title")}
         </Text>
-        <Text className="text-body-s text-gray-60 text-left self-start font-sans mb-4">
+        <Text className="body-s text-gray-60 text-left self-start font-sans mb-4">
           {t("kycPreview.subtitle")}
         </Text>
-        <Text className="text-body-s text-gray-60 text-left self-start font-sans mb-6">
+        <Text className="body-s text-gray-60 text-left self-start font-sans mb-6">
           {t("kycPreview.terms")}
         </Text>
       </View>
@@ -39,7 +39,7 @@ const KYCVerificationScreen = () => {
           className="bg-dark-content-white rounded-full py-4 items-center mb-4"
           onPress={launchKYCProvider}
         >
-          <Text className="text-dark-content-dark text-body-s">
+          <Text className="text-dark-content-dark body-s">
             {t("kycPreview.startButton")}
           </Text>
         </TouchableOpacity>

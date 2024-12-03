@@ -16,6 +16,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import LoggedLayout from "@/components/LoggedLayout";
 
 const LoginWithEmail = () => {
   const TEST_EMAIL = "tester@zeneca.app";
@@ -82,127 +83,59 @@ const LoginWithEmail = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.mainContainer}
-    >
-      <SafeAreaView style={styles.safeAreaContainer}>
-        <View style={styles.topContent}>
-          <Text style={styles.title}>{t("loginWithEmail.title")}</Text>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>{t("loginWithEmail.emailLabel")}</Text>
-            <TextInput
-              style={styles.input}
-              value={email}
-              onChangeText={setEmail}
-              autoComplete="off"
-              autoCorrect={false}
-              clearButtonMode="while-editing"
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-
-            <View
-              style={[styles.inputLine, !isEmailValid && styles.inputLineError]}
-            />
-            {!isEmailValid && (
-              <Text style={styles.errorText}>
-                {t("loginWithEmail.errorText")}
-              </Text>
-            )}
-          </View>
-        </View>
-        <View style={styles.bottomContent}>
-          <TouchableOpacity
-            disabled={email?.length === 0}
-            style={[
-              styles.continueButton,
-              email?.length === 0 && styles.continueButtonDisabled,
-            ]}
-            onPress={onSubmit}
-          >
-            <Text style={styles.continueButtonText}>
-              {t("loginWithEmail.continueButton")}
+    <LoggedLayout>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        className="flex-1 bg-basic-black"
+      >
+        <SafeAreaView className="flex-1">
+          <View className="p-5">
+            <Text className="text-[32px] text-white mb-5 font-Manrope_500Medium">
+              {t("loginWithEmail.title")}
             </Text>
-          </TouchableOpacity>
-        </View>
-        <LoadingScreen isVisible={isLoading} text={loadingMessage} />
-      </SafeAreaView>
-    </KeyboardAvoidingView>
+            <View className="mt-5">
+              <Text className="text-dark-content-30 text-sm mb-1 font-Manrope_300Light">
+                {t("loginWithEmail.emailLabel")}
+              </Text>
+              <TextInput
+                className="text-white text-base py-2"
+                value={email}
+                onChangeText={setEmail}
+                autoComplete="off"
+                autoCorrect={false}
+                clearButtonMode="while-editing"
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+
+              <View
+                className={`h-[1px] bg-dark-border-80 mt-2 ${!isEmailValid && "border-semantic-danger"
+                  }`}
+              />
+              {!isEmailValid && (
+                <Text className="text-semantic-danger text-xs mt-1 font-Manrope_300Light">
+                  {t("loginWithEmail.errorText")}
+                </Text>
+              )}
+            </View>
+          </View>
+          <View className="p-5 mt-auto">
+            <TouchableOpacity
+              disabled={email?.length === 0}
+              className={`rounded-[35px] bg-dark-content-white p-4 items-center ${email?.length === 0 && "bg-dark-content-disabled"
+                }`}
+              onPress={onSubmit}
+            >
+              <Text className="text-lg text-basic-black font-Manrope_500Medium">
+                {t("loginWithEmail.continueButton")}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <LoadingScreen isVisible={isLoading} text={loadingMessage} />
+        </SafeAreaView>
+      </KeyboardAvoidingView>
+    </LoggedLayout>
   );
 };
-
-const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    backgroundColor: "#0D0B0D",
-  },
-  safeAreaContainer: {
-    flex: 1,
-  },
-  topContent: {
-    padding: 20,
-  },
-  backButton: {
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 32,
-    color: "#fff",
-    marginBottom: 20,
-    fontFamily: "Manrope_500Medium",
-  },
-  inputContainer: {
-    marginTop: 20,
-  },
-  inputLineError: {
-    borderColor: "red",
-  },
-  label: {
-    color: "#95929F",
-    fontSize: 14,
-    marginBottom: 4,
-    fontFamily: "Manrope_300Light",
-  },
-  input: {
-    color: "#fff",
-    fontSize: 16,
-    paddingVertical: 8,
-  },
-  errorText: {
-    color: "red",
-    fontSize: 12,
-    marginTop: 4,
-    fontFamily: "Manrope_300Light",
-  },
-  inputLine: {
-    height: 1,
-    backgroundColor: "#333",
-    marginTop: 8,
-  },
-  bottomContent: {
-    padding: 20,
-    marginTop: "auto",
-  },
-  continueButton: {
-    borderRadius: 35,
-    backgroundColor: "white",
-    padding: 16,
-    alignItems: "center",
-  },
-  continueButtonDisabled: {
-    backgroundColor: "rgba(215, 191, 250, 0.17)",
-  },
-  continueButtonText: {
-    color: "black",
-    fontSize: 18,
-    fontFamily: "Manrope_500Medium",
-  },
-  continueButtonTextDisabled: {
-    color: "rgba(233, 220, 251, 0.45)",
-    fontSize: 18,
-    fontFamily: "Manrope_500Medium",
-  },
-});
 
 export default LoginWithEmail;

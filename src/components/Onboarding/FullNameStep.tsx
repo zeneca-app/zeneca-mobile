@@ -52,7 +52,7 @@ const FullNameStep = ({
         required={true}
       >
         <TextInput
-          className="text-white text-body-m pb-4"
+          className="text-white body-m pb-4"
           value={formValues.first_name}
           onChangeText={(e) => handleChange("first_name", e)}
           autoComplete="off"
@@ -74,7 +74,7 @@ const FullNameStep = ({
         error={getError("last_name")}
       >
         <TextInput
-          className="text-white text-body-m pb-4"
+          className="text-white body-m pb-4"
           value={formValues.last_name}
           onChangeText={(e) => handleChange("last_name", e)}
           autoComplete="off"

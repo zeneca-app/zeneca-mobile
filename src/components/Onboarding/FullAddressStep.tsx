@@ -88,7 +88,7 @@ const FullAddressStep = ({
                 required={true}
             >
                 <TextInput
-                    className="text-white text-body-m pb-4"
+                    className="text-white body-m pb-4"
                     value={formValues.address_street_1}
                     onChangeText={(e) => handleChange("address_street_1", e)}
                     autoComplete="off"
@@ -109,7 +109,7 @@ const FullAddressStep = ({
                 hint=""
             >
                 <TextInput
-                    className="text-white text-body-m pb-4"
+                    className="text-white body-m pb-4"
                     value={formValues.address_street_2}
                     onChangeText={(e) => handleChange("address_street_2", e)}
                     autoComplete="off"
@@ -131,7 +131,7 @@ const FullAddressStep = ({
                 required={true}
             >
                 <TextInput
-                    className="text-white text-body-m pb-4"
+                    className="text-white body-m pb-4"
                     value={formValues.address_city}
                     onChangeText={(e) => handleChange("address_city", e)}
                     autoComplete="off"
@@ -153,7 +153,7 @@ const FullAddressStep = ({
                 required={true}
             >
                 <TextInput
-                    className="text-white text-body-m pb-4"
+                    className="text-white body-m pb-4"
                     value={formValues.address_state}
                     onChangeText={(e) => handleChange("address_state", e)}
                     autoComplete="off"
@@ -176,7 +176,7 @@ const FullAddressStep = ({
 
             >
                 <TextInput
-                    className="text-white text-body-m pb-4"
+                    className="text-white body-m pb-4"
                     value={formValues.address_postal_code}
                     onChangeText={(e) => handleChange("address_postal_code", e)}
                     autoComplete="off"

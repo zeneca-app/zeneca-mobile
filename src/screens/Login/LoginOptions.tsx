@@ -27,6 +27,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import LoggedLayout from "@/components/LoggedLayout";
 
 
 const LoginOptions = () => {
@@ -162,14 +163,19 @@ const LoginOptions = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-dark-background-100">
-      <View className="flex-1 justify-between">
-        <View className="flex-1">
-          <Text className="ml-layout text-heading-s text-dark-content-white mb-layout-s">
-            {t("loginOptions.title")}
-          </Text>
-          <View className="flex-1 bg-dark-background-100 rounded-card items-center justify-start">
-            <View className="w-full py-[60px] px-layout items-center justify-center">
+    <LoggedLayout>
+      <SafeAreaView className="flex-1 ">
+        <View className="flex-1 px-layout pb-layout">
+          {/* Header Section */}
+          <View className="pt-12">
+            <Text className="heading-s text-dark-content-white mb-layout-s">
+              {t("loginOptions.title")}
+            </Text>
+          </View>
+
+          {/* Main Content */}
+          <View className="flex-1">
+            <View className="space-y-4">
               <LoginButton
                 icon="mail"
                 text={t("loginOptions.emailOption")}
@@ -187,18 +193,20 @@ const LoginOptions = () => {
               />
             </View>
           </View>
-        </View>
-        <View className="w-full px-layout pb-layout-s items-center">
-          <Text className="text-dark-content-white text-caption-l font-normal mt-10">
-            {t("loginOptions.terms")}{" "}
-            <Text className="text-dark-content-white text-caption-l font-medium underline">
-              {t("loginOptions.termsLink")}
+
+          {/* Footer Section */}
+          <View className="pb-safe mb-6">
+            <Text className="text-dark-content-white caption-l text-center">
+              {t("loginOptions.terms")}{" "}
+              <Text className="text-dark-content-white caption-l font-medium underline">
+                {t("loginOptions.termsLink")}
+              </Text>
+              .
             </Text>
-            .
-          </Text>
+          </View>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </LoggedLayout>
   );
 };
 

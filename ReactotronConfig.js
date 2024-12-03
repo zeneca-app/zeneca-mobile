@@ -8,7 +8,17 @@ import Reactotron from "reactotron-react-native";
 
 // do not allow Reactotron to be used in production and in tests
 if (__DEV__ && process.env.JEST_WORKER_ID === undefined) {
-  const host = NativeModules.SourceCode.scriptURL.split("://")[1].split(":")[0];
+  let host = "localhost"; // default fallback
+
+  try {
+    host = NativeModules.SourceCode.scriptURL.split("://")[1].split(":")[0];
+  } catch (error) {
+    console.warn(
+      "Failed to get host from SourceCode, falling back to localhost:",
+      error,
+    );
+  }
+
   Reactotron.configure({ host })
     .useReactNative()
     .use(

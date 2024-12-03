@@ -76,10 +76,10 @@ const CountryStep = ({
                 onPress={() => handleCountryChange(item.isoCode)}
                 className="flex-row items-center justify-start py-6 px-8 gap-4"
             >
-                <Text className="text-white text-body-s">
+                <Text className="text-white body-s">
                     {LATIN_AMERICA_FLAGS[item.isoCode]}
                 </Text>
-                <Text className="text-white text-body-s">{item.name}</Text>
+                <Text className="text-white body-s">{item.name}</Text>
             </TouchableOpacity>
         );
     };
@@ -93,7 +93,7 @@ const CountryStep = ({
 
                 leftSlot={
                     Boolean(formValues.country_code) ? (
-                        <Text className="text-white text-body-m">
+                        <Text className="text-white body-m">
                             {LATIN_AMERICA_FLAGS[formValues.country_code]}
                         </Text>
                     ) : null
@@ -103,7 +103,7 @@ const CountryStep = ({
                     className="flex w-full flex-row items-center justify-start pb-4"
                     onPress={handleShowCountries}
                 >
-                    <Text className="text-white flex-1 text-body-s">
+                    <Text className="text-white flex-1 body-s">
                         {
                             Country.getCountryByCode(formValues.country_code)?.name
                         }

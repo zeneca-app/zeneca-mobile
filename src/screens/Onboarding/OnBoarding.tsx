@@ -179,10 +179,10 @@ const OnBoarding = () => {
             >
                 <ScrollView className="flex-1">
                     <View className="flex-1 justify-center items-stretch gap-l px-layout">
-                        <Text className="text-heading-s text-gray-10">
+                        <Text className="heading-s text-gray-10">
                             {t(`onBoarding.title`)}
                         </Text>
-                        <Text className="text-body-s text-gray-40 font-light">
+                        <Text className="body-s text-gray-40 font-light">
                             {t(`onBoarding.steps.step_${activeStep + 1}.subtitle`)}
                         </Text>
                         <View className="flex-1 justify-start items-stretch gap">
@@ -224,7 +224,7 @@ const OnBoarding = () => {
                                 onPress={handleNext}
                                 disabled={!isCurrentStepValid || isPending}
                             >
-                                <Text className="text-body-m">
+                                <Text className="body-m">
                                     {t("onBoarding.continue_button")}
                                 </Text>
                             </Button>

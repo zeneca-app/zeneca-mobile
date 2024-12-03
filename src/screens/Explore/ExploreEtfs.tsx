@@ -38,7 +38,7 @@ const ExploreETFs = () => {
 
   return (
     <LoggedLayout>
-      <Text className="text-heading-s text-gray-10 px-layout pt-layout-s pb-layout-l">
+      <Text className="heading-s text-gray-10 px-layout pt-layout-s pb-layout-l">
         <Trans
           i18nKey="explore.title"
           components={[]}

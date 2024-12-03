@@ -64,10 +64,10 @@ const Balance = ({
   )
   return (
     <View
-      className={`w-full flex h-44 justify-start items-stretch px-layout${containerClasses ? " " + containerClasses : ""}`}
+      className={`w-full flex h-44 justify-start items-stretch px-layout ${containerClasses ? " " + containerClasses : ""}`}
     >
       <Text
-        className={`caption-xl text-gray-50 pb-3${captionClasses ? " " + captionClasses : ""}`}
+        className={`caption-l text-gray-50 pb-3 ${captionClasses ? " " + captionClasses : ""}`}
       >
         {t("balance.equity")}
       </Text>
@@ -76,7 +76,7 @@ const Balance = ({
           <LoadingTotalBalance />
         ) : (
           <>
-            <Text className="text-heading-l text-white font-sans">
+            <Text className="heading-l text-white">
               {equity}
             </Text>
             {displayCurrencyName && (
@@ -87,9 +87,9 @@ const Balance = ({
           </>
         )
         }
-      </View >
+      </View>
       <Text
-        className={`caption-xl text-gray-50 pb-2${captionClasses ? " " + captionClasses : ""}`}
+        className={`caption-l text-gray-50 pb-2 ${captionClasses ? " " + captionClasses : ""}`}
       >
         {t("balance.available_funds")}
       </Text>
@@ -98,13 +98,13 @@ const Balance = ({
           <LoadingAvailable />
         ) : (
           <Text
-            className={`caption-xl text-white pb-3${captionClasses ? " " + captionClasses : ""}`}
+            className={`caption-xl text-white pb-3 ${captionClasses ? " " + captionClasses : ""}`}
           >
             {available}
           </Text>
         )
       }
-    </View >
+    </View>
   );
 };
 

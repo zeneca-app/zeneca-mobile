@@ -29,6 +29,7 @@ import {
   View,
 } from "react-native";
 import { OtpInput } from "react-native-otp-entry";
+import LoggedLayout from "@/components/LoggedLayout";
 
 const LoginOtpScreen = () => {
   const { t } = useTranslation();
@@ -190,119 +191,74 @@ const LoginOtpScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.mainContainer}
-    >
-      <SafeAreaView style={styles.safeAreaContainer}>
-        <View style={styles.topContent}>
-          <Text style={styles.title}>{t("emailOtpValidation.title")}</Text>
-          <Text style={styles.subtitle}>
-            {t("emailOtpValidation.subtitle")} {email}
-          </Text>
-          <View style={styles.codeInputContainer}>
-            <OtpInput
-              numberOfDigits={6}
-              focusColor="#5A10EF"
-              focusStickBlinkingDuration={500}
-              onTextChange={(text) => setCode(text as `${number | ""}`)}
-              onFilled={handleOtpFilled}
-              theme={{
-                containerStyle: styles.otpContainer,
-                inputsContainerStyle: styles.otpInputsContainer,
-                pinCodeContainerStyle: styles.otpPinCodeContainer,
-                pinCodeTextStyle: styles.otpPinCodeText,
-                focusStickStyle: styles.otpFocusStick,
-                focusedPinCodeContainerStyle: styles.otpActivePinCodeContainer,
-              }}
-            />
-          </View>
-        </View>
-        <View style={styles.bottomContent}>
-          <TouchableOpacity
-            style={[
-              styles.continueButton,
-              !isCodeFilled && styles.continueButtonDisabled,
-            ]}
-            disabled={!isCodeFilled}
-            onPress={handleConfirmCode}
-          >
-            <Text
-              style={[
-                styles.continueButtonText,
-                !isCodeFilled && styles.continueButtonTextDisabled,
-              ]}
-            >
-              {t("emailOtpValidation.continueButton")}
+    <LoggedLayout>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        className="flex-1 bg-basic-black"
+      >
+        <SafeAreaView className="flex-1">
+          <View className="p-layout">
+            <Text className="heading-s text-dark-content-white mb-layout-s">
+              {t("emailOtpValidation.title")}
             </Text>
-          </TouchableOpacity>
-        </View>
+            <Text className="caption-xl text-gray-50 mb-[30px]">
+              {t("emailOtpValidation.subtitle")} {email}
+            </Text>
+            <View className="mb-[30px]">
+              <OtpInput
+                numberOfDigits={6}
+                focusColor="#5A10EF"
+                focusStickBlinkingDuration={500}
+                onTextChange={(text) => setCode(text as `${number | ""}`)}
+                onFilled={handleOtpFilled}
+                theme={{
+                  containerStyle: styles.otpContainer,
+                  inputsContainerStyle: styles.otpInputsContainer,
+                  pinCodeContainerStyle: styles.otpPinCodeContainer,
+                  pinCodeTextStyle: styles.otpPinCodeText,
+                  focusStickStyle: styles.otpFocusStick,
+                  focusedPinCodeContainerStyle: styles.otpActivePinCodeContainer,
+                }}
+              />
+            </View>
+          </View>
+          <View className="p-layout mt-auto">
+            <TouchableOpacity
+              className={`rounded-[35px] bg-dark-content-white p-4 items-center ${!isCodeFilled ? "bg-dark-content-disabled" : ""
+                }`}
+              disabled={!isCodeFilled}
+              onPress={handleConfirmCode}
+            >
+              <Text
+                className={`text-[18px] font-Manrope_500Medium ${!isCodeFilled ? "text-dark-content-30" : "text-black"
+                  }`}
+              >
+                {t("emailOtpValidation.continueButton")}
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-        <StatusModal
-          modalState={modalState}
-          text={
-            modalState === "loading"
-              ? loadingMessage
-              : t("loginWithEmail.errorCodeText")
-          }
-          onClose={() => {
-            setModalState("dismissed");
-            setCode("");
-            navigation.navigate("LoginWithEmail");
-          }}
-          actionButtonText={t("loginWithEmail.errorCodeTryAgain")}
-        />
-      </SafeAreaView>
-    </KeyboardAvoidingView>
+          <StatusModal
+            modalState={modalState}
+            text={
+              modalState === "loading"
+                ? loadingMessage
+                : t("loginWithEmail.errorCodeText")
+            }
+            onClose={() => {
+              setModalState("dismissed");
+              setCode("");
+              navigation.navigate("LoginWithEmail");
+            }}
+            actionButtonText={t("loginWithEmail.errorCodeTryAgain")}
+          />
+        </SafeAreaView>
+      </KeyboardAvoidingView>
+    </LoggedLayout>
   );
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    backgroundColor: "#0D0B0D",
-  },
-  safeAreaContainer: {
-    flex: 1,
-  },
-  topContent: {
-    padding: 20,
-  },
-  backButton: {
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 32,
-    color: "#fff",
-    marginBottom: 20,
-    fontFamily: "Manrope_500Medium",
-  },
-  subtitle: {
-    fontSize: 16,
-    color: "#95929F",
-    marginBottom: 30,
-    fontFamily: "Manrope_400Regular",
-  },
-  inputContainer: {
-    marginTop: 20,
-  },
-  inputLineError: {
-    borderColor: "red",
-  },
-  label: {
-    color: "#95929F",
-    fontSize: 14,
-    marginBottom: 4,
-    fontFamily: "Manrope_300Light",
-  },
-  codeInputContainer: {
-    marginBottom: 30,
-  },
-  input: {
-    color: "#fff",
-    fontSize: 16,
-    paddingVertical: 8,
-  },
   otpContainer: {
     width: "100%",
   },
@@ -329,40 +285,6 @@ const styles = StyleSheet.create({
   otpActivePinCodeContainer: {
     borderBottomColor: "#5A10EF",
     borderBottomWidth: 2,
-  },
-  errorText: {
-    color: "red",
-    fontSize: 12,
-    marginTop: 4,
-    fontFamily: "Manrope_300Light",
-  },
-  inputLine: {
-    height: 1,
-    backgroundColor: "#333",
-    marginTop: 8,
-  },
-  bottomContent: {
-    padding: 20,
-    marginTop: "auto",
-  },
-  continueButton: {
-    borderRadius: 35,
-    backgroundColor: "white",
-    padding: 16,
-    alignItems: "center",
-  },
-  continueButtonDisabled: {
-    backgroundColor: "rgba(215, 191, 250, 0.17)",
-  },
-  continueButtonText: {
-    color: "black",
-    fontSize: 18,
-    fontFamily: "Manrope_500Medium",
-  },
-  continueButtonTextDisabled: {
-    color: "rgba(233, 220, 251, 0.45)",
-    fontSize: 18,
-    fontFamily: "Manrope_500Medium",
   },
 });
 
