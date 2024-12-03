@@ -15,24 +15,22 @@ import Login from "@/screens/Login/Login";
 import LoginOptions from "@/screens/Login/LoginOptions";
 import LoginOtpVerification from "@/screens/Login/LoginOtpVerification";
 import LoginWithEmail from "@/screens/Login/LoginWithEmail";
-import QuoteScreen from "@/screens/Quote";
-import QuoteConfirmationScreen from "@/screens/QuoteConfirmation";
-import RecipientsScreen from "@/screens/Recipients";
 import OrderHistory from "@/screens/OrderHistory";
 import OnBoarding from "@/screens/Onboarding/OnBoarding";
-import Send from "@/screens/Send";
-import SendConfirmation from "@/screens/SendConfirmation";
-import SendSuccessScreen from "@/screens/SendSuccess";
-import TransactionReceiptScreen from "@/screens/TransactionReceipt";
 import ProfileScreen from "@/screens/ProfileScreen";
 import { useUserStore } from "@/storage/userStore";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useCheckUpdate } from "@/hooks/useCheckUpdate";
-
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import { TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import ProfileButton from "@/components/ProfileButton";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const MainNavigation = () => {
+  const navigation = useNavigation();
   const { user } = useUserStore();
   const { checkUpdate } = useCheckUpdate();
 
@@ -41,147 +39,72 @@ const MainNavigation = () => {
     checkUpdate();
   }, []);
 
+  const backButton = () => (
+    <TouchableOpacity onPress={() => navigation.goBack()}>
+      <Ionicons name="chevron-back" size={22} color="white" />
+    </TouchableOpacity>
+  );
+
+  // Common header options
+  const defaultScreenOptions = {
+    title: '',
+    headerBackTitle: '',
+    headerStyle: { backgroundColor: Colors.basicBlack },
+    headerShadowVisible: false,
+    headerTransparent: true,
+    headerLeft: backButton,
+  };
+
+  // Screen configurations
+  const screenConfigs = {
+    noHeader: { headerShown: false },
+    defaultHeader: defaultScreenOptions,
+    homeHeader: {
+      ...defaultScreenOptions,
+      headerLeft: () => <ProfileButton />
+    },
+    modalScreen: { headerShown: false, presentation: "modal" as const },
+    profileScreen: {
+      headerShown: false,
+      presentation: 'card' as const,
+      animation: 'slide_from_left' as const,
+    }
+  };
+
   return (
     <Stack.Navigator initialRouteName={!user ? "Login" : "Home"}>
+      {/* Home Screens */}
+      <Stack.Screen name="Home" component={HomeScreen} options={screenConfigs.homeHeader} />
+      <Stack.Screen name="Profile" component={ProfileScreen} options={screenConfigs.profileScreen} />
+      <Stack.Screen name="OrderHistory" component={OrderHistory} options={screenConfigs.modalScreen} />
+
+      {/* Login Screens */}
       <Stack.Group>
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="Profile"
-          component={ProfileScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="Login"
-          component={Login}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="EmailOtpValidation"
-          component={LoginOtpVerification}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="LoginWithEmail"
-          component={LoginWithEmail}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="LoginOptions"
-          component={LoginOptions}
-        />
+        <Stack.Screen name="Login" component={Login} options={screenConfigs.noHeader} />
+        <Stack.Screen name="EmailOtpValidation" component={LoginOtpVerification} options={screenConfigs.defaultHeader} />
+        <Stack.Screen name="LoginWithEmail" component={LoginWithEmail} options={screenConfigs.defaultHeader} />
+        <Stack.Screen name="LoginOptions" component={LoginOptions} options={screenConfigs.defaultHeader} />
       </Stack.Group>
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="Home"
-        component={HomeScreen}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="Recipients"
-        component={RecipientsScreen}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="Quote"
-        component={QuoteScreen}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="QuoteConfirmation"
-        component={QuoteConfirmationScreen}
-      />
-      <Stack.Group screenOptions={{ presentation: "modal" }}>
-        <Stack.Screen
-          name="TransactionReceipt"
-          options={{ headerShown: false }}
-          component={TransactionReceiptScreen}
-        />
-      </Stack.Group>
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="DepositCrypto"
-        component={DepositCrypto}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="DepositWithBank"
-        component={DepositWithBank}
-      />
 
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="ExploreETFs"
-        component={ExploreETFs}
-      />
 
-      <Stack.Screen
-        options={{ headerShown: false, presentation: "modal" }}
-        name="OrderHistory"
-        component={OrderHistory}
-      />
+      {/* Deposit Screens */}
+      <Stack.Screen name="DepositCrypto" component={DepositCrypto} options={screenConfigs.defaultHeader} />
+      <Stack.Screen name="DepositWithBank" component={DepositWithBank} options={screenConfigs.defaultHeader} />
 
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="OnBoarding"
-        component={OnBoarding}
-      />
+      {/* ETF Screens */}
+      <Stack.Screen name="ExploreETFs" component={ExploreETFs} options={screenConfigs.defaultHeader} />
+      <Stack.Screen name="ETFDetail" component={ETFDetail} options={screenConfigs.defaultHeader} />
+      <Stack.Screen name="ETFPurchase" component={ETFPurchase} options={screenConfigs.defaultHeader} />
+      <Stack.Screen name="ETFPurchaseConfirmation" component={ETFPurchaseConfirmation} options={screenConfigs.defaultHeader} />
+      <Stack.Screen name="ETFPurchaseSuccess" component={ETFPurchaseSuccess} options={screenConfigs.noHeader} />
 
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="ETFDetail"
-        component={ETFDetail}
-      />
+      {/* Other Screens */}
 
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="ETFPurchase"
-        component={ETFPurchase}
-      />
-
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="ETFPurchaseConfirmation"
-        component={ETFPurchaseConfirmation}
-      />
-
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="ETFPurchaseSuccess"
-        component={ETFPurchaseSuccess}
-      />
-
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="KYCPreview"
-        component={KYCPreview}
-      />
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-        name="KYCProvider"
-        component={KYCProvider}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="KYCSuccess"
-        component={KYCSuccess}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="Send"
-        component={Send}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="SendSuccess"
-        component={SendSuccessScreen}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="SendConfirmation"
-        component={SendConfirmation}
-      />
+      {/* KYC and Onboarding Screens */}
+      <Stack.Screen name="OnBoarding" component={OnBoarding} options={screenConfigs.noHeader} />
+      <Stack.Screen name="KYCPreview" component={KYCPreview} options={screenConfigs.noHeader} />
+      <Stack.Screen name="KYCProvider" component={KYCProvider} options={screenConfigs.noHeader} />
+      <Stack.Screen name="KYCSuccess" component={KYCSuccess} options={screenConfigs.noHeader} />
     </Stack.Navigator>
   );
 };

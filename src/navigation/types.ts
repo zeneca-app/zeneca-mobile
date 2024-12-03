@@ -12,19 +12,20 @@ export type RootStackParamList = {
   LoginWithEmail: undefined;
   EmailOtpValidation: undefined;
   ExploreETFs: undefined;
-  ETFPurchaseConfirmation: undefined;
-  ETFPurchase: undefined;
   ETFDetail: undefined;
+  ETFPurchaseConfirmation: undefined;
+  ETFPurchaseSuccess: undefined;
+  ETFPurchase: undefined;
   KYCPreview: undefined;
   KYCProvider: undefined;
   KYCSuccess: undefined;
+  OnBoarding: undefined;
   DepositWithBank: undefined;
   DepositCrypto: undefined;
   Send: undefined;
   SendConfirmation: undefined;
   Profile: undefined;
   OrderHistory: undefined;
-  OnBoarding: undefined;
 };
 
 declare global {

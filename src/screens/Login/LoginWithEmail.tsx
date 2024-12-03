@@ -88,9 +88,6 @@ const LoginWithEmail = () => {
     >
       <SafeAreaView style={styles.safeAreaContainer}>
         <View style={styles.topContent}>
-          <TouchableOpacity onPress={dismissScreen} style={styles.backButton}>
-            <Ionicons name="chevron-back" size={24} color="white" />
-          </TouchableOpacity>
           <Text style={styles.title}>{t("loginWithEmail.title")}</Text>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>{t("loginWithEmail.emailLabel")}</Text>

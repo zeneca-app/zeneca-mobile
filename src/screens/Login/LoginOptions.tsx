@@ -162,18 +162,14 @@ const LoginOptions = () => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.modalOverlay}>
-        <View style={styles.topContent}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Ionicons name="chevron-back" size={22} color="white" />
-          </TouchableOpacity>
-          <Text style={styles.title}>{t("loginOptions.title")}</Text>
-          <View style={styles.modalContent}>
-            <View style={styles.buttonsContainer}>
+    <SafeAreaView className="flex-1 bg-dark-background-100">
+      <View className="flex-1 justify-between">
+        <View className="flex-1">
+          <Text className="ml-layout text-heading-s text-dark-content-white mb-layout-s">
+            {t("loginOptions.title")}
+          </Text>
+          <View className="flex-1 bg-dark-background-100 rounded-card items-center justify-start">
+            <View className="w-full py-[60px] px-layout items-center justify-center">
               <LoginButton
                 icon="mail"
                 text={t("loginOptions.emailOption")}
@@ -192,126 +188,18 @@ const LoginOptions = () => {
             </View>
           </View>
         </View>
-        <View style={styles.termsContainer}>
-          <Text style={styles.termsText}>
+        <View className="w-full px-layout pb-layout-s items-center">
+          <Text className="text-dark-content-white text-caption-l font-normal mt-10">
             {t("loginOptions.terms")}{" "}
-            <Text style={styles.termsTextLink}>
+            <Text className="text-dark-content-white text-caption-l font-medium underline">
               {t("loginOptions.termsLink")}
             </Text>
             .
           </Text>
         </View>
       </View>
-
-      <LoadingScreen isVisible={isLoading} text={loadingMessage} />
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#19181B", // Semi-transparent background
-  },
-  modalOverlay: {
-    flex: 1,
-    justifyContent: "space-between",
-  },
-  topContent: {
-    flex: 1,
-  },
-  title: {
-    marginLeft: 25,
-    fontSize: 32,
-    color: "white",
-    marginBottom: 20,
-    fontFamily: "Manrope_500Medium",
-  },
-  backButton: {
-    marginLeft: 20,
-    marginBottom: 20,
-  },
-  modalContent: {
-    flex: 1,
-    backgroundColor: "#19181B",
-    borderRadius: 50,
-    alignItems: "center",
-    justifyContent: "flex-start",
-  },
-  handleBar: {
-    marginTop: 10,
-    width: 50,
-    height: 4,
-    backgroundColor: "#312F36",
-    borderRadius: 2,
-  },
-  buttonsContainer: {
-    width: "100%",
-    paddingVertical: 60,
-    paddingHorizontal: 30,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  loadingText: {
-    color: "#fff",
-    marginTop: 10,
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-  commonButtonPrimary: {
-    flexDirection: "row",
-    width: "100%",
-    height: 55,
-    borderRadius: 25,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "white",
-    marginBottom: 25,
-  },
-  commonButtonSecondary: {
-    flexDirection: "row",
-    width: "100%",
-    height: 55,
-    borderRadius: 25,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#252328",
-    marginBottom: 25,
-  },
-  buttonIcon: {
-    marginRight: 10,
-  },
-  buttonEmailContainer: {
-    marginTop: 30,
-  },
-  commonButtonPrimaryText: {
-    color: colors.darkHighlight,
-    fontSize: 16,
-    fontFamily: "Manrope_500Medium",
-  },
-  commonButtonSecondaryText: {
-    color: "white",
-    fontSize: 16,
-    fontFamily: "Manrope_500Medium",
-  },
-  termsContainer: {
-    width: "100%",
-    paddingHorizontal: 30,
-    paddingBottom: 20,
-    alignItems: "center",
-  },
-  termsText: {
-    color: "white",
-    fontSize: 14,
-    fontFamily: "Manrope_400Regular",
-    marginTop: 40,
-  },
-  termsTextLink: {
-    color: "white",
-    fontSize: 14,
-    fontFamily: "Manrope_500Medium",
-    textDecorationLine: "underline",
-  },
-});
 
 export default LoginOptions;
