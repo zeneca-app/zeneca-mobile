@@ -165,7 +165,7 @@ const LoginOptions = () => {
     <SafeAreaView className="flex-1 bg-dark-background-100">
       <View className="flex-1 justify-between">
         <View className="flex-1">
-          <Text className="ml-layout text-heading-s text-dark-content-white mb-layout-s">
+          <Text className="ml-layout heading-s text-dark-content-white mb-layout-s">
             {t("loginOptions.title")}
           </Text>
           <View className="flex-1 bg-dark-background-100 rounded-card items-center justify-start">
@@ -189,9 +189,9 @@ const LoginOptions = () => {
           </View>
         </View>
         <View className="w-full px-layout pb-layout-s items-center">
-          <Text className="text-dark-content-white text-caption-l font-normal mt-10">
+          <Text className="text-dark-content-white caption-l font-normal mt-10">
             {t("loginOptions.terms")}{" "}
-            <Text className="text-dark-content-white text-caption-l font-medium underline">
+            <Text className="text-dark-content-white caption-l font-medium underline">
               {t("loginOptions.termsLink")}
             </Text>
             .

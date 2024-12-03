@@ -44,10 +44,10 @@ const VerifyCTACard = () => {
         <View className="flex-row items-center">
           <VerifyIcon className="h-10 w-10" />
           <View className="flex-col items-stretch justify-start pl-4">
-            <Text className="text-caption-xl text-gray-50">
+            <Text className="caption-xl text-gray-50">
               {t("accountVerified.title")}
             </Text>
-            <Text className="text-caption-xl text-gray-50 pb-2">
+            <Text className="caption-xl text-gray-50 pb-2">
               {t("accountVerified.subtitle")}
             </Text>
           </View>
@@ -62,10 +62,10 @@ const VerifyCTACard = () => {
       <View className="flex-row items-center">
         <VerifyIcon className="h-10 w-10" />
         <View className="flex-col items-stretch justify-start pl-4">
-          <Text className="text-caption-xl text-gray-50">
+          <Text className="caption-xl text-gray-50">
             {t("accountNotVerified.title")}
           </Text>
-          <Text className="text-caption-xl text-gray-50 pb-2">
+          <Text className="caption-xl text-gray-50 pb-2">
             {t("accountNotVerified.subtitle")}
           </Text>
           <TouchableOpacity onPress={goToOnboarding}>

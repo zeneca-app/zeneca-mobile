@@ -14,18 +14,18 @@ const DepositWithBank = () => {
 
   return (
     <LoggedLayout>
-      <Text className="text-heading-s text-gray-10 px-layout pb-layout-l pt-layout-s">
+      <Text className="heading-s text-gray-10 px-layout pb-layout-l pt-layout-s">
         {t("depositWithBank.title")}
       </Text>
 
       <ScrollView className="flex-1 px-layout">
         <View className="text-center flex gap items-center pt-layout-l px-layout-l">
           <Ionicons name="construct" size={48} color="white" />
-          <Text className="text-body-s text-dark-content-white text-center">
+          <Text className="body-s text-dark-content-white text-center">
             {t("comingSoon.title")}
           </Text>
 
-          <Text className="text-caption-xl text-gray-50 text-center">
+          <Text className="caption-xl text-gray-50 text-center">
             {t("comingSoon.subtitle")}
           </Text>
         </View>

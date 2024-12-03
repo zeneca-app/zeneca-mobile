@@ -20,7 +20,7 @@ const CryptoTokenButton: React.FC<CryptoTokenButtonProps> = ({
       className="flex flex-row items-center gap-3"
     >
       {iconSlot && <View className="w-12 h-12">{iconSlot}</View>}
-      <Text className="text-gray-10 text-caption-xl flex-1">{token}</Text>
+      <Text className="text-gray-10 caption-xl flex-1">{token}</Text>
       {rightSlot && <View className="w-12 h-12">{rightSlot}</View>}
     </TouchableOpacity>
   );

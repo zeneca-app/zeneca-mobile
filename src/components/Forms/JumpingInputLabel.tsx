@@ -79,7 +79,7 @@ const JumpingInputLabel = ({
                     }}
                 >
                     <Text
-                        className={`absolute text-body-s ${isErrored ? "text-semantic-danger" : "text-gray-50"}`}
+                        className={`absolute body-s ${isErrored ? "text-semantic-danger" : "text-gray-50"}`}
                     >
                         {label}
                     </Text>

@@ -122,17 +122,17 @@ const Login = () => {
           <View className="flex flex-1 justify-center items-center gap-6">
             <LogoLetter className="h-8 w-full" />
             <View>
-              <Text className="text-caption-xl text-gray-50 text-center">
+              <Text className="caption-xl text-gray-50 text-center">
                 {t("login.description_line_1")}
               </Text>
-              <Text className="text-caption-xl text-gray-50 text-center">
+              <Text className="caption-xl text-gray-50 text-center">
                 {t("login.description_line_2")}
               </Text>
             </View>
           </View>
           <View className="flex items-stretch justify-start gap-buttons">
             <Button onPress={loginWithOptions} className="w-full">
-              <Text className="text-button-m">{t("login.signUpButton")}</Text>
+              <Text className="button-m">{t("login.signUpButton")}</Text>
             </Button>
             {/* {showSignUp && (
               <Button
@@ -140,7 +140,7 @@ const Login = () => {
                 className="w-full"
                 variant="link"
               >
-                <Text className="text-button-m text-white">
+                <Text className="button-m text-white">
                   {t("login.signInButton")}
                 </Text>
               </Button>
@@ -152,13 +152,13 @@ const Login = () => {
         <BottomSheetView className="px-layout items-stretch rounded-card m-2 flex gap-buttons pb-14">
           <Button onPress={loginWithEmail}>
             <Ionicons name="mail" size={20} color="black" />
-            <Text className="text-button-m">
+            <Text className="button-m">
               {t("loginOptions.emailOption")}
             </Text>
           </Button>
           <Button onPress={loginWithGmail}>
             <AntDesign name="google" size={20} color="black" />
-            <Text className="text-button-m">
+            <Text className="button-m">
               {t("loginOptions.googleOption")}
             </Text>
           </Button>

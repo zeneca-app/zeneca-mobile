@@ -35,7 +35,7 @@ const DepositCrypto = () => {
 
   return (
     <LoggedLayout>
-      <Text className="text-heading-s text-gray-10 px-layout pb-layout-l pt-layout-s">
+      <Text className="heading-s text-gray-10 px-layout pb-layout-l pt-layout-s">
         {t("depositCrypto.title")}
       </Text>
 
@@ -57,11 +57,11 @@ const DepositCrypto = () => {
           </Card>
 
           <Card className="flex items-stretch justify-start gap-xs py-layout">
-            <Text className="text-gray-50 text-caption-l">
+            <Text className="text-gray-50 caption-l">
               {t("depositCrypto.addressLabel")}
             </Text>
             <View className="flex flex-row justify-between items-center">
-              <Text className="text-dark-content-white text-body-s flex-1">
+              <Text className="text-dark-content-white body-s flex-1">
                 {shortenAddressLonger(walletAddress)}
               </Text>
               <TouchableOpacity

@@ -41,7 +41,7 @@ const StockListItem = ({ etf }: StockListItemProps) => {
           {currencyFormatter(etf.price)}
         </Text>
         {/*         <Text
-          className={`text-caption-xl ${increased ? "text-semantic-success" : "text-red-20"}`}
+          className={`caption-xl ${increased ? "text-semantic-success" : "text-red-20"}`}
         >
           {percentageFormatter(etf.change_percent)}
         </Text> */}

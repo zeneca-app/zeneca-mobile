@@ -59,11 +59,11 @@ const EmailOtpValidationScreen = ({ route }: EmailOtpValidationScreenProps) => {
       <SafeAreaView className="flex-1">
         <View className="flex-1 p-layout">
 
-          <Text className="text-heading-s text-dark-content-white font-sans mb-2.5">
+          <Text className="heading-s text-dark-content-white font-sans mb-2.5">
             {t("emailOtpValidation.title")}
           </Text>
 
-          <Text className="text-caption-xl text-gray-50 font-sans mb-7.5">
+          <Text className="caption-xl text-gray-50 font-sans mb-7.5">
             {t("emailOtpValidation.subtitle")} {email}
           </Text>
           <View className="mb-7.5">
@@ -92,7 +92,7 @@ const EmailOtpValidationScreen = ({ route }: EmailOtpValidationScreenProps) => {
             onPress={handleContinue}
           >
             <Text
-              className={`text-body-m font-sans ${!isCodeFilled ? "text-dark-content-30" : "text-dark-content-dark"
+              className={`body-m font-sans ${!isCodeFilled ? "text-dark-content-30" : "text-dark-content-dark"
                 }`}
             >
               {t("emailOtpValidation.continueButton")}

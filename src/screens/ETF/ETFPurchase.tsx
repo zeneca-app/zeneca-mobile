@@ -77,7 +77,7 @@ const ETFPurchase = ({ route }) => {
       }
     >
       <View className="px-layout flex justify-center items-stretch gap-s flex-1">
-        <Text className="text-caption-l text-center text-gray-50">
+        <Text className="caption-l text-center text-gray-50">
           {t("etfPurchase.available")}{" "}
           {isBalancePending ? (
             <SkeletonLoadingView className="flex-1">
@@ -88,14 +88,14 @@ const ETFPurchase = ({ route }) => {
           )}
         </Text>
         <View className="flex-row items-center justify-center gap-s">
-          <Text className="text-body-l text-center text-gray-10 leading-tight">
+          <Text className="body-l text-center text-gray-10 leading-tight">
             $
           </Text>
-          <Text className="text-heading-l text-center text-gray-10">
+          <Text className="heading-l text-center text-gray-10">
             {amount}
           </Text>
         </View>
-        <Text className="text-caption-l text-center text-gray-50">
+        <Text className="caption-l text-center text-gray-50">
           {amountInEtf} {etf.symbol}
         </Text>
       </View>
@@ -107,7 +107,7 @@ const ETFPurchase = ({ route }) => {
       <View className="px-layout">
         <Button className="" disabled={!canContinue} onPress={goToConfirmation}>
           <Text
-            className={`text-button-m ${!canContinue ? "text-dark-content-30" : "text-dark-content-dark"}`}
+            className={`button-m ${!canContinue ? "text-dark-content-30" : "text-dark-content-dark"}`}
           >
             {t("etfPurchase.continue")}
           </Text>

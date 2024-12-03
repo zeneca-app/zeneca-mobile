@@ -89,25 +89,25 @@ const Keypad = ({ onChange, value, maximun, decimals = 2 }: KeypadProps) => {
           onPress={() => handlePreset(5)}
           className="border border-gray-90 w-20 text-white  flex justify-center items-center"
         >
-          <Text className="text-caption-l text-white">$5</Text>
+          <Text className="caption-l text-white">$5</Text>
         </PillButton>
         <PillButton
           onPress={() => handlePreset(10)}
           className="border border-gray-90 w-20 text-white flex justify-center items-center"
         >
-          <Text className="text-caption-l text-white">$10</Text>
+          <Text className="caption-l text-white">$10</Text>
         </PillButton>
         <PillButton
           onPress={() => handlePreset(20)}
           className="border border-gray-90 w-20 text-white flex justify-center items-center"
         >
-          <Text className="text-caption-l text-white">$20</Text>
+          <Text className="caption-l text-white">$20</Text>
         </PillButton>
         <PillButton
           onPress={() => handlePreset(maximun)}
           className="border border-gray-90 w-20 text-white flex justify-center items-center"
         >
-          <Text className="text-caption-l text-white">MAX</Text>
+          <Text className="caption-l text-white">MAX</Text>
         </PillButton>
       </View>
       <View className="flex-row justify-between px-4">

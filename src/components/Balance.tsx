@@ -76,7 +76,7 @@ const Balance = ({
           <LoadingTotalBalance />
         ) : (
           <>
-            <Text className="text-heading-l text-white font-sans">
+            <Text className="heading-l text-white font-sans">
               {equity}
             </Text>
             {displayCurrencyName && (

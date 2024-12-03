@@ -9,7 +9,7 @@ import {
   Manrope_700Bold,
   useFonts,
 } from "@expo-google-fonts/manrope";
-import { AppState, Platform } from 'react-native';
+import { AppState, Platform, StatusBar } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 import * as Sentry from "@sentry/react-native";
 import { LogBox } from "react-native";
@@ -39,11 +39,11 @@ LogBox.ignoreLogs([new RegExp("TypeError:.*")]);
 
 const AppIndex = () => {
   const [loaded] = useFonts({
-    Manrope_300Light,
-    Manrope_400Regular,
-    Manrope_500Medium,
-    Manrope_600SemiBold,
-    Manrope_700Bold,
+    Manrope_300Light: Manrope_300Light,
+    Manrope_400Regular: Manrope_400Regular,
+    Manrope_500Medium: Manrope_500Medium,
+    Manrope_600SemiBold: Manrope_600SemiBold,
+    Manrope_700Bold: Manrope_700Bold,
   });
 
   if (!loaded || AppState.currentState === 'inactive') {
@@ -52,6 +52,7 @@ const AppIndex = () => {
   return (
     <NavigationContainer>
       <Providers>
+        <StatusBar />
         <MainNavigation />
       </Providers>
     </NavigationContainer>

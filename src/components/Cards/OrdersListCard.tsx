@@ -34,15 +34,15 @@ const OrdersListCard = () => {
       <View className="pb-6">
         <ChartArrowUp className="h-40 w-40" />
       </View>
-      <Text className="text-center text-caption-xl text-gray-50">
+      <Text className="text-center caption-xl text-gray-50">
         {t("ordersListCard.empty_transactions")}
       </Text>
       {canTrade ? (
-        <Text className="text-center text-caption-xl text-gray-50">
+        <Text className="text-center caption-xl text-gray-50">
           {t("ordersListCard.empty_transactions_no_assets")}
         </Text>
       ) : (
-        <Text className="text-center text-caption-xl text-gray-50">
+        <Text className="text-center caption-xl text-gray-50">
           {t("ordersListCard.empty_transactions_no_funds")}
         </Text>
       )}
@@ -76,7 +76,7 @@ const OrdersListCard = () => {
       </View>
       <VerifyCtaCard />
       <CardHeader>
-        <Text className="text-caption-xl text-gray-50">
+        <Text className="caption-xl text-gray-50">
           {t("ordersListCard.myAssets")}
         </Text>
       </CardHeader>
