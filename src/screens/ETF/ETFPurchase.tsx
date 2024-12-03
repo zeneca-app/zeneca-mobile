@@ -72,7 +72,7 @@ const ETFPurchase = ({ route }) => {
           <View className="w-6 h-6 bg-gray-90 rounded-full overflow-hidden">
             <Logo style={{ height: "100%", width: "100%" }} />
           </View>
-          <Text className="text-gray-50 text-caption-xl">{etf.symbol}</Text>
+          <Text className="text-gray-50 caption-xl">{etf.symbol}</Text>
         </View>
       }
     >

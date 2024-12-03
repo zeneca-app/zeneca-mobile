@@ -21,7 +21,7 @@ const BottomSheetButton = ({
       <View className="flex-1 flex justify-center items-stretch">
         <Text className="text-white button-m">{label}</Text>
         {caption && (
-          <Text className="text-gray-50 text-caption-xl">{caption}</Text>
+          <Text className="text-gray-50 caption-xl">{caption}</Text>
         )}
       </View>
     </TouchableOpacity>

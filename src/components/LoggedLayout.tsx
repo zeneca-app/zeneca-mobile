@@ -25,7 +25,7 @@ const LoggedLayout = ({
   const insets = useSafeAreaInsets();
   return (
     <SafeAreaView
-      className={`flex-1 items-stretch bg-basic-black relative font-sans`}
+      className={`flex-1 items-stretch bg-basic-black relative`}
       style={{
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : insets.top,
         paddingBottom: insets.bottom,

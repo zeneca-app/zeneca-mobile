@@ -6,7 +6,7 @@ module.exports = {
   content: ["./app/**/*.{js,jsx,ts,tsx}", "./src/**/*.{js,jsx,ts,tsx}"],
   presets: [require("nativewind/preset")],
   fontFamily: {
-    sans: ['"manrope"', "sans-serif"],
+    sans: ['"manrope"'],
     Manrope_700Bold: ['"Manrope_700Bold"'],
     Manrope_600SemiBold: ['"Manrope_600SemiBold"'],
     Manrope_500Medium: ['"Manrope_500Medium"'],
@@ -61,6 +61,11 @@ module.exports = {
         },
         ".caption-xl": {
           fontFamily: '"Manrope_500Medium"',
+          fontSize: 16,
+          lineHeight: "1.46",
+        },
+        ".caption-xl-light": {
+          fontFamily: '"Manrope_300Light"',
           fontSize: 16,
           lineHeight: "1.46",
         },

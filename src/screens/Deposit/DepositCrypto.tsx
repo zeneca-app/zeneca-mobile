@@ -75,11 +75,11 @@ const DepositCrypto = () => {
           <View className="h-px bg-dark-background-100" />
         </View>
         <View className="text-center flex gap items-stretch pt-layout-l px-layout-l">
-          <Text className="text-caption-xs text-gray-50 text-left">
+          <Text className="caption-xs text-gray-50 text-left">
             {t("depositCrypto.infoText")}
           </Text>
 
-          <Text className="text-caption-xs text-gray-50 text-left">
+          <Text className="caption-xs text-gray-50 text-left">
             {t("depositCrypto.disclaimerText")}
           </Text>
         </View>

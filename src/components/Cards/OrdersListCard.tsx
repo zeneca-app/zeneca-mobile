@@ -76,7 +76,7 @@ const OrdersListCard = () => {
       </View>
       <VerifyCtaCard />
       <CardHeader>
-        <Text className="caption-xl text-gray-50">
+        <Text className="caption-xl-bold text-gray-50">
           {t("ordersListCard.myAssets")}
         </Text>
       </CardHeader>
@@ -87,9 +87,9 @@ const OrdersListCard = () => {
 
   const HomeFooter = () => (
     <CardFooter>
-      <Text className="text-caption-x"></Text>
-      <Text className="text-caption-xl"></Text>
-      <Text className="text-caption-xl"></Text>
+      <Text className="caption-xl"></Text>
+      <Text className="caption-xl"></Text>
+      <Text className="caption-xl"></Text>
     </CardFooter>
   )
 

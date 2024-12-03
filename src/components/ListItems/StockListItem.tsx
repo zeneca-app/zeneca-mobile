@@ -33,11 +33,11 @@ const StockListItem = ({ etf }: StockListItemProps) => {
         <Logo style={{ height: "100%", width: "100%" }} />
       </View>
       <View className="flex-1 flex justify-center items-stretch">
-        <Text className="text-gray-10 text-caption-xl">{etf.display_name}</Text>
-        <Text className="text-gray-50 text-caption-xl">{etf.symbol}</Text>
+        <Text className="text-gray-10 caption-xl">{etf.display_name}</Text>
+        <Text className="text-gray-50 caption-xl">{etf.symbol}</Text>
       </View>
       <View className="flex-1 flex justify-center items-end">
-        <Text className="text-gray-10 text-caption-xl">
+        <Text className="text-gray-10 caption-xl">
           {currencyFormatter(etf.price)}
         </Text>
         {/*         <Text

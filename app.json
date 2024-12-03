@@ -38,8 +38,7 @@
             "./node_modules/@expo-google-fonts/manrope/Manrope_400Regular.ttf",
             "./node_modules/@expo-google-fonts/manrope/Manrope_500Medium.ttf",
             "./node_modules/@expo-google-fonts/manrope/Manrope_600SemiBold.ttf",
-            "./node_modules/@expo-google-fonts/manrope/Manrope_700Bold.ttf",
-            "./node_modules/@expo-google-fonts/manrope/Manrope_800ExtraBold.ttf"
+            "./node_modules/@expo-google-fonts/manrope/Manrope_700Bold.ttf"
           ]
         }
       ],
