@@ -29,6 +29,7 @@ import {
   View,
 } from "react-native";
 import { OtpInput } from "react-native-otp-entry";
+import LoggedLayout from "@/components/LoggedLayout";
 
 const LoginOtpScreen = () => {
   const { t } = useTranslation();
@@ -190,70 +191,72 @@ const LoginOtpScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.mainContainer}
-    >
-      <SafeAreaView style={styles.safeAreaContainer}>
-        <View style={styles.topContent}>
-          <Text style={styles.title}>{t("emailOtpValidation.title")}</Text>
-          <Text style={styles.subtitle}>
-            {t("emailOtpValidation.subtitle")} {email}
-          </Text>
-          <View style={styles.codeInputContainer}>
-            <OtpInput
-              numberOfDigits={6}
-              focusColor="#5A10EF"
-              focusStickBlinkingDuration={500}
-              onTextChange={(text) => setCode(text as `${number | ""}`)}
-              onFilled={handleOtpFilled}
-              theme={{
-                containerStyle: styles.otpContainer,
-                inputsContainerStyle: styles.otpInputsContainer,
-                pinCodeContainerStyle: styles.otpPinCodeContainer,
-                pinCodeTextStyle: styles.otpPinCodeText,
-                focusStickStyle: styles.otpFocusStick,
-                focusedPinCodeContainerStyle: styles.otpActivePinCodeContainer,
-              }}
-            />
-          </View>
-        </View>
-        <View style={styles.bottomContent}>
-          <TouchableOpacity
-            style={[
-              styles.continueButton,
-              !isCodeFilled && styles.continueButtonDisabled,
-            ]}
-            disabled={!isCodeFilled}
-            onPress={handleConfirmCode}
-          >
-            <Text
-              style={[
-                styles.continueButtonText,
-                !isCodeFilled && styles.continueButtonTextDisabled,
-              ]}
-            >
-              {t("emailOtpValidation.continueButton")}
+    <LoggedLayout>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.mainContainer}
+      >
+        <SafeAreaView style={styles.safeAreaContainer}>
+          <View style={styles.topContent}>
+            <Text style={styles.title}>{t("emailOtpValidation.title")}</Text>
+            <Text style={styles.subtitle}>
+              {t("emailOtpValidation.subtitle")} {email}
             </Text>
-          </TouchableOpacity>
-        </View>
+            <View style={styles.codeInputContainer}>
+              <OtpInput
+                numberOfDigits={6}
+                focusColor="#5A10EF"
+                focusStickBlinkingDuration={500}
+                onTextChange={(text) => setCode(text as `${number | ""}`)}
+                onFilled={handleOtpFilled}
+                theme={{
+                  containerStyle: styles.otpContainer,
+                  inputsContainerStyle: styles.otpInputsContainer,
+                  pinCodeContainerStyle: styles.otpPinCodeContainer,
+                  pinCodeTextStyle: styles.otpPinCodeText,
+                  focusStickStyle: styles.otpFocusStick,
+                  focusedPinCodeContainerStyle: styles.otpActivePinCodeContainer,
+                }}
+              />
+            </View>
+          </View>
+          <View style={styles.bottomContent}>
+            <TouchableOpacity
+              style={[
+                styles.continueButton,
+                !isCodeFilled && styles.continueButtonDisabled,
+              ]}
+              disabled={!isCodeFilled}
+              onPress={handleConfirmCode}
+            >
+              <Text
+                style={[
+                  styles.continueButtonText,
+                  !isCodeFilled && styles.continueButtonTextDisabled,
+                ]}
+              >
+                {t("emailOtpValidation.continueButton")}
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-        <StatusModal
-          modalState={modalState}
-          text={
-            modalState === "loading"
-              ? loadingMessage
-              : t("loginWithEmail.errorCodeText")
-          }
-          onClose={() => {
-            setModalState("dismissed");
-            setCode("");
-            navigation.navigate("LoginWithEmail");
-          }}
-          actionButtonText={t("loginWithEmail.errorCodeTryAgain")}
-        />
-      </SafeAreaView>
-    </KeyboardAvoidingView>
+          <StatusModal
+            modalState={modalState}
+            text={
+              modalState === "loading"
+                ? loadingMessage
+                : t("loginWithEmail.errorCodeText")
+            }
+            onClose={() => {
+              setModalState("dismissed");
+              setCode("");
+              navigation.navigate("LoginWithEmail");
+            }}
+            actionButtonText={t("loginWithEmail.errorCodeTryAgain")}
+          />
+        </SafeAreaView>
+      </KeyboardAvoidingView>
+    </LoggedLayout>
   );
 };
 

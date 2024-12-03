@@ -16,6 +16,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import LoggedLayout from "@/components/LoggedLayout";
 
 const LoginWithEmail = () => {
   const TEST_EMAIL = "tester@zeneca.app";
@@ -82,53 +83,55 @@ const LoginWithEmail = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.mainContainer}
-    >
-      <SafeAreaView style={styles.safeAreaContainer}>
-        <View style={styles.topContent}>
-          <Text style={styles.title}>{t("loginWithEmail.title")}</Text>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>{t("loginWithEmail.emailLabel")}</Text>
-            <TextInput
-              style={styles.input}
-              value={email}
-              onChangeText={setEmail}
-              autoComplete="off"
-              autoCorrect={false}
-              clearButtonMode="while-editing"
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
+    <LoggedLayout>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.mainContainer}
+      >
+        <SafeAreaView style={styles.safeAreaContainer}>
+          <View style={styles.topContent}>
+            <Text style={styles.title}>{t("loginWithEmail.title")}</Text>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>{t("loginWithEmail.emailLabel")}</Text>
+              <TextInput
+                style={styles.input}
+                value={email}
+                onChangeText={setEmail}
+                autoComplete="off"
+                autoCorrect={false}
+                clearButtonMode="while-editing"
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
 
-            <View
-              style={[styles.inputLine, !isEmailValid && styles.inputLineError]}
-            />
-            {!isEmailValid && (
-              <Text style={styles.errorText}>
-                {t("loginWithEmail.errorText")}
-              </Text>
-            )}
+              <View
+                style={[styles.inputLine, !isEmailValid && styles.inputLineError]}
+              />
+              {!isEmailValid && (
+                <Text style={styles.errorText}>
+                  {t("loginWithEmail.errorText")}
+                </Text>
+              )}
+            </View>
           </View>
-        </View>
-        <View style={styles.bottomContent}>
-          <TouchableOpacity
-            disabled={email?.length === 0}
-            style={[
-              styles.continueButton,
-              email?.length === 0 && styles.continueButtonDisabled,
-            ]}
-            onPress={onSubmit}
-          >
-            <Text style={styles.continueButtonText}>
-              {t("loginWithEmail.continueButton")}
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <LoadingScreen isVisible={isLoading} text={loadingMessage} />
-      </SafeAreaView>
-    </KeyboardAvoidingView>
+          <View style={styles.bottomContent}>
+            <TouchableOpacity
+              disabled={email?.length === 0}
+              style={[
+                styles.continueButton,
+                email?.length === 0 && styles.continueButtonDisabled,
+              ]}
+              onPress={onSubmit}
+            >
+              <Text style={styles.continueButtonText}>
+                {t("loginWithEmail.continueButton")}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <LoadingScreen isVisible={isLoading} text={loadingMessage} />
+        </SafeAreaView>
+      </KeyboardAvoidingView>
+    </LoggedLayout>
   );
 };
 
