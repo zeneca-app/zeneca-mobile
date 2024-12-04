@@ -18,7 +18,7 @@ import MainNavigation from "@/screens/MainNavigation";
 import * as SplashScreen from "expo-splash-screen";
 
 
-const navigationIntegration = Sentry.reactNavigationIntegration({
+const navigationIntegration = new Sentry.ReactNavigationInstrumentation({
   enableTimeToInitialDisplay: true,
 });
 
@@ -30,8 +30,9 @@ Sentry.init({
   dsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
   debug: false,
   integrations: [
-    navigationIntegration,
-    Sentry.reactNativeTracingIntegration({}),
+    new Sentry.ReactNativeTracing({
+      routingInstrumentation: navigationIntegration,
+    }),
   ],
 });
 
