@@ -1,12 +1,30 @@
 import { DBUser } from "@/storage/interfaces";
 import { create } from "zustand";
+import { createJSONStorage, devtools, persist } from "zustand/middleware";
+import zustandStorage from "./storage";
 
 type UserStore = {
   user?: DBUser;
   setUser: (user?: DBUser) => void;
+  resetUser: () => void;
 };
 
-export const useUserStore = create<UserStore>((set) => ({
+const initialState = {
   user: undefined,
-  setUser: (user) => set({ user }),
-}));
+};
+
+export const useUserStore = create<UserStore>()(
+  devtools(
+    persist(
+      (set) => ({
+        user: initialState.user,
+        setUser: (data: DBUser | undefined) => set(() => ({ user: data })),
+        resetUser: () => set(() => initialState),
+      }),
+      {
+        name: "user-storage",
+        storage: createJSONStorage(() => zustandStorage),
+      },
+    ),
+  ),
+);
