@@ -28,6 +28,10 @@
     "production": {
       "autoIncrement": true,
       "channel": "production",
+      "android": {
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleRelease"
+      },
       "ios": {
         "distribution": "store"
       }
@@ -45,9 +49,38 @@
       "extends": "production",
       "channel": "testflight",
       "distribution": "internal"
+    },
+    "playstore-beta": {
+      "env": {
+        "EXPO_PUBLIC_PRIVY_APP_ID": "${EXPO_PUBLIC_PRIVY_APP_ID}",
+        "EXPO_PUBLIC_PRIVY_CLIENT_ID": "${EXPO_PUBLIC_PRIVY_CLIENT_ID}",
+        "EXPO_PUBLIC_AIPRISE_TEMPLATE_ID": "${EXPO_PUBLIC_AIPRISE_TEMPLATE_ID}",
+        "EXPO_PUBLIC_PIMLICO_API_KEY": "${EXPO_PUBLIC_PIMLICO_API_KEY}",
+        "EXPO_PUBLIC_SENTRY_DSN": "${EXPO_PUBLIC_SENTRY_DSN}",
+        "EXPO_PUBLIC_POSTHOG_API_KEY": "${EXPO_PUBLIC_POSTHOG_API_KEY}",
+        "EXPO_PUBLIC_POSTHOG_HOST": "${EXPO_PUBLIC_POSTHOG_HOST}"
+      },
+      "extends": "production",
+      "channel": "beta",
+      "distribution": "internal",
+      "android": {
+        "buildType": "app-bundle",
+        "gradleCommand": ":app:bundleRelease"
+      }
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "track": "production",
+        "releaseStatus": "completed"
+      }
+    },
+    "playstore-beta": {
+      "android": {
+        "track": "internal",
+        "releaseStatus": "completed"
+      }
+    }
   }
 }
