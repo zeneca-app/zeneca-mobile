@@ -19,7 +19,7 @@ export const useUserStore = create<UserStore>()(
       (set) => ({
         user: initialState.user,
         setUser: (data: DBUser | undefined) => set(() => ({ user: data })),
-        resetUser: () => set(() => initialState),
+        resetUser: () => set({ user: undefined }),
       }),
       {
         name: "user-storage",
