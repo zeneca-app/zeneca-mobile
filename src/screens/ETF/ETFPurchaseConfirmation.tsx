@@ -124,7 +124,8 @@ const ETFPurchaseConfirmation = ({ route }) => {
   // Initial quote fetch
   useEffect(() => {
     fetchQuote();
-  }, []); // Run only once on mount
+  }, [fetchQuote]); // Add fetchQuote to dependencies
+
 
   // Timer management
   useEffect(() => {
@@ -138,13 +139,14 @@ const ETFPurchaseConfirmation = ({ route }) => {
 
       if (remaining <= 0) {
         fetchQuote();
-        clearInterval(timerId); // Stop the interval when fetching new quote
       }
     };
 
     const timerId = setInterval(updateTimer, 1000);
-    return () => clearInterval(timerId);
-  }, [quote]);
+    return () => {
+      clearInterval(timerId); // Move clearInterval to cleanup function
+    };
+  }, [quote, fetchQuote]); // Add fetchQuote to dependencies
 
   const formatTimeLeft = (seconds: number): string => {
     if (seconds <= 0) return '0:00';
