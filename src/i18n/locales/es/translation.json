@@ -181,7 +181,8 @@
   "etfDetail": {
     "buy": "Comprar",
     "from": "from: ",
-    "to": "to: "
+    "to": "to: ",
+    "description": "Acerca de"
   },
   "onBoarding": {
     "steps": {

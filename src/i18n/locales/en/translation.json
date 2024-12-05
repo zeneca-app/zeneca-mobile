@@ -272,7 +272,8 @@
   "etfDetail": {
     "buy": "Buy",
     "from": "from: ",
-    "to": "to: "
+    "to": "to: ",
+    "description": "About"
   },
   "etfPurchase": {
     "timeLeft": "Quote expires in {{time}}",
