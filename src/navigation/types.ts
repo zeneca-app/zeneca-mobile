@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
+import { AssetPrice } from "@/client/";
+
 /* eslint-disable @typescript-eslint/no-namespace */
 export type RootStackParamList = {
   Login: undefined;
@@ -12,7 +14,9 @@ export type RootStackParamList = {
   LoginWithEmail: undefined;
   EmailOtpValidation: undefined;
   ExploreETFs: undefined;
-  ETFDetail: undefined;
+  ETFDetail: {
+    asset: AssetPrice;
+  };
   ETFPurchaseConfirmation: undefined;
   ETFPurchaseSuccess: undefined;
   ETFPurchase: undefined;

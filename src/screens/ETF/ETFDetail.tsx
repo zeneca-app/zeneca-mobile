@@ -24,6 +24,7 @@ import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Animated, Dimensions, View } from "react-native";
 import { LineChart } from "react-native-wagmi-charts";
+import { AssetPrice } from "@/client/";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -31,21 +32,17 @@ const windowHeight = Dimensions.get("window").height;
 const chartWidth = windowWidth - 48;
 const chartHeight = windowHeight - 600;
 
-type Asset = {
-  etf: {
-    id: string;
-    name: string;
-    description: string;
-    symbol: string;
-    display_name: string;
-    logo_url: string;
-    external_id: string;
-    price: string;
+
+type ETFDetailScreenProps = {
+  route: {
+    params: {
+      asset: AssetPrice;
+    };
   };
 };
 
-const ETFDetail = ({ route }: Asset) => {
-  const asset = route.params.etf as Asset["etf"];
+const ETFDetail = ({ route }: ETFDetailScreenProps) => {
+  const asset = route.params.asset;
 
   const navigation = useNavigation();
 

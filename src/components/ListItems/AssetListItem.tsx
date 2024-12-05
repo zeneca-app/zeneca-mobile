@@ -2,29 +2,20 @@ import { STOCKS } from "@/constants/stocks";
 import { currencyFormatter, percentageFormatter } from "@/utils/currencyUtils";
 import { useNavigation } from "@react-navigation/native";
 import { Text, TouchableOpacity, View } from "react-native";
+import { AssetPrice } from "@/client/";
 
-export type StockListItemProps = {
-  etf: {
-    id: string;
-    price: string;
-    display_name: string;
-    logo_url: string;
-    symbol: string;
-    name: string;
-    external_id: string;
-    description: string;
-  };
+
+export type AssetListItemProps = {
+  asset: AssetPrice;
 };
 
-const StockListItem = ({ etf }: StockListItemProps) => {
-
+const AssetListItem = ({ asset }: AssetListItemProps) => {
   const navigation = useNavigation();
 
-  const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo;
-
+  const Logo = STOCKS?.[asset.symbol as keyof typeof STOCKS]?.logo;
 
   const handlePress = () => {
-    navigation.navigate("ETFDetail", { etf });
+    navigation.navigate("ETFDetail", { asset });
   };
 
   return (
@@ -33,12 +24,12 @@ const StockListItem = ({ etf }: StockListItemProps) => {
         <Logo style={{ height: "100%", width: "100%" }} />
       </View>
       <View className="flex-1 flex justify-center items-stretch">
-        <Text className="text-gray-10 caption-xl">{etf.display_name}</Text>
-        <Text className="text-gray-50 caption-xl">{etf.symbol}</Text>
+        <Text className="text-gray-10 caption-xl">{asset.display_name}</Text>
+        <Text className="text-gray-50 caption-xl">{asset.symbol}</Text>
       </View>
       <View className="flex-1 flex justify-center items-end">
         <Text className="text-gray-10 caption-xl">
-          {currencyFormatter(etf.price)}
+          {currencyFormatter(asset.price)}
         </Text>
         {/*         <Text
           className={`caption-xl ${increased ? "text-semantic-success" : "text-red-20"}`}
@@ -50,6 +41,6 @@ const StockListItem = ({ etf }: StockListItemProps) => {
   );
 };
 
-StockListItem.displayName = "StockListItem";
+AssetListItem.displayName = "AssetListItem";
 
-export default StockListItem;
+export default AssetListItem;
