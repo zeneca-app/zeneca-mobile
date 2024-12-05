@@ -3,8 +3,9 @@ import { usersMeOptions } from "@/client/@tanstack/react-query.gen";
 import client from "@/client/client";
 import { useUserStore } from "@/storage/userStore";
 import { usePrivy } from "@privy-io/expo";
-import * as SplashScreen from "expo-splash-screen";
 import { useQuery } from "@tanstack/react-query";
+import ZenecaLogoAnimation from "@/components/IntroAnimation";
+
 
 export function AwaitPrivyProvider({ children }: { children: ReactNode }) {
     const [isReady, setIsReady] = useState<boolean>(false);
@@ -87,10 +88,9 @@ export function AwaitPrivyProvider({ children }: { children: ReactNode }) {
 
     // Only render children when ready and both auth states exist
     if (isReady) {
-        SplashScreen.hideAsync();
         return <>{children}</>;
     }
 
 
-    return null;
+    return <ZenecaLogoAnimation />;
 }
