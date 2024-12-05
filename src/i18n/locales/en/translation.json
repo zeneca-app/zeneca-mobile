@@ -275,6 +275,7 @@
     "to": "to: "
   },
   "etfPurchase": {
+    "timeLeft": "Quote expires in {{time}}",
     "continue": "Continue",
     "max": "MAX",
     "available": "Available",

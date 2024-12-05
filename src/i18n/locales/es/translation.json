@@ -273,6 +273,7 @@
     "continue_button": "Continuar"
   },
   "etfPurchase": {
+    "timeLeft": "La cotización expira en {{time}}",
     "continue": "Continuar",
     "max": "MAX",
     "available": "Disponible",
