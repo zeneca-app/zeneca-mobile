@@ -18,16 +18,23 @@ import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { Address } from "viem";
 
+
+
 const ETFPurchaseConfirmation = ({ route }) => {
-  
+  const { etf, amount } = route.params;
+
+  const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo || null;
+
   const navigation = useNavigation();
   const queryClient = useQueryClient();
+
   const { t } = useTranslation();
   const wallet = useEmbeddedWallet();
   const { chain } = useChainStore();
   const [transactionInitiated, setTransactionInitiated] = useState(false);
 
-  const { etf, amount } = route.params;
+  const [quote, setQuote] = useState<OrderQuote | null>(null);
+  const [timeLeft, setTimeLeft] = useState(0);
 
   const amountDisplayed = amount
     ? currencyFormatter(amount, 2, 6, true)
@@ -35,8 +42,6 @@ const ETFPurchaseConfirmation = ({ route }) => {
 
   const amountToOrder = formatNumber(amount, 2, 6, true);
 
-  const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo || null;
-  const [quote, setQuote] = useState<OrderQuote | null>(null);
 
   const { mutate: createQuote, isPending: isQuotePending } = useMutation({
     ...ordersCreateQuoteOrderMutation(),
@@ -53,6 +58,9 @@ const ETFPurchaseConfirmation = ({ route }) => {
       setTransactionInitiated(true);
 
       const signerAddress = wallet?.account?.address as Address;
+      if (!signerAddress) throw new Error("No wallet address found");
+      if (!quote) throw new Error("No quote available");
+
       const smartAccountClient = await getPimlicoSmartAccountClient(
         signerAddress,
         chain,
@@ -62,20 +70,29 @@ const ETFPurchaseConfirmation = ({ route }) => {
       const tx = await smartAccountClient.sendTransactions({
         transactions: transactions,
       });
-      if (tx) {
-        const receipt = await publicClient.waitForTransactionReceipt({
-          hash: tx,
-        });
 
-        queryClient.invalidateQueries({ queryKey: ["usersMyBalance"] });
-        queryClient.invalidateQueries({ queryKey: ["usersMyAssets"] });
+      if (!tx) throw new Error("Transaction failed to send");
 
-        navigation.navigate("ETFPurchaseSuccess", {
-          etf,
-          amount,
-          quote,
-        });
+      const receipt = await publicClient.waitForTransactionReceipt({
+        hash: tx,
+      });
+
+      if (receipt.status !== "success") {
+        throw new Error("Transaction failed");
       }
+
+      // Invalidate queries after successful transaction
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["usersMyBalance"] }),
+        queryClient.invalidateQueries({ queryKey: ["usersMyAssets"] }),
+      ]);
+
+      navigation.navigate("ETFPurchaseSuccess", {
+        etf,
+        amount,
+        quote,
+      });
+
     } catch (error) {
       console.error("Error during transaction:", error);
     } finally {
@@ -86,7 +103,14 @@ const ETFPurchaseConfirmation = ({ route }) => {
     }
   };
 
-  useEffect(() => {
+  const calculateTimeLeft = () => {
+    if (!quote) return 0;
+    const now = Math.floor(Date.now() / 1000); // Current time in seconds
+    const timeLeft = quote.deadline - now;
+    return timeLeft > 0 ? timeLeft : 0;
+  };
+
+  const fetchQuote = React.useCallback(() => {
     createQuote({
       body: {
         asset_id: etf.id,
@@ -95,7 +119,41 @@ const ETFPurchaseConfirmation = ({ route }) => {
         amount: amount.toString(),
       },
     });
-  }, [createQuote]);
+  }, [createQuote, etf.id, amount]);
+
+  // Initial quote fetch
+  useEffect(() => {
+    fetchQuote();
+  }, []); // Run only once on mount
+
+  // Timer management
+  useEffect(() => {
+    if (!quote) return;
+
+    setTimeLeft(calculateTimeLeft());
+
+    const updateTimer = () => {
+      const remaining = calculateTimeLeft();
+      setTimeLeft(remaining);
+
+      if (remaining <= 0) {
+        fetchQuote();
+        clearInterval(timerId); // Stop the interval when fetching new quote
+      }
+    };
+
+    const timerId = setInterval(updateTimer, 1000);
+    return () => clearInterval(timerId);
+  }, [quote]);
+
+  const formatTimeLeft = (seconds: number): string => {
+    if (seconds <= 0) return '0:00';
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${String(remainingSeconds).padStart(2, '0')}`;
+  };
+
+  const minLeft = formatTimeLeft(timeLeft);
 
   const etfAmount = new BigNumber(amountToOrder)
     .dividedBy(etf.price)
@@ -196,9 +254,18 @@ const ETFPurchaseConfirmation = ({ route }) => {
             ]}
           />
         </Text>
+
+        {isQuotePending ? (
+          <SkeletonView className="w-20 h-4" />
+        ) : (
+          <Text className="caption-l text-gray-50">
+            {t("etfPurchase.timeLeft", { time: minLeft })}
+          </Text>
+        )}
+
       </View>
       <View className="px-layout">
-        {showButtonConfirmation && (
+        {showButtonConfirmation ? (
           <Button
             className=""
             onPress={executeTransaction}
@@ -207,6 +274,8 @@ const ETFPurchaseConfirmation = ({ route }) => {
           >
             <Text className="button-m">{t("etfPurchase.confirm")}</Text>
           </Button>
+        ) : (
+          <SkeletonView className="w-full h-12" />
         )}
       </View>
     </LoggedLayout>
