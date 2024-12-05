@@ -15,22 +15,26 @@ import {
   STOCKS,
   TIMEFRAME_DEFAULT,
 } from "@/constants/stocks";
-import { currencyFormatter, percentageFormatter } from "@/utils/currencyUtils";
+import { currencyFormatter, percentageFormatter, formatNumber } from "@/utils/currencyUtils";
 import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import BigNumber from "bignumber.js";
 import { cssInterop } from "nativewind";
 import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { Animated, Dimensions, View } from "react-native";
+import { Animated, Dimensions, ScrollView, View } from "react-native";
 import { LineChart } from "react-native-wagmi-charts";
 import { AssetPrice } from "@/client/";
+import useMarketHourStore from "@/storage/marketHourStore";
+import MarketHours from "@/components/MarketHours";
+import BottomActions from "@/components/BottomActions";
+
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 const chartWidth = windowWidth - 48;
-const chartHeight = windowHeight - 600;
+const chartHeight = windowHeight * 0.34;
 
 
 type ETFDetailScreenProps = {
@@ -51,9 +55,9 @@ const ETFDetail = ({ route }: ETFDetailScreenProps) => {
 
   const { t } = useTranslation();
 
-  const Logo = STOCKS?.[asset.symbol as keyof typeof STOCKS]?.logo || null;
-
   cssInterop(CopyIcon, { className: "style" });
+
+  const { isMarketOpen } = useMarketHourStore((state) => state);
 
   const {
     isPending: assetDetailLoading,
@@ -123,96 +127,129 @@ const ETFDetail = ({ route }: ETFDetailScreenProps) => {
 
   const lineColor = change.increase ? "#04AE92" : "#F58989";
 
+  const ChartView = () => (
+    <View className="flex flex-1 gap-l ">
+      <View className="flex-1 flex gap-s justify-end ">
+        <Animated.View
+          className="relative w-full"
+          style={{ height: chartHeight + 24, width: chartWidth }}
+        >
+          {stockPointsData && stockPointsData.length > 0 ? (
+            <LineChart.Provider data={chartData}>
+              <LineChart height={chartHeight}>
+                <LineChart.Path color={lineColor}>
+                  <LineChart.Gradient />
+                </LineChart.Path>
+                <LineChart.CursorCrosshair color={"#F7F7F8"}>
+                  <LineChart.Tooltip
+                    textStyle={{
+                      backgroundColor: "#19181B",
+                      borderRadius: 4,
+                      color: "white",
+                      fontSize: 18,
+                      padding: 4,
+                    }}
+                  />
+                </LineChart.CursorCrosshair>
+              </LineChart>
+            </LineChart.Provider>
+          ) : (
+            <View className="flex-1 flex justify-center items-center absolute w-full h-full mx-layout">
+              <LoaderSpinner />
+            </View>
+          )}
+        </Animated.View>
+        <View className="flex flex-row justify-between items-center px-layout-l w-full pb-layout-s">
+          {Object.entries(CHART_TIMEFRAMES).map(([key, value]) => (
+            <PillButtonProps
+              key={key}
+              onPress={() =>
+                setTimeframe(key as keyof typeof CHART_TIMEFRAMES)
+              }
+              activeClasses="!bg-gray-90"
+              isActive={timeframe === key}
+            >
+              <Text
+                className={`caption-m ${timeframe === key ? "text-white" : "text-gray-50"}`}
+              >
+                {key}
+              </Text>
+            </PillButtonProps>
+          ))}
+        </View>
+      </View>
+
+    </View>
+  )
+
+  const HeaderView = () => {
+    const Logo = STOCKS?.[asset.symbol as keyof typeof STOCKS]?.logo || null;
+    const priceDisplayed = price
+      ? currencyFormatter(price, 2, 0, true)
+      : "0.00";
+
+    return (
+      <>
+        <View className="flex-row gap-s pt-layout-s pb-layout-s items-center justify-start px-layout">
+          <View className="w-12 h-12 bg-gray-90 rounded-full overflow-hidden">
+            <Logo style={{ height: "100%", width: "100%" }} />
+          </View>
+          <Text className="text-gray-50 caption-xl flex-1">
+            {asset.symbol}
+          </Text>
+        </View>
+        <Text
+          className="heading-m text-gray-10 px-layout"
+          numberOfLines={2}
+          ellipsizeMode="tail"
+        >
+          {asset.display_name}
+        </Text>
+        <Text className="heading-s text-gray-10 px-layout">{priceDisplayed}</Text>
+        <View className="flex-row gap-s pt-layout-s pb-layout-s items-center justify-start px-layout">
+          <Text
+            className={`caption-m ${change.increase ? "text-semantic-success" : "text-red-20"}`}
+          >
+            {change.increase && "+"}
+            {currencyFormatter(change.change, 2, 0)} (
+            {percentageFormatter(change.percentage)})
+          </Text>
+        </View>
+      </>
+    )
+  }
+
+  const BottomView = () => {
+    return (
+      <BottomActions>
+        {!isMarketOpen ? (
+          <MarketHours />) : (
+          <View className="px-layout">
+            <Button
+              className=""
+              onPress={() =>
+                navigation.navigate("ETFPurchase", {
+                  etf: { ...asset, price: price },
+                })
+              }
+            >
+              <Text className="button-m">{t("etfDetail.buy")}</Text>
+            </Button>
+          </View>
+        )}
+      </BottomActions>
+    )
+  }
+
   return (
     <LoggedLayout>
-      <View className="flex-row gap-s pt-layout-s pb-layout-s items-center justify-start px-layout">
-        <View className="w-12 h-12 bg-gray-90 rounded-full overflow-hidden">
-          <Logo style={{ height: "100%", width: "100%" }} />
+      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+        <HeaderView />
+        <ChartView />
+        <View className="px-layout">
         </View>
-        <Text className="text-gray-50 caption-xl flex-1">
-          {asset.symbol}
-        </Text>
-      </View>
-      <Text
-        className="heading-m text-gray-10 px-layout"
-        numberOfLines={2}
-        ellipsizeMode="tail"
-      >
-        {asset.display_name}
-      </Text>
-      <Text className="heading-m text-gray-10 px-layout">${price}</Text>
-      <View className="flex-row gap-s pt-layout-s pb-layout-s items-center justify-start px-layout">
-        <Text
-          className={`caption-m ${change.increase ? "text-semantic-success" : "text-red-20"}`}
-        >
-          {change.increase && "+"}
-          {currencyFormatter(change.change, 2, 0)} (
-          {percentageFormatter(change.percentage)})
-        </Text>
-      </View>
-      <View className="flex flex-1 gap-l">
-        <View className="flex-1 flex gap-s justify-end ">
-          <Animated.View
-            className="relative w-full"
-            style={{ height: chartHeight + 24, width: chartWidth }}
-          >
-            {stockPointsData && stockPointsData.length > 0 ? (
-              <LineChart.Provider data={chartData}>
-                <LineChart height={chartHeight}>
-                  <LineChart.Path color={lineColor}>
-                    <LineChart.Gradient />
-                  </LineChart.Path>
-                  <LineChart.CursorCrosshair color={"#F7F7F8"}>
-                    <LineChart.Tooltip
-                      textStyle={{
-                        backgroundColor: "#19181B",
-                        borderRadius: 4,
-                        color: "white",
-                        fontSize: 18,
-                        padding: 4,
-                      }}
-                    />
-                  </LineChart.CursorCrosshair>
-                </LineChart>
-              </LineChart.Provider>
-            ) : (
-              <View className="flex-1 flex justify-center items-center absolute w-full h-full mx-layout">
-                <LoaderSpinner />
-              </View>
-            )}
-          </Animated.View>
-          <View className="flex flex-row justify-between items-center px-layout-l w-full">
-            {Object.entries(CHART_TIMEFRAMES).map(([key, value]) => (
-              <PillButtonProps
-                key={key}
-                onPress={() =>
-                  setTimeframe(key as keyof typeof CHART_TIMEFRAMES)
-                }
-                activeClasses="!bg-gray-90"
-                isActive={timeframe === key}
-              >
-                <Text
-                  className={`caption-m ${timeframe === key ? "text-white" : "text-gray-50"}`}
-                >
-                  {key}
-                </Text>
-              </PillButtonProps>
-            ))}
-          </View>
-        </View>
-        <View className="px-layout pt-layout">
-          <Button
-            className=""
-            onPress={() =>
-              navigation.navigate("ETFPurchase", {
-                etf: { ...asset, price: price },
-              })
-            }
-          >
-            <Text className="button-m">{t("etfDetail.buy")}</Text>
-          </Button>
-        </View>
-      </View>
+      </ScrollView>
+      <BottomView />
     </LoggedLayout>
   );
 };
