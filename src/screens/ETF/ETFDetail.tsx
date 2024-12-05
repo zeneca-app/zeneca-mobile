@@ -9,6 +9,7 @@ import Button from "@/components/Button";
 import PillButtonProps from "@/components/Buttons/PillButton";
 import LoaderSpinner from "@/components/LoaderSpinner";
 import LoggedLayout from "@/components/LoggedLayout";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import Text from "@/components/Text";
 import {
   CHART_TIMEFRAMES,
@@ -28,13 +29,15 @@ import { AssetPrice } from "@/client/";
 import useMarketHourStore from "@/storage/marketHourStore";
 import MarketHours from "@/components/MarketHours";
 import BottomActions from "@/components/BottomActions";
+import COLORS from "@/constants/colors";
+import { SkeletonView } from "@/components/Loading/SkeletonLoadingView";
 
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 const chartWidth = windowWidth - 48;
-const chartHeight = windowHeight * 0.34;
+const chartHeight = windowHeight * 0.24;
 
 
 type ETFDetailScreenProps = {
@@ -206,14 +209,21 @@ const ETFDetail = ({ route }: ETFDetailScreenProps) => {
           {asset.display_name}
         </Text>
         <Text className="heading-s text-gray-10 px-layout">{priceDisplayed}</Text>
-        <View className="flex-row gap-s pt-layout-s pb-layout-s items-center justify-start px-layout">
-          <Text
-            className={`caption-m ${change.increase ? "text-semantic-success" : "text-red-20"}`}
-          >
-            {change.increase && "+"}
-            {currencyFormatter(change.change, 2, 0)} (
-            {percentageFormatter(change.percentage)})
-          </Text>
+        <View className="flex-row gap-s pt-layout-s items-center justify-end px-layout">
+          {chartLoading ? (
+            <SkeletonView className="w-20 h-4" />
+          ) : (
+            <>
+              <Ionicons name={change.increase ? "arrow-up" : "arrow-down"} size={16} color={change.increase ?
+                COLORS.semantic.success : COLORS.red[20]} />
+              <Text
+                className={`caption-xl ${change.increase ? "text-semantic-success" : "text-red-20"}`}
+              >
+                {percentageFormatter(change.percentage)}
+              </Text>
+            </>
+          )
+          }
         </View>
       </>
     )
@@ -222,21 +232,22 @@ const ETFDetail = ({ route }: ETFDetailScreenProps) => {
   const BottomView = () => {
     return (
       <BottomActions>
-        {!isMarketOpen ? (
+        {/* {!isMarketOpen ? (
           <MarketHours />) : (
-          <View className="px-layout">
-            <Button
-              className=""
-              onPress={() =>
-                navigation.navigate("ETFPurchase", {
-                  etf: { ...asset, price: price },
-                })
-              }
-            >
-              <Text className="button-m">{t("etfDetail.buy")}</Text>
-            </Button>
-          </View>
-        )}
+          
+        )} */}
+        <View className="px-layout">
+          <Button
+            className=""
+            onPress={() =>
+              navigation.navigate("ETFPurchase", {
+                etf: { ...asset, price: price },
+              })
+            }
+          >
+            <Text className="button-m">{t("etfDetail.buy")}</Text>
+          </Button>
+        </View>
       </BottomActions>
     )
   }
@@ -246,7 +257,12 @@ const ETFDetail = ({ route }: ETFDetailScreenProps) => {
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <HeaderView />
         <ChartView />
-        <View className="px-layout">
+        <View className="px-layout pt-layout-l pb-layout-l">
+          <Text className="heading-m text-gray-10">{t("etfDetail.description")} {asset.display_name}</Text>
+          <Text className="body-s text-gray-50">{asset.description}</Text>
+          <View className="pb-layout-l" />
+          <View className="pb-layout-l" />
+          <View className="pb-layout-l" />
         </View>
       </ScrollView>
       <BottomView />
