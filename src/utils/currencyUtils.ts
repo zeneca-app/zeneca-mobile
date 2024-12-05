@@ -18,8 +18,11 @@ export const generateZeros = (length: number): string => {
 export const truncateDecimals = (value: string, decimals: number): string => {
   const [integerPart, decimalPart] = value.split(".");
   if (!decimalPart || decimalPart.length <= decimals) {
-    return value;
+    // If no decimal part or it's shorter than desired decimals, pad with zeros
+    const paddedDecimal = (decimalPart || "").padEnd(decimals, "0");
+    return `${integerPart}.${paddedDecimal}`;
   }
+  // Truncate decimal part to desired length without rounding
   return `${integerPart}.${decimalPart.substring(0, decimals)}`;
 };
 
@@ -32,9 +35,8 @@ export const formatNumber = (
   const parsedPrecision =
     typeof precision === "string" ? parseInt(precision) : precision;
 
-  const parsedValue = BigNumber(value)
+    const parsedValue = BigNumber(value)
     .dividedBy(Math.pow(10, parsedPrecision))
-    .toFixed(parsedPrecision)
     .toString();
 
   if (truncate) {

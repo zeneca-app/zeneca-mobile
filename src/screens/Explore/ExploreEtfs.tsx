@@ -5,7 +5,7 @@ import AssetListItem from "@/components/ListItems/AssetListItem";
 import LoggedLayout from "@/components/LoggedLayout";
 import { useQuery } from "@tanstack/react-query";
 import { cssInterop } from "nativewind";
-import React from "react";
+import React, { useEffect } from "react";
 import { Trans } from "react-i18next";
 import { FlatList, Text, View } from "react-native";
 import "@/client";
@@ -15,10 +15,15 @@ import SkeletonLoadingView, {
 } from "@/components/Loading/SkeletonLoadingView";
 import { AssetPrice } from "@/client/";
 import MarketHours from "@/components/MarketHours";
+import useMarketHourStore from "@/storage/marketHourStore";
+import BottomActions from "@/components/BottomActions";
+
 
 
 const ExploreETFs = () => {
   cssInterop(CopyIcon, { className: "style" });
+
+  const { setIsMarketOpen } = useMarketHourStore((state) => state);
 
   const {
     isPending,
@@ -36,9 +41,7 @@ const ExploreETFs = () => {
     error: marketHoursError,
     data: marketHours,
   } = useQuery({
-    ...assetsGetMarketHoursOptions({
-      client: client,
-    }),
+    ...assetsGetMarketHoursOptions(),
   });
 
   const isMarketOpen = marketHours?.is_market_open || false;
@@ -53,6 +56,21 @@ const ExploreETFs = () => {
   const assets = allAssets || [];
 
   const separator = () => <Separator />;
+
+  const Footer = () => (
+    <View className="flex-1">
+      <Text className="caption-xl"></Text>
+      <Text className="caption-xl"></Text>
+      <Text className="caption-xl"></Text>
+      <Text className="caption-xl"></Text>
+    </View>
+  )
+
+  useEffect(() => {
+    if (marketHours) {
+      setIsMarketOpen(marketHours.is_market_open || false);
+    }
+  }, [marketHours, setIsMarketOpen]);
 
   return (
     <LoggedLayout>
@@ -77,13 +95,18 @@ const ExploreETFs = () => {
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
             ItemSeparatorComponent={separator}
+            ListFooterComponent={<Footer />}
             showsVerticalScrollIndicator={false}
             onRefresh={refetch}
             refreshing={isPending}
           />
         )}
       </View>
-      {!isMarketOpen && !marketHoursPending && <MarketHours />}
+      {!isMarketOpen && !marketHoursPending && (
+        <BottomActions>
+          <MarketHours />
+        </BottomActions>
+      )}
     </LoggedLayout>
   );
 };
