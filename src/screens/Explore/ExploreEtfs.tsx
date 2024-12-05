@@ -1,7 +1,7 @@
 import CopyIcon from "@/assets/copy.svg";
-import { assetsGetAssetsOptions } from "@/client/@tanstack/react-query.gen";
+import { assetsGetAssetsOptions, assetsGetMarketHoursOptions } from "@/client/@tanstack/react-query.gen";
 import client from "@/client/client";
-import StockListItem from "@/components/ListItems/StockListItem";
+import AssetListItem from "@/components/ListItems/AssetListItem";
 import LoggedLayout from "@/components/LoggedLayout";
 import { useQuery } from "@tanstack/react-query";
 import { cssInterop } from "nativewind";
@@ -13,6 +13,7 @@ import Separator from "@/components/ListItems/Separator";
 import SkeletonLoadingView, {
   SkeletonStockListItem,
 } from "@/components/Loading/SkeletonLoadingView";
+import { AssetPrice } from "@/client/";
 
 const ExploreETFs = () => {
   cssInterop(CopyIcon, { className: "style" });
@@ -28,8 +29,11 @@ const ExploreETFs = () => {
     }),
   });
 
-  const renderItem = ({ item }) => {
-    return <StockListItem etf={item} />;
+  const renderItem = ({ item }: { item: AssetPrice }) => {
+    if (!item) {
+      return null;
+    }
+    return <AssetListItem asset={item} />;
   };
 
   const assets = allAssets || [];
@@ -59,6 +63,7 @@ const ExploreETFs = () => {
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
             ItemSeparatorComponent={separator}
+            showsVerticalScrollIndicator={false}
             onRefresh={refetch}
             refreshing={isPending}
           />
