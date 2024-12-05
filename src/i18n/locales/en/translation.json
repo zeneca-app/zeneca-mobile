@@ -55,6 +55,7 @@
     "wait": "We will notify you when the verification is complete.",
     "doneButton": "Done"
   },
+  "marketClosed": "The market is closed",
   "home": {
     "depositActionText": "Deposit",
     "sendActionText": "Send",

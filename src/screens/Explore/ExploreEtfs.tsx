@@ -14,6 +14,8 @@ import SkeletonLoadingView, {
   SkeletonStockListItem,
 } from "@/components/Loading/SkeletonLoadingView";
 import { AssetPrice } from "@/client/";
+import MarketHours from "@/components/MarketHours";
+
 
 const ExploreETFs = () => {
   cssInterop(CopyIcon, { className: "style" });
@@ -28,6 +30,18 @@ const ExploreETFs = () => {
       client: client,
     }),
   });
+
+  const {
+    isPending: marketHoursPending,
+    error: marketHoursError,
+    data: marketHours,
+  } = useQuery({
+    ...assetsGetMarketHoursOptions({
+      client: client,
+    }),
+  });
+
+  const isMarketOpen = marketHours?.is_market_open || false;
 
   const renderItem = ({ item }: { item: AssetPrice }) => {
     if (!item) {
@@ -69,6 +83,7 @@ const ExploreETFs = () => {
           />
         )}
       </View>
+      {!isMarketOpen && !marketHoursPending && <MarketHours />}
     </LoggedLayout>
   );
 };

@@ -41,6 +41,7 @@
     "wait": "Te avisaremos cuando la verificación esté completa.",
     "doneButton": "Terminado"
   },
+  "marketClosed": "El mercado está cerrado",
   "home": {
     "depositActionText": "Depositar",
     "sendActionText": "Enviar",
