@@ -54,7 +54,7 @@ export function AwaitPrivyProvider({ children }: { children: ReactNode }) {
             return;
         }
 
-        // Handle successful user data fetch
+        // fetch user again if we are authenticated
         if (userData) {
             setUser(userData);
             setIsReady(true);
