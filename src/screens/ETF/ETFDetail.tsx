@@ -208,7 +208,7 @@ const ETFDetail = ({ route }: ETFDetailScreenProps) => {
         >
           {asset.display_name}
         </Text>
-        <Text className="heading-s text-gray-10 px-layout">{priceDisplayed}</Text>
+        <Text className="heading-m text-gray-10 px-layout">{priceDisplayed}</Text>
         <View className="flex-row gap-s pt-layout-s items-center justify-end px-layout">
           {chartLoading ? (
             <SkeletonView className="w-20 h-4" />
@@ -258,7 +258,7 @@ const ETFDetail = ({ route }: ETFDetailScreenProps) => {
         <HeaderView />
         <ChartView />
         <View className="px-layout pt-layout-l pb-layout-l">
-          <Text className="heading-m text-gray-10">{t("etfDetail.description")} {asset.display_name}</Text>
+          <Text className="heading-s text-gray-10">{t("etfDetail.description")} {asset.display_name}</Text>
           <Text className="body-s text-gray-50">{asset.description}</Text>
           <View className="pb-layout-l" />
           <View className="pb-layout-l" />

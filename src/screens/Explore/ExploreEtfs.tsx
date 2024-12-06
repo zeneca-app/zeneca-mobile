@@ -59,10 +59,9 @@ const ExploreETFs = () => {
 
   const Footer = () => (
     <View className="flex-1">
-      <Text className="caption-xl"></Text>
-      <Text className="caption-xl"></Text>
-      <Text className="caption-xl"></Text>
-      <Text className="caption-xl"></Text>
+      <View className="pb-layout-l" />
+      <View className="pb-layout-l" />
+      <View className="pb-layout-l" />
     </View>
   )
 
