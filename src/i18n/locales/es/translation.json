@@ -29,11 +29,11 @@
     "continueButton": "Verificar y continuar"
   },
   "kycPreview": {
-    "title": "¡Ya casi!",
-    "subtitle": "Para terminar, debemos verificar tu identidad. Solo tomará unos minutos.",
+    "title": "¡Ayudanos a verificar tu identidad!",
+    "subtitle": "La verificación de identidad es requerida por las regulaciones locales.",
     "startButton": "Empezar",
     "laterButton": "Hacerlo más tarde",
-    "terms": "La verificación de identidad se realiza a través del proveedor seguro y regulado AiPrise."
+    "terms": "Solo tomará unos minutos. Mantendremos tus datos seguros."
   },
   "kycSuccess": {
     "title": "¡Perfecto!",
