@@ -63,27 +63,15 @@ const JumpingInputLabel = ({
     }, [isFocused, dropLabel, raiseLabel]);
 
     return (
-        <View className="flex items-stretch">
-            <View className="overflow-visible relative h-4">
-                <Animated.View
-                    className="absolute overflow-visible"
-                    style={{
-                        transform: [
-                            {
-                                scale: labelScale,
-                            },
-                            {
-                                translateY: labelPosition,
-                            },
-                        ],
-                    }}
+        <View className="flex">
+            <View className="flex-1 pb-layout">
+
+                <Text
+                    className={`absolute body-s ${isErrored ? "text-semantic-danger" : "text-gray-50"}`}
                 >
-                    <Text
-                        className={`absolute body-s ${isErrored ? "text-semantic-danger" : "text-gray-50"}`}
-                    >
-                        {label}
-                    </Text>
-                </Animated.View>
+                    {label}
+                </Text>
+
             </View>
             {children}
         </View>
