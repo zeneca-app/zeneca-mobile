@@ -396,7 +396,7 @@ export const usersMyAssets = <ThrowOnError extends boolean = false>(
 
 /**
  * Get Kyc Status
- * Get user's KYC status
+ * Get user's onboarding and KYC status
  */
 export const usersGetKycStatus = <ThrowOnError extends boolean = false>(
   options?: Options<unknown, ThrowOnError>,

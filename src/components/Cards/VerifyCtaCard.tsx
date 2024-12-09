@@ -1,28 +1,53 @@
+import { useEffect } from "react";
 import VerifyIcon from "@/assets/id-card.svg";
 import Card from "@/components/Card";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import { Text, TouchableOpacity, View } from "react-native";
+import { useQuery } from "@tanstack/react-query";
+import { usersGetKycStatusOptions } from "@/client/@tanstack/react-query.gen";
+import Config from "@/config";
+import SkeletonLoadingView, {
+  SkeletonView,
+} from "@/components/Loading/SkeletonLoadingView";
 import { useUserStore } from "@/storage/userStore";
+
 
 const VerifyCTACard = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const { user } = useUserStore();
+  const { user, fetchUser, isLoading: isUserLoading } = useUserStore();
 
-  const obStatus = user?.account?.ob_status;
-  const accountStatus = user?.account?.status;
+  const { isPending: isKycPending, error: kycError, data: OBKYCStatus } = useQuery({
+    ...usersGetKycStatusOptions(),
+    refetchInterval: Config.REFETCH_INTERVAL,
+    staleTime: 0, // Consider data stale immediately
+    gcTime: 1000 * 60 * 5, // Cache for 5 minutes
+  });
+
+  useEffect(() => {
+    const canRefetchUser = OBKYCStatus?.ob_status === "ADDRESS_STEP" && !user?.account
+    if (canRefetchUser) {
+      fetchUser();
+    }
+  }, [OBKYCStatus]);
+
+  const isLoading = isKycPending || isUserLoading;
+
+  const obStatus = OBKYCStatus?.ob_status;
+  const kycStatus = OBKYCStatus?.kyc_status;
 
   const goToOnboarding = () => {
     if (!obStatus) {
       navigation.navigate("KYCPreview");
       return;
     }
+
     switch (obStatus) {
       case "NAMES_STEP":
       case "COUNTRY_STEP":
-        navigation.navigate("KYCPreview");
+        navigation.navigate("OnBoarding");
         break;
       case "ADDRESS_STEP":
         navigation.navigate("KYCProvider", {
@@ -34,7 +59,7 @@ const VerifyCTACard = () => {
     }
   };
 
-  if (accountStatus === "ACTIVE") return null;
+  if (kycStatus?.status === "APPROVED") return null;
 
   const isVerifying = obStatus === "KYC_PROVIDER_STEP";
 
@@ -68,14 +93,18 @@ const VerifyCTACard = () => {
           <Text className="caption-xl text-gray-50 pb-2">
             {t("accountNotVerified.subtitle")}
           </Text>
-          <TouchableOpacity onPress={goToOnboarding}>
-            <View className="flex-row items-center">
-              <Text className="text-button-s text-white pr-2">
-                {t("accountNotVerified.action")}
-              </Text>
-              <AntDesign name="arrowright" size={14} color="white" />
-            </View>
-          </TouchableOpacity>
+          {!isLoading ? (
+            <TouchableOpacity onPress={goToOnboarding}>
+              <View className="flex-row items-center">
+                <Text className="text-button-s text-white pr-2">
+                  {t("accountNotVerified.action")}
+                </Text>
+                <AntDesign name="arrowright" size={14} color="white" />
+              </View>
+            </TouchableOpacity>
+          ) : (
+            <SkeletonView className="w-20 h-4" />
+          )}
         </View>
       </View>
     </Card>
