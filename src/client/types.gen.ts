@@ -143,11 +143,16 @@ export type HTTPValidationError = {
   detail?: Array<ValidationError>;
 };
 
-export type KYCStatus = "APPROVED" | "REJECTED" | "PENDING" | "INCOMPLETE";
+export type KYCStatus =
+  | "NOT_STARTED"
+  | "APPROVED"
+  | "REJECTED"
+  | "PENDING"
+  | "INCOMPLETE";
 
 export type KycStatusResponse = {
   status: KYCStatus;
-  attempted_dt: string;
+  attempted_dt?: string | null;
 };
 
 export type MarketHours = {
@@ -177,6 +182,11 @@ export type MyAsset = {
 
 export type MyAssets = Array<MyAsset>;
 
+export type OBKYCStatusResponse = {
+  ob_status: string;
+  kyc_status: KycStatusResponse;
+};
+
 export type OnboardingAddressStep = {
   street_line_1: string;
   street_line_2?: string | null;
@@ -198,6 +208,7 @@ export type OnboardingNamesStep = {
 };
 
 export type OnboardingStatus =
+  | "NOT_STARTED"
   | "NAMES_STEP"
   | "COUNTRY_STEP"
   | "ADDRESS_STEP"
@@ -613,7 +624,7 @@ export type UsersMyAssetsResponse = MyAssets;
 
 export type UsersMyAssetsError = unknown;
 
-export type UsersGetKycStatusResponse = KycStatusResponse;
+export type UsersGetKycStatusResponse = OBKYCStatusResponse;
 
 export type UsersGetKycStatusError = unknown;
 

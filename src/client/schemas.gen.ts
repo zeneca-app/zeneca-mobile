@@ -591,7 +591,7 @@ export const HTTPValidationErrorSchema = {
 
 export const KYCStatusSchema = {
   type: "string",
-  enum: ["APPROVED", "REJECTED", "PENDING", "INCOMPLETE"],
+  enum: ["NOT_STARTED", "APPROVED", "REJECTED", "PENDING", "INCOMPLETE"],
   title: "KYCStatus",
 } as const;
 
@@ -601,13 +601,20 @@ export const KycStatusResponseSchema = {
       $ref: "#/components/schemas/KYCStatus",
     },
     attempted_dt: {
-      type: "string",
-      format: "date-time",
+      anyOf: [
+        {
+          type: "string",
+          format: "date-time",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Attempted Dt",
     },
   },
   type: "object",
-  required: ["status", "attempted_dt"],
+  required: ["status"],
   title: "KycStatusResponse",
 } as const;
 
@@ -769,6 +776,21 @@ export const MyAssetsSchema = {
   title: "MyAssets",
 } as const;
 
+export const OBKYCStatusResponseSchema = {
+  properties: {
+    ob_status: {
+      type: "string",
+      title: "Ob Status",
+    },
+    kyc_status: {
+      $ref: "#/components/schemas/KycStatusResponse",
+    },
+  },
+  type: "object",
+  required: ["ob_status", "kyc_status"],
+  title: "OBKYCStatusResponse",
+} as const;
+
 export const OnboardingAddressStepSchema = {
   properties: {
     street_line_1: {
@@ -838,7 +860,13 @@ export const OnboardingNamesStepSchema = {
 
 export const OnboardingStatusSchema = {
   type: "string",
-  enum: ["NAMES_STEP", "COUNTRY_STEP", "ADDRESS_STEP", "KYC_PROVIDER_STEP"],
+  enum: [
+    "NOT_STARTED",
+    "NAMES_STEP",
+    "COUNTRY_STEP",
+    "ADDRESS_STEP",
+    "KYC_PROVIDER_STEP",
+  ],
   title: "OnboardingStatus",
 } as const;
 
