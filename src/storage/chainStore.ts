@@ -1,5 +1,5 @@
 import { Chain } from "viem";
-import { baseSepolia, sepolia } from "viem/chains";
+import { base, sepolia } from "viem/chains";
 import { create } from "zustand";
 
 type ChainStore = {

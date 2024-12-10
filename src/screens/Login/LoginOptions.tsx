@@ -41,7 +41,7 @@ const LoginOptions = () => {
   const wallet = useEmbeddedWallet();
 
   const chain = useChainStore((state) => state.chain);
-  const setChain = useChainStore((state) => state.setChain);
+  
   const [loginStatus, setLoginStatus] = useState<LoginStatus>(
     LoginStatus.INITIAL,
   );

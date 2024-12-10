@@ -201,7 +201,7 @@
     },
     "title": "Completa tu \ninformación",
     "first_name_field": {
-      "label": "Primer nombre",
+      "label": "Nombre",
       "hint": "Como aparece en tu identificación",
       "error_required": "Es requerido"
     },
@@ -211,7 +211,7 @@
       "error_required": "Es requerido"
     },
     "last_name_field": {
-      "label": "Primer apellido",
+      "label": "Apellido",
       "hint": "Como aparece en tu identificación",
       "error_required": "Es requerido"
     },
