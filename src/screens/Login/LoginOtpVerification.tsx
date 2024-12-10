@@ -30,11 +30,15 @@ import {
 } from "react-native";
 import { OtpInput } from "react-native-otp-entry";
 import LoggedLayout from "@/components/LoggedLayout";
+import Button from "@/components/Button";
+
 
 const LoginOtpScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const { setUser } = useUserStore((state) => state);
+  const { setUser } = useUserStore((state) => ({
+    setUser: state.setUser
+  }));
   const { email } = useLoginStore((state) => ({
     email: state.email,
   }));
@@ -114,8 +118,9 @@ const LoginOtpScreen = () => {
           },
         },
       });
-
+      
       const userData = await fetchUserData(accessToken!);
+      
       setUser({ ...userData, token: accessToken! } as DBUser);
 
       await SecureStore.setItemAsync(`token-${address}`, accessToken!);
@@ -145,8 +150,6 @@ const LoginOtpScreen = () => {
         handleConnection(user)
           .then(() => {
             setModalState("dismissed");
-            console.log("success");
-            goToNextScreen();
           })
           .catch((e) => {
             console.error("Error Handling Connection", e);
@@ -186,16 +189,13 @@ const LoginOtpScreen = () => {
     }
   };
 
-  const dismissScreen = () => {
-    navigation.navigate("LoginWithEmail");
-  };
 
   return (
-    <LoggedLayout>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className="flex-1 bg-basic-black"
-      >
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 bg-basic-black"
+    >
+      <LoggedLayout>
         <SafeAreaView className="flex-1">
           <View className="p-layout">
             <Text className="heading-s text-dark-content-white mb-layout-s">
@@ -223,9 +223,7 @@ const LoginOtpScreen = () => {
             </View>
           </View>
           <View className="p-layout mt-auto">
-            <TouchableOpacity
-              className={`rounded-[35px] bg-dark-content-white p-4 items-center ${!isCodeFilled ? "bg-dark-content-disabled" : ""
-                }`}
+            <Button
               disabled={!isCodeFilled}
               onPress={handleConfirmCode}
             >
@@ -235,7 +233,7 @@ const LoginOtpScreen = () => {
               >
                 {t("emailOtpValidation.continueButton")}
               </Text>
-            </TouchableOpacity>
+            </Button>
           </View>
 
           <StatusModal
@@ -253,8 +251,8 @@ const LoginOtpScreen = () => {
             actionButtonText={t("loginWithEmail.errorCodeTryAgain")}
           />
         </SafeAreaView>
-      </KeyboardAvoidingView>
-    </LoggedLayout>
+      </LoggedLayout>
+    </KeyboardAvoidingView>
   );
 };
 

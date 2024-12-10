@@ -17,6 +17,9 @@ import {
   View,
 } from "react-native";
 import LoggedLayout from "@/components/LoggedLayout";
+import Button from "@/components/Button";
+
+
 
 const LoginWithEmail = () => {
   const TEST_EMAIL = "tester@zeneca.app";
@@ -83,11 +86,11 @@ const LoginWithEmail = () => {
   };
 
   return (
-    <LoggedLayout>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className="flex-1 bg-basic-black"
-      >
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 bg-basic-black"
+    >
+      <LoggedLayout>
         <SafeAreaView className="flex-1">
           <View className="p-5">
             <Text className="text-[32px] text-white mb-5 font-Manrope_500Medium">
@@ -120,21 +123,20 @@ const LoginWithEmail = () => {
             </View>
           </View>
           <View className="p-5 mt-auto">
-            <TouchableOpacity
+            <Button
               disabled={email?.length === 0}
-              className={`rounded-[35px] bg-dark-content-white p-4 items-center ${email?.length === 0 && "bg-dark-content-disabled"
-                }`}
               onPress={onSubmit}
             >
               <Text className="text-lg text-basic-black font-Manrope_500Medium">
                 {t("loginWithEmail.continueButton")}
               </Text>
-            </TouchableOpacity>
+            </Button>
           </View>
           <LoadingScreen isVisible={isLoading} text={loadingMessage} />
         </SafeAreaView>
-      </KeyboardAvoidingView>
-    </LoggedLayout>
+      </LoggedLayout>
+    </KeyboardAvoidingView>
+
   );
 };
 
