@@ -118,9 +118,9 @@ const LoginOtpScreen = () => {
           },
         },
       });
-      console.log("accessToken", accessToken);
+      
       const userData = await fetchUserData(accessToken!);
-      console.log("userData", userData);
+      
       setUser({ ...userData, token: accessToken! } as DBUser);
 
       await SecureStore.setItemAsync(`token-${address}`, accessToken!);
