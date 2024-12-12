@@ -1,3 +1,4 @@
+import { currentEnv } from "@/config/by_stage";
 import tokens from "@/constants/tokens";
 import { getWalletClient } from "@/lib/smart-accounts";
 import { EmbeddedWalletState } from "@privy-io/expo";
@@ -22,11 +23,6 @@ import {
   http,
 } from "viem";
 import { entryPoint07Address } from "viem/account-abstraction";
-import {
-  transportUrl,
-  RPC_BASE_SEPOLIA_URL,
-  RPC_SEPOLIA_URL,
-} from "@/constants/blockchain";
 
 export function getChainPublicClient(chain: Chain) {
   return createPublicClient({
@@ -36,18 +32,18 @@ export function getChainPublicClient(chain: Chain) {
 }
 
 export const publicClient = createPublicClient({
-  transport: http(RPC_SEPOLIA_URL),
+  transport: http(currentEnv.RPC),
 });
 
-export const paymasterClient = (chain: Chain) =>
+export const paymasterClient = () =>
   createPimlicoPaymasterClient({
-    transport: http(transportUrl(chain)),
+    transport: http(currentEnv.PAYMASTER),
     entryPoint: entryPoint07Address,
   });
 
-export const pimlicoBundlerClient = (chain: Chain) =>
+export const pimlicoBundlerClient = () =>
   createPimlicoBundlerClient({
-    transport: http(transportUrl(chain)),
+    transport: http(currentEnv.PAYMASTER),
     entryPoint: entryPoint07Address,
   });
 
@@ -67,12 +63,12 @@ export const getPimlicoSmartAccountClient = async (
     // @ts-ignore
     account: simpleAccount,
     entryPoint: entryPoint07Address,
-    chain,
-    bundlerTransport: http(transportUrl(chain)),
+    chain: currentEnv.CHAIN,
+    bundlerTransport: http(currentEnv.PAYMASTER),
     middleware: {
       gasPrice: async () =>
-        (await pimlicoBundlerClient(chain).getUserOperationGasPrice()).fast,
-      sponsorUserOperation: paymasterClient(chain).sponsorUserOperation,
+        (await pimlicoBundlerClient().getUserOperationGasPrice()).fast,
+      sponsorUserOperation: paymasterClient().sponsorUserOperation,
     },
   });
 };

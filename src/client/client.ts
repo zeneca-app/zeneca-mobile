@@ -1,8 +1,9 @@
 import { createPrivyClient } from "@privy-io/expo";
 import { client } from "./services.gen";
+import env from "@/config/env";
 
-const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID!;
-const CLIENT_ID = process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID!;
+const APP_ID = env.PRIVY_APP_ID;
+const CLIENT_ID = env.PRIVY_CLIENT_ID;
 
 const privy = createPrivyClient({
   appId: APP_ID,
@@ -13,7 +14,6 @@ let token: string | null = null;
 
 client.interceptors.request.use(async (request, options) => {
   token = await privy.getAccessToken();
-  //console.log("URL", request.url);
   console.log("TOKEN", token);
   request.headers.set("Authorization", "Bearer " + token);
   return request;

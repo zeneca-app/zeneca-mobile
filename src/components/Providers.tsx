@@ -12,6 +12,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { createConfig, http, WagmiProvider } from "wagmi";
 import { base, baseSepolia, sepolia } from "wagmi/chains";
 import { AwaitPrivyProvider } from "@/components/AwaitPrivyProvider";
+import env from "@/config/env";
 
 const queryClient = new QueryClient();
 
@@ -24,10 +25,10 @@ const wagmiConfig = createConfig({
   },
 });
 
-const APP_ID = process.env.EXPO_PUBLIC_PRIVY_APP_ID!;
-const CLIENT_ID = process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID!;
-const POSTHOG_API_KEY = process.env.EXPO_PUBLIC_POSTHOG_API_KEY!;
-const POSTHOG_HOST = process.env.EXPO_PUBLIC_POSTHOG_HOST!;
+const APP_ID = env.PRIVY_APP_ID;
+const CLIENT_ID = env.PRIVY_CLIENT_ID;
+const POSTHOG_API_KEY = env.POSTHOG_API_KEY;
+const POSTHOG_HOST = env.POSTHOG_HOST;
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
