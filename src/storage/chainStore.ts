@@ -1,6 +1,6 @@
 import { Chain } from "viem";
-import { base, sepolia } from "viem/chains";
 import { create } from "zustand";
+import { currentEnv } from "@/config/by_stage";
 
 type ChainStore = {
   chain: Chain;
@@ -8,6 +8,6 @@ type ChainStore = {
 };
 
 export const useChainStore = create<ChainStore>((set, get) => ({
-  chain: base,
+  chain: currentEnv.CHAIN,
   setChain: (chain) => set({ chain }),
 }));
