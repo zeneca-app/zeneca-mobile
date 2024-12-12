@@ -4,7 +4,7 @@ import CopyIcon from "@/assets/copy.svg";
 import CryptoNetworkButton from "@/components/Buttons/CryptoNetworkButton";
 import Card from "@/components/Card";
 import LoggedLayout from "@/components/LoggedLayout";
-import { useUserStore } from "@/storage/userStore";
+import { useUserStore } from "@/storage/";
 import { shortenAddressLonger } from "@/utils/address";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { toast } from "burnt";

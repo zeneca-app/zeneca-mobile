@@ -5,7 +5,7 @@ import Text from '@/components/Text';
 import { cssInterop } from "nativewind";
 import { useTranslation } from 'react-i18next';
 import * as Application from 'expo-application';
-import { useUserStore } from '@/storage/userStore';
+import { useUserStore } from '@/storage/';
 import { usePrivy } from "@privy-io/expo";
 import { useState, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';

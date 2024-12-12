@@ -8,6 +8,6 @@ type ChainStore = {
 };
 
 export const useChainStore = create<ChainStore>((set, get) => ({
-  chain: sepolia,
+  chain: base,
   setChain: (chain) => set({ chain }),
 }));

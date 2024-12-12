@@ -1,7 +1,7 @@
 import useQuoteStore from "@/storage/quoteStore";
 import useRecipientStore from "@/storage/recipientStore";
 import useTransferStore from "@/storage/transferStore";
-import { useUserStore } from "@/storage/userStore";
+import { useUserStore } from "@/storage/";
 import { NativeModules } from "react-native";
 import reactotronZustand from "reactotron-plugin-zustand";
 import Reactotron from "reactotron-react-native";

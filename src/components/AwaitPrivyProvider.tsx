@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState, useCallback } from "react";
 import { usersMeOptions } from "@/client/@tanstack/react-query.gen";
 import client from "@/client/client";
-import { useUserStore } from "@/storage/userStore";
+import { useUserStore } from "@/storage/";
 import { usePrivy } from "@privy-io/expo";
 import { useQuery } from "@tanstack/react-query";
 import ZenecaLogoAnimation from "@/components/IntroAnimation";

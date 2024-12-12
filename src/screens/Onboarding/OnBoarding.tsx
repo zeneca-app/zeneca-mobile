@@ -23,7 +23,7 @@ import Animated, {
     SlideOutLeft
 } from 'react-native-reanimated';
 import { useOnboardingMutations } from "@/components/Onboarding/useOnboardingMutations";
-import { useUserStore } from "@/storage/userStore";
+import { useUserStore } from "@/storage/";
 
 
 export enum OnboardingStatus {
