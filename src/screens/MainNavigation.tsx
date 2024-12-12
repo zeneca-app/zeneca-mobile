@@ -18,7 +18,7 @@ import LoginWithEmail from "@/screens/Login/LoginWithEmail";
 import OrderHistory from "@/screens/OrderHistory";
 import OnBoarding from "@/screens/Onboarding/OnBoarding";
 import ProfileScreen from "@/screens/ProfileScreen";
-import { useUserStore } from "@/storage/userStore";
+import { useUserStore } from "@/storage/";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useCheckUpdate } from "@/hooks/useCheckUpdate";
 import { Colors } from "react-native/Libraries/NewAppScreen";
@@ -54,6 +54,7 @@ const MainNavigation = () => {
     headerTransparent: true,
     headerLeft: backButton,
   };
+
 
   // Screen configurations
   const screenConfigs = {

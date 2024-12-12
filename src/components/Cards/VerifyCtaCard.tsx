@@ -11,7 +11,7 @@ import Config from "@/config";
 import SkeletonLoadingView, {
   SkeletonView,
 } from "@/components/Loading/SkeletonLoadingView";
-import { useUserStore } from "@/storage/userStore";
+import { useUserStore } from "@/storage/";
 
 
 const VerifyCTACard = () => {
@@ -27,8 +27,8 @@ const VerifyCTACard = () => {
   });
 
   useEffect(() => {
-    const canRefetchUser = OBKYCStatus?.ob_status === "ADDRESS_STEP" && !user?.account
-    if (canRefetchUser) {
+    const needToRefetchUser = OBKYCStatus?.ob_status === "ADDRESS_STEP" && !user?.account
+    if (needToRefetchUser) {
       fetchUser();
     }
   }, [OBKYCStatus]);

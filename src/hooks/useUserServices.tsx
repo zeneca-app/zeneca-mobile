@@ -3,7 +3,7 @@ import { usersMeOptions } from "@/client/@tanstack/react-query.gen";
 import client from "@/client/client";
 import { getPimlicoSmartAccountClient } from "@/lib/pimlico";
 import { useChainStore } from "@/storage/chainStore";
-import { useUserStore } from "@/storage/userStore";
+import { useUserStore } from "@/storage/";
 import { useEmbeddedWallet, useLoginWithEmail, usePrivy } from "@privy-io/expo";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { QueryClient } from "@tanstack/react-query";

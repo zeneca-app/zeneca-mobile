@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import { TEMPLATE_ID, MODE } from "@/constants/kyc";
-import { useUserStore } from "@/storage/userStore";
+import { useUserStore } from "@/storage/";
 
 
 const AI_PRISE_THEME = {

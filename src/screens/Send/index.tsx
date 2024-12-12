@@ -4,7 +4,7 @@ import { usersMyBalanceOptions } from "@/client/@tanstack/react-query.gen";
 import { useQuery } from "@tanstack/react-query";
 import useRecipientStore from "@/storage/recipientStore";
 import useTransferStore from "@/storage/transferStore";
-import { useUserStore } from "@/storage/userStore";
+import { useUserStore } from "@/storage/";
 import { colors } from "@/styles/colors";
 import { shortenAddress } from "@/utils/address";
 import { formatCurrency } from "@/utils/currencyUtils";

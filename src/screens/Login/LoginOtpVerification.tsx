@@ -6,8 +6,7 @@ import { LoginStatus } from "@/lib/types/login";
 import { useChainStore } from "@/storage/chainStore";
 import { DBUser } from "@/storage/interfaces";
 import { useLoginStore } from "@/storage/loginStore";
-import { useUserStore } from "@/storage/userStore";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { useUserStore } from "@/storage/";
 import {
   getUserEmbeddedEthereumWallet,
   isNotCreated,
