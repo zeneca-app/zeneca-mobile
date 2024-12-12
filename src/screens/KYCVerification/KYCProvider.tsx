@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   View,
 } from "react-native";
-import { TEMPLATE_ID, MODE } from "@/constants/kyc";
+import { currentEnv } from "@/config/by_stage";
 import { useUserStore } from "@/storage/";
 
 
@@ -45,9 +45,9 @@ const KYCProvider = ({ route }) => {
           width: width,
           height: height * 0.89,
         }}
-        mode={MODE}
+        mode={currentEnv.AI_PRISE_MODE}
         clientReferenceID={user?.account?.id}
-        templateID={TEMPLATE_ID}
+        templateID={currentEnv.AIPRISE_TEMPLATE_ID}
         uiOptions={{
           id_verification_module: {
             allowed_country_code: country,
