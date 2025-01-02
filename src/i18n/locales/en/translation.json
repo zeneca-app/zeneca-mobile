@@ -26,7 +26,7 @@
   "depositCrypto": {
     "title": "Deposit with crypto",
     "addressLabel": "Wallet address",
-    "infoText": "This address can only receive USDC on Base Sepolia",
+    "infoText": "This address can only receive USDC on Base",
     "disclaimerText": "Make sure the network is the same as the one from the wallet you are sending from or you could lose your funds.",
     "addressCopied": "Address copied to clipboard"
   },

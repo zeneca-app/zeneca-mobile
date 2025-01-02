@@ -8,22 +8,16 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 import { usersGetKycStatusOptions } from "@/client/@tanstack/react-query.gen";
 import Config from "@/config";
-import { SkeletonView } from "@/components/Loading/SkeletonLoadingView";
+import SkeletonLoadingView, {
+  SkeletonView,
+} from "@/components/Loading/SkeletonLoadingView";
 import { useUserStore } from "@/storage/";
-import { useKYCStatusStore } from "@/storage/kycStatusStore";
-import { KYCStatus, OnboardingStatus } from "@/client";
 
 
 const VerifyCTACard = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
-
   const { user, fetchUser, isLoading: isUserLoading } = useUserStore();
-
-  const { setObStatus, setKycStatus } = useKYCStatusStore((state) => ({
-    setObStatus: state.setObStatus,
-    setKycStatus: state.setKycStatus,
-  }));
 
   const { isPending: isKycPending, error: kycError, data: OBKYCStatus } = useQuery({
     ...usersGetKycStatusOptions(),
@@ -36,12 +30,6 @@ const VerifyCTACard = () => {
     const needToRefetchUser = OBKYCStatus?.ob_status === "ADDRESS_STEP" && !user?.account
     if (needToRefetchUser) {
       fetchUser();
-    }
-    if (OBKYCStatus?.ob_status) {
-      setObStatus(OBKYCStatus?.ob_status as OnboardingStatus);
-    }
-    if (OBKYCStatus?.kyc_status) {
-      setKycStatus(OBKYCStatus?.kyc_status.status as KYCStatus);
     }
   }, [OBKYCStatus]);
 

@@ -26,13 +26,7 @@ type OrderData = [
   Hex, // fee_quote_signature (0x6ed08b...)
 ];
 
-export const createOrder = async (
-  quote: OrderQuote,
-  smartAccountClient: any,
-) => {
-  if (!smartAccountClient) {
-    throw new Error("Smart account client not found");
-  }
+export const createOrder = async (quote: OrderQuote) => {
   const orderProcessorAddress = tokens.ORDER_PROCESSOR_ADDRESS[
     quote.chain_id
   ] as Address;

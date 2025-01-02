@@ -1,5 +1,6 @@
 import { client } from "@/client/services.gen";
+import env from "@/config/env";
 
 client.setConfig({
-  baseUrl: "https://sandbox.zeneca.app",
+  baseUrl: env.API_URL,
 });

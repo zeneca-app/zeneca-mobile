@@ -4,7 +4,7 @@ import { z } from "zod";
 const envSchema = z.object({
   // Environment
   ENVIRONMENT: z.string(),
-  
+
   // API & Services
   API_URL: z.string(),
 
@@ -22,7 +22,6 @@ const envSchema = z.object({
   RPC_BASE_URL: z.string(),
   PAYMASTER_SEPOLIA_URL: z.string(),
   PAYMASTER_BASE_URL: z.string(),
-  PIMLICO_API_KEY: z.string(),
 
   // KYC
   AIPRISE_TEMPLATE_ID: z.string(),
@@ -54,7 +53,6 @@ const env = envSchema.parse({
   RPC_BASE_URL: process.env.EXPO_PUBLIC_RPC_BASE_URL,
   PAYMASTER_SEPOLIA_URL: process.env.EXPO_PUBLIC_PAYMASTER_SEPOLIA_URL,
   PAYMASTER_BASE_URL: process.env.EXPO_PUBLIC_PAYMASTER_BASE_URL,
-  PIMLICO_API_KEY: process.env.EXPO_PUBLIC_PIMLICO_API_KEY,
 
   // KYC
   AIPRISE_TEMPLATE_ID: process.env.EXPO_PUBLIC_AIPRISE_TEMPLATE_ID,

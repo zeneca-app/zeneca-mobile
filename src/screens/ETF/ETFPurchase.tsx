@@ -17,6 +17,8 @@ import SkeletonLoadingView, {
 
 
 const ETFPurchase = ({ route }) => {
+  const { t } = useTranslation();
+
   const { etf } = route.params;
 
   const navigation = useNavigation();
@@ -24,8 +26,6 @@ const ETFPurchase = ({ route }) => {
   const [amount, setAmount] = useState<string>("0");
 
   const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo || null;
-
-  const { t } = useTranslation();
 
   const {
     isPending: isBalancePending,
@@ -105,6 +105,7 @@ const ETFPurchase = ({ route }) => {
         maximun={Number(available)}
       />
       <View className="px-layout">
+
         <Button className="" disabled={!canContinue} onPress={goToConfirmation}>
           <Text
             className={`button-m ${!canContinue ? "text-dark-content-30" : "text-dark-content-dark"}`}
@@ -112,6 +113,7 @@ const ETFPurchase = ({ route }) => {
             {t("etfPurchase.continue")}
           </Text>
         </Button>
+        
       </View>
     </LoggedLayout>
   );
