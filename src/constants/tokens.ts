@@ -7,7 +7,7 @@ export interface Tokens {
 }
 const tokens: Tokens = {
   USDC: {
-    [sepolia.id]: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+    [sepolia.id]: "0x709CE4CB4b6c2A03a4f938bA8D198910E44c11ff",
     [base.id]: "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
   },
   ORDER_PROCESSOR_ADDRESS: {

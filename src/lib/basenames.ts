@@ -1,6 +1,6 @@
 import { RESOLVER_ADDRESSES_BY_CHAIN_ID } from "@/constants/basenames";
 import L2ResolverAbi from "@/lib/abis/L2ResolverAbi";
-import { getChainPublicClient } from "@/lib/pimlico";
+
 import {
   Basename,
   GetAddress,
@@ -20,6 +20,13 @@ import {
   namehash,
 } from "viem";
 import { base, mainnet } from "viem/chains";
+
+export function getChainPublicClient(chain: Chain) {
+  return createPublicClient({
+    chain: chain,
+    transport: http(),
+  });
+}
 
 export const BASENAME_L2_RESOLVER_ADDRESS =
   "0xC6d566A56A1aFf6508b41f6c90ff131615583BCD";
