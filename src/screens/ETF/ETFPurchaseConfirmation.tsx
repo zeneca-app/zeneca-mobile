@@ -11,6 +11,7 @@ import { useChainStore } from "@/storage/chainStore";
 import { currencyFormatter, formatNumber } from "@/utils/currencyUtils";
 import { useEmbeddedWallet } from "@privy-io/expo";
 import { useNavigation } from "@react-navigation/native";
+import * as Sentry from '@sentry/react-native';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import BigNumber from "bignumber.js";
 import React, { useEffect, useState } from "react";
@@ -95,6 +96,13 @@ const ETFPurchaseConfirmation = ({ route }) => {
 
     } catch (error) {
       console.error("Error during transaction:", error);
+      Sentry.captureException(error, {
+        extra: {
+          etfSymbol: etf.symbol,
+          amount,
+          quoteId: quote?.id,
+        },
+      });
     } finally {
       /* navigation.navigate("ETFPurchaseSuccess", {
         etf,
