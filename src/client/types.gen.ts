@@ -231,39 +231,47 @@ export type Order = {
 };
 
 export type OrderQuote = {
-  id: string;
+  id?: string | null;
+  external_order_id: string;
   asset_id: string;
   side: OrderSide;
   order_type: OrderType;
   quantity?: string | null;
-  amount?: string | null;
+  estimated_quantity_out?: string | null;
+  amount_in?: number | null;
+  amount_out: number;
   asset_price?: string;
-  fee: string;
-  total: string;
-  amount_to_receive: string;
-  external_order_id: string;
-  smart_account_address: string;
+  fee: number;
+  partner_fee: number;
+  zeneca_fee: number;
+  total_amount: number;
+  user_address: string;
   signature: string;
-  order_data: OrderQuoteData;
   chain_id: number;
+  order_data: OrderQuoteData;
+  transactions?: Array<Transaction> | null;
   deadline: number;
   created_at: number;
   readonly precision: number;
 };
 
 export type OrderQuoteData = {
+  signature: string;
+  external_order_id: string;
+  created_at: number;
+  deadline: number;
   recipient: string;
+  allowance_amount: number;
+  tif: number;
+  fee: string;
+  sell: boolean;
   asset_token_quantity: number;
   payment_token_quantity: number;
   asset_token: string;
   payment_token: string;
-  sell: boolean;
   order_type: number;
-  limit_price: string;
-  tif: number;
-  fee: string;
+  limit_price: number;
   request_timestamp: number;
-  allowance_amount: number;
 };
 
 export type OrderQuoteRequest = {
@@ -272,6 +280,7 @@ export type OrderQuoteRequest = {
   order_type: OrderType;
   quantity?: number | null;
   amount?: number | null;
+  limit_price?: number | null;
 };
 
 export type OrderSide = "BUY" | "SELL";
@@ -365,6 +374,12 @@ export type StockTickDataList = Array<StockTickData>;
 export type Timespan = "DAY" | "WEEK" | "MONTH" | "YEAR";
 
 export type TokenSymbol = "usdc.polygon" | "usdc.base" | "usdc.stellar";
+
+export type Transaction = {
+  to: string;
+  data: string;
+  value: string;
+};
 
 export type TransferRead = {
   id: string;
