@@ -240,7 +240,7 @@ export type OrderQuote = {
   estimated_quantity_out?: string | null;
   amount_in?: number | null;
   amount_out: number;
-  asset_price?: string;
+  asset_price?: string | null;
   fee: number;
   partner_fee: number;
   zeneca_fee: number;
@@ -251,7 +251,6 @@ export type OrderQuote = {
   order_data: OrderQuoteData;
   transactions?: Array<Transaction> | null;
   deadline: number;
-  created_at: number;
   readonly precision: number;
 };
 
@@ -378,7 +377,7 @@ export type TokenSymbol = "usdc.polygon" | "usdc.base" | "usdc.stellar";
 export type Transaction = {
   to: string;
   data: string;
-  value: string;
+  value: number;
 };
 
 export type TransferRead = {

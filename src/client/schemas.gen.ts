@@ -996,7 +996,6 @@ export const OrderQuoteSchema = {
         },
       ],
       title: "Quantity",
-      default: "0",
     },
     estimated_quantity_out: {
       anyOf: [
@@ -1008,7 +1007,6 @@ export const OrderQuoteSchema = {
         },
       ],
       title: "Estimated Quantity Out",
-      default: "0",
     },
     amount_in: {
       anyOf: [
@@ -1020,16 +1018,21 @@ export const OrderQuoteSchema = {
         },
       ],
       title: "Amount In",
-      default: 0,
     },
     amount_out: {
       type: "integer",
       title: "Amount Out",
     },
     asset_price: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Asset Price",
-      default: "0",
     },
     fee: {
       type: "integer",
@@ -1080,10 +1083,6 @@ export const OrderQuoteSchema = {
       type: "integer",
       title: "Deadline",
     },
-    created_at: {
-      type: "integer",
-      title: "Created At",
-    },
     precision: {
       type: "integer",
       title: "Precision",
@@ -1106,7 +1105,6 @@ export const OrderQuoteSchema = {
     "chain_id",
     "order_data",
     "deadline",
-    "created_at",
     "precision",
   ],
   title: "OrderQuote",
@@ -1717,7 +1715,7 @@ export const TransactionSchema = {
       title: "Data",
     },
     value: {
-      type: "string",
+      type: "integer",
       title: "Value",
     },
   },
