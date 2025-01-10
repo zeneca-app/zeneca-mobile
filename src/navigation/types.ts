@@ -30,6 +30,8 @@ export type RootStackParamList = {
   SendConfirmation: undefined;
   Profile: undefined;
   OrderHistory: undefined;
+  ETFSell: undefined;
+  ETFSellConfirmation: undefined;
 };
 
 declare global {

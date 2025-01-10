@@ -21,8 +21,8 @@ import { Address } from "viem";
 
 
 
-const ETFPurchaseConfirmation = ({ route }) => {
-  const { etf, amount } = route.params;
+const ETFSellConfirmation = ({ route }) => {
+  const { etf, quantity } = route.params;
 
   const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo || null;
 
@@ -38,11 +38,11 @@ const ETFPurchaseConfirmation = ({ route }) => {
 
   const [timeLeft, setTimeLeft] = useState(0);
 
-  const amountDisplayed = amount
-    ? currencyFormatter(amount, 2, 6, true)
+  const amountDisplayed = quantity
+    ? currencyFormatter(quantity, 2, 6, true)
     : "0.00";
 
-  const amountToOrder = formatNumber(amount, 2, 6, true);
+  const amountToOrder = formatNumber(quantity, 2, 6, true);
 
 
   const { mutate: createQuote, isPending: isQuotePending } = useMutation({
@@ -71,7 +71,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
       );
 
       const tx = await smartAccountClient.sendTransactions({
-        transactions: quote.transactions, 
+        transactions: quote.transactions,
       });
 
       if (!tx) throw new Error("Transaction failed to send");
@@ -101,7 +101,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
       Sentry.captureException(error, {
         extra: {
           etfSymbol: etf.symbol,
-          amount,
+          quantity,
           quoteId: quote?.id,
         },
       });
@@ -124,12 +124,12 @@ const ETFPurchaseConfirmation = ({ route }) => {
     createQuote({
       body: {
         asset_id: etf.id,
-        side: "BUY",
+        side: "SELL",
         order_type: "MARKET",
-        amount: amount.toString(),
+        quantity: quantity,
       },
     });
-  }, [createQuote, etf.id, amount]);
+  }, [createQuote, etf.id, quantity]);
 
   // Initial quote fetch
   useEffect(() => {
@@ -154,9 +154,9 @@ const ETFPurchaseConfirmation = ({ route }) => {
 
     const timerId = setInterval(updateTimer, 1000);
     return () => {
-      clearInterval(timerId); 
+      clearInterval(timerId);
     };
-  }, [quote, fetchQuote]); 
+  }, [quote, fetchQuote]);
 
   const formatTimeLeft = (seconds: number): string => {
     if (seconds <= 0) return '0:00';
@@ -294,6 +294,6 @@ const ETFPurchaseConfirmation = ({ route }) => {
   );
 };
 
-ETFPurchaseConfirmation.displayName = "ETFPurchaseConfirmation";
+ETFSellConfirmation.displayName = "ETFSellConfirmation";
 
-export default ETFPurchaseConfirmation;
+export default ETFSellConfirmation;

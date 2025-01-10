@@ -271,6 +271,7 @@
   },
   "etfDetail": {
     "buy": "Buy",
+    "sell": "Sell",
     "from": "from: ",
     "to": "to: ",
     "description": "About"

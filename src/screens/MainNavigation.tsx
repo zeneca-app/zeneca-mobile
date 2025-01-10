@@ -26,6 +26,8 @@ import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import ProfileButton from "@/components/ProfileButton";
+import ETFSell from "@/screens/ETF/ETFSell";
+import ETFSellConfirmation from "@/screens/ETF/ETFSellConfirmation";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -92,11 +94,19 @@ const MainNavigation = () => {
       <Stack.Screen name="DepositCrypto" component={DepositCrypto} options={screenConfigs.defaultHeader} />
       <Stack.Screen name="DepositWithBank" component={DepositWithBank} options={screenConfigs.defaultHeader} />
 
-      {/* ETF Screens */}
+      {/* ETF Screens Explore and Detail */}
       <Stack.Screen name="ExploreETFs" component={ExploreETFs} options={screenConfigs.defaultHeader} />
       <Stack.Screen name="ETFDetail" component={ETFDetail} options={screenConfigs.defaultHeader} />
+
+      {/* ETF Purchase Screens */}
       <Stack.Screen name="ETFPurchase" component={ETFPurchase} options={screenConfigs.defaultHeader} />
       <Stack.Screen name="ETFPurchaseConfirmation" component={ETFPurchaseConfirmation} options={screenConfigs.defaultHeader} />
+
+      {/* ETF Sell Screens */}
+      <Stack.Screen name="ETFSell" component={ETFSell} options={screenConfigs.defaultHeader} />
+      <Stack.Screen name="ETFSellConfirmation" component={ETFSellConfirmation} options={screenConfigs.defaultHeader} />
+
+      {/* ETF Success Screens */}
       <Stack.Screen name="ETFPurchaseSuccess" component={ETFPurchaseSuccess} options={screenConfigs.noHeader} />
 
       {/* Other Screens */}

@@ -180,6 +180,7 @@
   },
   "etfDetail": {
     "buy": "Comprar",
+    "sell": "Vender",
     "from": "from: ",
     "to": "to: ",
     "description": "Acerca de"
