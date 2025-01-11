@@ -92,7 +92,7 @@ const ETFSellConfirmation = ({ route }) => {
 
       navigation.navigate("ETFPurchaseSuccess", {
         etf,
-        amount,
+        amount: quote?.total_amount,
         quote,
       });
 
@@ -106,10 +106,7 @@ const ETFSellConfirmation = ({ route }) => {
         },
       });
     } finally {
-      /* navigation.navigate("ETFPurchaseSuccess", {
-        etf,
-        amount,
-      }); */
+      setTransactionInitiated(false);
     }
   };
 

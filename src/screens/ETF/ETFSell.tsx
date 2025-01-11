@@ -30,12 +30,17 @@ const ETFSell = ({ route }) => {
 
   const { assets } = useAssetsStore((state) => state);
   const asset = assets?.find((asset) => asset.symbol === etf.symbol);
-  console.log("asset", asset);
 
   const quantity = asset?.quantity_in_wei
     ? formatNumber(asset?.quantity_in_wei, 9, 18, true)
     : "0.00";
 
+  const totalAmount = quantity
+    ? new BigNumber(quantity)
+      .multipliedBy(etf.price)
+      .decimalPlaces(2, BigNumber.ROUND_DOWN)
+      .toString()
+    : "0";
 
   const amountInEtf = new BigNumber(amount)
     .dividedBy(etf.price)
@@ -43,7 +48,7 @@ const ETFSell = ({ route }) => {
     .toString();
 
   const hasNumber = Number(amount) > 0;
-  const isLessThanAvailable = Number(amount) <= Number(quantity);
+  const isLessThanAvailable = Number(amount) <= Number(totalAmount);
   const canContinue = hasNumber && isLessThanAvailable;
 
   const goToConfirmation = () => {
@@ -51,18 +56,18 @@ const ETFSell = ({ route }) => {
     // const amountToBuy = isMaxAmount
     //   ? new BigNumber(balance?.available || 0).toString()
     //   : new BigNumber(amount).multipliedBy(1_000_000).toString();
-    console.log("amount", amount);
-    asset?.quantity_in_wei
 
-    const fivePercentQuantity = asset?.quantity_in_wei
-      ? new BigNumber(asset.quantity_in_wei)
-          .multipliedBy(0.05)
-          .toString()
-      : "0";
-    console.log("fivePercentQuantity", fivePercentQuantity);
+    const quantityToSell = new BigNumber(amount)
+      .dividedBy(etf.price)  // Convert dollar amount to ETF units
+      .multipliedBy('1000000000000000000')  // Convert to wei (18 decimals) using string to maintain precision
+      .integerValue(BigNumber.ROUND_DOWN)  // Remove decimals, round down to whole number
+      .toString();
+
+
     navigation.navigate("ETFSellConfirmation", {
       etf,
-      quantity: fivePercentQuantity,
+      quantity: quantityToSell,
+
     });
   };
 
@@ -78,7 +83,10 @@ const ETFSell = ({ route }) => {
       }
     >
       <View className="px-layout flex justify-center items-stretch gap-s flex-1">
-
+        <Text className="caption-l text-center text-gray-50">
+          {t("etfPurchase.available")}{" "}
+          {totalAmount}
+        </Text>
         <View className="flex-row items-center justify-center gap-s">
           <Text className="body-l text-center text-gray-10 leading-tight">
             $
@@ -94,7 +102,7 @@ const ETFSell = ({ route }) => {
       <Keypad
         value={amount}
         onChange={setAmount}
-        maximun={Number(quantity)}
+        maximun={Number(totalAmount)}
       />
       <View className="px-layout">
 
