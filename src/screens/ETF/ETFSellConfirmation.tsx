@@ -22,7 +22,7 @@ import { Address } from "viem";
 
 
 const ETFSellConfirmation = ({ route }) => {
-  const { etf, quantity } = route.params;
+  const { etf, quantity, amount } = route.params;
 
   const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo || null;
 
@@ -38,12 +38,9 @@ const ETFSellConfirmation = ({ route }) => {
 
   const [timeLeft, setTimeLeft] = useState(0);
 
-  const amountDisplayed = quantity
-    ? currencyFormatter(quantity, 2, 6, true)
+  const amountDisplayed = amount
+    ? currencyFormatter(amount, 2, 0, true)
     : "0.00";
-
-  const amountToOrder = formatNumber(quantity, 2, 6, true);
-
 
   const { mutate: createQuote, isPending: isQuotePending } = useMutation({
     ...ordersCreateQuoteOrderMutation(),
@@ -164,9 +161,9 @@ const ETFSellConfirmation = ({ route }) => {
 
   const minLeft = formatTimeLeft(timeLeft);
 
-  const etfAmount = new BigNumber(amountToOrder)
-    .dividedBy(etf.price)
-    .precision(4)
+  const etfAmount = new BigNumber(quantity)
+    .dividedBy('1000000000000000000')  // Divide by 10^18 to get to base units
+    .toFormat(9)  // Format to exactly 9 decimal places
     .toString();
 
   const isLoading = isQuotePending || transactionInitiated;
@@ -203,7 +200,7 @@ const ETFSellConfirmation = ({ route }) => {
       <View className="px-layout pb-layout flex justify-start items-stretch gap flex-1">
         <View className="flex-row items-center justify-between gap-s">
           <Text className="caption-l text-gray-50">
-            {t("etfPurchase.price")}
+            {t("etfSell.price")}
           </Text>
           <Text className="caption-xl text-dark-content-white">
             {isQuotePending ? (
@@ -215,7 +212,7 @@ const ETFSellConfirmation = ({ route }) => {
         </View>
         <View className="flex-row items-center justify-between gap-s">
           <Text className="caption-l text-gray-50">
-            {t("etfPurchase.fee")}
+            {t("etfSell.fee")}
           </Text>
           <Text className="caption-xl text-dark-content-white">
             {isQuotePending ? (
@@ -227,7 +224,7 @@ const ETFSellConfirmation = ({ route }) => {
         </View>
         <View className="flex-row items-center justify-between gap-s">
           <Text className="caption-l text-gray-50">
-            {t("etfPurchase.total")}
+            {t("etfSell.total")}
           </Text>
           <Text className="caption-xl text-dark-content-white">
             {isQuotePending ? (
@@ -240,13 +237,13 @@ const ETFSellConfirmation = ({ route }) => {
         <View className="h-px rounded-full bg-dark-background-100" />
         <Text className="caption-l text-gray-50">
           <Trans
-            i18nKey="etfPurchase.disclaimer"
+            i18nKey="etfSell.disclaimer"
             values={{
               etf_amount: etfAmount,
               etf_symbol: etf.symbol,
               display_name: etf.name,
               symbol: etf.symbol,
-              amount: amountToOrder,
+              amount: amount,
               etf_price: etf.price,
             }}
             components={[
@@ -268,7 +265,7 @@ const ETFSellConfirmation = ({ route }) => {
           <SkeletonView className="w-20 h-4" />
         ) : (
           <Text className="caption-l text-gray-50">
-            {t("etfPurchase.timeLeft", { time: minLeft })}
+            {t("etfSell.timeLeft", { time: minLeft })}
           </Text>
         )}
 
@@ -281,8 +278,8 @@ const ETFSellConfirmation = ({ route }) => {
             disabled={isDisabled}
             isLoading={isLoading}
           >
-            <Text className="button-m">{t("etfPurchase.confirm")}</Text>
-          </Button>
+            <Text className="button-m">{t("etfSell.confirm")}</Text>
+          </Button> 
         ) : (
           <SkeletonView className="w-full h-12" />
         )}

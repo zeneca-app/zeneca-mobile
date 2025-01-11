@@ -291,5 +291,23 @@
       "done_button": "Entendido",
       "view_order_button": "Ver orden"
     }
+  },
+  "etfSell": {
+    "timeLeft": "La cotización expira en {{time}}",
+    "continue": "Continuar",
+    "max": "MAX",
+    "available": "Disponible",
+    "price": "Precio",
+    "fee": "Comisión",
+    "total": "Total",
+    "disclaimer": "Estas iniciando una orden de venta de <0>{{etf_amount}}</0> acciones de <1>{{display_name}} {{symbol}}</1> por <2>${{amount}}</2> a <3>${{etf_price}}</3> por acción.",
+    "confirm": "Vender",
+    "success": {
+      "title": "¡Orden Recibida!",
+      "summary": "Estamos procesando tu venta de <0>${{amount}}</0> de <1>{{display_name}} {{symbol}}</1> a <2>${{etf_price}}</2> por acción.",
+      "subtitle": "Tu venta se realizó con éxito",
+      "done_button": "Entendido",
+      "view_order_button": "Ver orden"
+    }
   }
 }

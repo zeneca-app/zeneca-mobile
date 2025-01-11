@@ -66,6 +66,7 @@ const ETFSell = ({ route }) => {
 
     navigation.navigate("ETFSellConfirmation", {
       etf,
+      amount,
       quantity: quantityToSell,
 
     });
