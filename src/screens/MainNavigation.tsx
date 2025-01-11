@@ -28,6 +28,7 @@ import { useNavigation } from "@react-navigation/native";
 import ProfileButton from "@/components/ProfileButton";
 import ETFSell from "@/screens/ETF/ETFSell";
 import ETFSellConfirmation from "@/screens/ETF/ETFSellConfirmation";
+import ETFSellSuccess from "./ETF/ETFSellSuccess";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -101,13 +102,13 @@ const MainNavigation = () => {
       {/* ETF Purchase Screens */}
       <Stack.Screen name="ETFPurchase" component={ETFPurchase} options={screenConfigs.defaultHeader} />
       <Stack.Screen name="ETFPurchaseConfirmation" component={ETFPurchaseConfirmation} options={screenConfigs.defaultHeader} />
+      <Stack.Screen name="ETFPurchaseSuccess" component={ETFPurchaseSuccess} options={screenConfigs.noHeader} />
 
       {/* ETF Sell Screens */}
       <Stack.Screen name="ETFSell" component={ETFSell} options={screenConfigs.defaultHeader} />
       <Stack.Screen name="ETFSellConfirmation" component={ETFSellConfirmation} options={screenConfigs.defaultHeader} />
+      <Stack.Screen name="ETFSellSuccess" component={ETFSellSuccess} options={screenConfigs.noHeader} />
 
-      {/* ETF Success Screens */}
-      <Stack.Screen name="ETFPurchaseSuccess" component={ETFPurchaseSuccess} options={screenConfigs.noHeader} />
 
       {/* Other Screens */}
 

@@ -87,7 +87,7 @@ const ETFSellConfirmation = ({ route }) => {
         queryClient.invalidateQueries({ queryKey: ["usersMyAssets"] }),
       ]);
 
-      navigation.navigate("ETFPurchaseSuccess", {
+      navigation.navigate("ETFSellSuccess", {
         etf,
         amount: quote?.total_amount,
         quote,

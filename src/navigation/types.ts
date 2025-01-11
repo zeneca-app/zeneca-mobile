@@ -32,6 +32,7 @@ export type RootStackParamList = {
   OrderHistory: undefined;
   ETFSell: undefined;
   ETFSellConfirmation: undefined;
+  ETFSellSuccess: undefined;
 };
 
 declare global {
