@@ -9,6 +9,7 @@ import type {
   AssetsGetAssetDetailData,
   AssetsGetAssetDetailError,
   AssetsGetAssetDetailResponse,
+  AssetsGetAssetsData,
   AssetsGetAssetsError,
   AssetsGetAssetsResponse,
   AssetsGetAssetTicksData,
@@ -66,6 +67,9 @@ import type {
   UsersGetKycStatusResponse,
   UsersMeError,
   UsersMeResponse,
+  UsersMyAssetByIdData,
+  UsersMyAssetByIdError,
+  UsersMyAssetByIdResponse,
   UsersMyAssetsError,
   UsersMyAssetsResponse,
   UsersMyBalanceError,
@@ -391,7 +395,24 @@ export const usersMyAssets = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     ...options,
-    url: "/v0/users/me/assets",
+    url: "/v0/users/my_assets",
+  });
+};
+
+/**
+ * My Asset By Id
+ * Get user's specific stock asset by asset ID
+ */
+export const usersMyAssetById = <ThrowOnError extends boolean = false>(
+  options: Options<UsersMyAssetByIdData, ThrowOnError>,
+) => {
+  return (options?.client ?? client).get<
+    UsersMyAssetByIdResponse,
+    UsersMyAssetByIdError,
+    ThrowOnError
+  >({
+    ...options,
+    url: "/v0/users/my_assets/{asset_id}",
   });
 };
 
@@ -416,7 +437,7 @@ export const usersGetKycStatus = <ThrowOnError extends boolean = false>(
  * Get Assets
  */
 export const assetsGetAssets = <ThrowOnError extends boolean = false>(
-  options?: Options<unknown, ThrowOnError>,
+  options?: Options<AssetsGetAssetsData, ThrowOnError>,
 ) => {
   return (options?.client ?? client).get<
     AssetsGetAssetsResponse,
@@ -456,7 +477,7 @@ export const assetsGetAssetDetail = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     ...options,
-    url: "/v0/assets/{asset_id}/",
+    url: "/v0/assets/{asset_id}",
   });
 };
 

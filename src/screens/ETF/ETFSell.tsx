@@ -1,4 +1,4 @@
-import { usersMyBalanceOptions } from "@/client/@tanstack/react-query.gen";
+import { assetsGetAssetDetailOptions, usersMyBalanceOptions } from "@/client/@tanstack/react-query.gen";
 import Button from "@/components/Button";
 import Keypad from "@/components/Keypad";
 import LoggedLayout from "@/components/LoggedLayout";
@@ -15,7 +15,7 @@ import SkeletonLoadingView, {
   SkeletonView,
 } from "@/components/Loading/SkeletonLoadingView";
 import useAssetsStore from "@/storage/assetsStore";
-
+import Config from "@/config";
 
 const ETFSell = ({ route }) => {
   const { t } = useTranslation();
@@ -29,7 +29,26 @@ const ETFSell = ({ route }) => {
   const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo || null;
 
   const { assets } = useAssetsStore((state) => state);
+
   const asset = assets?.find((asset) => asset.symbol === etf.symbol);
+
+
+  const {
+    isPending: assetDetailLoading,
+    error: assetDetailError,
+    data: assetDetail,
+    refetch: assetDetailRefetch,
+  } = useQuery({
+    ...assetsGetAssetDetailOptions({
+      path: {
+        asset_id: asset?.id!
+      },
+    }),
+    refetchInterval: Config.REFETCH_INTERVAL,
+    staleTime: 0, // Consider data stale immediately  
+  });
+
+  const assetPrice = assetDetail?.price || etf.price;
 
   const quantity = asset?.quantity_in_wei
     ? formatNumber(asset?.quantity_in_wei, 9, 18, true)
@@ -37,30 +56,22 @@ const ETFSell = ({ route }) => {
 
   const totalAmount = quantity
     ? new BigNumber(quantity)
-      .multipliedBy(etf.price)
+      .multipliedBy(assetPrice)
       .decimalPlaces(2, BigNumber.ROUND_DOWN)
       .toString()
     : "0";
-
-  const amountInEtf = new BigNumber(amount)
-    .dividedBy(etf.price)
-    .precision(4)
-    .toString();
 
   const hasNumber = Number(amount) > 0;
   const isLessThanAvailable = Number(amount) <= Number(totalAmount);
   const canContinue = hasNumber && isLessThanAvailable;
 
   const goToConfirmation = () => {
-    // const isMaxAmount = Number(amount) === Number(available);
-    // const amountToBuy = isMaxAmount
-    //   ? new BigNumber(balance?.available || 0).toString()
-    //   : new BigNumber(amount).multipliedBy(1_000_000).toString();
+    const adjustedPrice = formatNumber(assetPrice, 2, 0, true)
 
     const quantityToSell = new BigNumber(amount)
-      .dividedBy(etf.price)  // Convert dollar amount to ETF units
-      .multipliedBy('1000000000000000000')  // Convert to wei (18 decimals) using string to maintain precision
-      .integerValue(BigNumber.ROUND_DOWN)  // Remove decimals, round down to whole number
+      .dividedBy(adjustedPrice)  // Convert dollar amount to ETF units
+      .multipliedBy('1000000000000000000')  // Convert to wei (18 decimals)
+      .decimalPlaces(0, BigNumber.ROUND_DOWN)  // Round down to ensure it's a whole number
       .toString();
 
 

@@ -688,6 +688,7 @@ export const MyAssetSchema = {
   properties: {
     id: {
       type: "string",
+      format: "uuid",
       title: "Id",
     },
     symbol: {
@@ -766,6 +767,26 @@ export const MyAssetSchema = {
     "amount",
   ],
   title: "MyAsset",
+} as const;
+
+export const MyAssetLiteSchema = {
+  properties: {
+    symbol: {
+      type: "string",
+      title: "Symbol",
+    },
+    quantity_in_wei: {
+      type: "integer",
+      title: "Quantity In Wei",
+    },
+    external_id: {
+      type: "integer",
+      title: "External Id",
+    },
+  },
+  type: "object",
+  required: ["symbol", "quantity_in_wei", "external_id"],
+  title: "MyAssetLite",
 } as const;
 
 export const MyAssetsSchema = {
@@ -997,7 +1018,7 @@ export const OrderQuoteSchema = {
       ],
       title: "Quantity",
     },
-    estimated_quantity_out: {
+    quantity_out: {
       anyOf: [
         {
           type: "string",
@@ -1006,7 +1027,7 @@ export const OrderQuoteSchema = {
           type: "null",
         },
       ],
-      title: "Estimated Quantity Out",
+      title: "Quantity Out",
     },
     amount_in: {
       anyOf: [
@@ -1020,7 +1041,14 @@ export const OrderQuoteSchema = {
       title: "Amount In",
     },
     amount_out: {
-      type: "integer",
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Amount Out",
     },
     asset_price: {
@@ -1088,6 +1116,26 @@ export const OrderQuoteSchema = {
       title: "Precision",
       readOnly: true,
     },
+    fee_displayed: {
+      type: "string",
+      title: "Fee Displayed",
+      description: `Convert fee from USDC wei (6 decimals) to Decimal with 2 decimal places.
+
+Example:
+    fee = 1234567 (1.234567 USDC in wei)
+    returns Decimal('1.23') (rounded to 2 decimal places)`,
+      readOnly: true,
+    },
+    total_amount_displayed: {
+      type: "string",
+      title: "Total Amount Displayed",
+      description: `Convert fee from USDC wei (6 decimals) to Decimal with 2 decimal places.
+
+Example:
+    fee = 1234567 (1.234567 USDC in wei)
+    returns Decimal('1.23') (rounded to 2 decimal places)`,
+      readOnly: true,
+    },
   },
   type: "object",
   required: [
@@ -1095,7 +1143,6 @@ export const OrderQuoteSchema = {
     "asset_id",
     "side",
     "order_type",
-    "amount_out",
     "fee",
     "partner_fee",
     "zeneca_fee",
@@ -1106,6 +1153,8 @@ export const OrderQuoteSchema = {
     "order_data",
     "deadline",
     "precision",
+    "fee_displayed",
+    "total_amount_displayed",
   ],
   title: "OrderQuote",
 } as const;

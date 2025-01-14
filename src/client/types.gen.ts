@@ -180,6 +180,12 @@ export type MyAsset = {
   readonly amount: string;
 };
 
+export type MyAssetLite = {
+  symbol: string;
+  quantity_in_wei: number;
+  external_id: number;
+};
+
 export type MyAssets = Array<MyAsset>;
 
 export type OBKYCStatusResponse = {
@@ -237,9 +243,9 @@ export type OrderQuote = {
   side: OrderSide;
   order_type: OrderType;
   quantity?: string | null;
-  estimated_quantity_out?: string | null;
+  quantity_out?: string | null;
   amount_in?: number | null;
-  amount_out: number;
+  amount_out?: number | null;
   asset_price?: string | null;
   fee: number;
   partner_fee: number;
@@ -252,6 +258,22 @@ export type OrderQuote = {
   transactions?: Array<Transaction> | null;
   deadline: number;
   readonly precision: number;
+  /**
+   * Convert fee from USDC wei (6 decimals) to Decimal with 2 decimal places.
+   *
+   * Example:
+   * fee = 1234567 (1.234567 USDC in wei)
+   * returns Decimal('1.23') (rounded to 2 decimal places)
+   */
+  readonly fee_displayed: string;
+  /**
+   * Convert fee from USDC wei (6 decimals) to Decimal with 2 decimal places.
+   *
+   * Example:
+   * fee = 1234567 (1.234567 USDC in wei)
+   * returns Decimal('1.23') (rounded to 2 decimal places)
+   */
+  readonly total_amount_displayed: string;
 };
 
 export type OrderQuoteData = {
@@ -638,13 +660,36 @@ export type UsersMyAssetsResponse = MyAssets;
 
 export type UsersMyAssetsError = unknown;
 
+export type UsersMyAssetByIdData = {
+  path: {
+    asset_id: string;
+  };
+};
+
+export type UsersMyAssetByIdResponse = MyAssetLite;
+
+export type UsersMyAssetByIdError = HTTPValidationError;
+
 export type UsersGetKycStatusResponse = OBKYCStatusResponse;
 
 export type UsersGetKycStatusError = unknown;
 
+export type AssetsGetAssetsData = {
+  query?: {
+    /**
+     * Maximum number of records to return
+     */
+    limit?: number;
+    /**
+     * Number of records to skip
+     */
+    skip?: number;
+  };
+};
+
 export type AssetsGetAssetsResponse = Array<AssetPrice>;
 
-export type AssetsGetAssetsError = unknown;
+export type AssetsGetAssetsError = HTTPValidationError;
 
 export type AssetsGetAssetTicksData = {
   path: {

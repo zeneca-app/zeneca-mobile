@@ -279,7 +279,7 @@ const ETFSellConfirmation = ({ route }) => {
             isLoading={isLoading}
           >
             <Text className="button-m">{t("etfSell.confirm")}</Text>
-          </Button> 
+          </Button>
         ) : (
           <SkeletonView className="w-full h-12" />
         )}

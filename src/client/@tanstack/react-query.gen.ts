@@ -27,6 +27,7 @@ import {
   transfersGetTransfers,
   usersGetKycStatus,
   usersMe,
+  usersMyAssetById,
   usersMyAssets,
   usersMyBalance,
   webhooksEventFromBridgeReceived,
@@ -36,6 +37,7 @@ import {
 } from "../services.gen";
 import type {
   AssetsGetAssetDetailData,
+  AssetsGetAssetsData,
   AssetsGetAssetTicksData,
   BanksGetBanksData,
   LoginLoginOrCreateData,
@@ -65,6 +67,7 @@ import type {
   TransfersCreateTransferError,
   TransfersCreateTransferResponse,
   TransfersGetTransferData,
+  UsersMyAssetByIdData,
   WebhooksEventFromBridgeReceivedError,
   WebhooksEventFromBridgeReceivedResponse,
   WebhooksEventFromKoyweReceivedError,
@@ -599,6 +602,26 @@ export const usersMyAssetsOptions = (options?: Options) => {
   });
 };
 
+export const usersMyAssetByIdQueryKey = (
+  options: Options<UsersMyAssetByIdData>,
+) => [createQueryKey("usersMyAssetById", options)];
+
+export const usersMyAssetByIdOptions = (
+  options: Options<UsersMyAssetByIdData>,
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey }) => {
+      const { data } = await usersMyAssetById({
+        ...options,
+        ...queryKey[0],
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: usersMyAssetByIdQueryKey(options),
+  });
+};
+
 export const usersGetKycStatusQueryKey = (options?: Options) => [
   createQueryKey("usersGetKycStatus", options),
 ];
@@ -617,11 +640,13 @@ export const usersGetKycStatusOptions = (options?: Options) => {
   });
 };
 
-export const assetsGetAssetsQueryKey = (options?: Options) => [
-  createQueryKey("assetsGetAssets", options),
-];
+export const assetsGetAssetsQueryKey = (
+  options?: Options<AssetsGetAssetsData>,
+) => [createQueryKey("assetsGetAssets", options)];
 
-export const assetsGetAssetsOptions = (options?: Options) => {
+export const assetsGetAssetsOptions = (
+  options?: Options<AssetsGetAssetsData>,
+) => {
   return queryOptions({
     queryFn: async ({ queryKey }) => {
       const { data } = await assetsGetAssets({
