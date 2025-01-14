@@ -191,12 +191,9 @@
         "subtitle": "Nombre como aparece en tu identificación"
       },
       "step_2": {
-        "subtitle": "Ingresa tu fecha de nacimiento"
-      },
-      "step_3": {
         "subtitle": "Selecciona tu país de residencia"
       },
-      "step_4": {
+      "step_3": {
         "subtitle": "Ingresa tu dirección completa"
       }
     },

@@ -57,7 +57,8 @@ const OnBoarding = () => {
     const { t } = useTranslation();
     const navigation = useNavigation();
 
-    const { user } = useUserStore();
+    const { user, fetchUser } = useUserStore();
+
 
     const initialFormValues = {
         first_name: "",
@@ -80,6 +81,7 @@ const OnBoarding = () => {
     const [isCurrentStepValid, setIsCurrentStepValid] = useState<boolean>(false);
 
     const currentStatus = user?.account?.ob_status as OnboardingStatus;
+
     const nextStep = STEPS[getNextStep(currentStatus)];
     const [activeStep, setActiveStep] = useState<number>(nextStep);
 
@@ -116,6 +118,7 @@ const OnBoarding = () => {
         }
 
         if (activeStep === STEPS[OnboardingStatus.COUNTRY_STEP]) {
+            fetchUser(); // fetch and update user
             mutations.updateCountryStep({
                 body: {
                     country: formValues.country_code

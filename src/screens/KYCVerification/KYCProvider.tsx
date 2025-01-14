@@ -32,8 +32,9 @@ const KYCProvider = ({ route }) => {
   };
 
   const { user } = useUserStore();
+  
   const country = country_code || user?.account?.country;
-
+  
   return (
     <SafeAreaView className="flex-1 bg-dark-background-100 pb-4">
       <View className="w-full px-4 py-1">
