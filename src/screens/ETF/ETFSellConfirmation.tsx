@@ -171,7 +171,7 @@ const ETFSellConfirmation = ({ route }) => {
   const showButtonConfirmation = !isQuotePending && quote;
 
   const feeDisplayed = quote?.fee
-    ? currencyFormatter(quote?.fee, 2, 6, true)
+    ? currencyFormatter(quote?.fee, 3, 6, true)
     : "0.00";
 
   const totalDisplayed = quote?.total_amount
