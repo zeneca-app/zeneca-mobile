@@ -271,6 +271,7 @@
   },
   "etfDetail": {
     "buy": "Buy",
+    "sell": "Sell",
     "from": "from: ",
     "to": "to: ",
     "description": "About"
@@ -289,6 +290,24 @@
       "title": "Order Received!",
       "subtitle": "Your purchase was successful",
       "summary": "We are processing your purchase of <0>${{amount}}</0> of \n<1>{{display_name}} {{symbol}}</1> at <2>${{etf_price}}</2> per share.",
+      "done_button": "Understood",
+      "view_order_button": "View order"
+    }
+  },
+  "etfSell": {
+    "timeLeft": "Quote expires in {{time}}",
+    "continue": "Continue",
+    "max": "MAX",
+    "available": "Available",
+    "price": "Price",
+    "fee": "Transaction fee",
+    "total": "Total",
+    "disclaimer": "You are initiating a sell order for <0>{{etf_amount}}</0> shares of <1>{{display_name}} {{symbol}}</1> for <2>${{amount}}</2> at <3>${{etf_price}}</3> per share.",
+    "confirm": "Sell",
+    "success": {
+      "title": "Order Received!",
+      "subtitle": "Your sell was successful",
+      "summary": "We are processing your sell of <0>${{amount}}</0> of \n<1>{{display_name}} {{symbol}}</1> at <2>${{etf_price}}</2> per share.",
       "done_button": "Understood",
       "view_order_button": "View order"
     }

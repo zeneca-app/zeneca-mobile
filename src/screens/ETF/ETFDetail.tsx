@@ -236,9 +236,9 @@ const ETFDetail = ({ route }: ETFDetailScreenProps) => {
           <MarketHours />) : (
           
         )} */}
-        <View className="px-layout">
+        <View className="flex-row gap-s px-layout">
           <Button
-            className=""
+            className="flex-1"
             onPress={() =>
               navigation.navigate("ETFPurchase", {
                 etf: { ...asset, price: price },
@@ -246,6 +246,16 @@ const ETFDetail = ({ route }: ETFDetailScreenProps) => {
             }
           >
             <Text className="button-m">{t("etfDetail.buy")}</Text>
+          </Button>
+          <Button
+            className="flex-1"
+            onPress={() =>
+              navigation.navigate("ETFSell", {
+                etf: { ...asset, price: price },
+              })
+            }
+          >
+            <Text className="button-m">{t("etfDetail.sell")}</Text>
           </Button>
         </View>
       </BottomActions>

@@ -21,8 +21,8 @@ import { Address } from "viem";
 
 
 
-const ETFPurchaseConfirmation = ({ route }) => {
-  const { etf, amount } = route.params;
+const ETFSellConfirmation = ({ route }) => {
+  const { etf, quantity, amount } = route.params;
 
   const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo || null;
 
@@ -39,11 +39,8 @@ const ETFPurchaseConfirmation = ({ route }) => {
   const [timeLeft, setTimeLeft] = useState(0);
 
   const amountDisplayed = amount
-    ? currencyFormatter(amount, 2, 6, true)
+    ? currencyFormatter(amount, 2, 0, true)
     : "0.00";
-
-  const amountToOrder = formatNumber(amount, 2, 6, true);
-
 
   const { mutate: createQuote, isPending: isQuotePending } = useMutation({
     ...ordersCreateQuoteOrderMutation(),
@@ -71,7 +68,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
       );
 
       const tx = await smartAccountClient.sendTransactions({
-        transactions: quote.transactions, 
+        transactions: quote.transactions,
       });
 
       if (!tx) throw new Error("Transaction failed to send");
@@ -90,9 +87,9 @@ const ETFPurchaseConfirmation = ({ route }) => {
         queryClient.invalidateQueries({ queryKey: ["usersMyAssets"] }),
       ]);
 
-      navigation.navigate("ETFPurchaseSuccess", {
+      navigation.navigate("ETFSellSuccess", {
         etf,
-        amount,
+        amount: quote?.total_amount,
         quote,
       });
 
@@ -101,15 +98,12 @@ const ETFPurchaseConfirmation = ({ route }) => {
       Sentry.captureException(error, {
         extra: {
           etfSymbol: etf.symbol,
-          amount,
+          quantity,
           quoteId: quote?.id,
         },
       });
     } finally {
-      /* navigation.navigate("ETFPurchaseSuccess", {
-        etf,
-        amount,
-      }); */
+      setTransactionInitiated(false);
     }
   };
 
@@ -124,12 +118,12 @@ const ETFPurchaseConfirmation = ({ route }) => {
     createQuote({
       body: {
         asset_id: etf.id,
-        side: "BUY",
+        side: "SELL",
         order_type: "MARKET",
-        amount: amount.toString(),
+        quantity: quantity,
       },
     });
-  }, [createQuote, etf.id, amount]);
+  }, [createQuote, etf.id, quantity]);
 
   // Initial quote fetch
   useEffect(() => {
@@ -154,9 +148,9 @@ const ETFPurchaseConfirmation = ({ route }) => {
 
     const timerId = setInterval(updateTimer, 1000);
     return () => {
-      clearInterval(timerId); 
+      clearInterval(timerId);
     };
-  }, [quote, fetchQuote]); 
+  }, [quote, fetchQuote]);
 
   const formatTimeLeft = (seconds: number): string => {
     if (seconds <= 0) return '0:00';
@@ -167,9 +161,9 @@ const ETFPurchaseConfirmation = ({ route }) => {
 
   const minLeft = formatTimeLeft(timeLeft);
 
-  const etfAmount = new BigNumber(amountToOrder)
-    .dividedBy(etf.price)
-    .precision(4)
+  const etfAmount = new BigNumber(quantity)
+    .dividedBy('1000000000000000000')  // Divide by 10^18 to get to base units
+    .toFormat(9)  // Format to exactly 9 decimal places
     .toString();
 
   const isLoading = isQuotePending || transactionInitiated;
@@ -206,7 +200,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
       <View className="px-layout pb-layout flex justify-start items-stretch gap flex-1">
         <View className="flex-row items-center justify-between gap-s">
           <Text className="caption-l text-gray-50">
-            {t("etfPurchase.price")}
+            {t("etfSell.price")}
           </Text>
           <Text className="caption-xl text-dark-content-white">
             {isQuotePending ? (
@@ -218,7 +212,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
         </View>
         <View className="flex-row items-center justify-between gap-s">
           <Text className="caption-l text-gray-50">
-            {t("etfPurchase.fee")}
+            {t("etfSell.fee")}
           </Text>
           <Text className="caption-xl text-dark-content-white">
             {isQuotePending ? (
@@ -230,7 +224,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
         </View>
         <View className="flex-row items-center justify-between gap-s">
           <Text className="caption-l text-gray-50">
-            {t("etfPurchase.total")}
+            {t("etfSell.total")}
           </Text>
           <Text className="caption-xl text-dark-content-white">
             {isQuotePending ? (
@@ -243,13 +237,13 @@ const ETFPurchaseConfirmation = ({ route }) => {
         <View className="h-px rounded-full bg-dark-background-100" />
         <Text className="caption-l text-gray-50">
           <Trans
-            i18nKey="etfPurchase.disclaimer"
+            i18nKey="etfSell.disclaimer"
             values={{
               etf_amount: etfAmount,
               etf_symbol: etf.symbol,
               display_name: etf.name,
               symbol: etf.symbol,
-              amount: amountToOrder,
+              amount: amount,
               etf_price: etf.price,
             }}
             components={[
@@ -271,7 +265,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
           <SkeletonView className="w-20 h-4" />
         ) : (
           <Text className="caption-l text-gray-50">
-            {t("etfPurchase.timeLeft", { time: minLeft })}
+            {t("etfSell.timeLeft", { time: minLeft })}
           </Text>
         )}
 
@@ -284,7 +278,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
             disabled={isDisabled}
             isLoading={isLoading}
           >
-            <Text className="button-m">{t("etfPurchase.confirm")}</Text>
+            <Text className="button-m">{t("etfSell.confirm")}</Text>
           </Button>
         ) : (
           <SkeletonView className="w-full h-12" />
@@ -294,6 +288,6 @@ const ETFPurchaseConfirmation = ({ route }) => {
   );
 };
 
-ETFPurchaseConfirmation.displayName = "ETFPurchaseConfirmation";
+ETFSellConfirmation.displayName = "ETFSellConfirmation";
 
-export default ETFPurchaseConfirmation;
+export default ETFSellConfirmation;

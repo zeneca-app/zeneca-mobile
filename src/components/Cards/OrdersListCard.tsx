@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ChartArrowUp from "@/assets/chart-arrow-up.svg";
 import { usersMyAssetsOptions } from "@/client/@tanstack/react-query.gen";
 import CardHeader from "@/components/CardHeader";
@@ -15,11 +15,13 @@ import Balance from "@/components/Balance";
 import VerifyCtaCard from "@/components/Cards/VerifyCtaCard";
 import CardFooter from "@/components/CardFooter";
 import { MyAsset } from "@/client/";
+import useAssetsStore from "@/storage/assetsStore";
+
 
 const OrdersListCard = () => {
   const { t } = useTranslation();
-
-  const { isPending, error, data: my_assets, refetch, isRefetching } = useQuery({
+  const { setAssets } = useAssetsStore((state) => state);
+  const { isPending: myAssetsPending, error: myAssetsError, data: my_assets, refetch, isRefetching } = useQuery({
     ...usersMyAssetsOptions(),
     refetchInterval: Config.REFETCH_INTERVAL,
     staleTime: 0, // Consider data stale immediately
@@ -27,6 +29,12 @@ const OrdersListCard = () => {
   });
 
   const hasAssets = my_assets?.length && my_assets?.length > 0;
+
+  useEffect(() => {
+    if (my_assets) {
+      setAssets(my_assets);
+    }
+  }, [my_assets]);
 
   // Component to render if no transactions
   const Empty = ({ canTrade = false }: { canTrade?: boolean }) => (
@@ -80,8 +88,8 @@ const OrdersListCard = () => {
           {t("ordersListCard.myAssets")}
         </Text>
       </CardHeader>
-      {isPending && !my_assets && <LoadingMyAssets />}
-      {!isPending && !hasAssets && <Empty canTrade={true} />}
+      {myAssetsPending && !my_assets && <LoadingMyAssets />}
+      {!myAssetsPending && !hasAssets && <Empty canTrade={true} />}
     </View>
   )
 
@@ -104,7 +112,7 @@ const OrdersListCard = () => {
         ListFooterComponent={<HomeFooter />}
         showsVerticalScrollIndicator={false}
         onRefresh={refetch}
-        refreshing={isPending}
+        refreshing={myAssetsPending}
 
         // Add these props for better update handling
         extraData={my_assets} // Re-render when my_assets changes
