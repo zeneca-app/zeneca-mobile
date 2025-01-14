@@ -37,7 +37,7 @@ const ETFSell = ({ route }) => {
     isPending: assetDetailLoading,
     error: assetDetailError,
     data: assetDetail,
-    refetch: assetDetailRefetch,
+    refetch,
   } = useQuery({
     ...assetsGetAssetDetailOptions({
       path: {
@@ -63,7 +63,7 @@ const ETFSell = ({ route }) => {
 
   const hasNumber = Number(amount) > 0;
   const isLessThanAvailable = Number(amount) <= Number(totalAmount);
-  const canContinue = hasNumber && isLessThanAvailable;
+  const canContinue = hasNumber && isLessThanAvailable && !assetDetailLoading;
 
   const goToConfirmation = () => {
     const adjustedPrice = formatNumber(assetPrice, 2, 0, true)
