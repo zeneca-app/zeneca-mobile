@@ -1,6 +1,6 @@
+import env from "@/config/env";
 import { createPrivyClient } from "@privy-io/expo";
 import { client } from "./services.gen";
-import env from "@/config/env";
 
 const APP_ID = env.PRIVY_APP_ID;
 const CLIENT_ID = env.PRIVY_CLIENT_ID;

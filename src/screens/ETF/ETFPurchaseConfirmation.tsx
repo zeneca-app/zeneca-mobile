@@ -35,6 +35,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
   const [transactionInitiated, setTransactionInitiated] = useState(false);
 
   const [quote, setQuote] = useState<OrderQuote | null>(null);
+
   const [timeLeft, setTimeLeft] = useState(0);
 
   const amountDisplayed = amount
@@ -54,6 +55,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
     },
   });
 
+
   const executeTransaction = async () => {
     try {
       setTransactionInitiated(true);
@@ -67,9 +69,9 @@ const ETFPurchaseConfirmation = ({ route }) => {
         chain,
         wallet,
       );
-      const transactions = await createOrder(quote!, smartAccountClient);
+
       const tx = await smartAccountClient.sendTransactions({
-        transactions: transactions,
+        transactions: quote.transactions, 
       });
 
       if (!tx) throw new Error("Transaction failed to send");
@@ -178,8 +180,8 @@ const ETFPurchaseConfirmation = ({ route }) => {
     ? currencyFormatter(quote?.fee, 2, 6, true)
     : "0.00";
 
-  const totalDisplayed = quote?.total
-    ? currencyFormatter(quote?.total, 2, 6, true)
+  const totalDisplayed = quote?.total_amount
+    ? currencyFormatter(quote?.total_amount, 2, 6, true)
     : "0.00";
 
   return (

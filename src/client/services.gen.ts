@@ -363,6 +363,7 @@ export const usersMe = <ThrowOnError extends boolean = false>(
 
 /**
  * My Balance
+ * Get user's balance and portfolio value
  */
 export const usersMyBalance = <ThrowOnError extends boolean = false>(
   options?: Options<unknown, ThrowOnError>,

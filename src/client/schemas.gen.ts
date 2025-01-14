@@ -960,9 +960,20 @@ export const OrderSchema = {
 export const OrderQuoteSchema = {
   properties: {
     id: {
-      type: "string",
-      format: "uuid",
+      anyOf: [
+        {
+          type: "string",
+          format: "uuid",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Id",
+    },
+    external_order_id: {
+      type: "string",
+      title: "External Order Id",
     },
     asset_id: {
       type: "string",
@@ -985,9 +996,8 @@ export const OrderQuoteSchema = {
         },
       ],
       title: "Quantity",
-      default: "0",
     },
-    amount: {
+    estimated_quantity_out: {
       anyOf: [
         {
           type: "string",
@@ -996,52 +1006,82 @@ export const OrderQuoteSchema = {
           type: "null",
         },
       ],
-      title: "Amount",
-      default: "0",
+      title: "Estimated Quantity Out",
+    },
+    amount_in: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Amount In",
+    },
+    amount_out: {
+      type: "integer",
+      title: "Amount Out",
     },
     asset_price: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Asset Price",
-      default: "0",
     },
     fee: {
-      type: "string",
+      type: "integer",
       title: "Fee",
     },
-    total: {
-      type: "string",
-      title: "Total",
+    partner_fee: {
+      type: "integer",
+      title: "Partner Fee",
     },
-    amount_to_receive: {
-      type: "string",
-      title: "Amount To Receive",
+    zeneca_fee: {
+      type: "integer",
+      title: "Zeneca Fee",
     },
-    external_order_id: {
-      type: "string",
-      title: "External Order Id",
+    total_amount: {
+      type: "integer",
+      title: "Total Amount",
     },
-    smart_account_address: {
+    user_address: {
       type: "string",
-      title: "Smart Account Address",
+      title: "User Address",
     },
     signature: {
       type: "string",
       title: "Signature",
     },
-    order_data: {
-      $ref: "#/components/schemas/OrderQuoteData",
-    },
     chain_id: {
       type: "integer",
       title: "Chain Id",
     },
+    order_data: {
+      $ref: "#/components/schemas/OrderQuoteData",
+    },
+    transactions: {
+      anyOf: [
+        {
+          items: {
+            $ref: "#/components/schemas/Transaction",
+          },
+          type: "array",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Transactions",
+    },
     deadline: {
       type: "integer",
       title: "Deadline",
-    },
-    created_at: {
-      type: "integer",
-      title: "Created At",
     },
     precision: {
       type: "integer",
@@ -1051,20 +1091,20 @@ export const OrderQuoteSchema = {
   },
   type: "object",
   required: [
-    "id",
+    "external_order_id",
     "asset_id",
     "side",
     "order_type",
+    "amount_out",
     "fee",
-    "total",
-    "amount_to_receive",
-    "external_order_id",
-    "smart_account_address",
+    "partner_fee",
+    "zeneca_fee",
+    "total_amount",
+    "user_address",
     "signature",
-    "order_data",
     "chain_id",
+    "order_data",
     "deadline",
-    "created_at",
     "precision",
   ],
   title: "OrderQuote",
@@ -1072,9 +1112,41 @@ export const OrderQuoteSchema = {
 
 export const OrderQuoteDataSchema = {
   properties: {
+    signature: {
+      type: "string",
+      title: "Signature",
+    },
+    external_order_id: {
+      type: "string",
+      title: "External Order Id",
+    },
+    created_at: {
+      type: "integer",
+      title: "Created At",
+    },
+    deadline: {
+      type: "integer",
+      title: "Deadline",
+    },
     recipient: {
       type: "string",
       title: "Recipient",
+    },
+    allowance_amount: {
+      type: "integer",
+      title: "Allowance Amount",
+    },
+    tif: {
+      type: "integer",
+      title: "Tif",
+    },
+    fee: {
+      type: "string",
+      title: "Fee",
+    },
+    sell: {
+      type: "boolean",
+      title: "Sell",
     },
     asset_token_quantity: {
       type: "integer",
@@ -1092,49 +1164,37 @@ export const OrderQuoteDataSchema = {
       type: "string",
       title: "Payment Token",
     },
-    sell: {
-      type: "boolean",
-      title: "Sell",
-    },
     order_type: {
       type: "integer",
       title: "Order Type",
     },
     limit_price: {
-      type: "string",
-      title: "Limit Price",
-    },
-    tif: {
       type: "integer",
-      title: "Tif",
-    },
-    fee: {
-      type: "string",
-      title: "Fee",
+      title: "Limit Price",
     },
     request_timestamp: {
       type: "integer",
       title: "Request Timestamp",
     },
-    allowance_amount: {
-      type: "integer",
-      title: "Allowance Amount",
-    },
   },
   type: "object",
   required: [
+    "signature",
+    "external_order_id",
+    "created_at",
+    "deadline",
     "recipient",
+    "allowance_amount",
+    "tif",
+    "fee",
+    "sell",
     "asset_token_quantity",
     "payment_token_quantity",
     "asset_token",
     "payment_token",
-    "sell",
     "order_type",
     "limit_price",
-    "tif",
-    "fee",
     "request_timestamp",
-    "allowance_amount",
   ],
   title: "OrderQuoteData",
 } as const;
@@ -1174,6 +1234,18 @@ export const OrderQuoteRequestSchema = {
         },
       ],
       title: "Amount",
+      default: 0,
+    },
+    limit_price: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Limit Price",
       default: 0,
     },
   },
@@ -1630,6 +1702,26 @@ export const TokenSymbolSchema = {
   type: "string",
   enum: ["usdc.polygon", "usdc.base", "usdc.stellar"],
   title: "TokenSymbol",
+} as const;
+
+export const TransactionSchema = {
+  properties: {
+    to: {
+      type: "string",
+      title: "To",
+    },
+    data: {
+      type: "string",
+      title: "Data",
+    },
+    value: {
+      type: "integer",
+      title: "Value",
+    },
+  },
+  type: "object",
+  required: ["to", "data", "value"],
+  title: "Transaction",
 } as const;
 
 export const TransferReadSchema = {
