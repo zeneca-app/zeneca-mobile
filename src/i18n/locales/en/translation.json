@@ -184,12 +184,9 @@
         "subtitle": "Name as it appears on your ID"
       },
       "step_2": {
-        "subtitle": "Enter your date of birth"
-      },
-      "step_3": {
         "subtitle": "Select your country of residence"
       },
-      "step_4": {
+      "step_3": {
         "subtitle": "Enter your complete address"
       }
     },
