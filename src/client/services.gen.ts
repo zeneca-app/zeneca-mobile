@@ -450,6 +450,22 @@ export const assetsGetAssets = <ThrowOnError extends boolean = false>(
 };
 
 /**
+ * Get Market Hours
+ */
+export const assetsGetMarketHours = <ThrowOnError extends boolean = false>(
+  options?: Options<unknown, ThrowOnError>,
+) => {
+  return (options?.client ?? client).get<
+    AssetsGetMarketHoursResponse,
+    AssetsGetMarketHoursError,
+    ThrowOnError
+  >({
+    ...options,
+    url: "/v0/assets/market_hours",
+  });
+};
+
+/**
  * Get Asset Ticks
  */
 export const assetsGetAssetTicks = <ThrowOnError extends boolean = false>(
@@ -478,22 +494,6 @@ export const assetsGetAssetDetail = <ThrowOnError extends boolean = false>(
   >({
     ...options,
     url: "/v0/assets/{asset_id}",
-  });
-};
-
-/**
- * Get Market Hours
- */
-export const assetsGetMarketHours = <ThrowOnError extends boolean = false>(
-  options?: Options<unknown, ThrowOnError>,
-) => {
-  return (options?.client ?? client).get<
-    AssetsGetMarketHoursResponse,
-    AssetsGetMarketHoursError,
-    ThrowOnError
-  >({
-    ...options,
-    url: "/v0/assets/market_hours",
   });
 };
 

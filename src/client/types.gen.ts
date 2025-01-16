@@ -30,7 +30,7 @@ export type AssetDetail = {
   symbol: string;
   display_name: string;
   logo_url?: string | null;
-  external_id: string;
+  external_id: number;
   price: string;
   change_percent: string;
   change: string;
@@ -49,7 +49,7 @@ export type AssetPrice = {
   symbol: string;
   display_name: string;
   logo_url?: string | null;
-  external_id: string;
+  external_id: number;
   price: string;
 };
 
@@ -59,6 +59,9 @@ export type Balance = {
   portfolio_market_value?: string;
   readonly precision: number;
   readonly equity: string;
+  readonly equity_in_usd: string;
+  readonly available_in_usd: string;
+  readonly pending_in_usd: string;
 };
 
 export type Bank = {
@@ -171,13 +174,9 @@ export type MyAsset = {
   logo_url?: string | null;
   quantity_in_wei: number;
   external_id: number;
-  equity: string;
+  equity: number;
+  equity_in_usd?: string | null;
   change_percent: string;
-  readonly precision: number;
-  /**
-   * Convert from 18 decimals to 6 decimals Wei
-   */
-  readonly amount: string;
 };
 
 export type MyAssetLite = {
@@ -243,7 +242,6 @@ export type OrderQuote = {
   side: OrderSide;
   order_type: OrderType;
   quantity?: string | null;
-  quantity_out?: string | null;
   amount_in?: number | null;
   amount_out?: number | null;
   asset_price?: string | null;
@@ -691,6 +689,10 @@ export type AssetsGetAssetsResponse = Array<AssetPrice>;
 
 export type AssetsGetAssetsError = HTTPValidationError;
 
+export type AssetsGetMarketHoursResponse = MarketHours;
+
+export type AssetsGetMarketHoursError = unknown;
+
 export type AssetsGetAssetTicksData = {
   path: {
     asset_id: string;
@@ -713,10 +715,6 @@ export type AssetsGetAssetDetailData = {
 export type AssetsGetAssetDetailResponse = AssetDetail;
 
 export type AssetsGetAssetDetailError = HTTPValidationError;
-
-export type AssetsGetMarketHoursResponse = MarketHours;
-
-export type AssetsGetMarketHoursError = unknown;
 
 export type OrdersGetOrdersResponse = Array<Order>;
 

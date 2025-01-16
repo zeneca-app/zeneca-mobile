@@ -77,7 +77,7 @@ const Balance = ({
         ) : (
           <>
             <Text className="heading-l text-white">
-              {equity}
+              {balance?.equity_in_usd}
             </Text>
             {displayCurrencyName && (
               <Text className="text-white text-base font-semibold">
