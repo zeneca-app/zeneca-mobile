@@ -27,7 +27,7 @@ const MyAssetItem = ({ asset }: MyAssetItemProps) => {
       <View className="flex-shrink-0 justify-center items-end">
         <Text className="text-gray-10 caption-xl"
           numberOfLines={1}>
-          {asset.equity_in_usd}
+          ${asset.equity_in_usd}
         </Text>
       </View>
     </View>
