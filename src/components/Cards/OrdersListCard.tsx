@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ChartArrowUp from "@/assets/chart-arrow-up.svg";
 import { usersMyAssetsOptions } from "@/client/@tanstack/react-query.gen";
 import CardHeader from "@/components/CardHeader";
-import OrderListItem from "@/components/ListItems/OrderListItem";
+import MyAssetItem from "@/components/ListItems/MyAssetItem";
 import Separator from "@/components/ListItems/Separator";
 import Config from "@/config";
 import { useQuery } from "@tanstack/react-query";
@@ -64,7 +64,7 @@ const OrdersListCard = () => {
       return null;
     }
     //console.log("orderlist item", item);
-    return <OrderListItem order={item} />;
+    return <MyAssetItem asset={item} />;
   };
 
   const LoadingMyAssets = () => (

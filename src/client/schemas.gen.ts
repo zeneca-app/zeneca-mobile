@@ -143,7 +143,7 @@ export const AssetDetailSchema = {
       title: "Logo Url",
     },
     external_id: {
-      type: "string",
+      type: "integer",
       title: "External Id",
     },
     price: {
@@ -245,7 +245,7 @@ export const AssetPriceSchema = {
       title: "Logo Url",
     },
     external_id: {
-      type: "string",
+      type: "integer",
       title: "External Id",
     },
     price: {
@@ -285,9 +285,30 @@ export const BalanceSchema = {
       title: "Equity",
       readOnly: true,
     },
+    equity_in_usd: {
+      type: "string",
+      title: "Equity In Usd",
+      readOnly: true,
+    },
+    available_in_usd: {
+      type: "string",
+      title: "Available In Usd",
+      readOnly: true,
+    },
+    pending_in_usd: {
+      type: "string",
+      title: "Pending In Usd",
+      readOnly: true,
+    },
   },
   type: "object",
-  required: ["precision", "equity"],
+  required: [
+    "precision",
+    "equity",
+    "equity_in_usd",
+    "available_in_usd",
+    "pending_in_usd",
+  ],
   title: "Balance",
 } as const;
 
@@ -737,23 +758,23 @@ export const MyAssetSchema = {
       title: "External Id",
     },
     equity: {
-      type: "string",
+      type: "integer",
       title: "Equity",
+    },
+    equity_in_usd: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Equity In Usd",
     },
     change_percent: {
       type: "string",
       title: "Change Percent",
-    },
-    precision: {
-      type: "integer",
-      title: "Precision",
-      readOnly: true,
-    },
-    amount: {
-      type: "string",
-      title: "Amount",
-      description: "Convert from 18 decimals to 6 decimals Wei",
-      readOnly: true,
     },
   },
   type: "object",
@@ -763,8 +784,6 @@ export const MyAssetSchema = {
     "external_id",
     "equity",
     "change_percent",
-    "precision",
-    "amount",
   ],
   title: "MyAsset",
 } as const;
@@ -1017,17 +1036,6 @@ export const OrderQuoteSchema = {
         },
       ],
       title: "Quantity",
-    },
-    quantity_out: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Quantity Out",
     },
     amount_in: {
       anyOf: [

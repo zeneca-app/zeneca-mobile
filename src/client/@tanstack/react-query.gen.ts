@@ -660,6 +660,24 @@ export const assetsGetAssetsOptions = (
   });
 };
 
+export const assetsGetMarketHoursQueryKey = (options?: Options) => [
+  createQueryKey("assetsGetMarketHours", options),
+];
+
+export const assetsGetMarketHoursOptions = (options?: Options) => {
+  return queryOptions({
+    queryFn: async ({ queryKey }) => {
+      const { data } = await assetsGetMarketHours({
+        ...options,
+        ...queryKey[0],
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: assetsGetMarketHoursQueryKey(options),
+  });
+};
+
 export const assetsGetAssetTicksQueryKey = (
   options: Options<AssetsGetAssetTicksData>,
 ) => [createQueryKey("assetsGetAssetTicks", options)];
@@ -697,24 +715,6 @@ export const assetsGetAssetDetailOptions = (
       return data;
     },
     queryKey: assetsGetAssetDetailQueryKey(options),
-  });
-};
-
-export const assetsGetMarketHoursQueryKey = (options?: Options) => [
-  createQueryKey("assetsGetMarketHours", options),
-];
-
-export const assetsGetMarketHoursOptions = (options?: Options) => {
-  return queryOptions({
-    queryFn: async ({ queryKey }) => {
-      const { data } = await assetsGetMarketHours({
-        ...options,
-        ...queryKey[0],
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: assetsGetMarketHoursQueryKey(options),
   });
 };
 

@@ -5,17 +5,14 @@ import { MyAsset } from "@/client/";
 import { SvgUri } from "react-native-svg";
 
 
-export type OrderListItemProps = {
-  order: MyAsset;
+export type MyAssetItemProps = {
+  asset: MyAsset;
 };
 
-const OrderListItem = ({ order }: OrderListItemProps) => {
-  const Logo = STOCKS?.[order.symbol as keyof typeof STOCKS]?.logo || null;
+const MyAssetItem = ({ asset }: MyAssetItemProps) => {
+  const Logo = STOCKS?.[asset.symbol as keyof typeof STOCKS]?.logo || null;
 
-  const equity = order.equity
-    ? currencyFormatter(order.equity, 2, order.precision, true)
-    : "0.00";
-
+  
   return (
     <View className="flex-row gap-3 px-layout bg-dark-background-100">
       {/* Logo container with fixed dimensions */}
@@ -24,19 +21,19 @@ const OrderListItem = ({ order }: OrderListItemProps) => {
       </View>
       {/* Name container with flex but constrained */}
       <View className="flex-1 min-w-0 justify-center items-stretch">
-        <Text className="text-gray-10 caption-xl">{order.display_name}</Text>
+        <Text className="text-gray-10 caption-xl">{asset.display_name}</Text>
       </View>
       {/* Price container with fixed width */}
       <View className="flex-shrink-0 justify-center items-end">
         <Text className="text-gray-10 caption-xl"
           numberOfLines={1}>
-          {equity}
+          {asset.equity_in_usd}
         </Text>
       </View>
     </View>
   );
 };
 
-OrderListItem.displayName = "OrderListItem";
+MyAssetItem.displayName = "MyAssetItem";
 
-export default OrderListItem;
+export default MyAssetItem;
