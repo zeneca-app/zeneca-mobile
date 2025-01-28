@@ -2,7 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Text from '@/components/Text';
-import { Order } from '@/client/';
+import { Order, OrderStatus } from '@/client/';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 
@@ -67,16 +67,23 @@ const OrderDetailsScreen: React.FC<OrderHistoryDetailScreenProps> = ({ route }) 
         pricePerShare: averagePrice
     };
 
-    const getStatusColor = (status: string): string => {
+    const getStatusColor = (status: OrderStatus): string => {
         switch (status.toUpperCase()) {
-            case 'COMPLETED':
             case 'FILLED':
                 return 'bg-green-500';
             case 'PENDING':
-            case 'OPEN':
+            case 'PENDING_CANCEL':
+            case 'PENDING_ESCROW':
+            case 'PENDING_FILL':
+            case 'PENDING_SUBMIT':
+            case 'ESCROWED':
+                return 'bg-gray-500';
+            case 'SUBMITTED':
                 return 'bg-yellow-500';
             case 'CANCELLED':
-            case 'FAILED':
+            case 'ERROR':
+            case 'REJECTED':
+            case 'REQUIRING_CONTACT':
                 return 'bg-red-500';
             default:
                 return 'bg-gray-500';
@@ -102,7 +109,7 @@ const OrderDetailsScreen: React.FC<OrderHistoryDetailScreenProps> = ({ route }) 
                 {/* Order Amount */}
                 <View className="mb-8">
                     <Text className="text-gray-400 text-base mb-2">
-                        Orden de compra
+                        {order.order_side === "BUY" ? "Orden de compra" : "Orden de venta"}
                     </Text>
                     <Text className="text-white text-4xl font-semibold">
                         ${orderDetails.amount}
@@ -130,7 +137,7 @@ const OrderDetailsScreen: React.FC<OrderHistoryDetailScreenProps> = ({ route }) 
                     <View className="flex-row justify-between items-center py-3 border-b border-[#1C1C1E]">
                         <Text className="text-gray-400 text-base">Status</Text>
                         <View className="flex-row items-center gap-2">
-                            <View className={`w-2 h-2 rounded-full ${getStatusColor(orderDetails.status)}`} />
+                            <View className={`w-2 h-2 rounded-full ${getStatusColor(orderDetails.status as OrderStatus)}`} />
                             <Text className="text-white text-base">
                                 {orderDetails.status}
                             </Text>
