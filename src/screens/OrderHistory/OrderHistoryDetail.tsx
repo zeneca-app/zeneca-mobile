@@ -5,6 +5,8 @@ import Text from '@/components/Text';
 import { Order, OrderStatus } from '@/client/';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+import { STOCKS } from '@/constants/stocks';
+
 
 
 type OrderHistoryDetailScreenProps = {
@@ -90,13 +92,15 @@ const OrderDetailsScreen: React.FC<OrderHistoryDetailScreenProps> = ({ route }) 
         }
     };
 
+    const Logo = STOCKS?.[order.symbol as keyof typeof STOCKS]?.logo || null;
+
     return (
         <SafeAreaView className="flex-1 bg-black">
             <View className="p-6 flex-1">
                 {/* Header */}
                 <View className="flex-row justify-between items-center mb-8">
                     <View className="w-12 h-12 bg-[#1C1C1E] rounded-full justify-center items-center">
-                        <Ionicons name="logo-apple" size={24} color="white" />
+                        <Logo style={{ height: "100%", width: "100%" }} />
                     </View>
                     <TouchableOpacity
                         onPress={() => navigation.goBack()}
@@ -114,6 +118,7 @@ const OrderDetailsScreen: React.FC<OrderHistoryDetailScreenProps> = ({ route }) 
                     <Text className="text-white text-4xl font-semibold">
                         ${orderDetails.amount}
                     </Text>
+
                 </View>
 
                 {/* Details Section */}
@@ -121,6 +126,10 @@ const OrderDetailsScreen: React.FC<OrderHistoryDetailScreenProps> = ({ route }) 
                     <DetailRow
                         label="Precio"
                         value={`$${orderDetails.price}`}
+                    />
+                    <DetailRow
+                        label="Shares"
+                        value={orderDetails.shares.toString()}
                     />
                     <DetailRow
                         label="Comisión"
@@ -134,6 +143,7 @@ const OrderDetailsScreen: React.FC<OrderHistoryDetailScreenProps> = ({ route }) 
                         label="Referencia"
                         value={orderDetails.reference}
                     />
+
                     <View className="flex-row justify-between items-center py-3 border-b border-[#1C1C1E]">
                         <Text className="text-gray-400 text-base">Status</Text>
                         <View className="flex-row items-center gap-2">
