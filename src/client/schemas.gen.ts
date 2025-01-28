@@ -962,31 +962,17 @@ export const OrderSchema = {
       type: "integer",
       title: "Fee Wei",
     },
+    fee: {
+      type: "string",
+      title: "Fee",
+    },
     total_wei: {
       type: "integer",
       title: "Total Wei",
     },
-    payment_token_spent_wei: {
-      anyOf: [
-        {
-          type: "integer",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Payment Token Spent Wei",
-    },
-    payment_token_spent: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Payment Token Spent",
+    total: {
+      type: "string",
+      title: "Total",
     },
     asset_token_filled_wei: {
       anyOf: [
@@ -1067,9 +1053,9 @@ export const OrderSchema = {
     "order_side",
     "order_type",
     "fee_wei",
+    "fee",
     "total_wei",
-    "payment_token_spent_wei",
-    "payment_token_spent",
+    "total",
     "asset_token_filled_wei",
     "asset_token_filled",
     "payment_token_filled_wei",

@@ -46,9 +46,7 @@ const OrderDetailsScreen: React.FC<OrderHistoryDetailScreenProps> = ({ route }) 
     const order = route.params.order;
     const { t } = useTranslation();
     const navigation = useNavigation();
-    const amount = order.order_side === "BUY" ?
-        Number(order.payment_token_spent) :
-        Number(order.payment_token_filled);
+    const amount = Number(order.payment_token_filled);
     const fees = Number(order.fee_wei)
     const shares = Number(order.asset_token_filled)
 

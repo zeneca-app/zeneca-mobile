@@ -70,12 +70,9 @@ const OrderHistoryItem = ({ order, onPress }: OrderHistoryItemProps) => {
             </View>
 
             <View className="items-end">
-                {order.order_side === "BUY" && <Text className="text-lg text-gray-400">
-                    ${order.payment_token_spent}
-                </Text>}
-                {order.order_side === "SELL" && <Text className="text-lg text-gray-400">
+                <Text className="text-lg text-gray-400">
                     ${order.payment_token_filled}
-                </Text>}
+                </Text>
 
                 <Text className={`text-sm text-${statusColor}`}>
                     {order.status}

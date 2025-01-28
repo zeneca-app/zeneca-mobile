@@ -231,9 +231,9 @@ export type Order = {
   order_side: OrderSide;
   order_type: OrderType;
   fee_wei: number;
+  fee: string;
   total_wei: number;
-  payment_token_spent_wei: number | null;
-  payment_token_spent: string | null;
+  total: string;
   asset_token_filled_wei: number | null;
   asset_token_filled: string | null;
   payment_token_filled_wei: number | null;
