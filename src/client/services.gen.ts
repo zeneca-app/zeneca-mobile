@@ -33,6 +33,8 @@ import type {
   OnboardingOnboardingCountryStepData,
   OnboardingOnboardingCountryStepError,
   OnboardingOnboardingCountryStepResponse,
+  OnboardingOnboardingKycStepError,
+  OnboardingOnboardingKycStepResponse,
   OnboardingOnboardingNamesStepData,
   OnboardingOnboardingNamesStepError,
   OnboardingOnboardingNamesStepResponse,
@@ -384,7 +386,7 @@ export const usersMyBalance = <ThrowOnError extends boolean = false>(
 
 /**
  * My Assets
- * Get user's stock assets
+ * Get user's positions
  */
 export const usersMyAssets = <ThrowOnError extends boolean = false>(
   options?: Options<unknown, ThrowOnError>,
@@ -401,7 +403,6 @@ export const usersMyAssets = <ThrowOnError extends boolean = false>(
 
 /**
  * My Asset By Id
- * Get user's specific stock asset by asset ID
  */
 export const usersMyAssetById = <ThrowOnError extends boolean = false>(
   options: Options<UsersMyAssetByIdData, ThrowOnError>,
@@ -580,5 +581,23 @@ export const onboardingOnboardingAddressStep = <
   >({
     ...options,
     url: "/v0/onboarding/address-step",
+  });
+};
+
+/**
+ * Onboarding Kyc Step
+ */
+export const onboardingOnboardingKycStep = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<unknown, ThrowOnError>,
+) => {
+  return (options?.client ?? client).post<
+    OnboardingOnboardingKycStepResponse,
+    OnboardingOnboardingKycStepError,
+    ThrowOnError
+  >({
+    ...options,
+    url: "/v0/onboarding/kyc-step",
   });
 };
