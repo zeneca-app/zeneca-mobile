@@ -5,8 +5,7 @@ import Text from '@/components/Text';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { ordersGetOrdersOptions } from '@/client/@tanstack/react-query.gen';
-import { currencyFormatter, formatNumber } from "@/utils/currencyUtils";
-import { format, formatDistanceToNow } from 'date-fns';
+import { format } from 'date-fns';
 import { Order } from '@/client/';
 import SkeletonLoadingView, {
     SkeletonOrderListItem,
@@ -69,26 +68,6 @@ const OrderHistoryItem = ({ order, onPress }: OrderHistoryItemProps) => {
                     {getSmartDate(order.created_at)}
                 </Text>
             </View>
-            {/*  <View className="items-end">
-                <Text className="text-white text-base font-medium">
-                    {currencyFormatter(order.payment_quantity, 2, 6)}
-                </Text>
-                <Text className="text-[#95929F] text-sm">
-                    {order.order_type}
-                </Text>
-                <Text className="text-[#95929F] text-sm">
-                    {getSmartDate(order.created_at)}
-                </Text>
-            </View> */}
-
-            {/*  <View className="flex-1">
-                <Text className="text-lg font-semibold">
-                    {order.order_type.toUpperCase()}
-                    {order.symbol && ` • ${order.symbol}`}
-                </Text>
-               
-            </View> */}
-            {console.log(order)}
 
             <View className="items-end">
                 {order.order_side === "BUY" && <Text className="text-lg text-gray-400">
@@ -140,8 +119,7 @@ const OrderHistory = () => {
             <OrderHistoryItem
                 order={order}
                 onPress={(order) => {
-                    // Handle order press
-                    console.log('Order pressed:', order);
+                    navigation.navigate('OrderHistoryDetail', { order });
                 }}
             />
         );
@@ -211,4 +189,5 @@ const OrderHistory = () => {
     );
 };
 
+OrderHistory.displayName = "OrderHistory";
 export default OrderHistory;

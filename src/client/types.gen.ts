@@ -223,17 +223,20 @@ export type OnboardingStatus =
   | "KYC_PROVIDER_STEP";
 
 export type Order = {
+  transaction_hash: string | null;
   external_id: string;
   symbol: string;
   name: string;
   status: OrderStatus;
   order_side: OrderSide;
   order_type: OrderType;
-  payment_quantity: string;
-  fee: string;
-  total: string;
-  transaction_hash: string | null;
+  fee_wei: number;
+  total_wei: number;
+  payment_token_spent_wei: number | null;
+  payment_token_spent: string | null;
+  asset_token_filled_wei: number | null;
   asset_token_filled: string | null;
+  payment_token_filled_wei: number | null;
   payment_token_filled: string | null;
   created_at: string | null;
   filled_at: string | null;

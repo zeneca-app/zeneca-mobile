@@ -926,6 +926,17 @@ export const OnboardingStatusSchema = {
 
 export const OrderSchema = {
   properties: {
+    transaction_hash: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Transaction Hash",
+    },
     external_id: {
       type: "string",
       title: "External Id",
@@ -947,19 +958,26 @@ export const OrderSchema = {
     order_type: {
       $ref: "#/components/schemas/OrderType",
     },
-    payment_quantity: {
-      type: "string",
-      title: "Payment Quantity",
+    fee_wei: {
+      type: "integer",
+      title: "Fee Wei",
     },
-    fee: {
-      type: "string",
-      title: "Fee",
+    total_wei: {
+      type: "integer",
+      title: "Total Wei",
     },
-    total: {
-      type: "string",
-      title: "Total",
+    payment_token_spent_wei: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Payment Token Spent Wei",
     },
-    transaction_hash: {
+    payment_token_spent: {
       anyOf: [
         {
           type: "string",
@@ -968,7 +986,18 @@ export const OrderSchema = {
           type: "null",
         },
       ],
-      title: "Transaction Hash",
+      title: "Payment Token Spent",
+    },
+    asset_token_filled_wei: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Asset Token Filled Wei",
     },
     asset_token_filled: {
       anyOf: [
@@ -980,6 +1009,17 @@ export const OrderSchema = {
         },
       ],
       title: "Asset Token Filled",
+    },
+    payment_token_filled_wei: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Payment Token Filled Wei",
     },
     payment_token_filled: {
       anyOf: [
@@ -1019,17 +1059,20 @@ export const OrderSchema = {
   },
   type: "object",
   required: [
+    "transaction_hash",
     "external_id",
     "symbol",
     "name",
     "status",
     "order_side",
     "order_type",
-    "payment_quantity",
-    "fee",
-    "total",
-    "transaction_hash",
+    "fee_wei",
+    "total_wei",
+    "payment_token_spent_wei",
+    "payment_token_spent",
+    "asset_token_filled_wei",
     "asset_token_filled",
+    "payment_token_filled_wei",
     "payment_token_filled",
     "created_at",
     "filled_at",
