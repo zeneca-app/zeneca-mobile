@@ -1,35 +1,47 @@
 import { KYCStatus, OnboardingStatus } from "@/client";
+import { queryClient } from "@/storage";
 import zustandStorage from "@/storage/storage";
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
 
 interface KYCStatusState {
-  ob_status?: OnboardingStatus;
-  kyc_status?: KYCStatus;
+  obStatus?: OnboardingStatus;
+  kycStatus?: KYCStatus;
+  isVerifying: boolean;
+  isVerified: boolean;
 }
 
 interface KYCStatusActions {
   setObStatus: (status: OnboardingStatus) => void;
   setKycStatus: (status: KYCStatus) => void;
+  reset: () => void;
 }
 
 type KYCStatusStore = KYCStatusState & KYCStatusActions;
 
 const initialState: KYCStatusState = {
-  ob_status: undefined,
-  kyc_status: undefined,
+  obStatus: undefined,
+  kycStatus: undefined,
+  isVerifying: false,
+  isVerified: false,
 };
 
 export const useKYCStatusStore = create<KYCStatusStore>()(
   devtools(
     persist(
       (set, get) => ({
-        ob_status: initialState.ob_status,
-        kyc_status: initialState.kyc_status,
-        setObStatus: (data: OnboardingStatus) =>
-          set(() => ({ ob_status: data })),
-        setKycStatus: (data: KYCStatus) => set(() => ({ kyc_status: data })),
-        resetAll: () => set(() => initialState),
+        ...initialState,
+        setObStatus: (status: OnboardingStatus) =>
+          set(() => ({
+            obStatus: status,
+            isVerifying: status === "KYC_PROVIDER_STEP",
+          })),
+        setKycStatus: (status: KYCStatus) =>
+          set(() => ({
+            kycStatus: status,
+            isVerified: status !== "NOT_STARTED",
+          })),
+        reset: () => set(initialState),
       }),
       {
         name: "kyc-status-storage",

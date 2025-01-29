@@ -10,6 +10,7 @@ import { usePrivy } from "@privy-io/expo";
 import { useState, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import Avatar from "@/assets/avatar.svg";
+import { useKYCStatusStore } from '@/storage/kycStatusStore';
 
 
 const ProfileScreen = () => {
@@ -20,9 +21,12 @@ const ProfileScreen = () => {
     const { user } = useUserStore();
     const [isLoading, setIsLoading] = useState(false);
     const { setUser } = useUserStore((state) => state);
+    const { reset } = useKYCStatusStore(state => state);
+
 
     const handleLogout = async () => {
         try {
+            reset();
             setIsLoading(true);
             setUser(undefined);
             queryClient.clear();
@@ -34,8 +38,7 @@ const ProfileScreen = () => {
                 routes: [{ name: "Login" }],
             });
         } catch (error) {
-            console.error("ERRRORRRR", error);
-            
+            console.error("Logout error:", error);
         }
         setIsLoading(false);
     };

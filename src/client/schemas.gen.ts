@@ -833,8 +833,7 @@ export const MyAssetsSchema = {
 export const OBKYCStatusResponseSchema = {
   properties: {
     ob_status: {
-      type: "string",
-      title: "Ob Status",
+      $ref: "#/components/schemas/OnboardingStatus",
     },
     kyc_status: {
       $ref: "#/components/schemas/KycStatusResponse",

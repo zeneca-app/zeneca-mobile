@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import VerifyIcon from "@/assets/id-card.svg";
 import Card from "@/components/Card";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -11,35 +11,43 @@ import Config from "@/config";
 import SkeletonLoadingView, {
   SkeletonView,
 } from "@/components/Loading/SkeletonLoadingView";
-import { useUserStore } from "@/storage/";
+import { useKYCStatusStore, useUserStore } from "@/storage/";
+import { OnboardingStatus } from "@/client";
+import * as Sentry from '@sentry/react-native';
 
 
 const VerifyCTACard = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const { user, fetchUser, isLoading: isUserLoading } = useUserStore();
+  const { user, isLoading: isUserLoading } = useUserStore();
 
-  const { isPending: isKycPending, error: kycError, data: OBKYCStatus } = useQuery({
+  const { kycStatus, obStatus, isVerifying, isVerified, setKycStatus, setObStatus } = useKYCStatusStore(
+    useCallback(state => ({
+      kycStatus: state.kycStatus,
+      obStatus: state.obStatus,
+      isVerifying: state.isVerifying,
+      isVerified: state.isVerified,
+      setKycStatus: state.setKycStatus,
+      setObStatus: state.setObStatus,
+    }), [])
+  );
+
+  const { data: OBKYCStatus, isPending: isKycPending, error } = useQuery({
     ...usersGetKycStatusOptions(),
-    refetchInterval: Config.REFETCH_INTERVAL,
-    staleTime: 0, // Consider data stale immediately
-    gcTime: 1000 * 60 * 5, // Cache for 5 minutes
-  });
-
-  useEffect(() => {
-    const needToRefetchUser = OBKYCStatus?.ob_status === "ADDRESS_STEP" && !user?.account
-    if (needToRefetchUser) {
-      fetchUser();
+    staleTime: 0,
+    gcTime: 0,
+    onError: (err) => {
+      Sentry.captureException(err, {
+        tags: { component: 'VerifyCtaCard', action: 'fetchKYCStatus' },
+        extra: { kycStatus, obStatus }
+      });
     }
-  }, [OBKYCStatus]);
+  });
 
   const isLoading = isKycPending || isUserLoading;
 
-  const obStatus = OBKYCStatus?.ob_status;
-  const kycStatus = OBKYCStatus?.kyc_status;
-
   const goToOnboarding = () => {
-    if (!obStatus) {
+    if (!obStatus || !user?.account) {
       navigation.navigate("KYCPreview");
       return;
     }
@@ -52,16 +60,31 @@ const VerifyCTACard = () => {
       case "ADDRESS_STEP":
         navigation.navigate("KYCProvider", {
           country_code: user?.account?.country,
-        } as any);
+        });
         break;
       default:
         navigation.navigate("KYCPreview");
     }
   };
 
-  if (kycStatus?.status === "APPROVED") return null;
+  useEffect(() => {
+    let cleanup = false;
 
-  const isVerifying = obStatus === "KYC_PROVIDER_STEP";
+    const handleStatusUpdate = () => {
+      if (!cleanup && OBKYCStatus) {
+        setKycStatus(OBKYCStatus.kyc_status.status);
+        setObStatus(OBKYCStatus.ob_status);
+      }
+    };
+
+    handleStatusUpdate();
+
+    return () => { cleanup = true; };
+  }, [OBKYCStatus, setKycStatus, setObStatus, error]);
+
+
+  if (isVerified) return null;
+
 
   if (isVerifying) {
     return (
@@ -81,6 +104,38 @@ const VerifyCTACard = () => {
     );
   }
 
+  if (isLoading) {
+    return (
+      <Card>
+        <View className="flex-row items-center">
+          <VerifyIcon className="h-10 w-10" />
+          <View className="flex-col items-stretch justify-start pl-4">
+            <SkeletonView className="w-46 h-4 mb-3" />
+            <SkeletonView className="w-20 h-4" />
+          </View>
+        </View>
+      </Card>
+    );
+  }
+
+
+  if (obStatus === "NOT_STARTED") {
+    return (
+      <Card>
+        <View className="flex-row items-center">
+          <VerifyIcon className="h-10 w-10" />
+          <View className="flex-col items-stretch justify-start pl-4">
+            <Text className="caption-xl text-gray-50">
+              {t("accountNotVerified.title")}
+            </Text>
+            <Text className="caption-xl text-gray-50 pb-2">
+              {t("accountNotVerified.subtitle")}
+            </Text>
+          </View>
+        </View>
+      </Card>
+    );
+  }
 
   return (
     <Card>
@@ -88,29 +143,27 @@ const VerifyCTACard = () => {
         <VerifyIcon className="h-10 w-10" />
         <View className="flex-col items-stretch justify-start pl-4">
           <Text className="caption-xl text-gray-50">
-            {t("accountNotVerified.title")}
+            {t("accountIncomplete.title")}
           </Text>
           <Text className="caption-xl text-gray-50 pb-2">
-            {t("accountNotVerified.subtitle")}
+            {t("accountIncomplete.subtitle")}
           </Text>
-          {!isLoading ? (
-            <TouchableOpacity onPress={goToOnboarding}>
-              <View className="flex-row items-center">
-                <Text className="text-button-s text-white pr-2">
-                  {t("accountNotVerified.action")}
-                </Text>
-                <AntDesign name="arrowright" size={14} color="white" />
-              </View>
-            </TouchableOpacity>
-          ) : (
-            <SkeletonView className="w-20 h-4" />
-          )}
+          <TouchableOpacity onPress={goToOnboarding}>
+            <View className="flex-row items-center">
+              <Text className="text-button-s text-white pr-2">
+                {t("accountIncomplete.action")}
+              </Text>
+              <AntDesign name="arrowright" size={14} color="white" />
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
     </Card>
   );
+
 };
 
 VerifyCTACard.displayName = "VerifyCTACard";
 
 export default VerifyCTACard;
+

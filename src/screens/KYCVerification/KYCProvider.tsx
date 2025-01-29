@@ -7,7 +7,10 @@ import {
   View,
 } from "react-native";
 import { currentEnv } from "@/config/by_stage";
-import { useUserStore } from "@/storage/";
+import { useKYCStatusStore, useUserStore } from "@/storage/";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { onboardingOnboardingKycStepMutation, usersGetKycStatusOptions } from "@/client/@tanstack/react-query.gen";
+import client from "@/client/client";
 
 
 const AI_PRISE_THEME = {
@@ -25,16 +28,33 @@ const KYCProvider = ({ route }) => {
   const { country_code } = route.params;
   const navigation = useNavigation();
   const { height, width } = Dimensions.get("window");
+  const { setObStatus } = useKYCStatusStore(state => ({
+    setObStatus: state.setObStatus,
+  }));
+
+  const queryClient = useQueryClient();
+
+  const { mutate: updateKycStep } = useMutation({
+    ...onboardingOnboardingKycStepMutation(),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ 
+        queryKey: usersGetKycStatusOptions().queryKey 
+      });
+      setObStatus("KYC_PROVIDER_STEP");
+      navigation.navigate("KYCSuccess");
+    }
+  });
 
   const handleOnComplete = () => {
-    navigation.goBack(); // Dismiss the modal
-    navigation.navigate("KYCSuccess");
+    updateKycStep({
+      client: client,
+    });
   };
 
   const { user } = useUserStore();
-  
+
   const country = country_code || user?.account?.country;
-  
+
   return (
     <SafeAreaView className="flex-1 bg-dark-background-100 pb-4">
       <View className="w-full px-4 py-1">

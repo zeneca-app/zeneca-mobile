@@ -151,6 +151,18 @@
     "subtitle": "Is quick and easy!",
     "action": "Verify my account"
   },
+  "accountIncomplete": {
+    "title": "Complete your account verification",
+    "subtitle": "Is quick and easy!",
+    "action": "Verify now"
+  },
+  "accountNotVerifiedError": {
+    "title": "An error has occurred",
+    "subtitle": "Please try again later"
+  },
+  "kycStatus": {
+    "error": "An error has occurred"
+  },
   "accountVerified": {
     "title": "We are validating your account",
     "subtitle": "Soon we will notify you"
