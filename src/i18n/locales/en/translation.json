@@ -176,7 +176,18 @@
     "version": "VERSION"
   },
   "orderHistory": {
-    "title": "Order history"
+    "title": "Order history",
+    "buy": "Buy of",
+    "sell": "Sell of",
+    "all": "All",
+    "orders": "Orders",
+    "transfers": "Transfers",
+    "status": "Status",
+    "reference": "Reference",
+    "amount": "Amount",
+    "shares": "Shares",
+    "fee": "Fee",
+    "price": "Average price"
   },
   "onBoarding": {
     "steps": {

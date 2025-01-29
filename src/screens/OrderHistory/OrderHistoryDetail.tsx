@@ -47,7 +47,7 @@ const OrderDetailsScreen: React.FC<OrderHistoryDetailScreenProps> = ({ route }) 
     const { t } = useTranslation();
     const navigation = useNavigation();
     const amount = Number(order.payment_token_filled);
-    const fees = Number(order.fee_wei)
+    const fees = Number(order.fee)
     const shares = Number(order.asset_token_filled)
 
     const averagePrice = Number((amount / shares).toFixed(2))
@@ -90,8 +90,32 @@ const OrderDetailsScreen: React.FC<OrderHistoryDetailScreenProps> = ({ route }) 
         }
     };
 
-    const Logo = STOCKS?.[order.symbol as keyof typeof STOCKS]?.logo || null;
+    const getStatusTextColor = (status: OrderStatus): string => {
+        switch (status.toUpperCase()) {
+            case 'FILLED':
+                return 'text-green-500';
+            case 'PENDING':
+            case 'PENDING_CANCEL':
+            case 'PENDING_ESCROW':
+            case 'PENDING_FILL':
+            case 'PENDING_SUBMIT':
+            case 'ESCROWED':
+                return 'text-gray-500';
+            case 'SUBMITTED':
+                return 'text-yellow-500';
+            case 'CANCELLED':
+            case 'ERROR':
+            case 'REJECTED':
+            case 'REQUIRING_CONTACT':
+                return 'text-red-500';
+            default:
+                return 'text-gray-500';
+        }
+    };
 
+    const Logo = STOCKS?.[order.symbol as keyof typeof STOCKS]?.logo || null;
+    const sharesWithSymbol = `${orderDetails.shares.toString()} ${order.symbol}`
+    
     return (
         <SafeAreaView className="flex-1 bg-black">
             <View className="p-6 flex-1">
@@ -111,7 +135,7 @@ const OrderDetailsScreen: React.FC<OrderHistoryDetailScreenProps> = ({ route }) 
                 {/* Order Amount */}
                 <View className="mb-8">
                     <Text className="text-gray-400 text-base mb-2">
-                        {order.order_side === "BUY" ? "Orden de compra" : "Orden de venta"}
+                        {t(order.order_side === "BUY" ? t("orderHistory.buy") : t("orderHistory.sell"))} {order.symbol}
                     </Text>
                     <Text className="text-white text-4xl font-semibold">
                         ${orderDetails.amount}
@@ -122,31 +146,31 @@ const OrderDetailsScreen: React.FC<OrderHistoryDetailScreenProps> = ({ route }) 
                 {/* Details Section */}
                 <View className="space-y-1">
                     <DetailRow
-                        label="Precio"
+                        label={t("orderHistoryDetail.price")}
                         value={`$${orderDetails.price}`}
                     />
                     <DetailRow
-                        label="Shares"
-                        value={orderDetails.shares.toString()}
+                        label={t("orderHistoryDetail.shares")}
+                        value={sharesWithSymbol}
                     />
                     <DetailRow
-                        label="Comisión"
+                        label={t("orderHistoryDetail.fee")}
                         value={`$${orderDetails.fee}`}
                     />
                     <DetailRow
-                        label="Costo total"
+                        label={t("orderHistoryDetail.amount")}
                         value={`$${orderDetails.totalCost}`}
                     />
                     <DetailRow
-                        label="Referencia"
+                        label={t("orderHistoryDetail.reference")}
                         value={orderDetails.reference}
                     />
 
                     <View className="flex-row justify-between items-center py-3 border-b border-[#1C1C1E]">
-                        <Text className="text-gray-400 text-base">Status</Text>
+                        <Text className="text-gray-400 text-base">{t("orderHistoryDetail.status")}</Text>
                         <View className="flex-row items-center gap-2">
                             <View className={`w-2 h-2 rounded-full ${getStatusColor(orderDetails.status as OrderStatus)}`} />
-                            <Text className="text-white text-base">
+                            <Text className={`${getStatusTextColor(orderDetails.status as OrderStatus)} text-base`}>
                                 {orderDetails.status}
                             </Text>
                         </View>

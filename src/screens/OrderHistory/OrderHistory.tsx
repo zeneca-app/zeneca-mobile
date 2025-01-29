@@ -22,6 +22,7 @@ type OrderHistoryItemProps = {
 
 
 const OrderHistoryItem = ({ order, onPress }: OrderHistoryItemProps) => {
+    const { t } = useTranslation();
 
     const getSmartDate = (dateString: string) => {
         const date = new Date(dateString);
@@ -59,10 +60,10 @@ const OrderHistoryItem = ({ order, onPress }: OrderHistoryItemProps) => {
         >
             <View>
                 {order.order_side === "BUY" && <Text className="text-white text-base font-medium">
-                    Compra de {order.symbol}
+                    {t("orderHistory.buy")}  {order.symbol}
                 </Text>}
                 {order.order_side === "SELL" && <Text className="text-white text-base font-medium">
-                    Venta de {order.symbol}
+                    {t("orderHistory.sell")} {order.symbol}
                 </Text>}
                 <Text className="text-gray-400 text-sm">
                     {getSmartDate(order.created_at)}
@@ -70,16 +71,17 @@ const OrderHistoryItem = ({ order, onPress }: OrderHistoryItemProps) => {
             </View>
 
             <View className="items-end">
-                <Text className="text-lg text-gray-400">
+                <Text className="text-base text-white">
                     ${order.payment_token_filled}
                 </Text>
 
-                <Text className={`text-sm text-${statusColor}`}>
-                    {order.status}
+        
+                <Text className="text-base text-gray-400">
+                    {order.asset_token_filled} {order.symbol}
                 </Text>
 
-                <Text className="text-lg text-gray-400">
-                    {order.asset_token_filled}
+                <Text className="text-base text-gray-400">
+                    {order.status}
                 </Text>
 
             </View>
@@ -151,17 +153,17 @@ const OrderHistory = () => {
 
             <View className="flex-row justify-between mb-4">
                 <TabButton
-                    title={"Todo"}
+                    title={t("orderHistory.all")}
                     active={selectedTab === 'todo'}
                     onPress={() => setSelectedTab('todo')}
                 />
                 <TabButton
-                    title={"Orders"}
+                    title={t("orderHistory.orders")}
                     active={selectedTab === 'orders'}
                     onPress={() => setSelectedTab('orders')}
                 />
                 <TabButton
-                    title={"Transfers"}
+                    title={t("orderHistory.transfers")}
                     active={selectedTab === 'transfers'}
                     onPress={() => setSelectedTab('transfers')}
                 />
