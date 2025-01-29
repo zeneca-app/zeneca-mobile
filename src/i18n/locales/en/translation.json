@@ -201,6 +201,16 @@
     "fee": "Fee",
     "price": "Average price"
   },
+  "orderHistoryDetail": {
+    "buy": "Buy of",
+    "sell": "Sell of",
+    "status": "Status",
+    "reference": "Reference",
+    "amount": "Amount",
+    "shares": "Shares",
+    "fee": "Fee",
+    "price": "Average price"
+  },
   "onBoarding": {
     "steps": {
       "step_1": {
