@@ -223,6 +223,7 @@ export type OnboardingStatus =
   | "KYC_PROVIDER_STEP";
 
 export type Order = {
+  id?: string;
   transaction_hash: string | null;
   external_id: string;
   symbol: string;

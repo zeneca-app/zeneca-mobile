@@ -926,6 +926,11 @@ export const OnboardingStatusSchema = {
 
 export const OrderSchema = {
   properties: {
+    id: {
+      type: "string",
+      format: "uuid",
+      title: "Id",
+    },
     transaction_hash: {
       anyOf: [
         {
