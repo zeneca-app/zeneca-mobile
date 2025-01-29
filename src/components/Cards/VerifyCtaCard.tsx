@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import VerifyIcon from "@/assets/id-card.svg";
 import Card from "@/components/Card";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -13,7 +13,7 @@ import SkeletonLoadingView, {
 } from "@/components/Loading/SkeletonLoadingView";
 import { useKYCStatusStore, useUserStore } from "@/storage/";
 import { OnboardingStatus } from "@/client";
-
+import * as Sentry from '@sentry/react-native';
 
 
 const VerifyCTACard = () => {
@@ -21,33 +21,33 @@ const VerifyCTACard = () => {
   const navigation = useNavigation();
   const { user, isLoading: isUserLoading } = useUserStore();
 
-  const {
-    kycStatus,
-    obStatus,
-    isVerifying,
-    isVerified,
-    setKycStatus,
-    setObStatus
-  } = useKYCStatusStore(state => ({
-    kycStatus: state.kycStatus,
-    obStatus: state.obStatus,
-    isVerifying: state.isVerifying,
-    isVerified: state.isVerified,
-    setKycStatus: state.setKycStatus,
-    setObStatus: state.setObStatus,
-  }));
+  const { kycStatus, obStatus, isVerifying, isVerified, setKycStatus, setObStatus } = useKYCStatusStore(
+    useCallback(state => ({
+      kycStatus: state.kycStatus,
+      obStatus: state.obStatus,
+      isVerifying: state.isVerifying,
+      isVerified: state.isVerified,
+      setKycStatus: state.setKycStatus,
+      setObStatus: state.setObStatus,
+    }), [])
+  );
 
   const { data: OBKYCStatus, isPending: isKycPending, error } = useQuery({
     ...usersGetKycStatusOptions(),
     staleTime: 0,
     gcTime: 0,
+    onError: (err) => {
+      Sentry.captureException(err, {
+        tags: { component: 'VerifyCtaCard', action: 'fetchKYCStatus' },
+        extra: { kycStatus, obStatus }
+      });
+    }
   });
 
   const isLoading = isKycPending || isUserLoading;
 
-
   const goToOnboarding = () => {
-    if (!obStatus) {
+    if (!obStatus || !user?.account) {
       navigation.navigate("KYCPreview");
       return;
     }
@@ -60,7 +60,7 @@ const VerifyCTACard = () => {
       case "ADDRESS_STEP":
         navigation.navigate("KYCProvider", {
           country_code: user?.account?.country,
-        } as any);
+        });
         break;
       default:
         navigation.navigate("KYCPreview");
@@ -68,26 +68,20 @@ const VerifyCTACard = () => {
   };
 
   useEffect(() => {
-    if (OBKYCStatus) {
-      setKycStatus(OBKYCStatus.kyc_status.status);
-      setObStatus(OBKYCStatus.ob_status);
-    }
-  }, [OBKYCStatus]); // Runs whenever OBKYCStatus changes
+    let cleanup = false;
 
-  if (error) {
-    return (
-      <Card>
-        <View className="flex-row items-center">
-          <VerifyIcon className="h-10 w-10" />
-          <View className="flex-col items-stretch justify-start pl-4">
-            <Text className="caption-xl text-gray-50">
-              Te ha ocurrido un error, por favor mas tarde
-            </Text>
-          </View>
-        </View>
-      </Card>
-    );
-  }
+    const handleStatusUpdate = () => {
+      if (!cleanup && OBKYCStatus) {
+        setKycStatus(OBKYCStatus.kyc_status.status);
+        setObStatus(OBKYCStatus.ob_status);
+      }
+    };
+
+    handleStatusUpdate();
+
+    return () => { cleanup = true; };
+  }, [OBKYCStatus, setKycStatus, setObStatus, error]);
+
 
   if (isVerified) return null;
 
@@ -149,12 +143,15 @@ const VerifyCTACard = () => {
         <VerifyIcon className="h-10 w-10" />
         <View className="flex-col items-stretch justify-start pl-4">
           <Text className="caption-xl text-gray-50">
-            Termina de verificar tu cuenta
+            {t("accountIncomplete.title")}
+          </Text>
+          <Text className="caption-xl text-gray-50 pb-2">
+            {t("accountIncomplete.subtitle")}
           </Text>
           <TouchableOpacity onPress={goToOnboarding}>
             <View className="flex-row items-center">
               <Text className="text-button-s text-white pr-2">
-                Verificar ahora
+                {t("accountIncomplete.action")}
               </Text>
               <AntDesign name="arrowright" size={14} color="white" />
             </View>

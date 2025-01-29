@@ -151,6 +151,18 @@
     "subtitle": "¡Es rápido y sencillo!",
     "action": "Verificar mi cuenta"
   },
+  "accountIncomplete": {
+    "title": "Termina de verificar tu cuenta",
+    "subtitle": "¡Es rápido y sencillo!",
+    "action": "Verificar ahora"
+  },
+  "accountNotVerifiedError": {
+    "title": "Te ha ocurrido un error",
+    "subtitle": "Por favor intenta mas tarde"
+  },
+  "kycStatus": {
+    "error": "Ha ocurrido un error"
+  },
   "accountVerified": {
     "title": "Estamos validando tu cuenta",
     "subtitle": "Pronto te avisaremos"
@@ -192,7 +204,6 @@
     "shares": "Acciones",
     "fee": "Comisión",
     "price": "Precio promedio"
-    
   },
   "etfDetail": {
     "buy": "Comprar",
