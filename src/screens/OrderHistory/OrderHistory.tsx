@@ -5,14 +5,14 @@ import Text from '@/components/Text';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { ordersGetOrdersOptions } from '@/client/@tanstack/react-query.gen';
-import { currencyFormatter, formatNumber } from "@/utils/currencyUtils";
-import { format, formatDistanceToNow } from 'date-fns';
+import { format } from 'date-fns';
 import { Order } from '@/client/';
 import SkeletonLoadingView, {
     SkeletonOrderListItem,
 } from "@/components/Loading/SkeletonLoadingView";
 import LoggedLayout from "@/components/LoggedLayout";
 import { Trans } from "react-i18next";
+import { useState } from 'react';
 
 
 type OrderHistoryItemProps = {
@@ -22,30 +22,7 @@ type OrderHistoryItemProps = {
 
 
 const OrderHistoryItem = ({ order, onPress }: OrderHistoryItemProps) => {
-
-    // Option 1: Using date-fns formatDistanceToNow (e.g., "2 hours ago")
-    const getRelativeTime = (dateString: string) => {
-        const date = new Date(dateString);
-        return formatDistanceToNow(date, { addSuffix: true });
-    };
-
-    // Option 2: Using date-fns format (e.g., "Mar 15, 2:30 PM")
-    const getFormattedDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return format(date, "MMM d, h:mm a");
-    };
-
-    // Option 3: Using Intl.DateTimeFormat (e.g., "3/15/24, 2:30 PM")
-    const getLocalizedDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return new Intl.DateTimeFormat('en-US', {
-            month: 'short',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true
-        }).format(date);
-    };
+    const { t } = useTranslation();
 
     const getSmartDate = (dateString: string) => {
         const date = new Date(dateString);
@@ -60,35 +37,74 @@ const OrderHistoryItem = ({ order, onPress }: OrderHistoryItemProps) => {
         return format(date, "MMM d, h:mm a");
     };
 
+    const statusColor = {
+        FILLED: 'green-500',
+        PENDING: 'yellow-500',
+        CANCELLED: 'red-500',
+        ERROR: 'red-500',
+        REJECTED: 'red-500',
+        REQUIRING_CONTACT: 'red-500',
+        ESCROWED: 'gray-500',
+        SUBMITTED: 'gray-500',
+        PENDING_CANCEL: 'gray-500',
+        PENDING_ESCROW: 'gray-500',
+        PENDING_FILL: 'gray-500',
+        PENDING_SUBMIT: 'gray-500',
+    }[order.status];
+
+
     return (
         <TouchableOpacity
             className="flex-row justify-between items-center py-4 border-b border-[#1C1C1E]"
             onPress={() => onPress?.(order)}
         >
             <View>
-                <Text className="text-[#95929F] text-sm mb-1">
-                    {order.status}
-                </Text>
-                <Text className="text-white text-base font-medium">
-                    {order.symbol}
-                </Text>
-            </View>
-            <View className="items-end">
-                <Text className="text-white text-base font-medium">
-                    {currencyFormatter(order.payment_quantity, 2, 6)}
-                </Text>
-                <Text className="text-[#95929F] text-sm">
-                    {order.order_type}
-                </Text>
-                <Text className="text-[#95929F] text-sm">
+                {order.order_side === "BUY" && <Text className="text-white text-base font-medium">
+                    {t("orderHistory.buy")}  {order.symbol}
+                </Text>}
+                {order.order_side === "SELL" && <Text className="text-white text-base font-medium">
+                    {t("orderHistory.sell")} {order.symbol}
+                </Text>}
+                <Text className="text-gray-400 text-sm">
                     {getSmartDate(order.created_at)}
                 </Text>
+            </View>
+
+            <View className="items-end">
+                <Text className="text-base text-white">
+                    ${order.payment_token_filled}
+                </Text>
+
+        
+                <Text className="text-base text-gray-400">
+                    {order.asset_token_filled} {order.symbol}
+                </Text>
+
+                <Text className="text-base text-gray-400">
+                    {order.status}
+                </Text>
+
             </View>
         </TouchableOpacity>
     );
 };
 
+
+const TabButton = ({ title, active, onPress }: { title: string, active: boolean, onPress: () => void }) => (
+    <TouchableOpacity
+        className={`py-2 mx-1.5 px-3 rounded-full flex-1 items-center ${active ? 'bg-[#2C2C2E] border border-[#2C2C2E]' : 'bg-transparent border border-[#2C2C2E]'
+            }`}
+        onPress={onPress}
+    >
+        <Text className={`text-sm text-white`}>
+            {title}
+        </Text>
+    </TouchableOpacity>
+);
+
 const OrderHistory = () => {
+    const [selectedTab, setSelectedTab] = useState<'todo' | 'orders' | 'transfers'>('todo');
+
     const navigation = useNavigation();
     const { t } = useTranslation();
 
@@ -102,8 +118,7 @@ const OrderHistory = () => {
             <OrderHistoryItem
                 order={order}
                 onPress={(order) => {
-                    // Handle order press
-                    console.log('Order pressed:', order);
+                    navigation.navigate('OrderHistoryDetail', { order });
                 }}
             />
         );
@@ -120,6 +135,13 @@ const OrderHistory = () => {
         </SkeletonLoadingView>
     )
 
+    /*  const filteredData = transactions?.filter(item => {
+         if (selectedTab === 'transactions') return item.type === 'trade';
+         if (selectedTab === 'orders') return item.type === 'order';
+         return item.type === 'deposit' || item.type === 'withdrawal';
+       });
+      */
+
     return (
         <LoggedLayout>
             <Text className="heading-s text-gray-10 px-layout pt-layout-s pb-layout-l">
@@ -128,6 +150,26 @@ const OrderHistory = () => {
                     components={[]}
                 />
             </Text>
+
+            <View className="flex-row justify-between mb-4">
+                <TabButton
+                    title={t("orderHistory.all")}
+                    active={selectedTab === 'todo'}
+                    onPress={() => setSelectedTab('todo')}
+                />
+                <TabButton
+                    title={t("orderHistory.orders")}
+                    active={selectedTab === 'orders'}
+                    onPress={() => setSelectedTab('orders')}
+                />
+                <TabButton
+                    title={t("orderHistory.transfers")}
+                    active={selectedTab === 'transfers'}
+                    onPress={() => setSelectedTab('transfers')}
+                />
+            </View>
+
+
             <View className="flex-1 px-layout">
                 {isPending && !orders ? (
                     <LoadingOrders />
@@ -146,4 +188,5 @@ const OrderHistory = () => {
     );
 };
 
+OrderHistory.displayName = "OrderHistory";
 export default OrderHistory;

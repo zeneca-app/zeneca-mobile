@@ -24,6 +24,15 @@ export type AddressUS = {
 export type country = "USA";
 
 export type AssetDetail = {
+  change_percent: string;
+  change: string;
+  close: string;
+  high: string;
+  price: string;
+  low: string;
+  open: string;
+  previous_close: string;
+  volume: string;
   id: string;
   name: string;
   description?: string | null;
@@ -31,15 +40,6 @@ export type AssetDetail = {
   display_name: string;
   logo_url?: string | null;
   external_id: number;
-  price: string;
-  change_percent: string;
-  change: string;
-  close: string;
-  high: string;
-  low: string;
-  open: string;
-  previous_close: string;
-  volume: string;
 };
 
 export type AssetPrice = {
@@ -53,15 +53,18 @@ export type AssetPrice = {
   price: string;
 };
 
+export type AssetsWithPrice = Array<AssetPrice>;
+
 export type Balance = {
   available?: string;
   pending?: string;
   portfolio_market_value?: string;
-  readonly precision: number;
   readonly equity: string;
-  readonly equity_in_usd: string;
+  readonly portfolio_market_value_in_usd: string;
   readonly available_in_usd: string;
   readonly pending_in_usd: string;
+  readonly equity_in_usd: string;
+  readonly precision: number;
 };
 
 export type Bank = {
@@ -220,19 +223,24 @@ export type OnboardingStatus =
   | "KYC_PROVIDER_STEP";
 
 export type Order = {
+  id?: string;
+  transaction_hash: string | null;
   external_id: string;
   symbol: string;
   name: string;
   status: OrderStatus;
   order_side: OrderSide;
   order_type: OrderType;
-  payment_quantity: string;
+  fee_wei: number;
   fee: string;
+  total_wei: number;
   total: string;
-  transaction_hash: string | null;
+  asset_token_filled_wei: number | null;
   asset_token_filled: string | null;
-  created_at: string;
-  filled_at: string;
+  payment_token_filled_wei: number | null;
+  payment_token_filled: string | null;
+  created_at: string | null;
+  filled_at: string | null;
 };
 
 export type OrderQuote = {
@@ -304,7 +312,19 @@ export type OrderQuoteRequest = {
 
 export type OrderSide = "BUY" | "SELL";
 
-export type OrderStatus = "PENDING" | "FILLED" | "CANCELLED" | "ERROR";
+export type OrderStatus =
+  | "PENDING"
+  | "PENDING_SUBMIT"
+  | "PENDING_CANCEL"
+  | "PENDING_ESCROW"
+  | "PENDING_FILL"
+  | "ESCROWED"
+  | "SUBMITTED"
+  | "CANCELLED"
+  | "FILLED"
+  | "ERROR"
+  | "REJECTED"
+  | "REQUIRING_CONTACT";
 
 export type OrderType = "MARKET" | "LIMIT";
 
@@ -685,7 +705,7 @@ export type AssetsGetAssetsData = {
   };
 };
 
-export type AssetsGetAssetsResponse = Array<AssetPrice>;
+export type AssetsGetAssetsResponse = AssetsWithPrice;
 
 export type AssetsGetAssetsError = HTTPValidationError;
 
@@ -751,3 +771,7 @@ export type OnboardingOnboardingAddressStepData = {
 export type OnboardingOnboardingAddressStepResponse = AccountRead;
 
 export type OnboardingOnboardingAddressStepError = HTTPValidationError;
+
+export type OnboardingOnboardingKycStepResponse = AccountRead;
+
+export type OnboardingOnboardingKycStepError = unknown;

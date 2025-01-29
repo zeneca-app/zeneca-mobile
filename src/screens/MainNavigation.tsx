@@ -15,7 +15,8 @@ import Login from "@/screens/Login/Login";
 import LoginOptions from "@/screens/Login/LoginOptions";
 import LoginOtpVerification from "@/screens/Login/LoginOtpVerification";
 import LoginWithEmail from "@/screens/Login/LoginWithEmail";
-import OrderHistory from "@/screens/OrderHistory";
+import OrderHistory from "@/screens/OrderHistory/OrderHistory";
+import OrderHistoryDetail from "@/screens/OrderHistory/OrderHistoryDetail";
 import OnBoarding from "@/screens/Onboarding/OnBoarding";
 import ProfileScreen from "@/screens/ProfileScreen";
 import { useUserStore } from "@/storage/";
@@ -81,7 +82,8 @@ const MainNavigation = () => {
       <Stack.Screen name="Home" component={HomeScreen} options={screenConfigs.homeHeader} />
       <Stack.Screen name="Profile" component={ProfileScreen} options={screenConfigs.profileScreen} />
       <Stack.Screen name="OrderHistory" component={OrderHistory} options={screenConfigs.modalScreen} />
-
+      <Stack.Screen name="OrderHistoryDetail" component={OrderHistoryDetail} options={screenConfigs.modalScreen} />
+      
       {/* Login Screens */}
       <Stack.Group>
         <Stack.Screen name="Login" component={Login} options={screenConfigs.noHeader} />

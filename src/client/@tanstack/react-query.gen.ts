@@ -14,6 +14,7 @@ import {
   loginLoginOrCreate,
   onboardingOnboardingAddressStep,
   onboardingOnboardingCountryStep,
+  onboardingOnboardingKycStep,
   onboardingOnboardingNamesStep,
   ordersCreateQuoteOrder,
   ordersGetOrders,
@@ -49,6 +50,8 @@ import type {
   OnboardingOnboardingCountryStepData,
   OnboardingOnboardingCountryStepError,
   OnboardingOnboardingCountryStepResponse,
+  OnboardingOnboardingKycStepError,
+  OnboardingOnboardingKycStepResponse,
   OnboardingOnboardingNamesStepData,
   OnboardingOnboardingNamesStepError,
   OnboardingOnboardingNamesStepResponse,
@@ -875,6 +878,41 @@ export const onboardingOnboardingAddressStepMutation = () => {
   > = {
     mutationFn: async (options) => {
       const { data } = await onboardingOnboardingAddressStep({
+        ...options,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
+export const onboardingOnboardingKycStepQueryKey = (options?: Options) => [
+  createQueryKey("onboardingOnboardingKycStep", options),
+];
+
+export const onboardingOnboardingKycStepOptions = (options?: Options) => {
+  return queryOptions({
+    queryFn: async ({ queryKey }) => {
+      const { data } = await onboardingOnboardingKycStep({
+        ...options,
+        ...queryKey[0],
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: onboardingOnboardingKycStepQueryKey(options),
+  });
+};
+
+export const onboardingOnboardingKycStepMutation = () => {
+  const mutationOptions: UseMutationOptions<
+    OnboardingOnboardingKycStepResponse,
+    OnboardingOnboardingKycStepError,
+    Options
+  > = {
+    mutationFn: async (options) => {
+      const { data } = await onboardingOnboardingKycStep({
         ...options,
         throwOnError: true,
       });

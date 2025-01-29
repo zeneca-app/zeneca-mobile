@@ -103,6 +103,42 @@ export const AddressUSSchema = {
 
 export const AssetDetailSchema = {
   properties: {
+    change_percent: {
+      type: "string",
+      title: "Change Percent",
+    },
+    change: {
+      type: "string",
+      title: "Change",
+    },
+    close: {
+      type: "string",
+      title: "Close",
+    },
+    high: {
+      type: "string",
+      title: "High",
+    },
+    price: {
+      type: "string",
+      title: "Price",
+    },
+    low: {
+      type: "string",
+      title: "Low",
+    },
+    open: {
+      type: "string",
+      title: "Open",
+    },
+    previous_close: {
+      type: "string",
+      title: "Previous Close",
+    },
+    volume: {
+      type: "string",
+      title: "Volume",
+    },
     id: {
       type: "string",
       format: "uuid",
@@ -146,59 +182,23 @@ export const AssetDetailSchema = {
       type: "integer",
       title: "External Id",
     },
-    price: {
-      type: "string",
-      title: "Price",
-    },
-    change_percent: {
-      type: "string",
-      title: "Change Percent",
-    },
-    change: {
-      type: "string",
-      title: "Change",
-    },
-    close: {
-      type: "string",
-      title: "Close",
-    },
-    high: {
-      type: "string",
-      title: "High",
-    },
-    low: {
-      type: "string",
-      title: "Low",
-    },
-    open: {
-      type: "string",
-      title: "Open",
-    },
-    previous_close: {
-      type: "string",
-      title: "Previous Close",
-    },
-    volume: {
-      type: "string",
-      title: "Volume",
-    },
   },
   type: "object",
   required: [
+    "change_percent",
+    "change",
+    "close",
+    "high",
+    "price",
+    "low",
+    "open",
+    "previous_close",
+    "volume",
     "id",
     "name",
     "symbol",
     "display_name",
     "external_id",
-    "price",
-    "change_percent",
-    "change",
-    "close",
-    "high",
-    "low",
-    "open",
-    "previous_close",
-    "volume",
   ],
   title: "AssetDetail",
 } as const;
@@ -258,6 +258,14 @@ export const AssetPriceSchema = {
   title: "AssetPrice",
 } as const;
 
+export const AssetsWithPriceSchema = {
+  items: {
+    $ref: "#/components/schemas/AssetPrice",
+  },
+  type: "array",
+  title: "AssetsWithPrice",
+} as const;
+
 export const BalanceSchema = {
   properties: {
     available: {
@@ -275,19 +283,14 @@ export const BalanceSchema = {
       title: "Portfolio Market Value",
       default: "0",
     },
-    precision: {
-      type: "integer",
-      title: "Precision",
-      readOnly: true,
-    },
     equity: {
       type: "string",
       title: "Equity",
       readOnly: true,
     },
-    equity_in_usd: {
+    portfolio_market_value_in_usd: {
       type: "string",
-      title: "Equity In Usd",
+      title: "Portfolio Market Value In Usd",
       readOnly: true,
     },
     available_in_usd: {
@@ -300,14 +303,25 @@ export const BalanceSchema = {
       title: "Pending In Usd",
       readOnly: true,
     },
+    equity_in_usd: {
+      type: "string",
+      title: "Equity In Usd",
+      readOnly: true,
+    },
+    precision: {
+      type: "integer",
+      title: "Precision",
+      readOnly: true,
+    },
   },
   type: "object",
   required: [
-    "precision",
     "equity",
-    "equity_in_usd",
+    "portfolio_market_value_in_usd",
     "available_in_usd",
     "pending_in_usd",
+    "equity_in_usd",
+    "precision",
   ],
   title: "Balance",
 } as const;
@@ -912,6 +926,22 @@ export const OnboardingStatusSchema = {
 
 export const OrderSchema = {
   properties: {
+    id: {
+      type: "string",
+      format: "uuid",
+      title: "Id",
+    },
+    transaction_hash: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Transaction Hash",
+    },
     external_id: {
       type: "string",
       title: "External Id",
@@ -933,28 +963,32 @@ export const OrderSchema = {
     order_type: {
       $ref: "#/components/schemas/OrderType",
     },
-    payment_quantity: {
-      type: "string",
-      title: "Payment Quantity",
+    fee_wei: {
+      type: "integer",
+      title: "Fee Wei",
     },
     fee: {
       type: "string",
       title: "Fee",
     },
+    total_wei: {
+      type: "integer",
+      title: "Total Wei",
+    },
     total: {
       type: "string",
       title: "Total",
     },
-    transaction_hash: {
+    asset_token_filled_wei: {
       anyOf: [
         {
-          type: "string",
+          type: "integer",
         },
         {
           type: "null",
         },
       ],
-      title: "Transaction Hash",
+      title: "Asset Token Filled Wei",
     },
     asset_token_filled: {
       anyOf: [
@@ -967,30 +1001,70 @@ export const OrderSchema = {
       ],
       title: "Asset Token Filled",
     },
+    payment_token_filled_wei: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Payment Token Filled Wei",
+    },
+    payment_token_filled: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Payment Token Filled",
+    },
     created_at: {
-      type: "string",
-      format: "date-time",
+      anyOf: [
+        {
+          type: "string",
+          format: "date-time",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Created At",
     },
     filled_at: {
-      type: "string",
-      format: "date-time",
+      anyOf: [
+        {
+          type: "string",
+          format: "date-time",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Filled At",
     },
   },
   type: "object",
   required: [
+    "transaction_hash",
     "external_id",
     "symbol",
     "name",
     "status",
     "order_side",
     "order_type",
-    "payment_quantity",
+    "fee_wei",
     "fee",
+    "total_wei",
     "total",
-    "transaction_hash",
+    "asset_token_filled_wei",
     "asset_token_filled",
+    "payment_token_filled_wei",
+    "payment_token_filled",
     "created_at",
     "filled_at",
   ],
@@ -1319,7 +1393,20 @@ export const OrderSideSchema = {
 
 export const OrderStatusSchema = {
   type: "string",
-  enum: ["PENDING", "FILLED", "CANCELLED", "ERROR"],
+  enum: [
+    "PENDING",
+    "PENDING_SUBMIT",
+    "PENDING_CANCEL",
+    "PENDING_ESCROW",
+    "PENDING_FILL",
+    "ESCROWED",
+    "SUBMITTED",
+    "CANCELLED",
+    "FILLED",
+    "ERROR",
+    "REJECTED",
+    "REQUIRING_CONTACT",
+  ],
   title: "OrderStatus",
 } as const;
 

@@ -176,7 +176,23 @@
     "version": "VERSIÓN"
   },
   "orderHistory": {
-    "title": "Historial de transacciones"
+    "title": "Historial de transacciones",
+    "buy": "Compra de",
+    "sell": "Venta de",
+    "all": "Todo",
+    "orders": "Ordenes",
+    "transfers": "Transferencias"
+  },
+  "orderHistoryDetail": {
+    "buy": "Compra de",
+    "sell": "Venta de",
+    "status": "Estatus",
+    "reference": "Referencia",
+    "amount": "Monto",
+    "shares": "Acciones",
+    "fee": "Comisión",
+    "price": "Precio promedio"
+    
   },
   "etfDetail": {
     "buy": "Comprar",

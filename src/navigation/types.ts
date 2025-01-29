@@ -30,6 +30,7 @@ export type RootStackParamList = {
   SendConfirmation: undefined;
   Profile: undefined;
   OrderHistory: undefined;
+  OrderHistoryDetail: undefined;
   ETFSell: undefined;
   ETFSellConfirmation: undefined;
   ETFSellSuccess: undefined;
