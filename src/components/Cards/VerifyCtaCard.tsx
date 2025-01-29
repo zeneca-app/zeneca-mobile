@@ -11,32 +11,40 @@ import Config from "@/config";
 import SkeletonLoadingView, {
   SkeletonView,
 } from "@/components/Loading/SkeletonLoadingView";
-import { useUserStore } from "@/storage/";
+import { useKYCStatusStore, useUserStore } from "@/storage/";
+import { OnboardingStatus } from "@/client";
+
 
 
 const VerifyCTACard = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const { user, fetchUser, isLoading: isUserLoading } = useUserStore();
+  const { user, isLoading: isUserLoading } = useUserStore();
 
-  const { isPending: isKycPending, error: kycError, data: OBKYCStatus } = useQuery({
+  const {
+    kycStatus,
+    obStatus,
+    isVerifying,
+    isVerified,
+    setKycStatus,
+    setObStatus
+  } = useKYCStatusStore(state => ({
+    kycStatus: state.kycStatus,
+    obStatus: state.obStatus,
+    isVerifying: state.isVerifying,
+    isVerified: state.isVerified,
+    setKycStatus: state.setKycStatus,
+    setObStatus: state.setObStatus,
+  }));
+
+  const { data: OBKYCStatus, isPending: isKycPending, error } = useQuery({
     ...usersGetKycStatusOptions(),
-    refetchInterval: Config.REFETCH_INTERVAL,
-    staleTime: 0, // Consider data stale immediately
-    gcTime: 1000 * 60 * 5, // Cache for 5 minutes
+    staleTime: 0,
+    gcTime: 0,
   });
-
-  useEffect(() => {
-    const needToRefetchUser = OBKYCStatus?.ob_status === "ADDRESS_STEP" && !user?.account
-    if (needToRefetchUser) {
-      fetchUser();
-    }
-  }, [OBKYCStatus]);
 
   const isLoading = isKycPending || isUserLoading;
 
-  const obStatus = OBKYCStatus?.ob_status;
-  const kycStatus = OBKYCStatus?.kyc_status;
 
   const goToOnboarding = () => {
     if (!obStatus) {
@@ -59,9 +67,30 @@ const VerifyCTACard = () => {
     }
   };
 
-  if (kycStatus?.status === "APPROVED") return null;
+  useEffect(() => {
+    if (OBKYCStatus) {
+      setKycStatus(OBKYCStatus.kyc_status.status);
+      setObStatus(OBKYCStatus.ob_status);
+    }
+  }, [OBKYCStatus]); // Runs whenever OBKYCStatus changes
 
-  const isVerifying = obStatus === "KYC_PROVIDER_STEP";
+  if (error) {
+    return (
+      <Card>
+        <View className="flex-row items-center">
+          <VerifyIcon className="h-10 w-10" />
+          <View className="flex-col items-stretch justify-start pl-4">
+            <Text className="caption-xl text-gray-50">
+              Te ha ocurrido un error, por favor mas tarde
+            </Text>
+          </View>
+        </View>
+      </Card>
+    );
+  }
+
+  if (isVerified) return null;
+
 
   if (isVerifying) {
     return (
@@ -81,6 +110,38 @@ const VerifyCTACard = () => {
     );
   }
 
+  if (isLoading) {
+    return (
+      <Card>
+        <View className="flex-row items-center">
+          <VerifyIcon className="h-10 w-10" />
+          <View className="flex-col items-stretch justify-start pl-4">
+            <SkeletonView className="w-46 h-4 mb-3" />
+            <SkeletonView className="w-20 h-4" />
+          </View>
+        </View>
+      </Card>
+    );
+  }
+
+
+  if (obStatus === "NOT_STARTED") {
+    return (
+      <Card>
+        <View className="flex-row items-center">
+          <VerifyIcon className="h-10 w-10" />
+          <View className="flex-col items-stretch justify-start pl-4">
+            <Text className="caption-xl text-gray-50">
+              {t("accountNotVerified.title")}
+            </Text>
+            <Text className="caption-xl text-gray-50 pb-2">
+              {t("accountNotVerified.subtitle")}
+            </Text>
+          </View>
+        </View>
+      </Card>
+    );
+  }
 
   return (
     <Card>
@@ -88,29 +149,24 @@ const VerifyCTACard = () => {
         <VerifyIcon className="h-10 w-10" />
         <View className="flex-col items-stretch justify-start pl-4">
           <Text className="caption-xl text-gray-50">
-            {t("accountNotVerified.title")}
+            Termina de verificar tu cuenta
           </Text>
-          <Text className="caption-xl text-gray-50 pb-2">
-            {t("accountNotVerified.subtitle")}
-          </Text>
-          {!isLoading ? (
-            <TouchableOpacity onPress={goToOnboarding}>
-              <View className="flex-row items-center">
-                <Text className="text-button-s text-white pr-2">
-                  {t("accountNotVerified.action")}
-                </Text>
-                <AntDesign name="arrowright" size={14} color="white" />
-              </View>
-            </TouchableOpacity>
-          ) : (
-            <SkeletonView className="w-20 h-4" />
-          )}
+          <TouchableOpacity onPress={goToOnboarding}>
+            <View className="flex-row items-center">
+              <Text className="text-button-s text-white pr-2">
+                Verificar ahora
+              </Text>
+              <AntDesign name="arrowright" size={14} color="white" />
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
     </Card>
   );
+
 };
 
 VerifyCTACard.displayName = "VerifyCTACard";
 
 export default VerifyCTACard;
+

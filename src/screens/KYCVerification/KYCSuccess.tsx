@@ -1,5 +1,6 @@
+import { queryClient } from "@/storage";
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
@@ -14,7 +15,8 @@ const KYCSuccess = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
 
-  const goHome = () => {
+  const goHome = async () => {
+    
     navigation.navigate("Home");
   };
 

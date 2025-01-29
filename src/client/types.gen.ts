@@ -191,7 +191,7 @@ export type MyAssetLite = {
 export type MyAssets = Array<MyAsset>;
 
 export type OBKYCStatusResponse = {
-  ob_status: string;
+  ob_status: OnboardingStatus;
   kyc_status: KycStatusResponse;
 };
 
