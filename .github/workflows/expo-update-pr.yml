@@ -1,0 +1,40 @@
+name: Expo Update on PR
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  expo-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Set up Expo
+        uses: expo/expo-github-action@v8
+        with:
+          expo-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install EAS CLI
+        run: yarn global add eas-cli
+
+      - name: Configure EAS
+        run: eas build:configure
+
+      - name: Publish update
+        run: |
+          eas update:configure
+          eas update --branch preview --message "PR Update: ${{ github.event.pull_request.title }}"
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }} 
