@@ -17,7 +17,7 @@ import "./styles/global.css";
 import MainNavigation from "@/screens/MainNavigation";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-
+import env from "@/config/env";
 
 const navigationIntegration = new Sentry.ReactNavigationInstrumentation({
   enableTimeToInitialDisplay: true,
@@ -28,7 +28,7 @@ const navigationIntegration = new Sentry.ReactNavigationInstrumentation({
 SplashScreen.preventAutoHideAsync();
 
 Sentry.init({
-  dsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
+  dsn: env.SENTRY_DSN,
   debug: false,
   integrations: [
     new Sentry.ReactNativeTracing({
