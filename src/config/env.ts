@@ -40,26 +40,26 @@ const env = envSchema.parse({
   API_URL: process.env.EXPO_PUBLIC_API_URL!,
 
   // Authentication and wallets
-  PRIVY_APP_ID: process.env.PRIVY_APP_ID!,
-  PRIVY_CLIENT_ID: process.env.PRIVY_CLIENT_ID!,
+  PRIVY_APP_ID: process.env.EXPO_PUBLIC_PRIVY_APP_ID!,
+  PRIVY_CLIENT_ID: process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID!,
 
   // Analytics & Monitoring
-  SENTRY_DSN: process.env.SENTRY_DSN!,
-  POSTHOG_API_KEY: process.env.POSTHOG_API_KEY!,
-  POSTHOG_HOST: process.env.POSTHOG_HOST!,
+  SENTRY_DSN: process.env.EXPO_PUBLIC_SENTRY_DSN!,
+  POSTHOG_API_KEY: process.env.EXPO_PUBLIC_POSTHOG_API_KEY!,
+  POSTHOG_HOST: process.env.EXPO_PUBLIC_POSTHOG_HOST!,
 
   // Blockchain
-  RPC_SEPOLIA_URL: process.env.RPC_SEPOLIA_URL!,
-  RPC_BASE_URL: process.env.RPC_BASE_URL!,
-  PAYMASTER_SEPOLIA_URL: process.env.PAYMASTER_SEPOLIA_URL!,
-  PAYMASTER_BASE_URL: process.env.PAYMASTER_BASE_URL!,
+  RPC_SEPOLIA_URL: process.env.EXPO_PUBLIC_RPC_SEPOLIA_URL!,
+  RPC_BASE_URL: process.env.EXPO_PUBLIC_RPC_BASE_URL!,
+  PAYMASTER_SEPOLIA_URL: process.env.EXPO_PUBLIC_PAYMASTER_SEPOLIA_URL!,
+  PAYMASTER_BASE_URL: process.env.EXPO_PUBLIC_PAYMASTER_BASE_URL!,
 
   // KYC
-  AIPRISE_TEMPLATE_ID: process.env.AIPRISE_TEMPLATE_ID!,
+  AIPRISE_TEMPLATE_ID: process.env.EXPO_PUBLIC_AIPRISE_TEMPLATE_ID!,
   AI_PRISE_MODE: process.env.EXPO_PUBLIC_AI_PRISE_MODE!,
 
   // Release Channel
-  RELEASE_CHANNEL: process.env.RELEASE_CHANNEL,
+  RELEASE_CHANNEL: process.env.EXPO_PUBLIC_RELEASE_CHANNEL,
 });
 
 export default env;
