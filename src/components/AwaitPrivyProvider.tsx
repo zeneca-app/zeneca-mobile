@@ -15,6 +15,7 @@ export function AwaitPrivyProvider({ children }: { children: ReactNode }) {
         setUser: state.setUser
     }));
 
+
     // Only fetch user data if we have a privyUser but no user in store
     const shouldFetchUser = !!privyUser && !user && isPrivyReady;
 
@@ -61,7 +62,7 @@ export function AwaitPrivyProvider({ children }: { children: ReactNode }) {
             setIsReady(true);
             return;
         }
-
+/* 
         // Handle error case - clear user and logout
         if (error) {
             setUser(undefined);
@@ -69,7 +70,7 @@ export function AwaitPrivyProvider({ children }: { children: ReactNode }) {
             setIsReady(true);
             return;
         }
-
+ */
         // If we have privyUser but no user data, trigger fetch
         if (shouldFetchUser) {
             refetch();
