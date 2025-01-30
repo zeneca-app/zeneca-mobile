@@ -131,6 +131,14 @@ const VerifyCTACard = () => {
             <Text className="caption-xl text-gray-50 pb-2">
               {t("accountNotVerified.subtitle")}
             </Text>
+            <TouchableOpacity onPress={goToOnboarding}>
+              <View className="flex-row items-center">
+                <Text className="text-button-s text-white pr-2">
+                  {t("accountIncomplete.action")}
+                </Text>
+                <AntDesign name="arrowright" size={14} color="white" />
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       </Card>
@@ -166,4 +174,3 @@ const VerifyCTACard = () => {
 VerifyCTACard.displayName = "VerifyCTACard";
 
 export default VerifyCTACard;
-
