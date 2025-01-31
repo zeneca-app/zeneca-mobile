@@ -12,7 +12,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import Avatar from "@/assets/avatar.svg";
 import { useKYCStatusStore } from '@/storage/kycStatusStore';
 
-
 const ProfileScreen = () => {
     const navigation = useNavigation();
     const { t } = useTranslation();
