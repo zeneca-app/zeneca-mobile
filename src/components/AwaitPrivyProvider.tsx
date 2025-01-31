@@ -61,14 +61,14 @@ export function AwaitPrivyProvider({ children }: { children: ReactNode }) {
             setIsReady(true);
             return;
         }
-
+/* 
         // Handle error case - clear user and logout
         if (error) {
             setUser(undefined);
             handleLogout()
             setIsReady(true);
             return;
-        }
+        } */
 
         // If we have privyUser but no user data, trigger fetch
         if (shouldFetchUser) {
