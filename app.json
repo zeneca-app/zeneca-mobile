@@ -15,14 +15,21 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "app.zeneca.prod",
-      "usesAppleSignIn": true
+      "usesAppleSignIn": true,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/android-icon.png",
         "backgroundColor": "#0D0C0E"
       },
-      "package": "app.zeneca.prod"
+      "package": "app.zeneca.prod",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/icon.png"
