@@ -13,13 +13,6 @@
       },
       "ios": {
         "buildConfiguration": "Debug"
-      },
-      "cache": {
-        "key": "${CI_COMMIT_SHA}-${platform}",
-        "paths": [
-          "node_modules/**/*",
-          ".expo/**/*"
-        ]
       }
     },
     "preview": {
@@ -42,13 +35,6 @@
       },
       "ios": {
         "distribution": "store"
-      },
-      "cache": {
-        "key": "${CI_COMMIT_SHA}-${platform}",
-        "paths": [
-          "node_modules/**/*",
-          ".expo/**/*"
-        ]
       }
     },
     "testflight": {
