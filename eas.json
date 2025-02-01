@@ -26,6 +26,7 @@
       }
     },
     "production": {
+      "environment": "production",
       "autoIncrement": true,
       "channel": "production",
       "android": {
@@ -50,7 +51,6 @@
         "EXPO_PUBLIC_RPC_BASE_URL": "${EXPO_PUBLIC_RPC_BASE_URL}",
         "EXPO_PUBLIC_PAYMASTER_BASE_URL": "${EXPO_PUBLIC_PAYMASTER_BASE_URL}",
         "EXPO_PUBLIC_ENVIRONMENT": "${EXPO_PUBLIC_ENVIRONMENT}",
-
         "EXPO_PUBLIC_API_URL": "${EXPO_PUBLIC_API_URL}"
       },
       "extends": "production",
