@@ -43,12 +43,14 @@ const env = envSchema.parse({
 
   // Analytics & Monitoring
   SENTRY_DSN: process.env.EXPO_PUBLIC_SENTRY_DSN,
+  // posthog
   POSTHOG_API_KEY: process.env.EXPO_PUBLIC_POSTHOG_API_KEY,
   POSTHOG_HOST: process.env.EXPO_PUBLIC_POSTHOG_HOST,
 
-  // Blockchain
+  // rpc
   RPC_SEPOLIA_URL: process.env.EXPO_PUBLIC_RPC_SEPOLIA_URL,
   RPC_BASE_URL: process.env.EXPO_PUBLIC_RPC_BASE_URL,
+  // paymaster
   PAYMASTER_SEPOLIA_URL: process.env.EXPO_PUBLIC_PAYMASTER_SEPOLIA_URL,
   PAYMASTER_BASE_URL: process.env.EXPO_PUBLIC_PAYMASTER_BASE_URL,
 
