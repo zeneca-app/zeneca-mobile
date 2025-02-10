@@ -16,12 +16,49 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import BigNumber from "bignumber.js";
 import React, { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import { View } from "react-native";
+import { Dimensions, View } from "react-native";
 import { Address } from "viem";
-
-
+import { GestureHandlerRootView, PanGestureHandler } from "react-native-gesture-handler";
+import Ionicons from '@expo/vector-icons/Ionicons';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  runOnJS,
+} from "react-native-reanimated";
+const SCREEN_HEIGHT = Dimensions.get("window").height;
 
 const ETFPurchaseConfirmation = ({ route }) => {
+  const backgroundOpacity = useSharedValue(0);
+  const contentTranslateY = useSharedValue(0);
+
+  const animateScreen = () => {
+    contentTranslateY.value = withTiming(-SCREEN_HEIGHT, { duration: 800 });
+    backgroundOpacity.value = withTiming(1, { duration: 800 });
+  };
+
+  const backgroundStyle = useAnimatedStyle(() => ({
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: '#5A10EF',
+    opacity: backgroundOpacity.value,
+  }));
+
+  const contentStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: contentTranslateY.value }],
+    backgroundColor: 'transparent',
+  }));
+
+  const onGestureEvent = (event) => {
+    if (event.nativeEvent.translationY < -100) {
+      runOnJS(animateScreen)();
+    }
+  };
+
+
   const { etf, amount } = route.params;
 
   const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo || null;
@@ -71,18 +108,18 @@ const ETFPurchaseConfirmation = ({ route }) => {
       );
 
       const tx = await smartAccountClient.sendTransactions({
-        transactions: quote.transactions, 
+        transactions: quote.transactions,
       });
 
       if (!tx) throw new Error("Transaction failed to send");
 
-      const receipt = await publicClient.waitForTransactionReceipt({
-        hash: tx,
-      });
-
-      if (receipt.status !== "success") {
-        throw new Error("Transaction failed");
-      }
+      /*   const receipt = await publicClient.waitForTransactionReceipt({
+          hash: tx,
+        });
+  
+        if (receipt.status !== "success") {
+          throw new Error("Transaction failed");
+        } */
 
       // Invalidate queries after successful transaction
       await Promise.all([
@@ -154,9 +191,9 @@ const ETFPurchaseConfirmation = ({ route }) => {
 
     const timerId = setInterval(updateTimer, 1000);
     return () => {
-      clearInterval(timerId); 
+      clearInterval(timerId);
     };
-  }, [quote, fetchQuote]); 
+  }, [quote, fetchQuote]);
 
   const formatTimeLeft = (seconds: number): string => {
     if (seconds <= 0) return '0:00';
@@ -185,112 +222,95 @@ const ETFPurchaseConfirmation = ({ route }) => {
     : "0.00";
 
   return (
-    <LoggedLayout>
-      <View className="flex pb-layout">
-        <View className="flex-row gap-s pt-layout-s pb-layout-s items-center justify-start px-layout">
-          <View className="w-12 h-12 bg-gray-90 rounded-full overflow-hidden">
-            <Logo style={{ height: "100%", width: "100%" }} />
-          </View>
-          <Text className="text-gray-50 caption-xl flex-1">
-            {etf.symbol}
-          </Text>
-        </View>
-        <Text className="heading-l text-gray-10 px-layout">
-          {amountDisplayed}
-        </Text>
-        <View className="flex flex-row items-center justify-start gap-s px-layout">
-          <Text className="caption-xl text-gray-50">{etfAmount}</Text>
-          <Text className="caption-xl text-gray-50">{etf.symbol}</Text>
-        </View>
-      </View>
-      <View className="px-layout pb-layout flex justify-start items-stretch gap flex-1">
-        <View className="flex-row items-center justify-between gap-s">
-          <Text className="caption-l text-gray-50">
-            {t("etfPurchase.price")}
-          </Text>
-          <Text className="caption-xl text-dark-content-white">
-            {isQuotePending ? (
-              <SkeletonView className="w-20 h-4" />
-            ) : (
-              <>${quote?.asset_price}</>
-            )}
-          </Text>
-        </View>
-        <View className="flex-row items-center justify-between gap-s">
-          <Text className="caption-l text-gray-50">
-            {t("etfPurchase.fee")}
-          </Text>
-          <Text className="caption-xl text-dark-content-white">
-            {isQuotePending ? (
-              <SkeletonView className="w-20 h-4" />
-            ) : (
-              feeDisplayed
-            )}
-          </Text>
-        </View>
-        <View className="flex-row items-center justify-between gap-s">
-          <Text className="caption-l text-gray-50">
-            {t("etfPurchase.total")}
-          </Text>
-          <Text className="caption-xl text-dark-content-white">
-            {isQuotePending ? (
-              <SkeletonView className="w-20 h-4" />
-            ) : (
-              totalDisplayed
-            )}
-          </Text>
-        </View>
-        <View className="h-px rounded-full bg-dark-background-100" />
-        <Text className="caption-l text-gray-50">
-          <Trans
-            i18nKey="etfPurchase.disclaimer"
-            values={{
-              etf_amount: etfAmount,
-              etf_symbol: etf.symbol,
-              display_name: etf.name,
-              symbol: etf.symbol,
-              amount: amountToOrder,
-              etf_price: etf.price,
-            }}
-            components={[
-              <Text className="caption-l text-white font-bold"></Text>,
-              <Text className="caption-l text-white font-bold">
-                segment2
-              </Text>,
-              <Text className="caption-l text-white font-bold">
-                segment3
-              </Text>,
-              <Text className="caption-l text-white font-bold">
-                segment3
-              </Text>,
-            ]}
-          />
-        </Text>
+    <GestureHandlerRootView className="flex-1">
+      <View className="flex-1 bg-electric-50">
+        <Animated.View style={backgroundStyle} />
+        <PanGestureHandler onGestureEvent={onGestureEvent}>
 
-        {isQuotePending ? (
-          <SkeletonView className="w-20 h-4" />
-        ) : (
-          <Text className="caption-l text-gray-50">
-            {t("etfPurchase.timeLeft", { time: minLeft })}
-          </Text>
-        )}
+          <Animated.View className="flex-1 mb-36 rounded-t-3xl bg-dark-background-900" style={contentStyle}>
+            <LoggedLayout>
+              <View className="flex pb-layout">
+                <View className="flex-row gap-s pt-layout-s pb-layout-s items-center justify-start px-layout">
+                  <View className="w-12 h-12 bg-gray-900 rounded-full overflow-hidden">
+                    <Logo className="w-full h-full" />
+                  </View>
+                  <Text className="text-gray-50 caption-xl flex-1">{etf.symbol}</Text>
+                </View>
+                <Text className="heading-l text-gray-100 px-layout">{amountDisplayed}</Text>
+                <View className="flex flex-row items-center justify-start gap-s px-layout">
+                  <Text className="caption-xl text-gray-50">{etfAmount}</Text>
+                  <Text className="caption-xl text-gray-50">{etf.symbol}</Text>
+                </View>
+              </View>
+              <View className="px-layout pb-layout flex justify-start items-stretch gap flex-1">
+                <View className="flex-row items-center justify-between gap-s">
+                  <Text className="caption-l text-gray-50">{t("etfPurchase.price")}</Text>
+                  <Text className="caption-xl text-dark-content-white">
+                    {isQuotePending ? <SkeletonView className="w-20 h-4" /> : <>${quote?.asset_price}</>}
+                  </Text>
+                </View>
+                <View className="flex-row items-center justify-between gap-s">
+                  <Text className="caption-l text-gray-50">{t("etfPurchase.fee")}</Text>
+                  <Text className="caption-xl text-dark-content-white">
+                    {isQuotePending ? <SkeletonView className="w-20 h-4" /> : feeDisplayed}
+                  </Text>
+                </View>
+                <View className="flex-row items-center justify-between gap-s">
+                  <Text className="caption-l text-gray-50">{t("etfPurchase.total")}</Text>
+                  <Text className="caption-xl text-dark-content-white">
+                    {isQuotePending ? <SkeletonView className="w-20 h-4" /> : totalDisplayed}
+                  </Text>
+                </View>
+                <View className="h-px rounded-full bg-dark-background-100" />
+                <Text className="caption-l text-gray-50">
+                  <Trans
+                    i18nKey="etfPurchase.disclaimer"
+                    values={{
+                      etf_amount: etfAmount,
+                      etf_symbol: etf.symbol,
+                      display_name: etf.name,
+                      symbol: etf.symbol,
+                      amount: amountToOrder,
+                      etf_price: etf.price,
+                    }}
+                    components={[
+                      <Text className="caption-l text-white font-bold"></Text>,
+                      <Text className="caption-l text-white font-bold">segment2</Text>,
+                      <Text className="caption-l text-white font-bold">segment3</Text>,
+                      <Text className="caption-l text-white font-bold">segment3</Text>,
+                    ]}
+                  />
+                </Text>
 
+                {isQuotePending ? (
+                  <SkeletonView className="w-20 h-4" />
+                ) : (
+                  <Text className="caption-l text-gray-50">{t("etfPurchase.timeLeft", { time: minLeft })}</Text>
+                )}
+              </View>
+              <View className="px-layout">
+                {showButtonConfirmation ? (
+                  <Button className="" onPress={executeTransaction} disabled={isDisabled} isLoading={isLoading}>
+                    <Text className="button-m">{t("etfPurchase.confirm")}</Text>
+                  </Button>
+                ) : (
+                  <SkeletonView className="w-full h-12" />
+                )}
+              </View>
+            </LoggedLayout>
+
+            <View className="py-6">
+              <View className="flex flex-row items-center justify-center gap-2 mb-2">
+                <Text className="text-white text-center text-base">Swipe up to submit</Text>
+                <Ionicons name="chevron-up" size={24} color="white" />
+              </View>
+              <View className="w-16 h-1 bg-white/30 rounded-full mx-auto" />
+            </View>
+          </Animated.View>
+        </PanGestureHandler>
       </View>
-      <View className="px-layout">
-        {showButtonConfirmation ? (
-          <Button
-            className=""
-            onPress={executeTransaction}
-            disabled={isDisabled}
-            isLoading={isLoading}
-          >
-            <Text className="button-m">{t("etfPurchase.confirm")}</Text>
-          </Button>
-        ) : (
-          <SkeletonView className="w-full h-12" />
-        )}
-      </View>
-    </LoggedLayout>
+    </GestureHandlerRootView>
+
   );
 };
 
