@@ -11,30 +11,40 @@ import { FlatList, Text, View } from "react-native";
 import SkeletonLoadingView, {
   SkeletonOrderListItem,
 } from "@/components/Loading/SkeletonLoadingView";
-import Balance from "@/components/Balance";
-import VerifyCtaCard from "@/components/Cards/VerifyCtaCard";
+import Balance from "@/screens/HomeScreen/components/Balance";
+import VerifyCtaCard from "@/screens/HomeScreen/components/VerifyCtaCard";
 import CardFooter from "@/components/CardFooter";
-import { MyAsset } from "@/client/";
-import useAssetsStore from "@/storage/assetsStore";
+import { MyAsset, MyAssets } from "@/client/";
+import { useObservableSyncedQuery } from '@legendapp/state/sync-plugins/tanstack-react-query';
+import { use$ } from '@legendapp/state/react';
+import { observe } from "@legendapp/state";
+import { syncObservable } from "@legendapp/state/sync";
+import { ObservablePersistMMKV } from "@legendapp/state/persist-plugins/mmkv"
+import { syncState } from "@legendapp/state";
 
 
-const OrdersListCard = () => {
+const MyPositionsList = () => {
   const { t } = useTranslation();
-  const { setAssets } = useAssetsStore((state) => state);
-  const { isPending: myAssetsPending, error: myAssetsError, data: my_assets, refetch, isRefetching } = useQuery({
-    ...usersMyAssetsOptions(),
-    refetchInterval: Config.REFETCH_INTERVAL,
-    staleTime: 0, // Consider data stale immediately
-    gcTime: 1000 * 60 * 5, // Cache for 5 minutes
+
+  const positionsStore$ = useObservableSyncedQuery({
+    query: {
+      ...usersMyAssetsOptions(),
+      refetchInterval: Config.REFETCH_INTERVAL,
+    }
   });
 
-  const hasAssets = my_assets?.length && my_assets?.length > 0;
-
-  useEffect(() => {
-    if (my_assets) {
-      setAssets(my_assets);
+  syncObservable(positionsStore$, {
+    persist: {
+      name: 'positions',
+      retrySync: true, // Retry sync after reload
+      plugin: ObservablePersistMMKV
     }
-  }, [my_assets]);
+  })
+
+  const positions = use$(positionsStore$)
+  const positionsState$ = syncState(positionsStore$)
+  const isLoaded = positionsState$.isLoaded.get()
+  console.log("positions", positions)
 
   // Component to render if no transactions
   const Empty = ({ canTrade = false }: { canTrade?: boolean }) => (
@@ -80,7 +90,7 @@ const OrdersListCard = () => {
   const HomeHeader = () => (
     <View className="flex-1">
       <View className="pt-12 pb-6">
-        <Balance isRefetching={isRefetching} />
+        <Balance isRefetching={false} />
       </View>
       <VerifyCtaCard />
       <CardHeader>
@@ -88,8 +98,8 @@ const OrdersListCard = () => {
           {t("ordersListCard.myAssets")}
         </Text>
       </CardHeader>
-      {myAssetsPending && !my_assets && <LoadingMyAssets />}
-      {!myAssetsPending && !hasAssets && <Empty canTrade={true} />}
+      {!isLoaded && !positions && <LoadingMyAssets />}
+      {!isLoaded && !positions && <Empty canTrade={true} />}
     </View>
   )
 
@@ -104,18 +114,18 @@ const OrdersListCard = () => {
   return (
     <View className="flex-1">
       <FlatList
-        data={my_assets}
+        data={positions}
         renderItem={renderItem}
         keyExtractor={(item) => `${item.id}`}
         ListHeaderComponent={<HomeHeader />}
         ItemSeparatorComponent={separator}
         ListFooterComponent={<HomeFooter />}
         showsVerticalScrollIndicator={false}
-        onRefresh={refetch}
-        refreshing={myAssetsPending}
+        //onRefresh={refetch}
+        //refreshing={myAssetsPending}
 
         // Add these props for better update handling
-        extraData={my_assets} // Re-render when my_assets changes
+        extraData={positions} // Re-render when my_assets changes
         maxToRenderPerBatch={10} // Limit batch rendering for better performance
         windowSize={5} // Reduce window size for better memory usage
       />
@@ -123,6 +133,6 @@ const OrdersListCard = () => {
   );
 };
 
-OrdersListCard.displayName = "OrdersListCard";
+MyPositionsList.displayName = "MyPositionsList";
 
-export default OrdersListCard;
+export default MyPositionsList;

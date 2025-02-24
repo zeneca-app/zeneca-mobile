@@ -17,6 +17,11 @@ import { AssetPrice } from "@/client/";
 import MarketHours from "@/components/MarketHours";
 import useMarketHourStore from "@/storage/marketHourStore";
 import BottomActions from "@/components/BottomActions";
+import { useObservableSyncedQuery } from "@legendapp/state/sync-plugins/tanstack-react-query";
+import { ObservablePersistMMKV } from "@legendapp/state/persist-plugins/mmkv";
+import { syncObservable } from "@legendapp/state/sync";
+import { use$ } from "@legendapp/state/react";
+import { syncState } from "@legendapp/state";
 
 
 
@@ -25,16 +30,20 @@ const ExploreETFs = () => {
 
   const { setIsMarketOpen } = useMarketHourStore((state) => state);
 
-  const {
-    isPending,
-    error: allAssetsError,
-    data: allAssets,
-    refetch,
-  } = useQuery({
-    ...assetsGetAssetsOptions({
-      client: client,
-    }),
+  const assetsStore$ = useObservableSyncedQuery({
+    query: {
+      ...assetsGetAssetsOptions(),
+    },
   });
+
+  syncObservable(assetsStore$, {
+    persist: {
+      name: 'assets',
+      retrySync: true, // Retry sync after reload
+      plugin: ObservablePersistMMKV
+    }
+
+  })
 
   const {
     isPending: marketHoursPending,
@@ -53,7 +62,10 @@ const ExploreETFs = () => {
     return <AssetListItem asset={item} />;
   };
 
-  const assets = allAssets || [];
+  const assets = use$(assetsStore$)
+  const state$ = syncState(assetsStore$)
+  const isLoaded = state$.isLoaded.get()
+  console.log("isLoaded", isLoaded)
 
   const separator = () => <Separator />;
 
@@ -80,7 +92,7 @@ const ExploreETFs = () => {
         />
       </Text>
       <View className="flex-1 px-layout">
-        {isPending ? (
+        {!isLoaded ? (
           <SkeletonLoadingView>
             <SkeletonStockListItem />
             <SkeletonStockListItem />
@@ -96,8 +108,8 @@ const ExploreETFs = () => {
             ItemSeparatorComponent={separator}
             ListFooterComponent={<Footer />}
             showsVerticalScrollIndicator={false}
-            onRefresh={refetch}
-            refreshing={isPending}
+          //onRefresh={refetch}
+          //refreshing={isPending}
           />
         )}
       </View>

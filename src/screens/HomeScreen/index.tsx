@@ -1,11 +1,11 @@
-import OrdersListCard from "@/components/Cards/OrdersListCard";
+import MyPositionsList from "@/screens/HomeScreen/components/MyPositionsList";
+import HomeActions from "@/screens/HomeScreen/components/HomeActions";
 import LoggedLayout from "@/components/LoggedLayout";
-import HomeActions from "./components/HomeActions";
 
 const HomeScreen = () => {
   return (
     <LoggedLayout>
-      <OrdersListCard />
+      <MyPositionsList />
       <HomeActions />
     </LoggedLayout>
   );
