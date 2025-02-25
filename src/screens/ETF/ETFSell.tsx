@@ -14,10 +14,19 @@ import { View } from "react-native";
 import SkeletonLoadingView, {
   SkeletonView,
 } from "@/components/Loading/SkeletonLoadingView";
-import useAssetsStore from "@/storage/assetsStore";
+import usePositionsStore from "@/storage/positionsStore";
 import Config from "@/config";
+import { AssetPrice } from "@/client/";
 
-const ETFSell = ({ route }) => {
+type ETFSellScreenProps = {
+  route: {
+    params: {
+      etf: AssetPrice;
+    };
+  };
+};
+
+const ETFSell = ({ route }: ETFSellScreenProps) => {
   const { t } = useTranslation();
 
   const { etf } = route.params;
@@ -27,10 +36,6 @@ const ETFSell = ({ route }) => {
   const [amount, setAmount] = useState<string>("0");
 
   const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo || null;
-
-  const { assets } = useAssetsStore((state) => state);
-
-  const asset = assets?.find((asset) => asset.symbol === etf.symbol);
 
 
   const {

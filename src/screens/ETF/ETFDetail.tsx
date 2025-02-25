@@ -3,6 +3,7 @@ import { Timespan } from "@/client";
 import {
   assetsGetAssetDetailOptions,
   assetsGetAssetTicksOptions,
+  usersMyAssetByIdOptions,
 } from "@/client/@tanstack/react-query.gen";
 import client from "@/client/client";
 import Button from "@/components/Button";
@@ -63,20 +64,6 @@ const ETFDetail = ({ route }: ETFDetailScreenProps) => {
   const { isMarketOpen } = useMarketHourStore((state) => state);
 
   const {
-    isPending: assetDetailLoading,
-    error: assetDetailError,
-    data: assetDetailData,
-    refetch: assetDetailRefetch,
-  } = useQuery({
-    ...assetsGetAssetDetailOptions({
-      client: client,
-      path: {
-        asset_id: asset.id,
-      },
-    }),
-  });
-
-  const {
     isPending: chartLoading,
     error: chartError,
     data: stockPointsData,
@@ -92,6 +79,35 @@ const ETFDetail = ({ route }: ETFDetailScreenProps) => {
       },
     }),
     enabled: Boolean(asset?.id),
+  });
+
+
+  const {
+    isPending: assetDetailLoading,
+    error: assetDetailError,
+    data: assetDetailData,
+    refetch: assetDetailRefetch,
+  } = useQuery({
+    ...assetsGetAssetDetailOptions({
+      client: client,
+      path: {
+        asset_id: asset.id,
+      },
+    }),
+  });
+
+  const {
+    isPending: positionLoading,
+    error: positionError,
+    data: positionData,
+    refetch: positionRefetch,
+  } = useQuery({
+    ...usersMyAssetByIdOptions({
+      client: client,
+      path: {
+        asset_id: asset.id,
+      },
+    }),
   });
 
   const normalizedStockPointsData = (data: any) => {
@@ -247,16 +263,18 @@ const ETFDetail = ({ route }: ETFDetailScreenProps) => {
           >
             <Text className="button-m">{t("etfDetail.buy")}</Text>
           </Button>
-          <Button
-            className="flex-1"
-            onPress={() =>
-              navigation.navigate("ETFSell", {
-                etf: { ...asset, price: price },
-              })
-            }
+          {/* 
+            <Button
+              className="flex-1"
+              onPress={() =>
+                navigation.navigate("ETFSell", {
+                  etf: { ...asset, price: price },
+                })
+              }
           >
-            <Text className="button-m">{t("etfDetail.sell")}</Text>
-          </Button>
+              <Text className="button-m">{t("etfDetail.sell")}</Text>
+            </Button> */}
+
         </View>
       </BottomActions>
     )
