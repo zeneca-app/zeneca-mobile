@@ -17,7 +17,7 @@ import { AssetPrice } from "@/client/";
 import MarketHours from "@/components/MarketHours";
 import useMarketHourStore from "@/storage/marketHourStore";
 import BottomActions from "@/components/BottomActions";
-
+import Config from "@/config";
 
 
 const ExploreETFs = () => {
@@ -34,6 +34,9 @@ const ExploreETFs = () => {
     ...assetsGetAssetsOptions({
       client: client,
     }),
+    refetchInterval: Config.REFETCH_INTERVAL,
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 
   const {

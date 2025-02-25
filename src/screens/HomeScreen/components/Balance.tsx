@@ -25,13 +25,13 @@ const Balance = ({
   const { t } = useTranslation();
 
   const { isPending, error, data: balance, refetch: refetchBalance } = useQuery({
-    ...usersMyBalanceOptions({
-      client: client,
-    }),
+    ...usersMyBalanceOptions(),
     refetchInterval: Config.REFETCH_INTERVAL,
-    staleTime: 0, // Consider data stale immediately
-    gcTime: 1000 * 60 * 5, // Cache for 5 minutes
+    staleTime: Infinity, // Consider data stale immediately
+    gcTime: Infinity, // Cache for 5 minutes
   });
+
+  console.log("balance", balance);
 
   if (isRefetching) {
     refetchBalance();
