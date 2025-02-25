@@ -29,7 +29,9 @@ import { useNavigation } from "@react-navigation/native";
 import ProfileButton from "@/components/ProfileButton";
 import ETFSell from "@/screens/ETF/ETFSell";
 import ETFSellConfirmation from "@/screens/ETF/ETFSellConfirmation";
-import ETFSellSuccess from "./ETF/ETFSellSuccess";
+import ETFSellSuccess from "@/screens/ETF/ETFSellSuccess";
+import NetInfo from '@react-native-community/netinfo';
+import { onlineManager } from "@tanstack/react-query";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -41,6 +43,13 @@ const MainNavigation = () => {
   useEffect(() => {
     if (__DEV__) return;
     checkUpdate();
+  }, []);
+
+  useEffect(() => {
+    return NetInfo.addEventListener(state => {
+      const status = !!state.isConnected;
+      onlineManager.setOnline(status);
+    });
   }, []);
 
   const backButton = () => (
@@ -83,7 +92,7 @@ const MainNavigation = () => {
       <Stack.Screen name="Profile" component={ProfileScreen} options={screenConfigs.profileScreen} />
       <Stack.Screen name="OrderHistory" component={OrderHistory} options={screenConfigs.modalScreen} />
       <Stack.Screen name="OrderHistoryDetail" component={OrderHistoryDetail} options={screenConfigs.modalScreen} />
-      
+
       {/* Login Screens */}
       <Stack.Group>
         <Stack.Screen name="Login" component={Login} options={screenConfigs.noHeader} />
