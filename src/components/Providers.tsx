@@ -12,9 +12,18 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { createConfig, http, WagmiProvider } from "wagmi";
 import { base, baseSepolia, sepolia } from "wagmi/chains";
 import { AwaitPrivyProvider } from "@/components/AwaitPrivyProvider";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import env from "@/config/env";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
+
 
 const queryClient = new QueryClient();
+
+const asyncStoragePersister = createAsyncStoragePersister({
+  storage: AsyncStorage,
+  throttleTime: 1000,
+});
 
 const wagmiConfig = createConfig({
   chains: [sepolia, baseSepolia, base],
@@ -25,33 +34,35 @@ const wagmiConfig = createConfig({
   },
 });
 
-const APP_ID = env.PRIVY_APP_ID;
-const CLIENT_ID = env.PRIVY_CLIENT_ID;
-const POSTHOG_API_KEY = env.POSTHOG_API_KEY;
-const POSTHOG_HOST = env.POSTHOG_HOST;
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <GestureHandlerRootView className="flex-1 text-white font-sans">
       <PrivyProvider
         storage={MyPermissiveSecureStorageAdapter}
-        appId={APP_ID}
-        clientId={CLIENT_ID}
+        appId={env.PRIVY_APP_ID}
+        clientId={env.PRIVY_CLIENT_ID}
         supportedChains={[sepolia, baseSepolia, base]}
       >
         <PostHogProvider
-          apiKey={POSTHOG_API_KEY}
+          apiKey={env.POSTHOG_API_KEY}
           options={{
-            host: POSTHOG_HOST,
+            host: env.POSTHOG_HOST,
           }}
         >
           <SafeAreaProvider>
             <BottomSheetModalProvider>
-              <QueryClientProvider client={queryClient}>
-                <WagmiProvider config={wagmiConfig}>
+              <WagmiProvider config={wagmiConfig}>
+                <PersistQueryClientProvider client={queryClient}
+                  onSuccess={() => {
+                    queryClient
+                      .resumePausedMutations()
+                      .then(() => queryClient.invalidateQueries());
+                  }}
+                  persistOptions={{ persister: asyncStoragePersister }}>
                   <AwaitPrivyProvider>{children}</AwaitPrivyProvider>
-                </WagmiProvider>
-              </QueryClientProvider>
+                </PersistQueryClientProvider>
+              </WagmiProvider>
             </BottomSheetModalProvider>
           </SafeAreaProvider>
         </PostHogProvider>

@@ -11,21 +11,22 @@ import { FlatList, Text, View } from "react-native";
 import SkeletonLoadingView, {
   SkeletonOrderListItem,
 } from "@/components/Loading/SkeletonLoadingView";
-import Balance from "@/components/Balance";
-import VerifyCtaCard from "@/components/Cards/VerifyCtaCard";
+import Balance from "@/screens/HomeScreen/components/Balance";
+import VerifyCtaCard from "@/screens/HomeScreen/components/VerifyCtaCard";
 import CardFooter from "@/components/CardFooter";
 import { MyAsset } from "@/client/";
 import useAssetsStore from "@/storage/assetsStore";
 
 
-const OrdersListCard = () => {
+const PositionsList = () => {
   const { t } = useTranslation();
   const { setAssets } = useAssetsStore((state) => state);
+
   const { isPending: myAssetsPending, error: myAssetsError, data: my_assets, refetch, isRefetching } = useQuery({
     ...usersMyAssetsOptions(),
     refetchInterval: Config.REFETCH_INTERVAL,
-    staleTime: 0, // Consider data stale immediately
-    gcTime: 1000 * 60 * 5, // Cache for 5 minutes
+    staleTime: Infinity, // Consider data stale immediately
+    gcTime: Infinity, // Cache for 5 minutes
   });
 
   const hasAssets = my_assets?.length && my_assets?.length > 0;
@@ -123,6 +124,6 @@ const OrdersListCard = () => {
   );
 };
 
-OrdersListCard.displayName = "OrdersListCard";
+PositionsList.displayName = "PositionsList";
 
-export default OrdersListCard;
+export default PositionsList;
