@@ -193,7 +193,8 @@
     "sell": "Venta de",
     "all": "Todo",
     "orders": "Ordenes",
-    "transfers": "Transferencias"
+    "transfers": "Transferencias",
+    "empty_transactions": "No hay transacciones"
   },
   "orderHistoryDetail": {
     "buy": "Compra de",

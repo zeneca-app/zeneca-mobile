@@ -13,6 +13,7 @@ import SkeletonLoadingView, {
 import LoggedLayout from "@/components/LoggedLayout";
 import { Trans } from "react-i18next";
 import { useState } from 'react';
+import ChartArrowUp from "@/assets/chart-arrow-up.svg";
 
 
 type OrderHistoryItemProps = {
@@ -24,7 +25,8 @@ type OrderHistoryItemProps = {
 const OrderHistoryItem = ({ order, onPress }: OrderHistoryItemProps) => {
     const { t } = useTranslation();
 
-    const getSmartDate = (dateString: string) => {
+    const getSmartDate = (dateString: string | null) => {
+        if (!dateString) return "";
         const date = new Date(dateString);
         const now = new Date();
         const diffInHours = Math.abs(now.getTime() - date.getTime()) / 36e5;
@@ -75,7 +77,7 @@ const OrderHistoryItem = ({ order, onPress }: OrderHistoryItemProps) => {
                     ${order.payment_token_filled}
                 </Text>
 
-        
+
                 <Text className="text-base text-gray-400">
                     {order.asset_token_filled} {order.symbol}
                 </Text>
@@ -112,17 +114,23 @@ const OrderHistory = () => {
         ...ordersGetOrdersOptions(),
     });
 
+    console.log("orders", orders);
+
+    const hasOrders = orders && orders.length > 0;
+
     const renderItem = ({ item: order }: { item: Order }) => {
         if (!order) return null;
         return (
             <OrderHistoryItem
                 order={order}
                 onPress={(order) => {
+                    // @ts-ignore
                     navigation.navigate('OrderHistoryDetail', { order });
                 }}
             />
         );
     }
+
     const LoadingOrders = () => (
         <SkeletonLoadingView className="flex-1 flex">
             <SkeletonOrderListItem />
@@ -134,6 +142,20 @@ const OrderHistory = () => {
             <SkeletonOrderListItem />
         </SkeletonLoadingView>
     )
+
+    const EmptyOrdersState = () => (
+        <View className="flex-1 justify-center items-center">
+            <View className="pb-6">
+                <ChartArrowUp className="h-40 w-40" />
+            </View>
+            <Text className="text-center caption-xl text-gray-50">
+                {t("orderHistory.title")}
+            </Text>
+            <Text className="text-center caption-xl text-gray-50 mt-2">
+                {t("orderHistory.empty_transactions")}
+            </Text>
+        </View>
+    );
 
     /*  const filteredData = transactions?.filter(item => {
          if (selectedTab === 'transactions') return item.type === 'trade';
@@ -171,8 +193,10 @@ const OrderHistory = () => {
 
 
             <View className="flex-1 px-layout">
-                {isPending && !orders ? (
+                {isPending ? (
                     <LoadingOrders />
+                ) : !hasOrders ? (
+                    <EmptyOrdersState />
                 ) : (
                     <FlatList
                         data={orders}
