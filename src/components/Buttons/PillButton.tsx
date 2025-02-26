@@ -19,9 +19,9 @@ const PillButton = ({
   return (
     <TouchableOpacity
       onPress={onPress}
-      className={`px-4 py-2 rounded-full transition-colors duration-300 ${className} ${isActive ? activeClasses : ""}`}
+      className={`px-4 py-2  rounded-full transition-colors duration-300 ${className} ${isActive ? activeClasses : ""}`}
     >
-      <View>{children}</View>
+      <View className="font-bold">{children}</View>
     </TouchableOpacity>
   );
 };
