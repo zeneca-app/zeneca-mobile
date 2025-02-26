@@ -19,7 +19,9 @@ export type RootStackParamList = {
   };
   ETFPurchaseConfirmation: undefined;
   ETFPurchaseSuccess: undefined;
-  ETFPurchase: undefined;
+  ETFPurchase: {
+    etf: AssetPrice & { price: string };
+  };
   KYCPreview: undefined;
   KYCProvider: undefined;
   KYCSuccess: undefined;
@@ -31,7 +33,9 @@ export type RootStackParamList = {
   Profile: undefined;
   OrderHistory: undefined;
   OrderHistoryDetail: undefined;
-  ETFSell: undefined;
+  ETFSell: {
+    etf: AssetPrice & { price: string };
+  };
   ETFSellConfirmation: undefined;
   ETFSellSuccess: undefined;
 };
