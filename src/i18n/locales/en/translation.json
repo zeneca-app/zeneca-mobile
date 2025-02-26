@@ -199,7 +199,8 @@
     "amount": "Amount",
     "shares": "Shares",
     "fee": "Fee",
-    "price": "Average price"
+    "price": "Average price",
+    "empty_transactions": "No transactions yet"
   },
   "orderHistoryDetail": {
     "buy": "Buy of",
