@@ -1,0 +1,231 @@
+---
+description: Mobile Cursor Rules
+globs: 
+alwaysApply: false
+---
+# Zeneca Mobile Cursor Rules
+
+## Core Principles
+
+1. **Consistency First**: Ensure uniform code style, patterns, and architecture across the codebase.
+2. **Developer Experience**: Prioritize readable, maintainable code with clear patterns.
+3. **Performance Matters**: Build with performance in mind from the component level up.
+4. **Security By Design**: Integrate security practices throughout development.
+5. **Accessibility Always**: Ensure the app is usable by everyone.
+
+## File Organization & Naming
+
+1. **Component Structure**
+   - Each component should be in its own directory within `src/components/`
+   - Component directories should include:
+     - `index.tsx` (main component file)
+     - `styles.ts` (if needed for additional styling)
+     - `types.ts` (for component-specific types)
+     - `__tests__/` (for component tests)
+
+2. **Screen Structure**
+   - Screens should be organized by feature in `src/screens/`
+   - Each screen should follow the same structure as components
+   - Screen-specific components should be in a `components/` subdirectory
+
+3. **Naming Conventions**
+   - Components and screens use PascalCase (e.g., `UserProfile.tsx`)
+   - Hooks use camelCase with "use" prefix (e.g., `useUserData.ts`)
+   - Utilities use camelCase (e.g., `formatCurrency.ts`)
+   - Zustand stores use camelCase with "Store" suffix (e.g., `userStore.ts`)
+   - Test files use the format `[filename].test.tsx`
+
+## React Native & TypeScript
+
+1. **TypeScript**
+   - All new files must be TypeScript (`.tsx` for components, `.ts` for others)
+   - Avoid using `any` type; prefer explicit typing
+   - Use interface for object shapes and type for unions/intersections
+   - Export types from a component's directory as needed
+
+2. **React Components**
+   - Use functional components with hooks
+   - Prefer arrow function syntax for component definitions
+   - Props interfaces should be named `[ComponentName]Props`
+   - Each component should have proper props validation
+
+3. **React Native Specifics**
+   - Use `StyleSheet.create()` for static styles
+   - Implement responsive layouts with percentage or flex values
+   - Always handle platform differences explicitly
+
+## State Management
+
+1. **Zustand Stores**
+   - Keep stores small and focused on a specific domain
+   - Use the MMKV persistence middleware for data that needs to persist
+   - Follow the store structure in the architecture document
+   - Include TypeScript interfaces for state and actions
+   - Implement selectors to prevent unnecessary re-renders
+   - Add middleware for debugging in development
+   - Document store purpose and usage patterns
+
+2. **React Query**
+   - All API calls should use React Query
+   - Implement error handling and loading states
+   - Use query invalidation for data refreshing
+   - Set appropriate staleTime and cacheTime based on data type
+   - Utilize background fetching for critical data
+   - Implement optimistic updates for better UX
+   - Create custom hooks for query logic reuse
+   - Use query keys consistently with a standardized format
+
+3. **Local Component State**
+   - Use `useState` for simple component state
+   - Use `useReducer` for complex state logic
+   - Avoid prop drilling; use context or Zustand for shared state
+   - Implement state machines for complex flows (like onboarding)
+   - Document state dependencies between components
+
+## Styling
+
+1. **NativeWind Usage**
+   - Prefer NativeWind classNames for styling
+   - Use consistent spacing and sizing based on the design system
+   - Keep classNames readable; break into multiple lines if needed
+   - Extract repeated classNames into custom class variants
+   - Group related classes logically (layout, typography, colors)
+
+2. **Theme Consistency**
+   - Use the Manrope font family consistently
+   - Follow the app's color palette defined in TailwindCSS config
+   - Support dark/light mode for all components
+   - Use semantic color names in the theme (e.g., 'primary', 'error')
+   - Define a typography scale with preset text styles
+
+3. **Design System Integration**
+   - Create and maintain a component library for common UI elements
+   - Document the design system with examples
+   - Include responsive breakpoints for different device sizes
+   - Create theme tokens for spacing, sizing, and colors
+
+## Authentication & Web3
+
+1. **Privy Integration**
+   - Use Privy hooks for authentication state
+   - Handle authentication errors gracefully
+   - Implement proper loading states during authentication
+
+2. **Wagmi/Viem Usage**
+   - Use wagmi hooks for blockchain interactions
+   - Handle blockchain errors with user-friendly messages
+   - Support the required chains (Ethereum, sepolia, baseSepolia, base)
+   - Implement appropriate gas estimation and error handling
+
+## Navigation
+
+1. **React Navigation**
+   - Define navigation types in `src/navigation/types.ts`
+   - Use screen components for each route
+   - Implement proper navigation guards based on auth state
+   - Use type-safe navigation with screens defined in types
+
+## Error Handling & Logging
+
+1. **Error Boundaries**
+   - Implement error boundaries for critical components
+   - Use Sentry for error tracking
+   - Log meaningful error messages
+
+2. **Analytics**
+   - Use PostHog for user event tracking
+   - Track important user actions and screen views
+   - Follow a consistent event naming convention
+
+## Performance
+
+1. **Optimization**
+   - Use `useMemo` and `useCallback` for expensive operations
+   - Implement list virtualization (FlashList) for long lists
+   - Avoid unnecessary re-renders with proper dependency arrays
+   - Use image optimization techniques (caching, progressive loading)
+   - Implement component memoization strategically
+   - Monitor and fix JavaScript thread bottlenecks
+   - Use native drivers for animations when possible
+   - Implement skeleton screens for loading states
+
+2. **Bundle Size**
+   - Be mindful of package dependencies
+   - Use tree-shakable libraries when possible
+   - Consider code splitting for large features
+   - Analyze bundle size regularly using Metro bundle analyzer
+   - Set budgets for bundle size and enforce them
+   - Use dynamic imports for rarely used features
+   - Optimize asset sizes (images, icons, etc.)
+
+3. **Monitoring & Metrics**
+   - Track key performance metrics (TTI, FPS, memory usage)
+   - Implement performance monitoring in production
+   - Set performance budgets for critical screens
+   - Create performance testing scenarios for CI
+
+## Testing
+
+1. **Unit Tests**
+   - Write tests for utility functions
+   - Test components with React Testing Library
+   - Test hooks with renderHook
+
+2. **Integration Tests**
+   - Test critical user flows
+   - Mock API responses for consistent tests
+   - Test navigation flows
+
+## Documentation
+
+1. **Code Comments**
+   - Document complex logic with comments
+   - Use JSDoc for function documentation
+   - Include references to relevant resources
+   - Add usage examples for shared utilities and hooks
+
+2. **README**
+   - Keep feature documentation updated
+   - Document new architecture decisions
+   - Update setup instructions when dependencies change
+   - Include troubleshooting section for common issues
+
+## Code Review
+
+1. **Pull Request Standards**
+   - PRs should address a single concern or feature
+   - Include screenshots for UI changes
+   - Reference related issues or tickets
+   - Add tests for new functionality
+   - Update documentation as needed
+
+2. **Review Process**
+   - Use a checklist-based approach for reviews
+   - Focus on business logic, performance, and security
+   - Enforce these cursor rules during review
+   - Require at least one approval before merging
+
+## Accessibility
+
+1. **Requirements**
+   - Use semantic components (proper roles and labels)
+   - Maintain proper contrast ratios
+   - Support screen readers with accessibilityLabel props
+   - Ensure touch targets meet minimum size requirements (44×44pt)
+   - Test with VoiceOver and TalkBack
+
+2. **Implementation**
+   - Document accessibility considerations in component documentation
+   - Include accessibility tests in the testing suite
+   - Review all UI components for accessibility compliance
+
+## Security
+
+1. **Data Handling**
+   - Use secure storage for sensitive information
+   - Never log sensitive user data
+   - Validate all user inputs
+   - Implement proper authentication guards for protected routes
+
+
+   - 
