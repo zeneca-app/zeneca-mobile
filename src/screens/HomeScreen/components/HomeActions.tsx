@@ -36,7 +36,7 @@ const HomeActions = () => {
 
   const handleExplore = () => {
     depositBottomMenuRef.current?.dismiss();
-    navigation.navigate("ExploreETFs");
+    navigation.navigate("ExploreAssets");
   };
 
   const handleSheetChanges = useCallback((index: number) => {
