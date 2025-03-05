@@ -13,7 +13,7 @@ export type RootStackParamList = {
   LoginOptions: undefined;
   LoginWithEmail: undefined;
   EmailOtpValidation: undefined;
-  ExploreETFs: undefined;
+  ExploreAssets: undefined;
   ETFDetail: {
     asset: AssetPrice;
   };

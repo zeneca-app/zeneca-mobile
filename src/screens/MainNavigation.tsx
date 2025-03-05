@@ -6,7 +6,7 @@ import ETFDetail from "@/screens/ETF/ETFDetail";
 import ETFPurchase from "@/screens/ETF/ETFPurchase";
 import ETFPurchaseConfirmation from "@/screens/ETF/ETFPurchaseConfirmation";
 import ETFPurchaseSuccess from "@/screens/ETF/ETFPurchaseSuccess";
-import ExploreETFs from "@/screens/Explore/ExploreEtfs";
+import ExploreAssets from "@/screens/Explore/ExploreAssets";
 import HomeScreen from "@/screens/HomeScreen";
 import KYCPreview from "@/screens/KYCVerification/KYCPreview";
 import KYCProvider from "@/screens/KYCVerification/KYCProvider";
@@ -107,7 +107,7 @@ const MainNavigation = () => {
       <Stack.Screen name="DepositWithBank" component={DepositWithBank} options={screenConfigs.defaultHeader} />
 
       {/* ETF Screens Explore and Detail */}
-      <Stack.Screen name="ExploreETFs" component={ExploreETFs} options={screenConfigs.defaultHeader} />
+      <Stack.Screen name="ExploreAssets" component={ExploreAssets} options={screenConfigs.defaultHeader} />
       <Stack.Screen name="ETFDetail" component={ETFDetail} options={screenConfigs.defaultHeader} />
 
       {/* ETF Purchase Screens */}
