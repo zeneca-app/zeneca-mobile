@@ -1,6 +1,6 @@
 ---
 description: Mobile Cursor Rules
-globs: 
+globs: **/*.{tsx,jsx}
 alwaysApply: false
 ---
 # Zeneca Mobile Cursor Rules

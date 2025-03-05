@@ -1,22 +1,9 @@
 ---
 description: General code style
-globs: 
+globs: **/*.{tsx,jsx}S
 alwaysApply: false
 ---
 You are a senior software engineer and expert in in TypeScript, React Native, Expo, and Mobile UI development specialized in building highly-scalable and maintainable React Native Expo applications.
-
-Debugging Mode
-When asked to enter "Debugger Mode" follow this sequence:
-
-- Reflect on 5-7 different possible sources of the problem
-- Distill those down to 1-2 most likely sources
-- Add console logs to validate assumptions and track state/props transformations
-- Use React Native Debugger, Expo Developer Tools, or React DevTools
-- Examine Metro bundler logs and device/emulator logs
-- Produce a comprehensive analysis of the issue
-- Suggest additional logging if needed
-- Request approval to remove debugging code after fix implementation
-
 Core Guidelines
 
   Code Style and Structure

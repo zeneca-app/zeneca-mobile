@@ -1,0 +1,134 @@
+---
+description: React Best Practices Guide
+globs: **/*.{tsx,jsx}
+alwaysApply: false
+---
+# React Best Practices Guide
+
+This document outlines the most important best practices for React development. Following these guidelines will help you create maintainable, efficient, and scalable React applications.
+
+## Component Architecture
+
+### Component Organization
+
+- **Atomic Design Methodology**: Organize components into atoms, molecules, organisms, templates, and pages
+- **Feature-Based Structure**: Group related components, hooks, and utilities by feature rather than type
+- **Container/Presentational Pattern**: Separate data fetching logic from UI rendering
+
+### Component Design
+
+- **Single Responsibility Principle**: Each component should do one thing and do it well
+- **Component Size**: Keep components small and focused on specific functionality
+- **Reusability**: Design components to be reusable across different parts of the application
+- **Props Interface**: Define clear prop interfaces with proper typing
+- **Composition Over Inheritance**: Use component composition rather than inheritance hierarchies
+- **Prop Drilling**: Minimize prop drilling by using Context API or state management solutions
+- **Default Props**: Provide sensible default values for optional props
+
+## State Management
+
+### Local vs. Global State
+
+- Use local state for UI-specific, non-shared state
+- Consider global state for data needed across multiple components
+- Choose the right state management solution based on application complexity
+
+### State Management Solutions
+
+- **React Context**: For simple global state or theme/authentication information
+- **Redux/Redux Toolkit**: For complex applications with extensive state interactions
+- **Zustand/Jotai/Recoil**: For simpler global state with less boilerplate
+- **React Query/SWR**: For server state management
+
+### useState Best Practices
+
+- Use functional updates for state that depends on previous state (`setState(prev => prev + 1)`)
+- Split complex state objects when portions update independently
+- Consider using a reducer (`useReducer`) for complex state logic
+- Initialize state lazily for expensive computations
+
+### useReducer
+
+- Use for complex state logic that involves multiple sub-values
+- Implement when state transitions depend on previous state
+- Create well-defined action types for predictable state changes
+- Co-locate reducer logic with the component or extract to separate files for reuse
+
+## Performance Optimization
+
+### Rendering Optimization
+
+- Implement memoization with `React.memo` for pure functional components
+- Use `useMemo` for expensive calculations
+- Apply `useCallback` for function stability between renders
+- Virtualize long lists with libraries like `react-window` or `react-virtualized`
+- Avoid anonymous functions in render methods
+- Implement `shouldComponentUpdate` or `React.memo` with custom comparison functions for specific optimization needs
+
+### Code Splitting
+
+- Implement lazy loading with `React.lazy` and `Suspense`
+- Split code by routes, features, or components
+- Use dynamic imports for conditionally loaded features
+- Preload critical components before they're needed
+
+### Asset Optimization
+
+- Optimize images and use proper formats (WebP, SVG)
+- Implement lazy loading for images and media
+- Minimize bundle size through tree shaking and dead code elimination
+- Use SVG for icons and simple illustrations
+- Implement font optimization strategies (preloading, subsetting)
+
+## Hooks Usage
+
+### useEffect Best Practices
+
+- **Dependency Array Management**: Carefully manage the dependency array to prevent infinite loops
+- **Clean-up Function**: Always return a cleanup function for subscriptions, timers, or event listeners
+- **Multiple Effects**: Split unrelated effects into separate useEffect calls
+- **API Calls**: Place API calls in useEffect with proper dependencies
+- **Effect Timing**: Understand the timing of effects (after render, not during)
+- **Race Conditions**: Handle race conditions in async effects with cleanup or flags
+- **Network Requests**: Add AbortController to cancel in-flight requests on cleanup
+- **Avoid Nested Effects**: Don't define effects inside other effects
+- **State Updates**: Be cautious with state updates in effects to prevent infinite loops
+
+### useCallback
+
+- Use for event handlers passed to optimized child components
+- Ensure the dependency array includes all values from the parent scope used inside the callback
+- Consider if the optimization is necessary before applying
+- Combine with `React.memo` for child components to fully benefit
+
+### useMemo
+
+- Apply for computationally expensive calculations
+- Use to maintain referential equality for objects and arrays passed as props
+- Include all dependencies used in the calculation
+- Balance the cost of memoization against the cost of recalculation
+
+### Custom Hooks
+
+- Extract reusable logic into custom hooks
+- Name hooks with the "use" prefix
+- Keep hooks focused on specific functionality
+- Compose complex hooks from simpler ones
+- Document the input and output interfaces
+- Consider publishing frequently used hooks as separate packages
+
+### Rules of Hooks
+
+- Only call hooks at the top level
+- Only call hooks from React functions
+- Maintain consistent hook calling order
+- Use ESLint plugin for hooks to catch violations
+
+### Less Common Hooks
+
+- **useImperativeHandle**: Use sparingly to customize ref-exposed instance values
+- **useLayoutEffect**: Use for DOM measurements needed before browser paint
+- **useDebugValue**: Add for custom hooks to improve DevTools debugging experience
+- **useId**: Generate unique IDs for accessibility attributes in SSR applications
+- **useDeferredValue**: Defer updates for expensive renders
+- **useTransition**: Mark state updates as non-urgent for better user experience
