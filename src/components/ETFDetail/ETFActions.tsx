@@ -26,7 +26,6 @@ const ETFActions: React.FC<ETFActionsProps> = ({
 
   return (
     <BottomActions>
-      {!isMarketOpen && <MarketHours />}
       <View className="flex-row gap-s px-layout">
         <Button
           className="flex-1"
