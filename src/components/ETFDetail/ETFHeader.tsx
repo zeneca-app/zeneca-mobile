@@ -19,14 +19,44 @@ interface ETFHeaderProps {
   isCursorActive?: boolean;
 }
 
-const ETFHeader: React.FC<ETFHeaderProps> = ({ 
-  asset, 
-  price, 
-  chartLoading, 
+const ETFHeader: React.FC<ETFHeaderProps> = ({
+  asset,
+  price,
+  chartLoading,
   change,
   isCursorActive = false
 }) => {
-  const Logo = STOCKS?.[asset.symbol as keyof typeof STOCKS]?.logo || null;
+  const stockLogoExists = asset?.symbol &&
+    STOCKS &&
+    STOCKS[asset.symbol as keyof typeof STOCKS]?.logo;
+  const renderLogo = () => {
+    if (stockLogoExists) {
+      // Use the stock logo from constants
+      const Logo = STOCKS[asset.symbol as keyof typeof STOCKS].logo;
+      return <Logo style={{ height: "100%", width: "100%" }} />;
+    } /* else if (hasLogoUrl) {
+      // Use the logo URL from the asset
+      return (
+        <Image
+          source={{ uri: asset.logo_url }}
+          style={{ height: "100%", width: "100%" }}
+          resizeMode="contain"
+          // Add error handling for image loading failures
+          onError={() => console.log(`Failed to load image for ${asset.symbol}`)}
+        />
+      );
+    } */ else {
+      // Fallback when no logo is available
+      return (
+        <View className="items-center justify-center w-full h-full bg-gray-80">
+          <Text className="text-gray-40 text-lg font-bold">
+            {asset.symbol?.[0] || "?"}
+          </Text>
+        </View>
+      );
+    }
+  };
+
   const priceDisplayed = price
     ? currencyFormatter(price, 2, 0, true)
     : "0.00";
@@ -35,7 +65,7 @@ const ETFHeader: React.FC<ETFHeaderProps> = ({
     <>
       <View className="flex-row gap-s pt-layout-s pb-layout-s items-center justify-start px-layout">
         <View className="w-12 h-12 bg-gray-90 rounded-full overflow-hidden">
-          <Logo style={{ height: "100%", width: "100%" }} />
+          {renderLogo()}
         </View>
         <Text className="text-gray-50 caption-xl flex-1">
           {asset.symbol}
@@ -56,10 +86,10 @@ const ETFHeader: React.FC<ETFHeaderProps> = ({
           <SkeletonView className="w-20 h-4" />
         ) : (
           <>
-            <Ionicons 
-              name={change.increase ? "arrow-up" : "arrow-down"} 
-              size={16} 
-              color={change.increase ? COLORS.semantic.success : COLORS.red[20]} 
+            <Ionicons
+              name={change.increase ? "arrow-up" : "arrow-down"}
+              size={16}
+              color={change.increase ? COLORS.semantic.success : COLORS.red[20]}
             />
             <Text
               className={`caption-xl ${change.increase ? "text-semantic-success" : "text-red-20"}`}
