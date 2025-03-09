@@ -79,7 +79,12 @@ const ETFDetail = ({ route }: ETFDetailScreenProps) => {
   const chartData = normalizeStockPointsData(stockPointsData || []);
   const change = getChartChange(chartData);
   const price = assetDetailData?.price || asset.price;
-  const lineColor = change.increase ? "#04AE92" : "#F58989";
+
+  const greenColor = "#04AE92";
+  const grayColor = "#d5deec"; // oklch(0.707 0.022 261.325)
+
+  const lineColor = change.increase ? greenColor : grayColor;
+
 
   // Handle cursor movement on chart
   const handleCursorChange = (value: string | null) => {
@@ -107,7 +112,10 @@ const ETFDetail = ({ route }: ETFDetailScreenProps) => {
           stockPointsData={stockPointsData}
           onCursorChange={handleCursorChange}
         />
-        <ETFDescription asset={asset} />
+        <ETFDescription
+          displayName={asset.display_name}
+          description={asset.description || ""}
+        />
       </ScrollView>
       <ETFActions
         asset={asset}

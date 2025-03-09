@@ -4,7 +4,7 @@ import { LineChart } from 'react-native-wagmi-charts';
 import Text from '@/components/Text';
 import PillButtonProps from '@/components/Buttons/PillButton';
 import { CHART_TIMEFRAMES } from '@/constants/stocks';
-import AnimatedWavyLine from '../Loading/AnimatedWavyLine';
+import AnimatedWavyLine from '@/components/Loading/AnimatedWavyLine';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -56,7 +56,6 @@ const ETFChart: React.FC<ETFChartProps> = ({
                       padding: 4,
                     }}
                   />
-                    
 
                 </LineChart.CursorCrosshair>
               </LineChart>

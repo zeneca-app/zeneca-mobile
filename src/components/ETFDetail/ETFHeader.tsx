@@ -89,10 +89,10 @@ const ETFHeader: React.FC<ETFHeaderProps> = ({
             <Ionicons
               name={change.increase ? "arrow-up" : "arrow-down"}
               size={16}
-              color={change.increase ? COLORS.semantic.success : COLORS.red[20]}
+              color={change.increase ? COLORS.semantic.success : COLORS.gray[30]}
             />
             <Text
-              className={`caption-xl ${change.increase ? "text-semantic-success" : "text-red-20"}`}
+              className={`caption-xl ${change.increase ? "text-semantic-success" : "text-gray-30"}`}
             >
               {percentageFormatter(change.percentage)}
             </Text>
