@@ -8,21 +8,30 @@ This document provides a comprehensive analysis of the onboarding flow in the Ze
 
 The onboarding process consists of the following key components:
 
-1. **Onboarding Steps**
+1. **Entry Points**
+   - VerifyCTACard (on HomeScreen) - Primary entry point for verification
+   - KYCPreview - Introduction screen for the KYC process
+
+2. **Onboarding Steps**
    - Full Name (first and last name)
    - Country Selection
    - Full Address (street, city, state, postal code)
    - KYC Verification (redirect to third-party provider)
 
-2. **State Management**
+3. **State Management**
    - User data (userStore)
    - KYC status (kycStatusStore)
+   - Onboarding status (tracked in both stores)
 
 ## Detailed Architecture Analysis
 
 ### Component Structure
 
-1. **Core Components**
+1. **Entry Point Components**
+   - **VerifyCTACard.tsx**: Main entry point from HomeScreen that checks verification status and directs users to the appropriate step based on their current onboarding status
+   - **KYCPreview.tsx**: Introduction screen that explains the KYC process to users before starting
+
+2. **Core Components**
    - **OnBoarding.tsx**: Main orchestrator component that manages step progression, form state, and API calls
    - **Step Components**:
      - `FullNameStep.tsx`: Handles first and last name collection and validation
@@ -33,23 +42,31 @@ The onboarding process consists of the following key components:
      - `KYCProvider.tsx`: Integrates with AiPrise third-party KYC service
      - `KYCSuccess.tsx`: Displays success message after KYC completion
 
-2. **State Management**
+3. **State Management**
    - **userStore.ts**: Zustand store that maintains user profile data including onboarding status
-   - **kycStatusStore.ts**: Specialized store for tracking KYC verification status
+   - **kycStatusStore.ts**: Specialized store for tracking KYC verification status and onboarding status
    - **Form State**: Managed locally in the OnBoarding component with useState hooks
 
 ### Data Flow
 
-1. **Onboarding Flow Sequence**
+1. **Complete Onboarding Flow Sequence**
    ```
-   User → FullNameStep → API → CountryStep → API → FullAddressStep → API → KYCRedirectStep → KYCProvider → API → KYCSuccess
+   HomeScreen (VerifyCTACard) → KYCPreview → OnBoarding (FullNameStep → CountryStep → FullAddressStep) → KYCRedirectStep → KYCProvider → API → KYCSuccess
    ```
 
-2. **State Updates**
+2. **Entry Point Logic**
+   - VerifyCTACard checks the user's current onboarding status (`obStatus`) and navigates to the appropriate screen:
+     - If `obStatus` is undefined or user account is undefined: Navigate to KYCPreview
+     - If `obStatus` is "NAMES_STEP" or "COUNTRY_STEP": Navigate to OnBoarding
+     - If `obStatus` is "ADDRESS_STEP": Navigate directly to KYCProvider
+     - Default: Navigate to KYCPreview
+
+3. **State Updates**
    - User completes a step → Form validation occurs → API mutation is called → Backend updates status → UI advances to next step
    - Current status is stored in `user.account.ob_status` and used to determine the active step
+   - KYC status is tracked separately in the kycStatusStore with properties like `isVerifying` and `isVerified`
 
-3. **Form Data Management**
+4. **Form Data Management**
    - Form values are maintained in the OnBoarding component's state
    - Each step component receives form values and handlers as props
    - Step components validate their specific fields and report validation status back to the parent
@@ -105,10 +122,36 @@ The onboarding process consists of the following key components:
    - No clear state machine for onboarding flow
    - Tight coupling between step progression and backend status
    - Race conditions between frontend navigation and backend state updates
-
-
+   - Multiple entry points with inconsistent navigation logic
 
 ## Identified Issues
+
+### Entry Point Issues
+
+1. **VerifyCTACard Direct Navigation Issue**
+   - **Problem**: When the user's status is "ADDRESS_STEP", the VerifyCTACard component navigates directly to the KYCProvider screen, bypassing the KYCRedirectStep. This could be contributing to the synchronization issue where the KYC step is attempted before the backend has fully updated the user's status.
+   - **Impact**: Users face errors when trying to complete the KYC verification process.
+   - **Code Location**: `src/screens/HomeScreen/components/VerifyCtaCard.tsx`
+   ```typescript
+   case "ADDRESS_STEP":
+     navigation.navigate("KYCProvider", {
+       country_code: user?.account?.country,
+     });
+     break;
+   ```
+   - **Recommendation**: Add a status check or introduce a delay/loading state to ensure the backend has fully updated the user's status before navigating to the KYCProvider.
+
+2. **Status Synchronization Issue in VerifyCTACard**
+   - **Problem**: The VerifyCTACard fetches the KYC status using React Query, but there's no mechanism to ensure that the status is up-to-date before navigating to the next step.
+   - **Impact**: Navigation decisions might be made based on stale status data.
+   - **Code Location**: `src/screens/HomeScreen/components/VerifyCtaCard.tsx`
+   - **Recommendation**: Implement a loading state while fetching the status and disable navigation until the status is confirmed to be up-to-date.
+
+3. **Error Handling Issues in VerifyCTACard**
+   - **Problem**: While errors are captured with Sentry, there's no user-facing error handling or recovery mechanism if the status fetch fails.
+   - **Impact**: Users might see a non-functional UI or face navigation issues if the status fetch fails.
+   - **Code Location**: `src/screens/HomeScreen/components/VerifyCtaCard.tsx`
+   - **Recommendation**: Add user-facing error messages and retry mechanisms for status fetch failures.
 
 ### Onboarding Flow Issues
 
@@ -209,26 +252,37 @@ The onboarding process consists of the following key components:
    - **Code Location**: Various storage implementations
    - **Recommendation**: Clarify the hierarchy and fallback mechanisms for data storage.
 
+6. **Multiple Store Synchronization**
+   - **Problem**: The use of separate stores for user data and KYC status could lead to inconsistencies if they're not properly synchronized.
+   - **Impact**: Inconsistent state between different stores could lead to navigation issues or incorrect UI rendering.
+   - **Code Location**: `src/storage/kycStatusStore.ts` and `src/storage/userStore.ts`
+   - **Recommendation**: Implement a synchronization mechanism between the KYC status store and the user store to ensure consistent state.
+
 ## Recommendations
 
 ### Short-term Fixes
 
-1. **Fix KYC Step Synchronization Issue**
+1. **Fix VerifyCTACard Navigation Issues**
+   - Modify the VerifyCTACard component to navigate to a transitional screen (like KYCRedirectStep) instead of directly to KYCProvider when the status is "ADDRESS_STEP"
+   - Add a status verification step before proceeding to the KYC provider
+   - Implement a loading state while verifying the status
+
+2. **Fix KYC Step Synchronization Issue**
    - Add proper waiting mechanism for the address step update to complete before proceeding to KYC
    - Implement status checking in the KYC provider component
    - Add retry logic for the KYC step if the status isn't updated yet
 
-2. **Improve Error Handling**
+3. **Improve Error Handling**
    - Add more specific error messages for different failure scenarios
    - Implement proper error handling UI components
    - Add retry mechanisms for failed API calls
 
-3. **Enhance Form Validation**
+4. **Enhance Form Validation**
    - Centralize validation logic to avoid duplication
    - Improve validation for international addresses and postal codes
    - Add more user-friendly validation messages
 
-4. **Fix Navigation Issues**
+5. **Fix Navigation Issues**
    - Implement proper navigation guards to prevent skipping steps
    - Add a way to resume onboarding from where the user left off
    - Improve the back navigation functionality
@@ -272,6 +326,10 @@ The onboarding process consists of the following key components:
    - Add deep linking support for resuming onboarding
    - Create a more flexible back navigation system
 
+5. **Consolidate Store Management**
+   - Consider consolidating the user store and KYC status store to avoid inconsistencies
+   - Implement a synchronization mechanism between stores if they remain separate
+   - Add validation to ensure local state matches backend state
 
 ## Next Steps
 

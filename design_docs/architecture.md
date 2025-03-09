@@ -65,7 +65,7 @@ The app uses a stack-based navigation system with the following main screens:
 ### Main Screens
 - **Home** (main dashboard)
 - **Profile**
-- **ExploreETFs**
+- **ExploreAssets**
 
 ### ETF Management
 - **ETFDetail**

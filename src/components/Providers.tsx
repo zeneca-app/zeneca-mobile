@@ -17,7 +17,6 @@ import env from "@/config/env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
 
-
 const queryClient = new QueryClient();
 
 const asyncStoragePersister = createAsyncStoragePersister({
@@ -60,7 +59,9 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
                       .then(() => queryClient.invalidateQueries());
                   }}
                   persistOptions={{ persister: asyncStoragePersister }}>
-                  <AwaitPrivyProvider>{children}</AwaitPrivyProvider>
+                  <AwaitPrivyProvider>
+                    {children}
+                  </AwaitPrivyProvider>
                 </PersistQueryClientProvider>
               </WagmiProvider>
             </BottomSheetModalProvider>
