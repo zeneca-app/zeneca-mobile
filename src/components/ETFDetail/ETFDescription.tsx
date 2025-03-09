@@ -3,7 +3,6 @@ import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import Text from '@/components/Text';
 
-import ExpandableText from '@/components/ExpandableText';
 
 interface ETFDescriptionProps {
   displayName: string;
@@ -18,10 +17,9 @@ const ETFDescription: React.FC<ETFDescriptionProps> = ({ displayName, descriptio
       <Text className="heading-s text-gray-10">
         {t("etfDetail.description")} {displayName}
       </Text>
-      <ExpandableText
+      <Text
         className="body-s text-gray-50"
-        text={description || ""}
-      />
+      >{description}</Text>
       <View className="pb-layout-l" />
       <View className="pb-layout-l" />
       <View className="pb-layout-l" />
