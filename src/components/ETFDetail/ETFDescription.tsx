@@ -2,21 +2,26 @@ import React from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import Text from '@/components/Text';
-import { AssetPrice } from '@/client';
+
+import ExpandableText from '@/components/ExpandableText';
 
 interface ETFDescriptionProps {
-  asset: AssetPrice;
+  displayName: string;
+  description: string;
 }
 
-const ETFDescription: React.FC<ETFDescriptionProps> = ({ asset }) => {
+const ETFDescription: React.FC<ETFDescriptionProps> = ({ displayName, description }) => {
   const { t } = useTranslation();
 
   return (
     <View className="px-layout pt-layout-l pb-layout-l">
       <Text className="heading-s text-gray-10">
-        {t("etfDetail.description")} {asset.display_name}
+        {t("etfDetail.description")} {displayName}
       </Text>
-      <Text className="body-s text-gray-50">{asset.description}</Text>
+      <ExpandableText
+        className="body-s text-gray-50"
+        text={description || ""}
+      />
       <View className="pb-layout-l" />
       <View className="pb-layout-l" />
       <View className="pb-layout-l" />
@@ -24,4 +29,5 @@ const ETFDescription: React.FC<ETFDescriptionProps> = ({ asset }) => {
   );
 };
 
+ETFDescription.displayName = "ETFDescription";
 export default ETFDescription; 
