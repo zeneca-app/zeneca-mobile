@@ -1,7 +1,6 @@
 import FaceIdIcon from "@/assets/face-id.svg";
 import {
   Country,
-  customersGetCustomer,
   QuoteRead,
   quotesCreateQuote,
   TransferRead,
@@ -20,14 +19,13 @@ import { formatQuoteToNumber } from "@/utils/quote";
 import { capitalizeFirstLetter } from "@/utils/string_utils";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import countryCodeToFlagEmoji from "country-code-to-flag-emoji";
 import * as LocalAuthentication from "expo-local-authentication";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   SafeAreaView,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -51,11 +49,6 @@ const QuoteConfirmationScreen = () => {
     setTransfer: state.setTransfer,
   }));
 
-  const { data: customer } = useQuery({
-    queryKey: ["customer"],
-    queryFn: customersGetCustomer,
-  });
-
   const customerId = "0191ddc1-5791-7383-8647-e8b068c8af65"; // TODO: get from customer
 
   const calculateTimeLeft = () => {
@@ -66,9 +59,11 @@ const QuoteConfirmationScreen = () => {
 
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
-  const currency = CURRENCY_BY_COUNTRY[
-    recipient.country as Country
-  ].toUpperCase() as CurrencyCode;
+  if (!recipient) {
+    return null; // or some error UI
+  }
+
+  const currency = CURRENCY_BY_COUNTRY[recipient.country as Country].toUpperCase() as CurrencyCode;
 
   const { mutate: createTransaction, isPending: isTransactionPending } =
     useMutation({
@@ -123,9 +118,7 @@ const QuoteConfirmationScreen = () => {
 
       if (result.success) {
         createTransaction();
-        //navigation.navigate("TransactionReceipt");
       } else {
-        // Handle authentication failure
         console.log("Authentication failed");
       }
     } catch (error) {
@@ -141,7 +134,6 @@ const QuoteConfirmationScreen = () => {
 
   useEffect(() => {
     if (timeLeft <= 0) {
-      // Fetch new quote when timer reaches zero
       createQuote();
       return;
     }
@@ -154,79 +146,81 @@ const QuoteConfirmationScreen = () => {
   }, [timeLeft, createQuote]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
+    <SafeAreaView className="flex-1 bg-black">
+      <View className="p-4">
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       </View>
-      <View style={styles.content}>
+      <View className="flex-1 p-4">
         <View>
-          <Text style={styles.title}>{t("quoteConfirmation.title")}</Text>
-          <Text style={styles.amount}>
+          <Text className="text-2xl font-bold text-white mb-2">
+            {t("quoteConfirmation.title")}
+          </Text>
+          <Text className="text-3xl font-bold text-[#8E8EFF] mb-1">
             {formatCurrency(quote.amount_out, currency as CurrencyCode, true)}
           </Text>
-          <Text style={styles.recipient}>
+          <Text className="text-2xl text-white mb-4">
             {t("quoteConfirmation.to")}{" "}
-            <Text style={styles.recipientName}>
+            <Text className="text-2xl font-bold text-white">
               {capitalizeFirstLetter(recipient.name)}
             </Text>
           </Text>
         </View>
 
-        <View style={styles.detailsContainer}>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>
+        <View className="bg-[#1C1C1E] rounded-lg p-4 mb-5">
+          <View className="flex-row justify-between mb-2">
+            <Text className="text-gray-500">
               {t("quoteConfirmation.accountNumber")}
             </Text>
-            <Text style={styles.detailValue}>
-              {recipient.external_account.account_number ?? ""}
+            <Text className="text-white">
+              {recipient.external_account?.account_number ?? ""}
             </Text>
           </View>
         </View>
 
-        <View style={styles.detailsContainer}>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>
+        <View className="bg-[#1C1C1E] rounded-lg p-4 mb-5">
+          <View className="flex-row justify-between mb-2">
+            <Text className="text-gray-500">
               {t("quoteConfirmation.amount")}
             </Text>
-            <Text style={styles.detailValue}>{quote.amount_in} USDC</Text>
+            <Text className="text-white">{quote.amount_in} USDC</Text>
           </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>{t("quoteConfirmation.fee")}</Text>
-            <Text style={styles.detailValue}>{quote.fee} USDC</Text>
+          <View className="flex-row justify-between mb-2">
+            <Text className="text-gray-500">{t("quoteConfirmation.fee")}</Text>
+            <Text className="text-white">{quote.fee} USDC</Text>
           </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>
+          <View className="flex-row justify-between">
+            <Text className="text-gray-500">
               {t("quoteConfirmation.total")}
             </Text>
-            <Text style={styles.detailValue}>
+            <Text className="text-white">
               {formatCurrency(quote.amount_out, currency as CurrencyCode)}{" "}
               {currency}{" "}
             </Text>
           </View>
         </View>
 
-        <View style={styles.timerContainer}>
+        <View className="items-center mb-5">
           {!isTransactionPending && (
-            <Text style={styles.timer}>
+            <Text className="text-gray-500 mb-4">
               {t("quoteConfirmation.timerDescription")} {formatTime(timeLeft)}
             </Text>
           )}
         </View>
 
-        <View style={styles.bottomSection}>
-          <Text style={styles.warning}>
+        <View className="items-center">
+          <Text className="text-gray-500 text-center mb-4 px-5">
             {t("quoteConfirmation.disclaimer")}
           </Text>
           {!isTransactionPending && (
             <TouchableOpacity
               disabled={isTransactionPending || isQuotePending}
               onPress={handleCreateTransaction}
-              style={styles.confirmButton}
+              className="bg-white rounded-lg p-4 flex-row justify-center items-center w-full"
             >
               <FaceIdIcon width={24} height={24} />
-              <Text style={styles.confirmButtonText}>
+              <Text className="text-black font-bold ml-2">
                 {t("quoteConfirmation.confirm")}
               </Text>
             </TouchableOpacity>
@@ -240,93 +234,5 @@ const QuoteConfirmationScreen = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000",
-  },
-  header: {
-    padding: 16,
-  },
-  content: {
-    flex: 1,
-    padding: 16,
-    justifyContent: "space-between",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "white",
-    marginBottom: 8,
-  },
-  amount: {
-    fontSize: 32,
-    fontWeight: "bold",
-    color: "#8E8EFF",
-    marginBottom: 4,
-  },
-  recipient: {
-    fontSize: 22,
-    color: "white",
-    marginBottom: 16,
-  },
-  recipientName: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "white",
-  },
-  detailsContainer: {
-    backgroundColor: "#1C1C1E",
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 20,
-  },
-  detailRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 8,
-  },
-  detailLabel: {
-    color: "#666",
-  },
-  detailValue: {
-    color: "white",
-  },
-  bottomSection: {
-    alignItems: "center",
-  },
-  timerContainer: {
-    alignItems: "center",
-    marginBottom: 20, // Add some bottom margin
-  },
-  timer: {
-    color: "#666",
-    marginBottom: 16,
-  },
-  warning: {
-    color: "#666",
-    textAlign: "center",
-    marginBottom: 16,
-    paddingHorizontal: 20,
-  },
-  confirmButton: {
-    backgroundColor: "white",
-    borderRadius: 8,
-    padding: 16,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-  },
-  scanIcon: {
-    marginRight: 8,
-  },
-  confirmButtonText: {
-    marginLeft: 8, // Add left margin to create space between icon and text
-    color: "black",
-    fontWeight: "bold",
-  },
-});
 
 export default QuoteConfirmationScreen;

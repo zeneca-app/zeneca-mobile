@@ -5,7 +5,7 @@ import { toast } from "burnt";
 import * as Linking from "expo-linking";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 const SendSuccessScreen = () => {
   const navigation = useNavigation();
@@ -34,24 +34,34 @@ const SendSuccessScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <View style={styles.checkmarkContainer}>
+    <View className="flex-1 bg-black p-5">
+      <View className="mt-[100px] flex-1 justify-start items-start">
+        <View className="w-[60px] h-[60px] rounded-[40px] border-2 border-[#04AE91] justify-center items-center mb-5">
           <Feather name="check" size={30} color="#04AE91" />
         </View>
 
-        <Text style={styles.title}>{t("sendSuccess.title")}</Text>
-        <Text style={styles.subtitle}>{t("sendSuccess.subtitle")}</Text>
+        <Text className="text-[34px] font-[Manrope_500Medium] text-white mb-[10px]">
+          {t("sendSuccess.title")}
+        </Text>
+        <Text className="text-base text-[#95929F] text-left">
+          {t("sendSuccess.subtitle")}
+        </Text>
       </View>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.primaryButton} onPress={goHome}>
-          <Text style={styles.primaryButtonText}>
+      <View className="mt-auto">
+        <TouchableOpacity 
+          className="bg-white p-[15px] rounded-[25px] items-center mb-[10px]" 
+          onPress={goHome}
+        >
+          <Text className="text-black text-base font-[Manrope_500Medium]">
             {t("sendSuccess.doneButton")}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.secondaryButton} onPress={showReceipt}>
-          <Text style={styles.secondaryButtonText}>
+        <TouchableOpacity 
+          className="p-[15px] items-center" 
+          onPress={showReceipt}
+        >
+          <Text className="text-white text-base font-[Manrope_500Medium]">
             {t("sendSuccess.viewReceiptButton")}
           </Text>
         </TouchableOpacity>
@@ -59,68 +69,5 @@ const SendSuccessScreen = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000000",
-    padding: 20,
-  },
-  closeButton: {
-    alignSelf: "flex-end",
-    padding: 10,
-  },
-  content: {
-    marginTop: 100,
-    flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-  },
-  checkmarkContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 40,
-    borderWidth: 2,
-    borderColor: "#04AE91",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 34,
-    fontFamily: "Manrope_500Medium",
-    color: "#FFFFFF",
-    marginBottom: 10,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: "#95929F",
-    textAlign: "left",
-  },
-  buttonContainer: {
-    marginTop: "auto",
-  },
-  primaryButton: {
-    backgroundColor: "#FFFFFF",
-    padding: 15,
-    borderRadius: 25,
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  primaryButtonText: {
-    color: "#000000",
-    fontSize: 16,
-    fontFamily: "Manrope_500Medium",
-  },
-  secondaryButton: {
-    padding: 15,
-    alignItems: "center",
-  },
-  secondaryButtonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontFamily: "Manrope_500Medium",
-  },
-});
 
 export default SendSuccessScreen;

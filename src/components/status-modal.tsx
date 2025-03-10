@@ -5,7 +5,6 @@ import {
   Animated,
   Dimensions,
   Modal,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -52,8 +51,8 @@ const StatusModal: React.FC<StatusModalProps> = ({
       animationType="slide"
       visible={modalState !== "dismissed"}
     >
-      <View style={styles.container}>
-        <View style={styles.content}>
+      <View className="flex-1 justify-end items-center bg-black/50 pb-[30px]">
+        <View className="mx-5 bg-[#18171A] py-[60px] px-[40px] rounded-[40px] items-center" style={{ width: width - 40 }}>
           {modalState === "error" ? (
             <Feather name="alert-circle" size={40} color="white" />
           ) : (
@@ -61,10 +60,13 @@ const StatusModal: React.FC<StatusModalProps> = ({
               <Feather name="clock" size={40} color="white" />
             </Animated.View>
           )}
-          <Text style={styles.text}>{text}</Text>
+          <Text className="text-white mt-[10px] text-2xl font-bold">{text}</Text>
           {modalState === "error" && onClose && (
-            <TouchableOpacity style={styles.actionButton} onPress={onClose}>
-              <Text style={styles.actionButtonText}>{actionButtonText}</Text>
+            <TouchableOpacity 
+              className="mt-5 bg-[#252328] p-3 rounded-[20px]" 
+              onPress={onClose}
+            >
+              <Text className="text-white text-base font-bold">{actionButtonText}</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -72,41 +74,5 @@ const StatusModal: React.FC<StatusModalProps> = ({
     </Modal>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    paddingBottom: 30,
-  },
-  content: {
-    marginHorizontal: 20,
-    backgroundColor: "#18171A",
-    paddingVertical: 60,
-    paddingHorizontal: 40,
-    borderRadius: 40,
-    alignItems: "center",
-    width: width - 40,
-  },
-  text: {
-    color: "#fff",
-    marginTop: 10,
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-  actionButton: {
-    marginTop: 20,
-    backgroundColor: "#252328",
-    padding: 12,
-    borderRadius: 20,
-  },
-  actionButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-});
 
 export default StatusModal;

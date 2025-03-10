@@ -5,7 +5,6 @@ import {
   Animated,
   Dimensions,
   Modal,
-  StyleSheet,
   Text,
   View,
 } from "react-native";
@@ -38,41 +37,16 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ isVisible, text }) => {
 
   return (
     <Modal transparent={true} animationType="slide" visible={isVisible}>
-      <View style={styles.container}>
-        <View style={styles.loadingBox}>
+      <View className="flex-1 justify-end items-center bg-black/50 pb-[30px]">
+        <View className="mx-5 bg-[#18171A] py-[60px] px-[40px] rounded-[20px] items-center" style={{ width: width - 40 }}>
           <Animated.View style={{ transform: [{ rotate: spin }] }}>
             <Feather name="clock" size={40} color="white" />
           </Animated.View>
-          <Text style={styles.loadingText}>{text}</Text>
+          <Text className="text-white mt-[10px] text-2xl font-bold">{text}</Text>
         </View>
       </View>
     </Modal>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    paddingBottom: 30,
-  },
-  loadingBox: {
-    marginHorizontal: 20,
-    backgroundColor: "#18171A",
-    paddingVertical: 60,
-    paddingHorizontal: 40,
-    borderRadius: 20,
-    alignItems: "center",
-    width: width - 40,
-  },
-  loadingText: {
-    color: "#fff",
-    marginTop: 10,
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-});
 
 export default LoadingScreen;

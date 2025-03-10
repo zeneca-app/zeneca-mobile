@@ -4,7 +4,6 @@ import React from "react";
 import {
   ActivityIndicator,
   Pressable,
-  StyleSheet,
   Text,
   View,
 } from "react-native";
@@ -28,11 +27,11 @@ const LoginButton: React.FC<LoginButtonProps> = ({
 }) => {
   return (
     <Pressable
-      style={[
-        styles.commonButton,
-        isPrimary ? styles.primaryButton : styles.secondaryButton,
-        disabled && styles.disabledButton,
-      ]}
+      className={`
+        flex-row w-full h-[55px] rounded-[25px] justify-center items-center mb-[25px]
+        ${isPrimary ? 'bg-white' : 'bg-[#252328]'}
+        ${disabled ? 'opacity-50' : ''}
+      `}
       onPress={onPress}
       disabled={disabled || isLoading}
     >
@@ -46,16 +45,16 @@ const LoginButton: React.FC<LoginButtonProps> = ({
           name={icon}
           size={24}
           color={isPrimary ? colors.darkHighlight : "white"}
-          style={styles.buttonIcon}
+          className="mr-[10px]"
         />
       )}
-      <View style={styles.textContainer}>
+      <View className="ml-[15px]">
         <Text
-          style={[
-            styles.buttonText,
-            isPrimary ? styles.primaryText : styles.secondaryText,
-            disabled && styles.disabledText,
-          ]}
+          className={`
+            text-base font-[Manrope_500Medium]
+            ${isPrimary ? 'text-[#darkHighlight]' : 'text-white'}
+            ${disabled ? 'text-[#999]' : ''}
+          `}
         >
           {text}
         </Text>
@@ -63,45 +62,5 @@ const LoginButton: React.FC<LoginButtonProps> = ({
     </Pressable>
   );
 };
-
-const styles = StyleSheet.create({
-  commonButton: {
-    flexDirection: "row",
-    width: "100%",
-    height: 55,
-    borderRadius: 25,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 25,
-  },
-  primaryButton: {
-    backgroundColor: "white",
-  },
-  secondaryButton: {
-    backgroundColor: "#252328",
-  },
-  disabledButton: {
-    opacity: 0.5,
-  },
-  buttonIcon: {
-    marginRight: 10,
-  },
-  textContainer: {
-    marginLeft: 15,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontFamily: "Manrope_500Medium",
-  },
-  primaryText: {
-    color: colors.darkHighlight,
-  },
-  secondaryText: {
-    color: "white",
-  },
-  disabledText: {
-    color: "#999",
-  },
-});
 
 export default LoginButton;
