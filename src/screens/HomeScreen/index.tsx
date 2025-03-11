@@ -14,4 +14,5 @@ const HomeScreen = () => {
   );
 };
 
+HomeScreen.displayName = "HomeScreen";
 export default HomeScreen;

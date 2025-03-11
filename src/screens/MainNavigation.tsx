@@ -11,7 +11,7 @@ import HomeScreen from "@/screens/HomeScreen";
 import KYCPreview from "@/screens/KYCVerification/KYCPreview";
 import KYCProvider from "@/screens/KYCVerification/KYCProvider";
 import KYCSuccess from "@/screens/KYCVerification/KYCSuccess";
-import Login from "@/screens/Login/Login";
+import WelcomeScreen from "@/screens/Login/Welcome";
 import LoginOptions from "@/screens/Login/LoginOptions";
 import LoginOtpVerification from "@/screens/Login/LoginOtpVerification";
 import LoginWithEmail from "@/screens/Login/LoginWithEmail";
@@ -86,7 +86,7 @@ const MainNavigation = () => {
   };
 
   return (
-    <Stack.Navigator initialRouteName={!user ? "Login" : "Home"}>
+    <Stack.Navigator initialRouteName={!user ? "Welcome" : "Home"}>
       {/* Home Screens */}
       <Stack.Screen name="Home" component={HomeScreen} options={screenConfigs.homeHeader} />
       <Stack.Screen name="Profile" component={ProfileScreen} options={screenConfigs.profileScreen} />
@@ -95,7 +95,7 @@ const MainNavigation = () => {
 
       {/* Login Screens */}
       <Stack.Group>
-        <Stack.Screen name="Login" component={Login} options={screenConfigs.noHeader} />
+        <Stack.Screen name="Welcome" component={WelcomeScreen} options={screenConfigs.noHeader} />
         <Stack.Screen name="EmailOtpValidation" component={LoginOtpVerification} options={screenConfigs.defaultHeader} />
         <Stack.Screen name="LoginWithEmail" component={LoginWithEmail} options={screenConfigs.defaultHeader} />
         <Stack.Screen name="LoginOptions" component={LoginOptions} options={screenConfigs.defaultHeader} />
