@@ -3,11 +3,11 @@ import { assetsGetAssetsOptions, assetsGetMarketHoursOptions } from "@/client/@t
 import client from "@/client/client";
 import AssetListItem from "@/components/ListItems/AssetListItem";
 import LoggedLayout from "@/components/LoggedLayout";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { cssInterop } from "nativewind";
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { Trans } from "react-i18next";
-import { FlatList, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import "@/client";
 import Separator from "@/components/ListItems/Separator";
 import SkeletonLoadingView, {
@@ -19,6 +19,7 @@ import useMarketHourStore from "@/storage/marketHourStore";
 import BottomActions from "@/components/BottomActions";
 import Config from "@/config";
 
+const ITEMS_PER_PAGE = 20;
 
 const ExploreAssets = () => {
   cssInterop(CopyIcon, { className: "style" });
@@ -26,14 +27,33 @@ const ExploreAssets = () => {
   const { setIsMarketOpen } = useMarketHourStore((state) => state);
 
   const {
-    isPending,
-    error: allAssetsError,
-    data: allAssets,
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
     refetch,
-  } = useQuery({
-    ...assetsGetAssetsOptions({
-      client: client,
-    }),
+    isRefetching,
+  } = useInfiniteQuery({
+    queryKey: ['assets'],
+    queryFn: async ({ pageParam }) => {
+      const { data } = await client.get<AssetPrice[]>({
+        url: "/v0/assets/",
+        query: {
+          limit: ITEMS_PER_PAGE,
+          skip: pageParam,
+        },
+      });
+      return data;
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      // If the last page has fewer items than the limit, we've reached the end
+      if (!lastPage || lastPage.length < ITEMS_PER_PAGE) {
+        return undefined;
+      }
+      return allPages.length * ITEMS_PER_PAGE;
+    },
     refetchInterval: Config.REFETCH_INTERVAL,
     staleTime: Infinity,
     gcTime: Infinity,
@@ -56,23 +76,42 @@ const ExploreAssets = () => {
     return <AssetListItem asset={item} />;
   };
 
-  const assets = allAssets || [];
+  // Flatten all pages of data into a single array and filter out undefined values
+  const assets: AssetPrice[] = data?.pages.flatMap(page => page || []).filter(Boolean) || [];
 
   const separator = () => <Separator />;
 
-  const Footer = () => (
+  const handleLoadMore = React.useCallback(() => {
+    if (!isFetchingNextPage && hasNextPage && !isRefetching) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage, isRefetching]);
+
+  const Footer = React.useCallback(() => (
     <View className="flex-1">
+      {isFetchingNextPage && (
+        <View className="py-4 items-center">
+          <ActivityIndicator size="small" />
+        </View>
+      )}
+      {!hasNextPage && assets.length > 0 && (
+        <View className="py-4 items-center">
+          <Text className="text-gray-50 caption-l">No more assets to load</Text>
+        </View>
+      )}
       <View className="pb-layout-l" />
       <View className="pb-layout-l" />
       <View className="pb-layout-l" />
     </View>
-  )
+  ), [isFetchingNextPage, hasNextPage, assets.length]);
 
   useEffect(() => {
     if (marketHours) {
       setIsMarketOpen(marketHours.is_market_open || false);
     }
   }, [marketHours, setIsMarketOpen]);
+
+  const isPending = status === 'pending';
 
   return (
     <LoggedLayout>
@@ -100,7 +139,9 @@ const ExploreAssets = () => {
             ListFooterComponent={<Footer />}
             showsVerticalScrollIndicator={false}
             onRefresh={refetch}
-            refreshing={isPending}
+            refreshing={isRefetching}
+            onEndReached={handleLoadMore}
+            onEndReachedThreshold={0.5}
           />
         )}
       </View>
