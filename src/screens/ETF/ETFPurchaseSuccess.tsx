@@ -39,7 +39,9 @@ const ETFPurchaseSuccess = ({ route }) => {
         <View className="relative flex justify-center items-center w-full">
           <GradientCircle className="relative" />
           <View className="absolute flex justify-center items-center">
-            <AssetLogo symbol={etf.symbol} size="lg" />
+            <View className="w-16 h-16 bg-gray-90 rounded-full overflow-hidden">
+              <AssetLogo symbol={etf.symbol} size="lg" />
+            </View>
           </View>
           <View className="absolute flex flex-1 bottom-1 pt-24">
             <Text className="heading-s text-gray-10 px-layout text-center">
