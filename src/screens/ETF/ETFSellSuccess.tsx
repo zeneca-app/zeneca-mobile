@@ -10,9 +10,20 @@ import React from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
 import AssetLogo from '@/components/AssetLogo';
+import { AssetPrice, OrderQuote } from "@/client";
 
-const ETFSellSuccess = ({ route }) => {
-  const { etf, amount = 0, quote } = route.params;
+type ETFSellSuccessScreenProps = {
+  route: {
+    params: {
+      asset: AssetPrice;
+      amount: string;
+      quote: OrderQuote;
+    };
+  };
+};
+
+const ETFSellSuccess = ({ route }: ETFSellSuccessScreenProps) => {
+  const { asset, amount = 0, quote } = route.params;
 
   const navigation = useNavigation();
 
@@ -29,7 +40,7 @@ const ETFSellSuccess = ({ route }) => {
   const amountToOrder = formatNumber(amount, 2, 6);
 
   const etfAmount = new BigNumber(amountToOrder)
-    .dividedBy(etf.price)
+    .dividedBy(asset.price)
     .precision(4)
     .toString();
 
@@ -40,7 +51,7 @@ const ETFSellSuccess = ({ route }) => {
           <GradientCircle className="relative" />
           <View className="absolute flex justify-center items-center">
             <View className="w-16 h-16 bg-gray-90 rounded-full overflow-hidden">
-              <AssetLogo symbol={etf.symbol} size="lg" />
+              <AssetLogo symbol={asset.symbol} size="lg" />
             </View>
           </View>
           <View className="absolute flex flex-1 bottom-1 pt-24">
@@ -52,9 +63,9 @@ const ETFSellSuccess = ({ route }) => {
                 i18nKey="etfSell.success.summary"
                 values={{
                   etf_amount: etfAmount,
-                  etf_symbol: etf.symbol,
-                  display_name: etf.name,
-                  symbol: etf.symbol,
+                  etf_symbol: asset.symbol,
+                  display_name: asset.name,
+                  symbol: asset.symbol,
                   amount: amountToOrder,
                   etf_price: quote.asset_price,
                 }}

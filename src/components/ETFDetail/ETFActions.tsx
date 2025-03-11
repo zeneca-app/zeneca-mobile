@@ -5,7 +5,6 @@ import { useNavigation } from '@react-navigation/native';
 import Button from '@/components/Button';
 import Text from '@/components/Text';
 import BottomActions from '@/components/BottomActions';
-import MarketHours from '@/components/MarketHours';
 import { AssetPrice } from '@/client';
 
 interface ETFActionsProps {
@@ -31,7 +30,7 @@ const ETFActions: React.FC<ETFActionsProps> = ({
           className="flex-1"
           onPress={() =>
             navigation.navigate('ETFPurchase', {
-              etf: { ...asset, price },
+              asset,
             })
           }
         >
@@ -42,7 +41,7 @@ const ETFActions: React.FC<ETFActionsProps> = ({
             className="flex-1"
             onPress={() =>
               navigation.navigate('ETFSell', {
-                etf: { ...asset, price },
+                asset,
               })
             }
           >
