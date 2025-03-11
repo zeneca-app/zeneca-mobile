@@ -16,6 +16,7 @@ import SkeletonLoadingView, {
 } from "@/components/Loading/SkeletonLoadingView";
 import useAssetsStore from "@/storage/assetsStore";
 import Config from "@/config";
+import AssetLogo from '@/components/AssetLogo';
 
 const ETFSell = ({ route }) => {
   const { t } = useTranslation();
@@ -25,8 +26,6 @@ const ETFSell = ({ route }) => {
   const navigation = useNavigation();
 
   const [amount, setAmount] = useState<string>("0");
-
-  const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo || null;
 
   const { assets } = useAssetsStore((state) => state);
 
@@ -88,7 +87,7 @@ const ETFSell = ({ route }) => {
       navCenter={
         <View className="flex-row items-center justify-center gap-s p-2 bg-gray-100 rounded-full">
           <View className="w-6 h-6 bg-gray-90 rounded-full overflow-hidden">
-            <Logo style={{ height: "100%", width: "100%" }} />
+            <AssetLogo symbol={etf.symbol} size="sm" />
           </View>
           <Text className="text-gray-50 caption-xl">{etf.symbol}</Text>
         </View>
@@ -117,7 +116,6 @@ const ETFSell = ({ route }) => {
         maximun={Number(totalAmount)}
       />
       <View className="px-layout">
-
         <Button className="" disabled={!canContinue} onPress={goToConfirmation}>
           <Text
             className={`button-m ${!canContinue ? "text-dark-content-30" : "text-dark-content-dark"}`}

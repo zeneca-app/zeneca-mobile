@@ -1,0 +1,200 @@
+---
+description:  Follow these styling patterns when working with the codebase
+globs: **/*.{tsx,jsx,ts}
+alwaysApply: false
+---
+# Styling Guidelines
+
+## Core Principles
+
+1. **NativeWind First**: Use NativeWind (Tailwind CSS for React Native) as the primary styling solution
+2. **Design System Consistency**: Follow the established design tokens and components
+3. **Dark Mode Support**: Ensure all components support dark mode by default
+4. **Type Safety**: Maintain type safety in styling props and theme values
+5. **Performance**: Optimize styling for performance and reusability
+
+## Theme Configuration
+
+### Colors
+- Use semantic color tokens from `src/constants/colors.ts`
+- Follow the color hierarchy:
+  ```typescript
+  dark: {
+    content: { active, disabled, dark, white }
+    background: { 100, 90, 80, white }
+    border: { 80, 70 }
+  }
+  light: {
+    content: { 60 }
+  }
+  semantic: {
+    educational
+    danger
+    warning
+    success
+  }
+  ```
+
+### Typography
+- Use Manrope font family with defined weights:
+  - Manrope_700Bold
+  - Manrope_600SemiBold
+  - Manrope_500Medium
+  - Manrope_400Light
+  - Manrope_300Light
+
+- Follow typography scale:
+  ```
+  heading-l: 56px
+  heading-m: 40px
+  heading-s: 32px
+  body-xl: 24px
+  body-l: 20px
+  body-m: 18px
+  body-s: 16px
+  ```
+
+### Spacing
+- Use predefined spacing tokens:
+  ```
+  layout: 24px
+  layout-s: 16px
+  layout-l: 32px
+  gap-xs: 4px
+  gap-s: 8px
+  gap-default: 16px
+  gap-l: 24px
+  gap-xl: 32px
+  gap-xxl: 40px
+  ```
+
+## Component Styling
+
+### Base Components
+- Extend base components with NativeWind classes:
+  ```typescript
+  <View className="flex-1 bg-dark-background-100" />
+  <Text className="text-white font-medium" />
+  <Pressable className="rounded-full bg-white" />
+  ```
+
+### Button Variants
+- Use predefined button variants:
+  ```typescript
+  solid: "bg-white text-dark-content-dark"
+  outline: "border border-white text-white"
+  link: "text-white"
+  ```
+
+### Card Components
+- Follow card styling pattern:
+  ```typescript
+  rounded-card
+  bg-dark-background-100
+  px-layout
+  py-9
+  ```
+
+### Safe Area Handling
+- Use SafeAreaView for root layouts
+- Apply consistent padding with layout tokens
+- Handle notches and system bars appropriately
+
+## Animation and Transitions
+
+### Reanimated Usage
+- Use react-native-reanimated for complex animations
+- Follow animation constants:
+  ```typescript
+  duration: 2000ms
+  damping: 18
+  stiffness: 200
+  ```
+
+### Loading States
+- Implement consistent loading indicators
+- Use skeleton loading where appropriate
+- Maintain smooth transitions between states
+
+## Best Practices
+
+### Composition
+- Compose styles using NativeWind's className prop
+- Use template literals for conditional classes
+- Extract common patterns into reusable classes
+
+### Dark Mode
+- Use semantic color tokens that support dark/light modes
+- Test components in both modes
+- Ensure sufficient contrast ratios
+
+### Performance
+- Avoid inline styles
+- Use className composition over style objects
+- Minimize dynamic style calculations
+
+### Accessibility
+- Maintain proper contrast ratios
+- Use semantic color tokens
+- Support dynamic text sizing
+- Implement proper touch targets
+
+## Examples
+
+<example>
+// Good: Using NativeWind with semantic tokens
+const Card = ({ children, className }) => (
+  <View className={`rounded-card bg-dark-background-100 px-layout py-9 ${className}`}>
+    {children}
+  </View>
+);
+</example>
+
+<example type="invalid">
+// Bad: Using inline styles and hardcoded values
+const Card = ({ children, style }) => (
+  <View style={{
+    borderRadius: 20,
+    backgroundColor: '#19181B',
+    padding: 24,
+    ...style
+  }}>
+    {children}
+  </View>
+);
+</example>
+
+<example>
+// Good: Button with variants and proper composition
+const Button = ({ variant = "solid", className, children }) => {
+  const variants = {
+    solid: "bg-white text-dark-content-dark",
+    outline: "border border-white text-white",
+    link: "text-white"
+  };
+  
+  return (
+    <Pressable className={`py-4 px-6 rounded-full ${variants[variant]} ${className}`}>
+      {children}
+    </Pressable>
+  );
+};
+</example>
+
+<example type="invalid">
+// Bad: Mixing styling approaches
+const Button = ({ variant, style, children }) => {
+  const styles = StyleSheet.create({
+    button: {
+      padding: 16,
+      borderRadius: 24,
+    }
+  });
+  
+  return (
+    <Pressable style={[styles.button, style]}>
+      {children}
+    </Pressable>
+  );
+};
+</example>

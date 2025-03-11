@@ -5,7 +5,7 @@ import Text from '@/components/Text';
 import { Order, OrderStatus } from '@/client/';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import { STOCKS } from '@/constants/stocks';
+import AssetLogo from '@/components/AssetLogo';
 
 
 
@@ -113,16 +113,15 @@ const OrderDetailsScreen: React.FC<OrderHistoryDetailScreenProps> = ({ route }) 
         }
     };
 
-    const Logo = STOCKS?.[order.symbol as keyof typeof STOCKS]?.logo || null;
     const sharesWithSymbol = `${orderDetails.shares.toString()} ${order.symbol}`
-    
+
     return (
         <SafeAreaView className="flex-1 bg-black">
             <View className="p-6 flex-1">
                 {/* Header */}
                 <View className="flex-row justify-between items-center mb-8">
                     <View className="w-12 h-12 bg-[#1C1C1E] rounded-full justify-center items-center">
-                        <Logo style={{ height: "100%", width: "100%" }} />
+                        <AssetLogo symbol={order.symbol} size="md" />
                     </View>
                     <TouchableOpacity
                         onPress={() => navigation.goBack()}

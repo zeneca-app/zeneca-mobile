@@ -9,6 +9,7 @@ import BigNumber from "bignumber.js";
 import React from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
+import AssetLogo from '@/components/AssetLogo';
 
 const ETFSellSuccess = ({ route }) => {
   const { etf, amount = 0, quote } = route.params;
@@ -32,8 +33,6 @@ const ETFSellSuccess = ({ route }) => {
     .precision(4)
     .toString();
 
-  const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo || null;
-
   return (
     <LoggedLayout wrapperClasses=" h-24" navLeft={<></>}>
       <View className="flex-1 gap justify-between">
@@ -41,7 +40,7 @@ const ETFSellSuccess = ({ route }) => {
           <GradientCircle className="relative" />
           <View className="absolute flex justify-center items-center">
             <View className="w-16 h-16 bg-gray-90 rounded-full overflow-hidden">
-              <Logo style={{ height: "100%", width: "100%" }} />
+              <AssetLogo symbol={etf.symbol} size="lg" />
             </View>
           </View>
           <View className="absolute flex flex-1 bottom-1 pt-24">

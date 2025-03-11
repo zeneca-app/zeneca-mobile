@@ -14,6 +14,7 @@ import { View } from "react-native";
 import SkeletonLoadingView, {
   SkeletonView,
 } from "@/components/Loading/SkeletonLoadingView";
+import AssetLogo from '@/components/AssetLogo';
 
 
 const ETFPurchase = ({ route }) => {
@@ -24,8 +25,6 @@ const ETFPurchase = ({ route }) => {
   const navigation = useNavigation();
 
   const [amount, setAmount] = useState<string>("0");
-
-  const Logo = STOCKS?.[etf.symbol as keyof typeof STOCKS]?.logo || null;
 
   const {
     isPending: isBalancePending,
@@ -70,7 +69,7 @@ const ETFPurchase = ({ route }) => {
       navCenter={
         <View className="flex-row items-center justify-center gap-s p-2 bg-gray-100 rounded-full">
           <View className="w-6 h-6 bg-gray-90 rounded-full overflow-hidden">
-            <Logo style={{ height: "100%", width: "100%" }} />
+            <AssetLogo symbol={etf.symbol} size="sm" />
           </View>
           <Text className="text-gray-50 caption-xl">{etf.symbol}</Text>
         </View>
