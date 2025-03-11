@@ -35,7 +35,7 @@ const ProfileScreen = () => {
             //navigation.navigate("Login");
             navigation.reset({
                 index: 0,
-                routes: [{ name: "Login" }],
+                routes: [{ name: "Welcome" }],
             });
         } catch (error) {
             console.error("Logout error:", error);

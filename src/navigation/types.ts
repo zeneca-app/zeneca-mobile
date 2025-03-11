@@ -3,7 +3,7 @@ import { AssetPrice, OrderQuote } from "@/client/";
 
 /* eslint-disable @typescript-eslint/no-namespace */
 export type RootStackParamList = {
-  Login: undefined;
+  Welcome: undefined;
   Home: undefined;
   Recipients: undefined;
   Quote: undefined;
