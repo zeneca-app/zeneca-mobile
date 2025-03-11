@@ -28,92 +28,40 @@ const LoginOptions = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState("");
+
   const { setUser } = useUserStore((state) => state);
   const { logout, user, getAccessToken } = usePrivy();
-  type PrivyUser = typeof user;
-  const wallet = useEmbeddedWallet();
-
-  const chain = useChainStore((state) => state.chain);
-  
-  const [loginStatus, setLoginStatus] = useState<LoginStatus>(
-    LoginStatus.INITIAL,
-  );
 
   const { login, state } = useLoginWithOAuth({
     onError: (error) => {
       console.error("ERRRORRRR", error);
       setIsLoading(false);
-      setLoginStatus(LoginStatus.CODE_ERROR);
       logout();
     },
-    onSuccess: (user, isNewUser) => {
-      console.log("onSuccess");
-    },
-  });
-
-  const handleConnection = useCallback(
-    async (user: PrivyUser): Promise<void> => {
-      setIsLoading(true);
+    onSuccess: async (user, isNewUser) => {
+      // create user on the backend
       const accessToken = await getAccessToken();
-
-      if (!accessToken) {
-        return;
-      }
-
-      const userAddress = getUserEmbeddedEthereumWallet(user)?.address;
-
-      if (isNotCreated(wallet)) {
-        await wallet.create!();
-      }
-
-      if (!userAddress) {
-        return;
-      }
-
-      const smartAccount = await getPimlicoSmartAccountClient(
-        userAddress as `0x${string}`,
-        chain,
-        wallet,
-      );
-
-      if (!smartAccount || !smartAccount.account) {
-        throw new Error("Cannot create wallet");
-      }
-
       const account = user?.linked_accounts.find(
         (account) => account.type === "google_oauth",
       );
-
       if (!account) {
         return;
       }
-
-      // create user on the backend
       await loginLoginOrCreate({
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
         body: {
-          email: account.email,
-          has_third_party_auth: true,
-          wallet: {
-            address: userAddress as `0x${string}`,
-            smart_account_address: smartAccount?.account
-              ?.address as `0x${string}`,
-          },
+          email: account.email
         },
       });
 
       const userData = await fetchUserData(accessToken!);
 
       setUser({ ...userData, token: accessToken! } as DBUser);
-
-      await SecureStore.setItemAsync(`token-${userAddress}`, accessToken!);
-      setIsLoading(false);
+      navigation.navigate("Home");
     },
-    [user, wallet],
-  );
+  });
 
   const fetchUserData = async (token: string) => {
     const userData = await usersMe({
@@ -123,30 +71,6 @@ const LoginOptions = () => {
     }).then((data) => data.data);
     return userData;
   };
-
-  useEffect(() => {
-    if (state.status === "done" && user) {
-      try {
-        setIsLoading(true);
-        handleConnection(user)
-          .then(() => {
-            setIsLoading(false);
-            console.log("success");
-            navigation.navigate("Home");
-          })
-          .catch((e) => {
-            console.error("Error Handling Connection", e);
-            setIsLoading(false);
-            throw new Error(e);
-          });
-      } catch (e) {
-        console.log("Error Connecting Stuffs", e);
-        throw new Error(e as any);
-      }
-    } else if (state.status === "initial") {
-      setLoginStatus(LoginStatus.INITIAL);
-    }
-  }, [state, user]);
 
   const loginWithGmail = async () => {
     await login({ provider: "google" });

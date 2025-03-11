@@ -53,11 +53,6 @@ const LoginOtpScreen = () => {
   }));
 
   const { logout, user, isReady, getAccessToken } = usePrivy();
-  type PrivyUser = typeof user;
-
-  const wallet = useEmbeddedWallet();
-
-  const chain = useChainStore((state) => state.chain);
 
   const { state, loginWithCode } = useLoginWithEmail({
     onError: (error) => {
@@ -66,68 +61,34 @@ const LoginOtpScreen = () => {
       setLoginStatus(LoginStatus.CODE_ERROR);
       setErrorMessage(error.message);
     },
-    onLoginSuccess(user) {
+    onLoginSuccess: async (user) => {
+      console.log("user", user);
       console.log("Logged in", user);
-    },
-  });
-
-  const handleConnection = useCallback(
-    async (user: PrivyUser): Promise<void> => {
-      setModalState("loading");
-      let address = getUserEmbeddedEthereumWallet(user)?.address;
       const accessToken = await getAccessToken();
-
-      if (isNotCreated(wallet)) {
-        console.log("Creating wallet...");
-        await wallet.create!();
-      }
-
-      if (!address) {
-        return;
-      }
-
-      const smartAccount = await getPimlicoSmartAccountClient(
-        address as `0x${string}`,
-        chain,
-        wallet,
-      );
-
-      if (!smartAccount || !smartAccount.account) {
-        throw new Error("Cannot create wallet");
-      }
-
+      console.log("accessToken", accessToken);
       const account = user?.linked_accounts.find(
         (account) => account.type === "email",
       );
       if (!account) {
         return;
       }
+      console.log("account", account);
 
       await loginLoginOrCreate({
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
         body: {
-          email: account.address,
-          has_third_party_auth: false,
-          wallet: {
-            address: address as `0x${string}`,
-            smart_account_address: smartAccount?.account
-              ?.address as `0x${string}`,
-          },
+          email: account.address
         },
       });
-      
-      const userData = await fetchUserData(accessToken!);
-      
-      setUser({ ...userData, token: accessToken! } as DBUser);
 
-      await SecureStore.setItemAsync(`token-${address}`, accessToken!);
-      setModalState("dismissed");
-      goToNextScreen();
+      const userData = await fetchUserData(accessToken!);
+
+      setUser({ ...userData, token: accessToken! } as DBUser);
+      navigation.navigate("Home");
     },
-    [user, wallet],
-  );
+  });
 
   const fetchUserData = async (token: string) => {
     const userData = await usersMe({
@@ -138,32 +99,6 @@ const LoginOtpScreen = () => {
     return userData;
   };
 
-  const goToNextScreen = () => {
-    navigation.navigate("Home");
-  };
-
-  useEffect(() => {
-    if (state.status === "done" && user) {
-      try {
-        setModalState("loading");
-        handleConnection(user)
-          .then(() => {
-            setModalState("dismissed");
-          })
-          .catch((e) => {
-            console.error("Error Handling Connection", e);
-            setLoginStatus(LoginStatus.CODE_ERROR);
-            navigation.navigate("Login");
-          });
-      } catch (e) {
-        setModalState("error");
-        console.log("Error Connecting Stuffs", e);
-        navigation.navigate("Login");
-      }
-    } else if (state.status === "initial") {
-      setLoginStatus(LoginStatus.INITIAL);
-    }
-  }, [state, user]);
 
   const isCodeFilled = code.length === 6;
 
