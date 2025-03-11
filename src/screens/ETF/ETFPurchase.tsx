@@ -15,12 +15,20 @@ import SkeletonLoadingView, {
   SkeletonView,
 } from "@/components/Loading/SkeletonLoadingView";
 import AssetLogo from '@/components/AssetLogo';
+import { AssetPrice } from "@/client/";
 
+type ETFPurchaseScreenProps = {
+  route: {
+    params: {
+      asset: AssetPrice;
+    };
+  };
+};
 
-const ETFPurchase = ({ route }) => {
+const ETFPurchase = ({ route }: ETFPurchaseScreenProps) => {
   const { t } = useTranslation();
 
-  const { etf } = route.params;
+  const { asset } = route.params;
 
   const navigation = useNavigation();
 
@@ -37,14 +45,14 @@ const ETFPurchase = ({ route }) => {
   const available = balance?.available
     ? formatNumber(balance?.available, 2, balance?.precision || 6, true)
     : "0.00";
-  
+
   const availableDisplayed = balance?.available
     ? currencyFormatter(balance?.available, 2, balance?.precision || 6, true)
     : "0.00";
-  
+
 
   const amountInEtf = new BigNumber(amount)
-    .dividedBy(etf.price)
+    .dividedBy(asset.price)
     .precision(4)
     .toString();
 
@@ -59,7 +67,7 @@ const ETFPurchase = ({ route }) => {
       : new BigNumber(amount).multipliedBy(1_000_000).toString();
 
     navigation.navigate("ETFPurchaseConfirmation", {
-      etf,
+      asset,
       amount: amountToBuy,
     });
   };
@@ -69,9 +77,9 @@ const ETFPurchase = ({ route }) => {
       navCenter={
         <View className="flex-row items-center justify-center gap-s p-2 bg-gray-100 rounded-full">
           <View className="w-6 h-6 bg-gray-90 rounded-full overflow-hidden">
-            <AssetLogo symbol={etf.symbol} size="sm" />
+            <AssetLogo symbol={asset.symbol} size="sm" />
           </View>
-          <Text className="text-gray-50 caption-xl">{etf.symbol}</Text>
+          <Text className="text-gray-50 caption-xl">{asset.symbol}</Text>
         </View>
       }
     >
@@ -95,7 +103,7 @@ const ETFPurchase = ({ route }) => {
           </Text>
         </View>
         <Text className="caption-l text-center text-gray-50">
-          {amountInEtf} {etf.symbol}
+          {amountInEtf} {asset.symbol}
         </Text>
       </View>
       <Keypad
@@ -112,7 +120,7 @@ const ETFPurchase = ({ route }) => {
             {t("etfPurchase.continue")}
           </Text>
         </Button>
-        
+
       </View>
     </LoggedLayout>
   );

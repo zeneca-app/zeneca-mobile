@@ -19,11 +19,21 @@ import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { Address } from "viem";
 import AssetLogo from '@/components/AssetLogo';
+import { AssetPrice } from "@/client";
 
 
+type ETFSellConfirmationScreenProps = {
+  route: {
+    params: {
+      asset: AssetPrice;
+      amount: string;
+      quantity: string;
+    };
+  };
+};
 
-const ETFSellConfirmation = ({ route }) => {
-  const { etf, quantity, amount } = route.params;
+const ETFSellConfirmation = ({ route }: ETFSellConfirmationScreenProps) => {
+  const { asset, quantity, amount } = route.params;
 
   const navigation = useNavigation();
   const queryClient = useQueryClient();
@@ -87,8 +97,8 @@ const ETFSellConfirmation = ({ route }) => {
       ]);
 
       navigation.navigate("ETFSellSuccess", {
-        etf,
-        amount: quote?.total_amount,
+        asset,
+        amount: quote?.total_amount.toString(),
         quote,
       });
 
@@ -96,7 +106,7 @@ const ETFSellConfirmation = ({ route }) => {
       console.error("Error during transaction:", error);
       Sentry.captureException(error, {
         extra: {
-          etfSymbol: etf.symbol,
+          etfSymbol: asset.symbol,
           quantity,
           quoteId: quote?.id,
         },
@@ -116,13 +126,13 @@ const ETFSellConfirmation = ({ route }) => {
   const fetchQuote = React.useCallback(() => {
     createQuote({
       body: {
-        asset_id: etf.id,
+        asset_id: asset.id,
         side: "SELL",
         order_type: "MARKET",
-        quantity: quantity,
+        quantity: Number(quantity),
       },
     });
-  }, [createQuote, etf.id, quantity]);
+  }, [createQuote, asset.id, quantity]);
 
   // Initial quote fetch
   useEffect(() => {
@@ -182,10 +192,10 @@ const ETFSellConfirmation = ({ route }) => {
       <View className="flex pb-layout">
         <View className="flex-row gap-s pt-layout-s pb-layout-s items-center justify-start px-layout">
           <View className="w-12 h-12 bg-gray-90 rounded-full overflow-hidden">
-            <AssetLogo symbol={etf.symbol} size="md" />
+            <AssetLogo symbol={asset.symbol} size="md" />
           </View>
           <Text className="text-gray-50 caption-xl flex-1">
-            {etf.symbol}
+            {asset.symbol}
           </Text>
         </View>
         <Text className="heading-l text-gray-10 px-layout">
@@ -193,7 +203,7 @@ const ETFSellConfirmation = ({ route }) => {
         </Text>
         <View className="flex flex-row items-center justify-start gap-s px-layout">
           <Text className="caption-xl text-gray-50">{etfAmount}</Text>
-          <Text className="caption-xl text-gray-50">{etf.symbol}</Text>
+          <Text className="caption-xl text-gray-50">{asset.symbol}</Text>
         </View>
       </View>
       <View className="px-layout pb-layout flex justify-start items-stretch gap flex-1">
@@ -239,11 +249,11 @@ const ETFSellConfirmation = ({ route }) => {
             i18nKey="etfSell.disclaimer"
             values={{
               etf_amount: etfAmount,
-              etf_symbol: etf.symbol,
-              display_name: etf.name,
-              symbol: etf.symbol,
+              etf_symbol: asset.symbol,
+              display_name: asset.name,
+              symbol: asset.symbol,
               amount: amount,
-              etf_price: etf.price,
+              etf_price: asset.price,
             }}
             components={[
               <Text className="caption-l text-white font-bold"></Text>,

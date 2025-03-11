@@ -17,11 +17,20 @@ import SkeletonLoadingView, {
 import useAssetsStore from "@/storage/assetsStore";
 import Config from "@/config";
 import AssetLogo from '@/components/AssetLogo';
+import { AssetPrice } from "@/client";
 
-const ETFSell = ({ route }) => {
+type ETFSellScreenProps = {
+  route: {
+    params: {
+      asset: AssetPrice;
+    };
+  };
+};
+
+const ETFSell = ({ route }: ETFSellScreenProps) => {
   const { t } = useTranslation();
 
-  const { etf } = route.params;
+  const { asset } = route.params;
 
   const navigation = useNavigation();
 
@@ -29,28 +38,12 @@ const ETFSell = ({ route }) => {
 
   const { assets } = useAssetsStore((state) => state);
 
-  const asset = assets?.find((asset) => asset.symbol === etf.symbol);
+  const currentAsset = assets?.find((currentAsset) => currentAsset.symbol === asset.symbol);
 
+  const assetPrice = asset.price;
 
-  const {
-    isPending: assetDetailLoading,
-    error: assetDetailError,
-    data: assetDetail,
-    refetch,
-  } = useQuery({
-    ...assetsGetAssetDetailOptions({
-      path: {
-        asset_id: asset?.id!
-      },
-    }),
-    refetchInterval: Config.REFETCH_INTERVAL,
-    staleTime: 0, // Consider data stale immediately  
-  });
-
-  const assetPrice = assetDetail?.price || etf.price;
-
-  const quantity = asset?.quantity_in_wei
-    ? formatNumber(asset?.quantity_in_wei, 9, 18, true)
+  const quantity = currentAsset?.quantity_in_wei
+    ? formatNumber(currentAsset?.quantity_in_wei, 9, 18, true)
     : "0.00";
 
   const totalAmount = quantity
@@ -62,7 +55,7 @@ const ETFSell = ({ route }) => {
 
   const hasNumber = Number(amount) > 0;
   const isLessThanAvailable = Number(amount) <= Number(totalAmount);
-  const canContinue = hasNumber && isLessThanAvailable && !assetDetailLoading;
+  const canContinue = hasNumber && isLessThanAvailable;
 
   const goToConfirmation = () => {
     const adjustedPrice = formatNumber(assetPrice, 2, 0, true)
@@ -75,7 +68,7 @@ const ETFSell = ({ route }) => {
 
 
     navigation.navigate("ETFSellConfirmation", {
-      etf,
+      asset,
       amount,
       quantity: quantityToSell,
 
@@ -87,9 +80,9 @@ const ETFSell = ({ route }) => {
       navCenter={
         <View className="flex-row items-center justify-center gap-s p-2 bg-gray-100 rounded-full">
           <View className="w-6 h-6 bg-gray-90 rounded-full overflow-hidden">
-            <AssetLogo symbol={etf.symbol} size="sm" />
+            <AssetLogo symbol={asset.symbol} size="sm" />
           </View>
-          <Text className="text-gray-50 caption-xl">{etf.symbol}</Text>
+          <Text className="text-gray-50 caption-xl">{asset.symbol}</Text>
         </View>
       }
     >
@@ -107,7 +100,7 @@ const ETFSell = ({ route }) => {
           </Text>
         </View>
         <Text className="caption-l text-center text-gray-50">
-          {quantity} {etf.symbol}
+          {quantity} {asset.symbol}
         </Text>
       </View>
       <Keypad

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
-import { AssetPrice } from "@/client/";
+import { AssetPrice, OrderQuote } from "@/client/";
 
 /* eslint-disable @typescript-eslint/no-namespace */
 export type RootStackParamList = {
@@ -17,10 +17,17 @@ export type RootStackParamList = {
   ETFDetail: {
     asset: AssetPrice;
   };
-  ETFPurchaseConfirmation: undefined;
-  ETFPurchaseSuccess: undefined;
+  ETFPurchaseConfirmation: {
+    asset: AssetPrice;
+    amount: string;
+  };
+  ETFPurchaseSuccess: {
+    asset: AssetPrice;
+    amount: string;
+    quote: OrderQuote;
+  };
   ETFPurchase: {
-    etf: AssetPrice & { price: string };
+    asset: AssetPrice;
   };
   KYCPreview: undefined;
   KYCProvider: undefined;
@@ -34,10 +41,18 @@ export type RootStackParamList = {
   OrderHistory: undefined;
   OrderHistoryDetail: undefined;
   ETFSell: {
-    etf: AssetPrice & { price: string };
+    asset: AssetPrice;
   };
-  ETFSellConfirmation: undefined;
-  ETFSellSuccess: undefined;
+  ETFSellConfirmation: {
+    asset: AssetPrice;
+    amount: string;
+    quantity: string;
+  };
+  ETFSellSuccess: {
+    asset: AssetPrice;
+    amount: string;
+    quote: OrderQuote;
+  };
 };
 
 declare global {

@@ -1,4 +1,4 @@
-import { OrderQuote } from "@/client";
+import { AssetPrice, OrderQuote } from "@/client";
 import { ordersCreateQuoteOrderMutation } from "@/client/@tanstack/react-query.gen";
 import Button from "@/components/Button";
 import { SkeletonView } from "@/components/Loading/SkeletonLoadingView";
@@ -20,10 +20,16 @@ import { View } from "react-native";
 import { Address } from "viem";
 import AssetLogo from '@/components/AssetLogo';
 
-
-
-const ETFPurchaseConfirmation = ({ route }) => {
-  const { etf, amount } = route.params;
+type ETFPurchaseConfirmationScreenProps = {
+  route: {
+    params: {
+      asset: AssetPrice;
+      amount: string;
+    };
+  };
+};
+const ETFPurchaseConfirmation = ({ route }: ETFPurchaseConfirmationScreenProps) => {
+  const { asset, amount } = route.params;
 
   const navigation = useNavigation();
   const queryClient = useQueryClient();
@@ -70,7 +76,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
       );
 
       const tx = await smartAccountClient.sendTransactions({
-        transactions: quote.transactions, 
+        transactions: quote.transactions,
       });
 
       if (!tx) throw new Error("Transaction failed to send");
@@ -90,7 +96,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
       ]);
 
       navigation.navigate("ETFPurchaseSuccess", {
-        etf,
+        asset,
         amount,
         quote,
       });
@@ -99,7 +105,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
       console.error("Error during transaction:", error);
       Sentry.captureException(error, {
         extra: {
-          etfSymbol: etf.symbol,
+          symbol: asset.symbol,
           amount,
           quoteId: quote?.id,
         },
@@ -122,13 +128,13 @@ const ETFPurchaseConfirmation = ({ route }) => {
   const fetchQuote = React.useCallback(() => {
     createQuote({
       body: {
-        asset_id: etf.id,
+        asset_id: asset.id,
         side: "BUY",
         order_type: "MARKET",
         amount: amount.toString(),
       },
     });
-  }, [createQuote, etf.id, amount]);
+  }, [createQuote, asset.id, amount]);
 
   // Initial quote fetch
   useEffect(() => {
@@ -153,9 +159,9 @@ const ETFPurchaseConfirmation = ({ route }) => {
 
     const timerId = setInterval(updateTimer, 1000);
     return () => {
-      clearInterval(timerId); 
+      clearInterval(timerId);
     };
-  }, [quote, fetchQuote]); 
+  }, [quote, fetchQuote]);
 
   const formatTimeLeft = (seconds: number): string => {
     if (seconds <= 0) return '0:00';
@@ -167,7 +173,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
   const minLeft = formatTimeLeft(timeLeft);
 
   const etfAmount = new BigNumber(amountToOrder)
-    .dividedBy(etf.price)
+    .dividedBy(asset.price)
     .precision(4)
     .toString();
 
@@ -188,10 +194,10 @@ const ETFPurchaseConfirmation = ({ route }) => {
       <View className="flex pb-layout">
         <View className="flex-row gap-s pt-layout-s pb-layout-s items-center justify-start px-layout">
           <View className="w-12 h-12 bg-gray-90 rounded-full overflow-hidden">
-            <AssetLogo symbol={etf.symbol} size="md" />
+            <AssetLogo symbol={asset.symbol} size="md" />
           </View>
           <Text className="text-gray-50 caption-xl flex-1">
-            {etf.symbol}
+            {asset.symbol}
           </Text>
         </View>
         <Text className="heading-l text-gray-10 px-layout">
@@ -199,7 +205,7 @@ const ETFPurchaseConfirmation = ({ route }) => {
         </Text>
         <View className="flex flex-row items-center justify-start gap-s px-layout">
           <Text className="caption-xl text-gray-50">{etfAmount}</Text>
-          <Text className="caption-xl text-gray-50">{etf.symbol}</Text>
+          <Text className="caption-xl text-gray-50">{asset.symbol}</Text>
         </View>
       </View>
       <View className="px-layout pb-layout flex justify-start items-stretch gap flex-1">
@@ -245,11 +251,11 @@ const ETFPurchaseConfirmation = ({ route }) => {
             i18nKey="etfPurchase.disclaimer"
             values={{
               etf_amount: etfAmount,
-              etf_symbol: etf.symbol,
-              display_name: etf.name,
-              symbol: etf.symbol,
+              etf_symbol: asset.symbol,
+              display_name: asset.name,
+              symbol: asset.symbol,
               amount: amountToOrder,
-              etf_price: etf.price,
+              etf_price: asset.price,
             }}
             components={[
               <Text className="caption-l text-white font-bold"></Text>,
