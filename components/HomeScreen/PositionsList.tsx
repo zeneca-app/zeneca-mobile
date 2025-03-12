@@ -11,8 +11,8 @@ import { FlatList, Text, View } from "react-native";
 import SkeletonLoadingView, {
   SkeletonOrderListItem,
 } from "@/components/Loading/SkeletonLoadingView";
-import Balance from "@/screens/HomeScreen/components/Balance";
-import VerifyCtaCard from "@/screens/HomeScreen/components/VerifyCtaCard";
+import Balance from "@/components/HomeScreen/Balance";
+import VerifyCtaCard from "@/components/HomeScreen/VerifyCtaCard";
 import CardFooter from "@/components/CardFooter";
 import { MyAsset } from "@/client/";
 import useAssetsStore from "@/storage/assetsStore";

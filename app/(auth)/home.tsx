@@ -1,12 +1,18 @@
-import { View, Text } from 'react-native';
+import LoggedLayout from "@/components/LoggedLayout";
+import { usePrefetchData } from "@/hooks/usePrefetchData";
+import HomeActions from "@/components/HomeScreen/HomeActions";
+import PositionsList from "@/components/HomeScreen/PositionsList";
 
-
-export default function Home() {
-
+const HomeScreen = () => {
+  usePrefetchData();
 
   return (
-    <View className="flex-1 items-center justify-center bg-black">
-      <Text className="text-2xl font-bold text-white">Welcome </Text>
-    </View>
+    <LoggedLayout>
+      <PositionsList />
+      <HomeActions />
+    </LoggedLayout>
   );
-} 
+};
+
+HomeScreen.displayName = "HomeScreen";
+export default HomeScreen;

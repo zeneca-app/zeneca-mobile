@@ -1,11 +1,10 @@
-import '@/lib/polyfills';
-import '../ReactotronConfig';
-import './config';
+import "@/lib/polyfills";
+import "@/i18n";
 import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack, useRouter, useSegments } from 'expo-router';
 import { PrivyProvider, usePrivy } from '@privy-io/expo';
-import { StatusBar, TouchableOpacity } from 'react-native';
+import { StatusBar, TouchableOpacity, LogBox } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import {
     Manrope_300Light,
@@ -34,6 +33,25 @@ import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client
 import env from "@/config/env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
+import IntroAnimation from "@/components/IntroAnimation";
+import * as Sentry from "@sentry/react-native";
+
+// Sentry Configuration
+const navigationIntegration = new Sentry.ReactNavigationInstrumentation({
+    enableTimeToInitialDisplay: true,
+});
+
+Sentry.init({
+    dsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
+    debug: false,
+    integrations: [
+        new Sentry.ReactNativeTracing({
+            routingInstrumentation: navigationIntegration,
+        }),
+    ],
+});
+
+LogBox.ignoreLogs([new RegExp("TypeError:.*")]);
 
 const queryClient = new QueryClient();
 
@@ -50,8 +68,6 @@ const wagmiConfig = createConfig({
         [base.id]: http(),
     },
 });
-
-
 
 export {
     // Catch any errors thrown by the Layout component.
@@ -131,6 +147,12 @@ const InitialLayout = () => {
         headerLeft: backButton,
     };
 
+    if (!loaded || !isReady) {
+        return (
+            <IntroAnimation />
+        );
+    }
+
     return (
         <Stack
             screenOptions={defaultScreenOptions}
@@ -194,4 +216,5 @@ const RootLayout = () => {
         </GestureHandlerRootView>
     );
 }
-export default RootLayout;
+
+export default Sentry.wrap(RootLayout);
