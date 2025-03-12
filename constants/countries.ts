@@ -61,24 +61,24 @@ export const EXCLUDED_COUNTRY_CODE: string[] = [
 ];
 
 export const LATIN_AMERICA_COUNTRY_CODE: string[] = [
-  //"AR", // Argentina
-  //"BO", // Bolivia
-  //"BR", // Brazil
-  //"CL", // Chile
+  "AR", // Argentina
+  "BO", // Bolivia
+  "BR", // Brazil
+  "CL", // Chile
   "PA", // Panama
   "CO", // Colombia
   "CR", // Costa Rica
   "DO", // Dominican Republic
   "EC", // Ecuador
-  //"SV", // El Salvador
-  "GT",
+  "SV", // El Salvador
+  "GT", // Guatemala
   "HN", // Honduras
-  "MX", // Mexico */
+  "MX", // Mexico
   "CO", // Colombia
-  // "PY", // Paraguay
+  "PY", // Paraguay
   "PE", // Peru
-  //"PR", // Puerto Rico
-  //"UY", // Uruguay */
+  "PR", // Puerto Rico
+  "UY", // Uruguay
 ];
 
 export const PRIORITY_COUNTRY_CODE: string[] = [

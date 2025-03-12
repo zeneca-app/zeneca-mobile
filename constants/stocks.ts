@@ -137,4 +137,4 @@ export const CHART_TIMEFRAMES: Record<string, string> = {
   "1Y": "YEAR",
 };
 
-export const TIMEFRAME_DEFAULT = "1M";
+export const TIMEFRAME_DEFAULT = "1Y";
