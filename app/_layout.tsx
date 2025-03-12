@@ -1,12 +1,12 @@
+import '@/lib/polyfills';
 import '../ReactotronConfig';
 import './config';
 import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack, useRouter, useSegments } from 'expo-router';
 import { PrivyProvider, usePrivy } from '@privy-io/expo';
-import Constants from 'expo-constants';
 import { StatusBar, TouchableOpacity } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import {
     Manrope_300Light,
     Manrope_400Regular,
@@ -20,6 +20,39 @@ import { onlineManager } from '@tanstack/react-query';
 import NetInfo from '@react-native-community/netinfo';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { Ionicons } from '@expo/vector-icons';
+import { MyPermissiveSecureStorageAdapter } from "@/lib/storage-adapter";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import {
+    QueryClient,
+} from "@tanstack/react-query";
+import { PostHogProvider } from "posthog-react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { createConfig, http, WagmiProvider } from "wagmi";
+import { base, baseSepolia, sepolia } from "wagmi/chains";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+import env from "@/config/env";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
+
+const queryClient = new QueryClient();
+
+const asyncStoragePersister = createAsyncStoragePersister({
+    storage: AsyncStorage,
+    throttleTime: 1000,
+});
+
+const wagmiConfig = createConfig({
+    chains: [sepolia, baseSepolia, base],
+    transports: {
+        [sepolia.id]: http(),
+        [baseSepolia.id]: http(),
+        [base.id]: http(),
+    },
+});
+
+
+
 export {
     // Catch any errors thrown by the Layout component.
     ErrorBoundary,
@@ -126,15 +159,39 @@ const InitialLayout = () => {
         </Stack>
     )
 }
+
 const RootLayout = () => {
     return (
-        <NavigationContainer>
-            <PrivyProvider appId={Constants.expoConfig?.extra?.PRIVY_APP_ID}>
-                <StatusBar />
-                <InitialLayout />
-            </PrivyProvider>
-        </NavigationContainer>
+        <GestureHandlerRootView>
+            <SafeAreaProvider>
+                <BottomSheetModalProvider>
+                    <PersistQueryClientProvider client={queryClient}
+                        onSuccess={() => {
+                            queryClient
+                                .resumePausedMutations()
+                                .then(() => queryClient.invalidateQueries());
+                        }}
+                        persistOptions={{ persister: asyncStoragePersister }}>
+                        <PrivyProvider appId={env.PRIVY_APP_ID}
+                            clientId={env.PRIVY_CLIENT_ID}
+                            supportedChains={[sepolia, baseSepolia, base]}
+                            storage={MyPermissiveSecureStorageAdapter}>
+                            <WagmiProvider config={wagmiConfig}>
+                                <PostHogProvider
+                                    apiKey={env.POSTHOG_API_KEY}
+                                    options={{
+                                        host: env.POSTHOG_HOST,
+                                    }}
+                                >
+                                    <StatusBar />
+                                    <InitialLayout />
+                                </PostHogProvider>
+                            </WagmiProvider>
+                        </PrivyProvider>
+                    </PersistQueryClientProvider>
+                </BottomSheetModalProvider>
+            </SafeAreaProvider>
+        </GestureHandlerRootView>
     );
 }
-
 export default RootLayout;
