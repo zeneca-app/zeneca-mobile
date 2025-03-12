@@ -78,7 +78,8 @@
           "project": "zeneca-mobile",
           "organization": "zeneca"
         }
-      ]
+      ],
+      "expo-router"
     ],
     "extra": {
       "eas": {
