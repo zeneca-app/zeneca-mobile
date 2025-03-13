@@ -49,7 +49,10 @@ const EmailSignUp = () => {
       await signUp.prepareEmailAddressVerification();
 
       // Navigate to verification screen
-      router.push("/verify/[email]");
+      router.push({
+        pathname: "/verify/[email]",
+        params: { email: email }
+      });
     } catch (err) {
       if (isClerkAPIResponseError(err)) {
         Alert.alert('Error', err.errors[0].message);

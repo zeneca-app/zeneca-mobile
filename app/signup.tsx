@@ -45,7 +45,7 @@ const Login = () => {
 
       if (createdSessionId) {
         setActive!({ session: createdSessionId });
-        router.push("/(auth)/home"); // Navigate to main app
+        router.replace("/(authenticated)/home"); // Navigate to main app
       }
     } catch (err: any) {
       Alert.alert(

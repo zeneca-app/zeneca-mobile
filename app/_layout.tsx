@@ -125,13 +125,13 @@ const InitialLayout = () => {
     useEffect(() => {
         if (!isLoaded) return;
 
-        const inAuthGroup = segments[0] === '(auth)';
+        const inAuthGroup = segments[0] === '(authenticated)';
         const isAuthenticated = isSignedIn && user;
         console.log("isAuthenticated", isAuthenticated);
         console.log("inAuthGroup", inAuthGroup);
 
         if (isAuthenticated && !inAuthGroup) {
-            router.replace('/(autenticated)/home');
+            router.replace('/(authenticated)/home');
         } else if (!isAuthenticated && inAuthGroup) {
             router.replace('/');
         }
@@ -167,7 +167,7 @@ const InitialLayout = () => {
     return (
         <Stack>
             <Stack.Screen
-                name="(autenticated)"
+                name="(authenticated)"
                 options={{ headerShown: false }}
             />
             <Stack.Screen
