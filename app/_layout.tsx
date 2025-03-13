@@ -3,7 +3,6 @@ import "@/i18n";
 import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack, useRouter, useSegments } from 'expo-router';
-import { PrivyProvider, usePrivy } from '@privy-io/expo';
 import { StatusBar, TouchableOpacity, LogBox } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import {
@@ -19,7 +18,6 @@ import { onlineManager } from '@tanstack/react-query';
 import NetInfo from '@react-native-community/netinfo';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { Ionicons } from '@expo/vector-icons';
-import { MyPermissiveSecureStorageAdapter } from "@/lib/storage-adapter";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import {
     QueryClient,
@@ -35,6 +33,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
 import IntroAnimation from "@/components/IntroAnimation";
 import * as Sentry from "@sentry/react-native";
+import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 
 // Sentry Configuration
 const navigationIntegration = new Sentry.ReactNavigationInstrumentation({
@@ -113,23 +112,35 @@ const InitialLayout = () => {
         }
     }, [loaded]);
 
-    const { isReady, user: privyUser } = usePrivy();
+
     const { user } = useUserStore();
+    const { isLoaded, isSignedIn } = useAuth();
     const segments = useSegments();
     const router = useRouter();
+    console.log("isLoaded", isLoaded);
+    console.log("isSignedIn", isSignedIn);
+    console.log("user", user);
+    console.log("segments", segments);
 
     useEffect(() => {
-        if (!isReady) return;
+        if (!isLoaded) return;
 
         const inAuthGroup = segments[0] === '(auth)';
-        const isAuthenticated = privyUser && user;
+        const isAuthenticated = isSignedIn && user;
+        console.log("isAuthenticated", isAuthenticated);
+        console.log("inAuthGroup", inAuthGroup);
 
         if (isAuthenticated && !inAuthGroup) {
-            router.replace('/(auth)/home');
+            router.replace('/(autenticated)/home');
         } else if (!isAuthenticated && inAuthGroup) {
             router.replace('/');
         }
-    }, [isReady, privyUser, user, segments]);
+    }, [isSignedIn]);
+
+    console.log("isLoaded", isLoaded);
+    console.log("isSignedIn", isSignedIn);
+    console.log("user", user);
+    console.log("segments", segments);
 
     const backButton = () => (
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -147,24 +158,33 @@ const InitialLayout = () => {
         headerLeft: backButton,
     };
 
-    if (!loaded || !isReady) {
+    if (!loaded || !isLoaded) {
         return (
             <IntroAnimation />
         );
     }
 
     return (
-        <Stack
-            screenOptions={defaultScreenOptions}
-            initialRouteName="home"
-        >
+        <Stack>
             <Stack.Screen
-                name="(auth)"
+                name="(autenticated)"
                 options={{ headerShown: false }}
             />
             <Stack.Screen
-                name="(public)"
+                name="index"
                 options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="signup"
+                options={defaultScreenOptions}
+            />
+            <Stack.Screen
+                name="email-signup"
+                options={defaultScreenOptions}
+            />
+            <Stack.Screen
+                name="verify/[email]"
+                options={defaultScreenOptions}
             />
             <Stack.Screen
                 name="etf"
@@ -187,17 +207,15 @@ const RootLayout = () => {
         <GestureHandlerRootView>
             <SafeAreaProvider>
                 <BottomSheetModalProvider>
-                    <PersistQueryClientProvider client={queryClient}
-                        onSuccess={() => {
-                            queryClient
-                                .resumePausedMutations()
-                                .then(() => queryClient.invalidateQueries());
-                        }}
-                        persistOptions={{ persister: asyncStoragePersister }}>
-                        <PrivyProvider appId={env.PRIVY_APP_ID}
-                            clientId={env.PRIVY_CLIENT_ID}
-                            supportedChains={[sepolia, baseSepolia, base]}
-                            storage={MyPermissiveSecureStorageAdapter}>
+                    <ClerkProvider publishableKey={env.CLERK_PUBLISHABLE_KEY}>
+                        <PersistQueryClientProvider client={queryClient}
+                            onSuccess={() => {
+                                queryClient
+                                    .resumePausedMutations()
+                                    .then(() => queryClient.invalidateQueries());
+                            }}
+                            persistOptions={{ persister: asyncStoragePersister }}>
+
                             <WagmiProvider config={wagmiConfig}>
                                 <PostHogProvider
                                     apiKey={env.POSTHOG_API_KEY}
@@ -209,8 +227,9 @@ const RootLayout = () => {
                                     <InitialLayout />
                                 </PostHogProvider>
                             </WagmiProvider>
-                        </PrivyProvider>
-                    </PersistQueryClientProvider>
+
+                        </PersistQueryClientProvider>
+                    </ClerkProvider>
                 </BottomSheetModalProvider>
             </SafeAreaProvider>
         </GestureHandlerRootView>

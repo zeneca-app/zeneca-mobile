@@ -1,9 +1,11 @@
 import { cssInterop } from "nativewind";
 import React from "react";
 import { ActivityIndicator, Pressable, Text } from "react-native";
+import { Link } from "expo-router";
 
 export type buttonProps = {
-  onPress: () => void;
+  onPress?: () => void;
+  href?: string;
   disabled?: boolean;
   isLoading?: boolean;
   loadingSlot?: React.ReactNode;
@@ -16,6 +18,7 @@ export type buttonProps = {
 
 const Button = ({
   onPress,
+  href,
   isLoading,
   loadingSlot = null,
   className = "",
@@ -59,20 +62,34 @@ const Button = ({
     },
   });
 
+  const ButtonContent = () => (
+    <Text className={conditionalContentClasses}>
+      {isLoading && (loadingSlot || (
+        <ActivityIndicator
+          size="small"
+          color={defaultContentClasses[variant] === "text-white" ? "#FFFFFF" : "#000000"}
+        />
+      ))}
+      {children}
+    </Text>
+  );
+
+  if (href) {
+    return (
+      <Link href={href} asChild disabled={disabled || isLoading}>
+        <Pressable className={`${defaultClasses[variant]} ${className}`}>
+          <ButtonContent />
+        </Pressable>
+      </Link>
+    );
+  }
+
   return (
     <Pressable
-      onPress={() => !isLoading && !disabled && onPress()}
+      onPress={() => !isLoading && !disabled && onPress?.()}
       className={`${defaultClasses[variant]} ${className}`}
     >
-      <Text className={conditionalContentClasses}>
-        {isLoading && (loadingSlot || (
-          <ActivityIndicator
-            size="small"
-            colorClass={defaultContentClasses[variant]}
-          />
-        ))}
-        {children}
-      </Text>
+      <ButtonContent />
     </Pressable>
   );
 };

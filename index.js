@@ -1,7 +1,7 @@
+import "./global.css";
 import "fast-text-encoding";
 import "react-native-get-random-values";
 import "@ethersproject/shims";
-import "./ReactotronConfig";
 
 import { registerRootComponent } from "expo";
 import { ExpoRoot } from "expo-router";

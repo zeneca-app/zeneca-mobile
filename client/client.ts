@@ -1,21 +1,21 @@
 import env from "@/config/env";
-import { createPrivyClient } from "@privy-io/expo";
+//import { createPrivyClient } from "@privy-io/expo";
 import { client } from "./services.gen";
 
 const APP_ID = env.PRIVY_APP_ID;
 const CLIENT_ID = env.PRIVY_CLIENT_ID;
 
-const privy = createPrivyClient({
-  appId: APP_ID,
-  clientId: CLIENT_ID,
-});
+//const privy = createPrivyClient({
+//  appId: APP_ID,
+//  clientId: CLIENT_ID,
+//});
 
 let token: string | null = null;
 
 client.interceptors.request.use(async (request, options) => {
   try {
-    token = await privy.getAccessToken();
-    
+    //token = await privy.getAccessToken();
+    token = "1234567890";
     console.log("[API Client] Request interceptor - Token obtained", token ? "Token exists" : "No token");
     console.log("token", token)
     console.log("[API Client] Request URL:", request.url);
