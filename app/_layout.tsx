@@ -34,7 +34,9 @@ import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persi
 import IntroAnimation from "@/components/IntroAnimation";
 import * as Sentry from "@sentry/react-native";
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
-
+import tokenCache from "@/utils/token";
+import clerkInstance from "@/utils/clerk";
+import { UserInactivityProvider } from "@/context/UserInactivity";
 // Sentry Configuration
 const navigationIntegration = new Sentry.ReactNavigationInstrumentation({
     enableTimeToInitialDisplay: true,
@@ -126,12 +128,12 @@ const InitialLayout = () => {
         if (!isLoaded) return;
 
         const inAuthGroup = segments[0] === '(authenticated)';
-        const isAuthenticated = isSignedIn && user;
+        const isAuthenticated = isSignedIn;
         console.log("isAuthenticated", isAuthenticated);
         console.log("inAuthGroup", inAuthGroup);
 
         if (isAuthenticated && !inAuthGroup) {
-            router.replace('/(authenticated)/home');
+            router.replace('/(authenticated)/(tabs)/home');
         } else if (!isAuthenticated && inAuthGroup) {
             router.replace('/');
         }
@@ -167,19 +169,26 @@ const InitialLayout = () => {
     return (
         <Stack>
             <Stack.Screen
-                name="(authenticated)"
-                options={{ headerShown: false }}
-            />
-            <Stack.Screen
                 name="index"
                 options={{ headerShown: false }}
             />
+
+            <Stack.Screen
+                name="(authenticated)/(tabs)"
+                options={{ headerShown: false }}
+            />
+
             <Stack.Screen
                 name="signup"
                 options={defaultScreenOptions}
             />
+
             <Stack.Screen
                 name="email-signup"
+                options={defaultScreenOptions}
+            />
+            <Stack.Screen
+                name="login"
                 options={defaultScreenOptions}
             />
             <Stack.Screen
@@ -195,8 +204,12 @@ const InitialLayout = () => {
                 options={{ headerShown: false }}
             />
             <Stack.Screen
-                name="kyc"
+                name="(kyc)"
                 options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="(authenticated)/(modals)/lock"
+                options={{ headerShown: false, animation: 'none' }}
             />
         </Stack>
     )
@@ -204,35 +217,37 @@ const InitialLayout = () => {
 
 const RootLayout = () => {
     return (
-        <GestureHandlerRootView>
-            <SafeAreaProvider>
-                <BottomSheetModalProvider>
-                    <ClerkProvider publishableKey={env.CLERK_PUBLISHABLE_KEY}>
-                        <PersistQueryClientProvider client={queryClient}
-                            onSuccess={() => {
-                                queryClient
-                                    .resumePausedMutations()
-                                    .then(() => queryClient.invalidateQueries());
-                            }}
-                            persistOptions={{ persister: asyncStoragePersister }}>
+        <ClerkProvider publishableKey={env.CLERK_PUBLISHABLE_KEY} tokenCache={tokenCache}>
+            <PersistQueryClientProvider client={queryClient}
+                onSuccess={() => {
+                    queryClient
+                        .resumePausedMutations()
+                        .then(() => queryClient.invalidateQueries());
+                }}
+                persistOptions={{ persister: asyncStoragePersister }}>
+                <GestureHandlerRootView>
+                    <SafeAreaProvider>
+                        <BottomSheetModalProvider>
 
-                            <WagmiProvider config={wagmiConfig}>
-                                <PostHogProvider
-                                    apiKey={env.POSTHOG_API_KEY}
-                                    options={{
-                                        host: env.POSTHOG_HOST,
-                                    }}
-                                >
-                                    <StatusBar />
-                                    <InitialLayout />
-                                </PostHogProvider>
-                            </WagmiProvider>
+                            <UserInactivityProvider>
+                                <WagmiProvider config={wagmiConfig}>
+                                    <PostHogProvider
+                                        apiKey={env.POSTHOG_API_KEY}
+                                        options={{
+                                            host: env.POSTHOG_HOST,
+                                        }}
+                                    >
+                                        <StatusBar />
+                                        <InitialLayout />
+                                    </PostHogProvider>
+                                </WagmiProvider>
+                            </UserInactivityProvider>
 
-                        </PersistQueryClientProvider>
-                    </ClerkProvider>
-                </BottomSheetModalProvider>
-            </SafeAreaProvider>
-        </GestureHandlerRootView>
+                        </BottomSheetModalProvider>
+                    </SafeAreaProvider>
+                </GestureHandlerRootView>
+            </PersistQueryClientProvider>
+        </ClerkProvider>
     );
 }
 

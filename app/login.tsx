@@ -6,19 +6,16 @@ import {
   View,
   Alert,
 } from "react-native";
-import { useSignUp, isClerkAPIResponseError, useOAuth } from "@clerk/clerk-expo";
+import { useSignUp, useOAuth, isClerkAPIResponseError } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import LoggedLayout from "@/components/LoggedLayout";
 import LoginButton from "@/components/login/button";
-import { useLocalCredentials } from '@clerk/clerk-expo/local-credentials'
 
-const SignUp = () => {
+const Login = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const { isLoaded, signUp } = useSignUp();
   const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
-
-  const { hasCredentials, setCredentials, authenticate, biometricType } = useLocalCredentials()
 
   const [isEmailLoading, setIsEmailLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
@@ -30,7 +27,7 @@ const SignUp = () => {
       setIsEmailLoading(true);
 
       // Start the email sign-up process
-      router.push("/email-signup");
+      router.push("/email-login");
     } catch (err: any) {
       if (isClerkAPIResponseError(err)) {
         Alert.alert('Error', err.errors[0].message);
@@ -47,9 +44,8 @@ const SignUp = () => {
       const { createdSessionId, setActive } = await startOAuthFlow();
 
       if (createdSessionId) {
-        
         setActive!({ session: createdSessionId });
-       
+        
       }
     } catch (err: any) {
       Alert.alert(
@@ -68,7 +64,7 @@ const SignUp = () => {
           {/* Header Section */}
           <View className="pt-12">
             <Text className="heading-s text-dark-content-white mb-layout-s">
-              {t("loginOptions.title")}
+              Iniciar sesión
             </Text>
           </View>
 
@@ -110,4 +106,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Login;

@@ -67,6 +67,9 @@ const WelcomeScreen = () => {
             <Button href="/signup" className="w-full">
               <Text className="button-m">{t("login.signUpButton")}</Text>
             </Button>
+            <Button href="/login" className="w-full" variant="link">
+              <Text className="button-m">{t("login.signInButton")}</Text>
+            </Button>
           </View>
         </View>
       </View>
