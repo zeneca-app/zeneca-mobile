@@ -218,7 +218,7 @@ export function AuthGuard() {
 ### 2. Core Setup
 
 - [ ] Create root layout
-- [ ] Implement auth guard
+- [ ] Implement auth guard in the root layout
 - [ ] Set up route groups
 - [ ] Configure deep linking
 
@@ -363,4 +363,56 @@ export function AuthGuard() {
 - [Expo Router Documentation](https://docs.expo.dev/router/introduction/)
 - [Migration Guide](https://docs.expo.dev/router/migration/)
 - [Examples Repository](https://github.com/expo/expo/tree/main/packages/expo-router/example)
-- [Expo Discord Community](https://chat.expo.dev/) 
+- [Expo Discord Community](https://chat.expo.dev/)
+
+## Implementation Progress
+
+### Completed Steps
+
+✅ Initial Setup
+- Installed required dependencies
+- Updated configuration files
+- Created basic directory structure
+
+✅ Core Setup
+- Created root layout with Privy integration
+- Implemented authentication guard
+- Set up route groups
+- Configured basic navigation
+
+✅ Authentication Flow
+- Integrated PrivyProvider
+- Implemented route protection
+- Set up navigation logic
+
+### In Progress
+
+🔄 Screen Migration
+- [ ] Complete public screens
+- [ ] Complete authenticated screens
+- [ ] Update navigation calls
+- [ ] Implement individual layouts
+
+🔄 Feature Migration
+- [ ] ETF screens
+- [ ] Deposit screens
+- [ ] KYC screens
+- [ ] Deep linking
+
+### Next Steps
+
+1. **Screen Implementation**
+   - Complete individual screen components
+   - Add proper typings
+   - Implement layouts for each route group
+
+2. **Feature Integration**
+   - Integrate ETF functionality
+   - Set up deposit flows
+   - Complete KYC integration
+
+3. **Testing & Optimization**
+   - Implement navigation testing
+   - Optimize transitions
+   - Test deep linking
+   - Performance testing 
