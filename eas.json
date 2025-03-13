@@ -4,6 +4,9 @@
     "appVersionSource": "remote"
   },
   "build": {
+    "ios": {
+      "supportsTablet": false
+    },
     "development": {
       "channel": "development",
       "developmentClient": true,
