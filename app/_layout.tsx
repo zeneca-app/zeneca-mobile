@@ -32,11 +32,14 @@ import env from "@/config/env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
 import IntroAnimation from "@/components/IntroAnimation";
+import ProfileButton from "@/components/ProfileButton";
 import * as Sentry from "@sentry/react-native";
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 import tokenCache from "@/utils/token";
 import clerkInstance from "@/utils/clerk";
 import { UserInactivityProvider } from "@/context/UserInactivity";
+import screenConfigs from "@/components/screenOptions";
+
 // Sentry Configuration
 const navigationIntegration = new Sentry.ReactNavigationInstrumentation({
     enableTimeToInitialDisplay: true,
@@ -133,7 +136,7 @@ const InitialLayout = () => {
         console.log("inAuthGroup", inAuthGroup);
 
         if (isAuthenticated && !inAuthGroup) {
-            router.replace('/(authenticated)/home');
+            router.replace('/(authenticated)/modals/lock');
         } else if (!isAuthenticated && inAuthGroup) {
             router.replace('/');
         }
@@ -144,21 +147,7 @@ const InitialLayout = () => {
     console.log("user", user);
     console.log("segments", segments);
 
-    const backButton = () => (
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="chevron-back" size={22} color="white" />
-        </TouchableOpacity>
-    );
 
-    // Common header options
-    const defaultScreenOptions = {
-        title: '',
-        headerBackTitle: '',
-        headerStyle: { backgroundColor: Colors.basicBlack },
-        headerShadowVisible: false,
-        headerTransparent: true,
-        headerLeft: backButton,
-    };
 
     if (!loaded || !isLoaded) {
         return (
@@ -170,46 +159,33 @@ const InitialLayout = () => {
         <Stack>
             <Stack.Screen
                 name="index"
-                options={{ headerShown: false }}
+                options={screenConfigs.noHeader}
             />
-
             <Stack.Screen
-                name="(authenticated)/"
-                options={{ headerShown: false }}
+                name="(authenticated)"
+                options={screenConfigs.noHeader}
             />
 
             <Stack.Screen
                 name="signup"
-                options={defaultScreenOptions}
+                options={screenConfigs.defaultHeader}
             />
 
             <Stack.Screen
                 name="email-signup"
-                options={defaultScreenOptions}
+                options={screenConfigs.defaultHeader}
             />
             <Stack.Screen
                 name="login"
-                options={defaultScreenOptions}
+                options={screenConfigs.defaultHeader}
             />
             <Stack.Screen
                 name="verify/[email]"
-                options={defaultScreenOptions}
-            />
-            <Stack.Screen
-                name="etf"
-                options={{ headerShown: false }}
-            />
-            <Stack.Screen
-                name="deposit"
-                options={{ headerShown: false }}
+                options={screenConfigs.defaultHeader}
             />
             <Stack.Screen
                 name="(kyc)"
-                options={{ headerShown: false }}
-            />
-            <Stack.Screen
-                name="(authenticated)/(modals)/lock"
-                options={{ headerShown: false, animation: 'none' }}
+                options={screenConfigs.noHeader}
             />
         </Stack>
     )

@@ -42,7 +42,7 @@ const Lock = () => {
         // Check if PIN is set, if not redirect to PIN setup
         const storedPin = storage.getString('user-pin');
         if (!storedPin) {
-            router.replace('/(authenticated)/(modals)/pin-setup');
+            router.replace('/(authenticated)/modals/pin-setup');
             return;
         }
 
