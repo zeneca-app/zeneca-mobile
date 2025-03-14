@@ -1,21 +1,19 @@
 import VerifyIlustration from "@/assets/verify-ilustration.svg";
-import { useNavigation } from "@react-navigation/native";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { router } from "expo-router";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import {
   SafeAreaView,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 
 const KYCVerificationScreen = () => {
-  const navigation = useNavigation();
   const { t } = useTranslation();
 
   const launchKYCProvider = () => {
-    navigation.navigate("OnBoarding");
+    router.push("/onboarding/steps");
   };
 
   return (

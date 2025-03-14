@@ -1,6 +1,5 @@
 
 import Button from "@/components/Button";
-import FullScreenLoader from "@/components/FullScreenLoader";
 import LoggedLayout, { LeftNav } from "@/components/LoggedLayout";
 import ProgressBar from "@/components/ProgressBar";
 import Text from "@/components/Text";
@@ -9,22 +8,14 @@ import { useTranslation } from "react-i18next";
 import { KeyboardAvoidingView, Platform, View, Keyboard, TouchableOpacity, ScrollView } from "react-native";
 import { FormValues, steps } from "@/components/Onboarding/config";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import Animated, {
     FadeIn,
     FadeOut,
-    SlideInDown,
-    withTiming,
-    withSpring,
-    SlideInRight,
     LinearTransition,
-    SlideOutRight,
-    SlideInLeft,
-    SlideOutLeft
 } from 'react-native-reanimated';
 import { useOnboardingMutations } from "@/components/Onboarding/useOnboardingMutations";
 import { useUserStore } from "@/storage/";
-
+import { router } from "expo-router";
 
 export enum OnboardingStatus {
     NAMES_STEP = "NAMES_STEP",
@@ -53,9 +44,8 @@ const getNextStep = (currentStatus: OnboardingStatus | null): OnboardingStatus =
     }
 };
 
-const OnBoarding = () => {
+const OnBoardingSteps = () => {
     const { t } = useTranslation();
-    const navigation = useNavigation();
 
     const { user, fetchUser } = useUserStore();
 
@@ -140,7 +130,7 @@ const OnBoarding = () => {
 
     const handleBack = () => {
         if (activeStep === STEPS[OnboardingStatus.NAMES_STEP]) {
-            navigation.goBack();
+            router.back();
             return;
         }
     };
@@ -240,6 +230,6 @@ const OnBoarding = () => {
     );
 };
 
-OnBoarding.displayName = "OnBoarding";
+OnBoardingSteps.displayName = "OnBoardingSteps";
 
-export default OnBoarding;
+export default OnBoardingSteps;

@@ -1,5 +1,5 @@
 import { queryClient } from "@/storage";
-import { useNavigation } from "@react-navigation/native";
+import { router } from "expo-router";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -13,11 +13,9 @@ import {
 
 const KYCSuccess = () => {
   const { t } = useTranslation();
-  const navigation = useNavigation();
 
   const goHome = async () => {
-    
-    navigation.navigate("Home");
+    router.replace("/(authenticated)/home");
   };
 
   return (

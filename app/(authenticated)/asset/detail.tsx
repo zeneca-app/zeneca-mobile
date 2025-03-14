@@ -11,7 +11,7 @@ import {
   TIMEFRAME_DEFAULT,
 } from "@/constants/stocks";
 import { cssInterop } from "nativewind";
-import React from "react";
+import React, { useState } from "react";
 import { ScrollView } from "react-native";
 import { AssetPrice } from "@/client/";
 import useMarketHourStore from "@/storage/marketHourStore";
@@ -21,23 +21,20 @@ import ETFChart from "@/components/ETFDetail/ETFChart";
 import ETFActions from "@/components/ETFDetail/ETFActions";
 import ETFDescription from "@/components/ETFDetail/ETFDescription";
 import { normalizeStockPointsData, getChartChange } from "@/components/ETFDetail/ETFChartUtils";
+import { useLocalSearchParams } from "expo-router";
 
-type DetailScreenProps = {
-  route: {
-    params: {
-      asset: AssetPrice;
-    };
-  };
-};
 
-const Detail = ({ route }: DetailScreenProps) => {
-  const asset = route.params.asset;
-  const [timeframe, setTimeframe] =
-    React.useState<keyof typeof CHART_TIMEFRAMES>(TIMEFRAME_DEFAULT);
-  // Add state for cursor price
-  const [cursorPrice, setCursorPrice] = React.useState<string | null>(null);
-
+const Detail = () => {
   cssInterop(CopyIcon, { className: "style" });
+
+  const { asset_id, serialized_asset } = useLocalSearchParams();
+  const asset = JSON.parse(serialized_asset as string) as AssetPrice;
+
+  const [timeframe, setTimeframe] =
+    useState<keyof typeof CHART_TIMEFRAMES>(TIMEFRAME_DEFAULT);
+
+  // Add state for cursor price
+  const [cursorPrice, setCursorPrice] = useState<string | null>(null);
 
   const { isMarketOpen } = useMarketHourStore((state) => state);
 
@@ -51,9 +48,10 @@ const Detail = ({ route }: DetailScreenProps) => {
     ...assetsGetAssetDetailOptions({
       client: client,
       path: {
-        asset_id: asset.id,
+        asset_id: asset_id as string,
       },
     }),
+    enabled: Boolean(asset_id),
   });
 
   // Fetch chart data
@@ -66,13 +64,13 @@ const Detail = ({ route }: DetailScreenProps) => {
     ...assetsGetAssetTicksOptions({
       client: client,
       path: {
-        asset_id: asset.id,
+        asset_id: asset_id as string,
       },
       query: {
         timespan: CHART_TIMEFRAMES[timeframe] as Timespan,
       },
     }),
-    enabled: Boolean(asset?.id),
+    enabled: Boolean(asset_id),
   });
 
   // Process chart data

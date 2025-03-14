@@ -45,7 +45,7 @@ const Explore = () => {
     data: marketHours,
   } = useQuery({
     ...assetsGetMarketHoursOptions(),
-  });
+  });  
 
   const isMarketOpen = marketHours?.is_market_open || false;
 

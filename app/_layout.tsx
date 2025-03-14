@@ -3,8 +3,7 @@ import "@/i18n";
 import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack, useRouter, useSegments } from 'expo-router';
-import { StatusBar, TouchableOpacity, LogBox } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { StatusBar, LogBox } from 'react-native';
 import {
     Manrope_300Light,
     Manrope_400Regular,
@@ -16,8 +15,6 @@ import { useUserStore } from '@/storage';
 import { useCheckUpdate } from '@/hooks/useCheckUpdate';
 import { onlineManager } from '@tanstack/react-query';
 import NetInfo from '@react-native-community/netinfo';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { Ionicons } from '@expo/vector-icons';
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import {
     QueryClient,
@@ -32,11 +29,9 @@ import env from "@/config/env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
 import IntroAnimation from "@/components/IntroAnimation";
-import ProfileButton from "@/components/ProfileButton";
 import * as Sentry from "@sentry/react-native";
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 import tokenCache from "@/utils/token";
-import clerkInstance from "@/utils/clerk";
 import { UserInactivityProvider } from "@/context/UserInactivity";
 import screenConfigs from "@/components/screenOptions";
 
@@ -82,7 +77,6 @@ export {
 SplashScreen.preventAutoHideAsync();
 
 const InitialLayout = () => {
-    const navigation = useNavigation();
 
     const [loaded, error] = useFonts({
         Manrope_300Light: Manrope_300Light,
@@ -148,7 +142,6 @@ const InitialLayout = () => {
     console.log("segments", segments);
 
 
-
     if (!loaded || !isLoaded) {
         return (
             <IntroAnimation />
@@ -184,7 +177,7 @@ const InitialLayout = () => {
                 options={screenConfigs.defaultHeader}
             />
             <Stack.Screen
-                name="(kyc)"
+                name="(onboarding)"
                 options={screenConfigs.noHeader}
             />
         </Stack>
@@ -204,7 +197,6 @@ const RootLayout = () => {
                 <GestureHandlerRootView>
                     <SafeAreaProvider>
                         <BottomSheetModalProvider>
-
                             <UserInactivityProvider>
                                 <WagmiProvider config={wagmiConfig}>
                                     <PostHogProvider
@@ -218,7 +210,6 @@ const RootLayout = () => {
                                     </PostHogProvider>
                                 </WagmiProvider>
                             </UserInactivityProvider>
-
                         </BottomSheetModalProvider>
                     </SafeAreaProvider>
                 </GestureHandlerRootView>
