@@ -14,6 +14,13 @@ export const UserInactivityProvider = ({ children }: any) => {
     const { isSignedIn } = useAuth();
 
     useEffect(() => {
+        // Check if app was killed while in background
+        const wasInBackground = storage.getBoolean('was_in_background');
+        if (wasInBackground && isSignedIn) {
+            router.replace('/(authenticated)/(modals)/lock');
+            storage.set('was_in_background', false);
+        }
+
         const subscription = AppState.addEventListener('change', handleAppStateChange);
 
         return () => {
@@ -25,20 +32,15 @@ export const UserInactivityProvider = ({ children }: any) => {
         console.log('🚀 ~ handleAppStateChange ~ nextAppState', nextAppState);
 
         if (nextAppState === 'background') {
-            recordStartTime();
-        } else if (nextAppState === 'active' && appState.current.match(/background/)) {
-            const elapsed = Date.now() - (storage.getNumber('startTime') || 0);
-            console.log('🚀 ~ handleAppStateChange ~ elapsed:', elapsed);
-
             if (isSignedIn) {
+                storage.set('was_in_background', true);
                 router.replace('/(authenticated)/(modals)/lock');
             }
+        } else if (nextAppState === 'active') {
+            storage.set('was_in_background', false);
         }
+        
         appState.current = nextAppState;
-    };
-
-    const recordStartTime = () => {
-        storage.set('startTime', Date.now());
     };
 
     return children;
