@@ -6,22 +6,23 @@ import { cssInterop } from "nativewind";
 import { useTranslation } from 'react-i18next';
 import * as Application from 'expo-application';
 import { useUserStore } from '@/storage/';
-import { usePrivy } from "@privy-io/expo";
+
 import { useState, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import Avatar from "@/assets/avatar.svg";
 import { useKYCStatusStore } from '@/storage/kycStatusStore';
-
+import { useRouter } from 'expo-router';
 
 const ProfileScreen = () => {
     const navigation = useNavigation();
     const { t } = useTranslation();
-    const { logout } = usePrivy();
+
     const queryClient = useQueryClient();
     const { user } = useUserStore();
     const [isLoading, setIsLoading] = useState(false);
     const { setUser } = useUserStore((state) => state);
     const { reset } = useKYCStatusStore(state => state);
+    const router = useRouter();
 
 
     const handleLogout = async () => {
@@ -30,13 +31,11 @@ const ProfileScreen = () => {
             setIsLoading(true);
             setUser(undefined);
             queryClient.clear();
-            await logout();
+
             // Close modal first, then navigate to Login
+            router.replace("/");
             //navigation.navigate("Login");
-            navigation.reset({
-                index: 0,
-                routes: [{ name: "Welcome" }],
-            });
+
         } catch (error) {
             console.error("Logout error:", error);
         }
@@ -45,7 +44,7 @@ const ProfileScreen = () => {
     cssInterop(Avatar, { className: "style" });
 
     const handleHistory = () => {
-        navigation.navigate("OrderHistory");
+        router.push("/order-history");
     }
 
     return (

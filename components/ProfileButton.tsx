@@ -9,7 +9,7 @@ import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TouchableOpacity } from "react-native";
 import FullScreenLoader from "./FullScreenLoader";
-
+import { useRouter } from "expo-router";
 
 export type ProfileButtonProps = {
   children?: React.ReactNode;
@@ -21,6 +21,7 @@ const ProfileButton = ({
   className,
 }: ProfileButtonProps) => {
   const navigation = useNavigation();
+  const router = useRouter();
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -37,7 +38,7 @@ const ProfileButton = ({
     <>
       <TouchableOpacity
         className={`${defaultClasses} ${className}`}
-        onPress={() => navigation.navigate("Profile")}
+        onPress={() => router.push("/profile")}
       >
         {children ? (
           children

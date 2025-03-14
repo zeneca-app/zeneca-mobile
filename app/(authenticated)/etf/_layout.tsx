@@ -1,38 +1,28 @@
 import { Stack } from 'expo-router';
+import screenConfigs from '@/components/screenOptions';
+
+
 
 export default function Layout() {
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-        animation: 'fade',
-      }}
-    >
+    <Stack>
       <Stack.Screen
         name="etf/detail"
-        options={{
-          headerShown: false
-        }}
+        options={screenConfigs.defaultHeader}
       />
       <Stack.Screen
         name="etf/purchase/purchase"
-        options={{
-          headerShown: false
-        }}
+        options={screenConfigs.defaultHeader}
       />
       <Stack.Screen
         name="etf/purchase/confirm"
-        options={{
-          headerShown: false
-        }}
+        options={screenConfigs.defaultHeader}
       />
       <Stack.Screen
         name="etf/purchase/success"
-        options={{
-          headerShown: false
-        }}
+        options={screenConfigs.noHeader}
       />
-      
+  
     </Stack>
   );
 }
