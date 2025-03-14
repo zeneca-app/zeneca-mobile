@@ -22,7 +22,7 @@ import ETFActions from "@/components/ETFDetail/ETFActions";
 import ETFDescription from "@/components/ETFDetail/ETFDescription";
 import { normalizeStockPointsData, getChartChange } from "@/components/ETFDetail/ETFChartUtils";
 
-type ETFDetailScreenProps = {
+type DetailScreenProps = {
   route: {
     params: {
       asset: AssetPrice;
@@ -30,7 +30,7 @@ type ETFDetailScreenProps = {
   };
 };
 
-const ETFDetail = ({ route }: ETFDetailScreenProps) => {
+const Detail = ({ route }: DetailScreenProps) => {
   const asset = route.params.asset;
   const [timeframe, setTimeframe] =
     React.useState<keyof typeof CHART_TIMEFRAMES>(TIMEFRAME_DEFAULT);
@@ -127,6 +127,6 @@ const ETFDetail = ({ route }: ETFDetailScreenProps) => {
   );
 };
 
-ETFDetail.displayName = "ETFDetail";
+Detail.displayName = "Detail";
 
-export default ETFDetail;
+export default Detail;

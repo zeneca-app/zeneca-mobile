@@ -16,8 +16,9 @@ import SkeletonLoadingView, {
 } from "@/components/Loading/SkeletonLoadingView";
 import AssetLogo from '@/components/AssetLogo';
 import { AssetPrice } from "@/client/";
+import { router } from "expo-router";
 
-type ETFPurchaseScreenProps = {
+type PurchaseScreenProps = {
   route: {
     params: {
       asset: AssetPrice;
@@ -25,13 +26,9 @@ type ETFPurchaseScreenProps = {
   };
 };
 
-const ETFPurchase = ({ route }: ETFPurchaseScreenProps) => {
+const Purchase = ({ route }: PurchaseScreenProps) => {
   const { t } = useTranslation();
-
   const { asset } = route.params;
-
-  const navigation = useNavigation();
-
   const [amount, setAmount] = useState<string>("0");
 
   const {
@@ -66,9 +63,12 @@ const ETFPurchase = ({ route }: ETFPurchaseScreenProps) => {
       ? new BigNumber(balance?.available || 0).toString()
       : new BigNumber(amount).multipliedBy(1_000_000).toString();
 
-    navigation.navigate("ETFPurchaseConfirmation", {
-      asset,
-      amount: amountToBuy,
+    router.push({
+      pathname: "/etf/purchase/confirmation",
+      params: {
+        asset,
+        amount: amountToBuy,
+      },
     });
   };
 
@@ -126,6 +126,6 @@ const ETFPurchase = ({ route }: ETFPurchaseScreenProps) => {
   );
 };
 
-ETFPurchase.displayName = "ETFPurchase";
+Purchase.displayName = "Purchase";
 
-export default ETFPurchase;
+export default Purchase;

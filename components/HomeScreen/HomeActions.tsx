@@ -7,15 +7,13 @@ import Button from "@/components/Button";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
+import { router } from "expo-router";
 
 const HomeActions = () => {
-  const navigation = useNavigation();
-
   const { t } = useTranslation();
 
   //const { dismiss, present } = useBottomSheetModal();
@@ -26,17 +24,23 @@ const HomeActions = () => {
 
   const handleDepositCrypto = () => {
     depositBottomMenuRef.current?.dismiss();
-    navigation.navigate("DepositCrypto");
+    router.push({
+      pathname: "/(authenticated)/deposit/crypto",
+    });
   };
 
   const handleDepositBank = () => {
     depositBottomMenuRef.current?.dismiss();
-    navigation.navigate("DepositWithBank");
+    router.push({
+      pathname: "/(authenticated)/deposit/bank",
+    });
   };
 
   const handleExplore = () => {
     depositBottomMenuRef.current?.dismiss();
-    navigation.navigate("ExploreAssets");
+    router.push({
+      pathname: "/(authenticated)/explore",
+    });
   };
 
   const handleSheetChanges = useCallback((index: number) => {

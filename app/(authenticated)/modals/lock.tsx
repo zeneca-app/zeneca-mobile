@@ -14,6 +14,11 @@ import Animated, {
     withSequence,
     withTiming,
 } from 'react-native-reanimated';
+import { MMKV } from 'react-native-mmkv';
+
+const storage = new MMKV({
+    id: 'pin-storage',
+});
 
 const Lock = () => {
     const { user } = useUser();
@@ -34,9 +39,16 @@ const Lock = () => {
     const TIME = 80;
 
     useEffect(() => {
+        // Check if PIN is set, if not redirect to PIN setup
+        const storedPin = storage.getString('user-pin');
+        if (!storedPin) {
+            router.replace('/(authenticated)/(modals)/pin-setup');
+            return;
+        }
+
         if (code.length === 6) {
-            if (code.join('') === '111111') {
-                router.replace('/(authenticated)/(tabs)/home');
+            if (code.join('') === storage.getString('user-pin')) {
+                router.replace('/(authenticated)/home');
                 setCode([]);
             } else {
                 offset.value = withSequence(
@@ -63,7 +75,7 @@ const Lock = () => {
     const onBiometricAuthPress = async () => {
         const { success } = await LocalAuthentication.authenticateAsync();
         if (success) {
-            router.replace('/(authenticated)/(tabs)/home');
+            router.replace('/(authenticated)/home');
         } else {
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
         }
@@ -131,9 +143,9 @@ const Lock = () => {
                         )}
                     </View>
                 </View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => router.replace('/(authenticated)/(modals)/pin-setup')}>
                     <Text className="text-lg font-medium text-electric-40 self-center mt-5">
-                        Forgot your passcode?
+                        Reset your PIN
                     </Text>
                 </TouchableOpacity>
             </View>

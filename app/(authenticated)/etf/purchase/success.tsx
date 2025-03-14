@@ -3,15 +3,15 @@ import Button from "@/components/Button";
 import LoggedLayout from "@/components/LoggedLayout";
 import Text from "@/components/Text";
 import { formatNumber } from "@/utils/currencyUtils";
-import { useNavigation } from "@react-navigation/native";
 import BigNumber from "bignumber.js";
 import React from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
 import AssetLogo from '@/components/AssetLogo';
 import { AssetPrice, OrderQuote } from "@/client";
+import { router } from "expo-router";
 
-type ETFPurchaseSuccessScreenProps = {
+type PurchaseSuccessScreenProps = {
   route: {
     params: {
       asset: AssetPrice;
@@ -21,18 +21,15 @@ type ETFPurchaseSuccessScreenProps = {
   };
 };
 
-const ETFPurchaseSuccess = ({ route }: ETFPurchaseSuccessScreenProps) => {
+const PurchaseSuccess = ({ route }: PurchaseSuccessScreenProps) => {
   const { asset, amount = 0, quote } = route.params;
 
-  const navigation = useNavigation();
 
   const { t } = useTranslation();
 
   const handleContinue = () => {
-    //reset go back action
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "Home" }],
+    router.replace({
+      pathname: "/(authenticated)/(tabs)/home",
     });
   };
 
@@ -109,6 +106,6 @@ const ETFPurchaseSuccess = ({ route }: ETFPurchaseSuccessScreenProps) => {
   );
 };
 
-ETFPurchaseSuccess.displayName = "ETFPurchaseSuccess";
+PurchaseSuccess.displayName = "PurchaseSuccess";
 
-export default ETFPurchaseSuccess;
+export default PurchaseSuccess;

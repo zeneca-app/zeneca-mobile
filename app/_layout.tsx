@@ -133,7 +133,7 @@ const InitialLayout = () => {
         console.log("inAuthGroup", inAuthGroup);
 
         if (isAuthenticated && !inAuthGroup) {
-            router.replace('/(authenticated)/(tabs)/home');
+            router.replace('/(authenticated)/home');
         } else if (!isAuthenticated && inAuthGroup) {
             router.replace('/');
         }
@@ -174,7 +174,7 @@ const InitialLayout = () => {
             />
 
             <Stack.Screen
-                name="(authenticated)/(tabs)"
+                name="(authenticated)/"
                 options={{ headerShown: false }}
             />
 

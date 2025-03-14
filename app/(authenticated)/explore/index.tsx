@@ -20,7 +20,7 @@ import BottomActions from "@/components/BottomActions";
 import Config from "@/config";
 
 
-const ExploreAssets = () => {
+const Explore = () => {
   cssInterop(CopyIcon, { className: "style" });
 
   const { setIsMarketOpen } = useMarketHourStore((state) => state);
@@ -113,6 +113,6 @@ const ExploreAssets = () => {
   );
 };
 
-ExploreAssets.displayName = "ExploreAssets";
+Explore.displayName = "Explore";
 
-export default ExploreAssets;
+export default Explore;

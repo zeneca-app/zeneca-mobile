@@ -12,3 +12,5 @@ export default function Layout() {
     </Stack>
   );
 } 
+
+Layout.displayName = "Layout";

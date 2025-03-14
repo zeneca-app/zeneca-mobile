@@ -9,7 +9,7 @@ import { createOrder } from "@/lib/dinari";
 import { getPimlicoSmartAccountClient, publicClient } from "@/lib/pimlico";
 import { useChainStore } from "@/storage/chainStore";
 import { currencyFormatter, formatNumber } from "@/utils/currencyUtils";
-import { useEmbeddedWallet } from "@privy-io/expo";
+
 import { useNavigation } from "@react-navigation/native";
 import * as Sentry from '@sentry/react-native';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -19,8 +19,11 @@ import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { Address } from "viem";
 import AssetLogo from '@/components/AssetLogo';
+import { router } from "expo-router";
 
-type ETFPurchaseConfirmationScreenProps = {
+
+
+type PurchaseConfirmationScreenProps = {
   route: {
     params: {
       asset: AssetPrice;
@@ -28,14 +31,14 @@ type ETFPurchaseConfirmationScreenProps = {
     };
   };
 };
-const ETFPurchaseConfirmation = ({ route }: ETFPurchaseConfirmationScreenProps) => {
+const PurchaseConfirmation = ({ route }: PurchaseConfirmationScreenProps) => {
   const { asset, amount } = route.params;
 
   const navigation = useNavigation();
   const queryClient = useQueryClient();
 
   const { t } = useTranslation();
-  const wallet = useEmbeddedWallet();
+  
   const { chain } = useChainStore();
   const [transactionInitiated, setTransactionInitiated] = useState(false);
 
@@ -95,10 +98,13 @@ const ETFPurchaseConfirmation = ({ route }: ETFPurchaseConfirmationScreenProps) 
         queryClient.invalidateQueries({ queryKey: ["usersMyAssets"] }),
       ]);
 
-      navigation.navigate("ETFPurchaseSuccess", {
-        asset,
-        amount,
-        quote,
+      router.replace({
+        pathname: "/etf/purchase/success",
+        params: {
+          asset: JSON.stringify(asset),
+          amount,
+          quote: JSON.stringify(quote),
+        },
       });
 
     } catch (error) {
@@ -299,6 +305,6 @@ const ETFPurchaseConfirmation = ({ route }: ETFPurchaseConfirmationScreenProps) 
   );
 };
 
-ETFPurchaseConfirmation.displayName = "ETFPurchaseConfirmation";
+PurchaseConfirmation.displayName = "PurchaseConfirmation";
 
-export default ETFPurchaseConfirmation;
+export default PurchaseConfirmation;
