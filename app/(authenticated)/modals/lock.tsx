@@ -38,14 +38,40 @@ const Lock = () => {
     const OFFSET = 20;
     const TIME = 80;
 
-    useEffect(() => {
-        // Check if PIN is set, if not redirect to PIN setup
-        const storedPin = storage.getString('user-pin');
-        if (!storedPin) {
-            router.replace('/(authenticated)/modals/pin-setup');
-            return;
+    const authenticateWithBiometrics = async () => {
+        const { success } = await LocalAuthentication.authenticateAsync({
+            promptMessage: 'Authenticate to access your account',
+            fallbackLabel: 'Use PIN instead'
+        });
+        if (success) {
+            router.replace('/(authenticated)/home');
+        } else {
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
         }
+    };
 
+    // Check for PIN and trigger biometric auth on mount
+    useEffect(() => {
+        const checkPinAndAuthenticate = async () => {
+            const storedPin = storage.getString('user-pin');
+            if (!storedPin) {
+                router.replace('/(authenticated)/modals/pin-setup');
+                return;
+            }
+
+            // Check if device supports biometric authentication
+            const hasHardware = await LocalAuthentication.hasHardwareAsync();
+            const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+            
+            if (hasHardware && isEnrolled) {
+                authenticateWithBiometrics();
+            }
+        };
+
+        checkPinAndAuthenticate();
+    }, []);
+
+    useEffect(() => {
         if (code.length === 6) {
             if (code.join('') === storage.getString('user-pin')) {
                 router.replace('/(authenticated)/home');
@@ -72,15 +98,6 @@ const Lock = () => {
         setCode(code.slice(0, -1));
     };
 
-    const onBiometricAuthPress = async () => {
-        const { success } = await LocalAuthentication.authenticateAsync();
-        if (success) {
-            router.replace('/(authenticated)/home');
-        } else {
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-        }
-    };
-
     return (
         <SafeAreaView className="flex-1 bg-basic-black">
             <Stack.Screen options={{ 
@@ -96,7 +113,7 @@ const Lock = () => {
                 {codeLength.map((_, index) => (
                     <View
                         key={index}
-                        className={`w-5 h-5 rounded-full ${code[index] ? 'bg-electric-40' : 'bg-dark-gray-alpha-3'}`}
+                        className={`w-5 h-5 rounded-full ${code[index] ? 'bg-electric-40' : 'bg-white'}`}
                     />
                 ))}
             </Animated.View>
@@ -125,7 +142,7 @@ const Lock = () => {
                     ))}
                 </View>
                 <View className="flex-row justify-between items-center">
-                    <TouchableOpacity onPress={onBiometricAuthPress}>
+                    <TouchableOpacity onPress={authenticateWithBiometrics}>
                         <MaterialCommunityIcons name="face-recognition" size={26} color="white" />
                     </TouchableOpacity>
 
