@@ -28,6 +28,10 @@ export default function Layout() {
         name="asset"
         options={screenConfigs.noHeader}
       />
+      <Stack.Screen
+        name="order-history"
+        options={screenConfigs.defaultHeader}
+      />
     </Stack>
   );
 }

@@ -1,23 +1,18 @@
 import { Stack } from 'expo-router';
+import screenConfigs from '@/components/screenOptions';
 
 export default function Layout() {
     return (
         <Stack
-            screenOptions={{
-                headerShown: false
-            }}
+            screenOptions={screenConfigs.defaultHeader}
         >
             <Stack.Screen
                 name="crypto"
-                options={{
-                    headerShown: false
-                }}
+                options={screenConfigs.noHeader}
             />
             <Stack.Screen
                 name="bank"
-                options={{
-                    headerShown: false
-                }}
+                options={screenConfigs.noHeader}
             />
         </Stack>
     );
