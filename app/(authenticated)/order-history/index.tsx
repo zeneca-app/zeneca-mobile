@@ -1,5 +1,4 @@
 import { View, FlatList } from 'react-native';
-import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Trans } from "react-i18next";
 import { useState } from 'react';
@@ -14,7 +13,6 @@ import { useOrders } from '@/hooks/useOrders';
 
 const OrderHistory = () => {
     const [selectedTab, setSelectedTab] = useState<'todo' | 'orders' | 'transfers'>('todo');
-    const router = useRouter();
     const { t } = useTranslation();
     const { isPending, orders, hasOrders, refetch } = useOrders();
 

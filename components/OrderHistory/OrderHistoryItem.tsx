@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import Text from '@/components/Text';
 import { Order } from '@/client';
 import { getSmartDate } from '@/utils/date/formatters';
+import { getStatusColor } from '@/utils/orders/status';
 
 interface OrderHistoryItemProps {
     order: Order;

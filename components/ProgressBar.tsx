@@ -19,7 +19,7 @@ const ProgressBar = ({ progress }: { progress: number }) => {
 
   return (
     <View className="flex-1 w-full justify-center items-stretch">
-      <View className="bg-dark-content-disabled relative rounded-full h-1 rounded-full overflow-hidden">
+      <View className="bg-dark-content-disabled relative h-1 rounded-full overflow-hidden">
         <Animated.View
           className="absolute top-0 left-0 h-full rounded-full overflow-hidden w-full"
           style={{
