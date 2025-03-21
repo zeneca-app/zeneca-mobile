@@ -14,6 +14,7 @@ export type buttonProps = {
   disabledContentClasses?: string;
   children: React.ReactNode;
   variant?: "solid" | "outline" | "link";
+  testID?: string;
 };
 
 const Button = ({
@@ -27,6 +28,7 @@ const Button = ({
   contentClasses = "",
   disabledContentClasses = "",
   children,
+  testID,
 }: buttonProps) => {
   const defaultClasses = {
     solid: [
@@ -77,7 +79,7 @@ const Button = ({
   if (href) {
     return (
       <Link href={href} asChild disabled={disabled || isLoading}>
-        <Pressable className={`${defaultClasses[variant]} ${className}`}>
+        <Pressable testID={testID} className={`${defaultClasses[variant]} ${className}`}>
           <ButtonContent />
         </Pressable>
       </Link>
@@ -86,6 +88,7 @@ const Button = ({
 
   return (
     <Pressable
+      testID={testID}
       onPress={() => !isLoading && !disabled && onPress?.()}
       className={`${defaultClasses[variant]} ${className}`}
     >
