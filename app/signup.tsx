@@ -6,17 +6,18 @@ import {
   View,
   Alert,
 } from "react-native";
-import { useSignUp, isClerkAPIResponseError, useOAuth } from "@clerk/clerk-expo";
+import { useSignUp, isClerkAPIResponseError, useSSO } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import LoggedLayout from "@/components/LoggedLayout";
 import LoginButton from "@/components/login/button";
 import { useLocalCredentials } from '@clerk/clerk-expo/local-credentials'
+import * as AuthSession from 'expo-auth-session'
 
 const SignUp = () => {
   const { t } = useTranslation();
   const router = useRouter();
-  const { isLoaded, signUp } = useSignUp();
-  const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
+  const { isLoaded } = useSignUp();
+  const { startSSOFlow } = useSSO()
 
   const { hasCredentials, setCredentials, authenticate, biometricType } = useLocalCredentials()
 
@@ -38,18 +39,20 @@ const SignUp = () => {
     } finally {
       setIsEmailLoading(false);
     }
-  }, [isLoaded, router]);
+  }, []);
 
   const onGoogleSignUpPress = useCallback(async () => {
     try {
       setIsGoogleLoading(true);
 
-      const { createdSessionId, setActive } = await startOAuthFlow();
+      const { createdSessionId, setActive, signIn, signUp } = await startSSOFlow({
+        strategy: 'oauth_google',
+        // Defaults to current path
+        redirectUrl: AuthSession.makeRedirectUri(),
+      })
 
       if (createdSessionId) {
-        
         setActive!({ session: createdSessionId });
-       
       }
     } catch (err: any) {
       Alert.alert(
@@ -59,7 +62,7 @@ const SignUp = () => {
     } finally {
       setIsGoogleLoading(false);
     }
-  }, [startOAuthFlow, router]);
+  }, []);
 
   return (
     <LoggedLayout>
