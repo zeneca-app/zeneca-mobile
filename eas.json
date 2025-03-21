@@ -17,12 +17,26 @@
     },
     "preview": {
       "channel": "preview",
-      "distribution": "internal",
+      "distribution": "store",
+      "ios": {
+        "buildConfiguration": "Release",
+        "distribution": "store"
+      },
       "android": {
-        "buildType": "apk"
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleRelease"
+      }
+    },
+    "build-and-maestro-test": {
+      "withoutCredentials": true,
+      "config": "build-and-maestro-test.yml",
+      "android": {
+        "buildType": "apk",
+        "image": "latest"
       },
       "ios": {
-        "simulator": true
+        "simulator": true,
+        "image": "latest"
       }
     },
     "production": {
@@ -30,40 +44,13 @@
       "autoIncrement": true,
       "channel": "production",
       "android": {
-        "buildType": "apk",
-        "gradleCommand": ":app:assembleRelease"
+        "buildType": "app-bundle",
+        "gradleCommand": ":app:bundleRelease"
       },
       "ios": {
         "distribution": "store"
       }
-    },
-    "testflight": {
-      "extends": "production",
-      "channel": "testflight",
-      "distribution": "internal"
-    },
-    "playstore-beta": {
-      "extends": "production",
-      "channel": "beta",
-      "distribution": "internal",
-      "android": {
-        "buildType": "app-bundle",
-        "gradleCommand": ":app:bundleRelease"
-      }
     }
   },
-  "submit": {
-    "production": {
-      "android": {
-        "track": "production",
-        "releaseStatus": "completed"
-      }
-    },
-    "playstore-beta": {
-      "android": {
-        "track": "internal",
-        "releaseStatus": "completed"
-      }
-    }
-  }
+  "submit": {}
 }
