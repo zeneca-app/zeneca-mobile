@@ -1,7 +1,6 @@
 import { Stack } from 'expo-router';
 import screenConfigs from '@/components/screenOptions';
 
-
 export default function Layout() {
   return (
     <Stack>

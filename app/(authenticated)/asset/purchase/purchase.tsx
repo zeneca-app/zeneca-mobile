@@ -64,9 +64,9 @@ const Purchase = ({ route }: PurchaseScreenProps) => {
       : new BigNumber(amount).multipliedBy(1_000_000).toString();
 
     router.push({
-      pathname: "/etf/purchase/confirmation",
+      pathname: "/asset/purchase/confirmation",
       params: {
-        asset,
+        asset: asset.symbol,
         amount: amountToBuy,
       },
     });

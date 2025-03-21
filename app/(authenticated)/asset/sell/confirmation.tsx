@@ -4,12 +4,8 @@ import Button from "@/components/Button";
 import { SkeletonView } from "@/components/Loading/SkeletonLoadingView";
 import LoggedLayout from "@/components/LoggedLayout";
 import Text from "@/components/Text";
-import { STOCKS } from "@/constants/stocks";
-import { createOrder } from "@/lib/dinari";
-import { getPimlicoSmartAccountClient, publicClient } from "@/lib/pimlico";
 import { useChainStore } from "@/storage/chainStore";
-import { currencyFormatter, formatNumber } from "@/utils/currencyUtils";
-
+import { currencyFormatter } from "@/utils/currencyUtils";
 import { useNavigation } from "@react-navigation/native";
 import * as Sentry from '@sentry/react-native';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -17,24 +13,14 @@ import BigNumber from "bignumber.js";
 import React, { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
-import { Address } from "viem";
 import AssetLogo from '@/components/AssetLogo';
-import { AssetPrice } from "@/client";
+import { router, useLocalSearchParams } from "expo-router";
 
 
-type ETFSellConfirmationScreenProps = {
-  route: {
-    params: {
-      asset: AssetPrice;
-      amount: string;
-      quantity: string;
-    };
-  };
-};
 
-const ETFSellConfirmation = ({ route }: ETFSellConfirmationScreenProps) => {
-  const { asset, quantity, amount } = route.params;
-
+const ETFSellConfirmation = () => {
+  const { asset, quantity, amount  } = useLocalSearchParams();
+  
   const navigation = useNavigation();
   const queryClient = useQueryClient();
 
@@ -66,40 +52,14 @@ const ETFSellConfirmation = ({ route }: ETFSellConfirmationScreenProps) => {
     try {
       setTransactionInitiated(true);
 
-      const signerAddress = wallet?.account?.address as Address;
-      if (!signerAddress) throw new Error("No wallet address found");
-      if (!quote) throw new Error("No quote available");
 
-      const smartAccountClient = await getPimlicoSmartAccountClient(
-        signerAddress,
-        chain,
-        wallet,
-      );
-
-      const tx = await smartAccountClient.sendTransactions({
-        transactions: quote.transactions,
-      });
-
-      if (!tx) throw new Error("Transaction failed to send");
-
-      const receipt = await publicClient.waitForTransactionReceipt({
-        hash: tx,
-      });
-
-      if (receipt.status !== "success") {
-        throw new Error("Transaction failed");
-      }
-
-      // Invalidate queries after successful transaction
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["usersMyBalance"] }),
-        queryClient.invalidateQueries({ queryKey: ["usersMyAssets"] }),
-      ]);
-
-      navigation.navigate("ETFSellSuccess", {
-        asset,
-        amount: quote?.total_amount.toString(),
-        quote,
+      router.push({
+        pathname: "/asset/sell/success",
+        params: {
+          asset: asset.symbol,
+          amount: quote?.total_amount.toString(),
+          quote,
+        },
       });
 
     } catch (error) {

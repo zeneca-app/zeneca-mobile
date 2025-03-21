@@ -2,38 +2,24 @@ import GradientCircle from "@/assets/green-gradient-circle.svg";
 import Button from "@/components/Button";
 import LoggedLayout from "@/components/LoggedLayout";
 import Text from "@/components/Text";
-import { STOCKS } from "@/constants/stocks";
 import { formatNumber } from "@/utils/currencyUtils";
-import { useNavigation } from "@react-navigation/native";
 import BigNumber from "bignumber.js";
 import React from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
 import AssetLogo from '@/components/AssetLogo';
-import { AssetPrice, OrderQuote } from "@/client";
+import { router, useLocalSearchParams } from "expo-router";
 
-type ETFSellSuccessScreenProps = {
-  route: {
-    params: {
-      asset: AssetPrice;
-      amount: string;
-      quote: OrderQuote;
-    };
-  };
-};
 
-const ETFSellSuccess = ({ route }: ETFSellSuccessScreenProps) => {
-  const { asset, amount = 0, quote } = route.params;
-
-  const navigation = useNavigation();
+const ETFSellSuccess = () => {
+  const { asset, amount = 0, quote } = useLocalSearchParams();
 
   const { t } = useTranslation();
 
   const handleContinue = () => {
     //reset go back action
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "Home" }],
+    router.replace({
+      pathname: "/(authenticated)/(tabs)/home",
     });
   };
 

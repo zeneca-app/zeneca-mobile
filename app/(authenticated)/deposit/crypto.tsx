@@ -15,13 +15,11 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
 
-
 const DepositCrypto = () => {
   const { t } = useTranslation();
-  const { user: storedUser } = useUserStore((state) => state);
+  const { user } = useUserStore((state) => state);
 
-  const walletAddress = storedUser?.wallets[0]
-    .smart_account_address as `0x${string}`;
+  const walletAddress = user?.wallets[0].smart_account_address as `0x${string}`;
 
   const copyToClipboard = () => {
     Clipboard.setString(walletAddress);

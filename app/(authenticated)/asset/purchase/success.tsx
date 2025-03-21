@@ -8,22 +8,11 @@ import React from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
 import AssetLogo from '@/components/AssetLogo';
-import { AssetPrice, OrderQuote } from "@/client";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
-type PurchaseSuccessScreenProps = {
-  route: {
-    params: {
-      asset: AssetPrice;
-      amount: string;
-      quote: OrderQuote;
-    };
-  };
-};
 
-const PurchaseSuccess = ({ route }: PurchaseSuccessScreenProps) => {
-  const { asset, amount = 0, quote } = route.params;
-
+const PurchaseSuccess = () => {
+  const { asset, amount = 0, quote } = useLocalSearchParams();
 
   const { t } = useTranslation();
 

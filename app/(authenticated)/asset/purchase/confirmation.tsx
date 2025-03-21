@@ -4,12 +4,8 @@ import Button from "@/components/Button";
 import { SkeletonView } from "@/components/Loading/SkeletonLoadingView";
 import LoggedLayout from "@/components/LoggedLayout";
 import Text from "@/components/Text";
-import { STOCKS } from "@/constants/stocks";
-import { createOrder } from "@/lib/dinari";
-import { getPimlicoSmartAccountClient, publicClient } from "@/lib/pimlico";
 import { useChainStore } from "@/storage/chainStore";
 import { currencyFormatter, formatNumber } from "@/utils/currencyUtils";
-
 import { useNavigation } from "@react-navigation/native";
 import * as Sentry from '@sentry/react-native';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -17,28 +13,20 @@ import BigNumber from "bignumber.js";
 import React, { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
-import { Address } from "viem";
 import AssetLogo from '@/components/AssetLogo';
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
 
 
-type PurchaseConfirmationScreenProps = {
-  route: {
-    params: {
-      asset: AssetPrice;
-      amount: string;
-    };
-  };
-};
-const PurchaseConfirmation = ({ route }: PurchaseConfirmationScreenProps) => {
-  const { asset, amount } = route.params;
+
+const PurchaseConfirmation = () => {
+  const { asset, amount } = useLocalSearchParams();
 
   const navigation = useNavigation();
   const queryClient = useQueryClient();
 
   const { t } = useTranslation();
-  
+
   const { chain } = useChainStore();
   const [transactionInitiated, setTransactionInitiated] = useState(false);
 
@@ -68,35 +56,6 @@ const PurchaseConfirmation = ({ route }: PurchaseConfirmationScreenProps) => {
     try {
       setTransactionInitiated(true);
 
-      const signerAddress = wallet?.account?.address as Address;
-      if (!signerAddress) throw new Error("No wallet address found");
-      if (!quote) throw new Error("No quote available");
-
-      const smartAccountClient = await getPimlicoSmartAccountClient(
-        signerAddress,
-        chain,
-        wallet,
-      );
-
-      const tx = await smartAccountClient.sendTransactions({
-        transactions: quote.transactions,
-      });
-
-      if (!tx) throw new Error("Transaction failed to send");
-
-      const receipt = await publicClient.waitForTransactionReceipt({
-        hash: tx,
-      });
-
-      if (receipt.status !== "success") {
-        throw new Error("Transaction failed");
-      }
-
-      // Invalidate queries after successful transaction
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["usersMyBalance"] }),
-        queryClient.invalidateQueries({ queryKey: ["usersMyAssets"] }),
-      ]);
 
       router.replace({
         pathname: "/etf/purchase/success",

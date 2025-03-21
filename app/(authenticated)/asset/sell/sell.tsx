@@ -3,34 +3,22 @@ import Button from "@/components/Button";
 import Keypad from "@/components/Keypad";
 import LoggedLayout from "@/components/LoggedLayout";
 import Text from "@/components/Text";
-import { STOCKS } from "@/constants/stocks";
-import { currencyFormatter, formatNumber } from "@/utils/currencyUtils";
+import { formatNumber } from "@/utils/currencyUtils";
 import { useNavigation } from "@react-navigation/native";
-import { useQuery } from "@tanstack/react-query";
 import BigNumber from "bignumber.js";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
-import SkeletonLoadingView, {
-  SkeletonView,
-} from "@/components/Loading/SkeletonLoadingView";
 import useAssetsStore from "@/storage/assetsStore";
-import Config from "@/config";
 import AssetLogo from '@/components/AssetLogo';
-import { AssetPrice } from "@/client";
+import { router, useLocalSearchParams } from "expo-router";
 
-type ETFSellScreenProps = {
-  route: {
-    params: {
-      asset: AssetPrice;
-    };
-  };
-};
 
-const ETFSell = ({ route }: ETFSellScreenProps) => {
+
+const ETFSell = () => {
   const { t } = useTranslation();
 
-  const { asset } = route.params;
+  const { asset } = useLocalSearchParams();
 
   const navigation = useNavigation();
 
@@ -67,11 +55,13 @@ const ETFSell = ({ route }: ETFSellScreenProps) => {
       .toString();
 
 
-    navigation.navigate("ETFSellConfirmation", {
-      asset,
-      amount,
-      quantity: quantityToSell,
-
+    router.push({
+      pathname: "/asset/sell/confirmation",
+      params: {
+        asset: asset.symbol,
+        amount,
+        quantity: quantityToSell,
+      },
     });
   };
 
