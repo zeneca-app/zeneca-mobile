@@ -15,10 +15,25 @@
     "test": "jest",
     "test:watchAll": "jest --watchAll",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "test:e2e": "maestro test .maestro/flows",
+    "test:e2e:record": "maestro record",
+    "test:e2e:studio": "maestro studio"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/__mocks__/"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   },
   "dependencies": {
     "@clerk/clerk-expo": "^2.6.1",
