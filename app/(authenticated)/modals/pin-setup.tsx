@@ -43,8 +43,8 @@ const PinSetup = () => {
             if (pin.join('') === firstPin.join('')) {
                 // Store PIN
                 storage.set('user-pin', pin.join(''));
-                // Navigate back
-                router.back();
+                // Navigate to home
+                router.replace('/(authenticated)/home');
             } else {
                 // Show error animation
                 offset.value = withSequence(
@@ -62,7 +62,7 @@ const PinSetup = () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         const currentPin = step === 'first' ? firstPin : confirmPin;
         const newPin = [...currentPin, number];
-        
+
         if (step === 'first') {
             setFirstPin(newPin);
         } else {
@@ -87,10 +87,10 @@ const PinSetup = () => {
 
     return (
         <SafeAreaView className="flex-1 bg-basic-black">
-            <Stack.Screen options={{ 
+            <Stack.Screen options={{
                 presentation: 'modal',
                 animation: 'none',
-                headerShown: false 
+                headerShown: false
             }} />
             <Text className="text-2xl font-bold mt-20 text-white self-center">
                 {step === 'first' ? 'Set your PIN' : 'Confirm your PIN'}
