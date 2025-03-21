@@ -23,17 +23,26 @@ alwaysApply: false
      - `types.ts` (for component-specific types)
      - `__tests__/` (for component tests)
 
-2. **Screen Structure**
-   - Screens should be organized by feature in `src/screens/`
-   - Each screen should follow the same structure as components
-   - Screen-specific components should be in a `components/` subdirectory
+2. **Feature Structure**
+   - Features should be organized in the `app/` directory following Expo Router conventions
+   - Each feature directory should include:
+     - Route files (e.g., `index.tsx`, `[id].tsx`)
+     - `_layout.tsx` for feature-specific layouts
+     - `components/` for feature-specific components
+     - `hooks/` for feature-specific hooks
+     - `client/` for API integration code
+     - `types.ts` for feature-specific types
 
 3. **Naming Conventions**
-   - Components and screens use PascalCase (e.g., `UserProfile.tsx`)
+   - Route files use kebab-case (e.g., `user-profile.tsx`)
+   - Components use PascalCase (e.g., `UserProfile.tsx`)
    - Hooks use camelCase with "use" prefix (e.g., `useUserData.ts`)
    - Utilities use camelCase (e.g., `formatCurrency.ts`)
    - Zustand stores use camelCase with "Store" suffix (e.g., `userStore.ts`)
    - Test files use the format `[filename].test.tsx`
+   - Route groups use parentheses (e.g., `(authenticated)`)
+   - Dynamic routes use square brackets (e.g., `[id].tsx`)
+   - Modal routes should be placed in `modals/` directory
 
 ## React Native & TypeScript
 
@@ -104,33 +113,40 @@ alwaysApply: false
    - Include responsive breakpoints for different device sizes
    - Create theme tokens for spacing, sizing, and colors
 
-## Authentication & Web3
-
-1. **Privy Integration**
-   - Use Privy hooks for authentication state
-   - Handle authentication errors gracefully
-   - Implement proper loading states during authentication
-
-2. **Wagmi/Viem Usage**
-   - Use wagmi hooks for blockchain interactions
-   - Handle blockchain errors with user-friendly messages
-   - Support the required chains (Ethereum, sepolia, baseSepolia, base)
-   - Implement appropriate gas estimation and error handling
-
 ## Navigation
 
-1. **React Navigation**
-   - Define navigation types in `src/navigation/types.ts`
-   - Use screen components for each route
-   - Implement proper navigation guards based on auth state
-   - Use type-safe navigation with screens defined in types
+1. **Expo Router**
+   - Use file-based routing structure in the `app/` directory
+   - Organize routes using directory groups:
+     - `(authenticated)/` for protected routes
+     - `(onboarding)/` for onboarding flow
+     - `modals/` for modal screens
+   - Use `_layout` files for shared layouts and navigation configuration
+   - Implement proper auth protection using route groups
+   - Use type-safe navigation with `Link` component and `router.push()`
+   - Follow naming conventions:
+     - Use kebab-case for file/directory names
+     - Use descriptive names that match the route purpose
+     - Group related routes in subdirectories
+   - Handle deep linking configuration in `app.json`
+   - Implement proper error boundaries for each route group
+   - Use loading states with Suspense boundaries
+
+2. **Screen Structure**
+   - Place screen components directly in the `app/` directory structure
+   - Screen-specific components should be in `components/` subdirectory within the feature directory
+   - Use shared layouts for consistent navigation patterns
+   - Implement proper TypeScript types for route params
+   - Handle navigation lifecycle events appropriately
 
 ## Error Handling & Logging
 
 1. **Error Boundaries**
-   - Implement error boundaries for critical components
+   - Implement error boundaries for each route group
    - Use Sentry for error tracking
    - Log meaningful error messages
+   - Create custom error pages for different route groups
+   - Handle navigation errors gracefully
 
 2. **Analytics**
    - Use PostHog for user event tracking
@@ -227,5 +243,5 @@ alwaysApply: false
    - Validate all user inputs
    - Implement proper authentication guards for protected routes
 
-
+<version>1.0.0</version>
    - 
