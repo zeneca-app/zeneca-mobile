@@ -1,6 +1,6 @@
 ---
-description:  Follow these styling patterns when working with the codebase
-globs: **/*.{tsx,jsx,ts}
+description: Follow these styling patterns when working with the codebase
+globs: **/*.tsx
 alwaysApply: false
 ---
 # Styling Guidelines

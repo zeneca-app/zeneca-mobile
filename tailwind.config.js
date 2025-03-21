@@ -1,9 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 const plugin = require("tailwindcss/plugin");
-const COLORS = require("./src/constants/colors");
+const COLORS = require("./constants/colors");
 module.exports = {
   // NOTE: Update this to include the paths to all of your component files.
-  content: ["./app/**/*.{js,jsx,ts,tsx}", "./src/**/*.{js,jsx,ts,tsx}"],
+  content: [
+    './app/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+  ],
   presets: [require("nativewind/preset")],
   fontFamily: {
     sans: ['"manrope"'],

@@ -1,0 +1,4 @@
+androidArgs:
+  skipExpoMenu: true
+iosArgs:
+  skipExpoMenu: true

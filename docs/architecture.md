@@ -1,140 +1,177 @@
 # Zeneca Mobile Architecture Overview
 
-## 1. Technology Stack
+## 1. Core Technology Stack
 
-### Core Technologies
-- **React Native**: The app is built using React Native with Expo (version 51.0.39)
-- **TypeScript**: The entire codebase is written in TypeScript for type safety
-- **Navigation**: Uses React Navigation (native-stack and bottom-tabs) for screen management
-- **State Management**: 
-  - Zustand for global state management with MMKV storage persistence
-  - React Query for server state management with AsyncStorage persistence
+### Frontend Framework
 
-### UI/Styling
-- **TailwindCSS**: Uses NativeWind (v4.1.21) for styling components
-- **Fonts**: Manrope font family from Google Fonts
-- **Components**: Mix of custom components and libraries like Bottom Sheet
+- **React Native with Expo (SDK 51)**
+- **TypeScript** for type safety and developer experience
+- **NativeWind** (Tailwind CSS for React Native) for styling
+- **Expo Router** for file-based navigation
 
-### Authentication & Web3
-- **Privy**: Used for authentication and wallet management (`@privy-io/expo`)
-- **Wagmi/Viem**: For blockchain interactions and wallet connectivity
-- **Chains**: Supports Ethereum networks (sepolia, baseSepolia, base)
+### State Management
 
-### API & Data Handling
-- **API Client**: Generated from OpenAPI specs using `@hey-api/openapi-ts`
-- **Data Fetching**: TanStack Query (React Query v5) with persistence
-- **Form Handling**: React Hook Form with Zod validation
+- **Zustand** for global state with MMKV persistence
+  - Specialized stores for user, KYC, assets, market hours, etc.
+  - Middleware for devtools and persistence
+- **TanStack Query** (React Query v5)
+  - Server state management
+  - AsyncStorage persistence
+  - Automatic background revalidation
+
+### Auth Integration
+
+- **Clerk** for authentication and user management
+  - Multi-provider authentication (social, email, phone)
+  - Session management and security
+  - User profile and metadata management
 
 ### Monitoring & Analytics
-- **Error Tracking**: Sentry for error monitoring
-- **Analytics**: PostHog for user analytics
 
-## 2. Application Structure
+- **Sentry** for error tracking and performance monitoring
+- **PostHog** for user analytics and event tracking
 
-### Directory Organization
+## 2. Application Architecture
+
+### Directory Structure
+
 ```
-src/                      # Main source code directory
-├── components/           # Reusable UI components
-├── screens/              # Screen components organized by feature
-├── navigation/           # Navigation configuration and types
-├── storage/              # State management with Zustand stores
-├── hooks/                # Custom React hooks
-├── client/               # API client and generated services
-├── lib/                  # Utility libraries and helpers
-├── utils/                # Utility functions
-├── i18n/                 # Internationalization setup
-├── styles/               # Global styles
-└── constants/            # Application constants
+app/                      # Main application (Expo Router)
+├── (authenticated)/      # Protected routes
+├── (onboarding)/        # Onboarding flow
+├── (public)/            # Public routes
+├── _layout.tsx          # Root layout
+└── index.tsx            # Entry point
+
+src/
+├── components/          # Reusable UI components
+├── hooks/              # Custom React hooks
+├── storage/            # Zustand stores
+├── lib/               # Core utilities
+├── config/            # Environment configuration
+└── constants/         # Application constants
 ```
 
-### Key Files
-- `src/index.tsx`: Main application entry point
-- `src/screens/MainNavigation.tsx`: Main navigation configuration
-- `src/components/Providers.tsx`: Global providers setup
+### Navigation Structure
 
-## 3. Navigation Structure
+- File-based routing with Expo Router
+- Route groups for authentication states
+- Modal and stack navigation patterns
+- Deep linking support
+- Type-safe navigation with TypeScript
 
-The app uses a stack-based navigation system with the following main screens:
-
-### Authentication Flow
-- **Login**
-- **LoginOptions**
-- **LoginWithEmail**
-- **EmailOtpValidation**
-
-### Main Screens
-- **Home** (main dashboard)
-- **Profile**
-- **ExploreAssets**
-
-### ETF Management
-- **ETFDetail**
-- **ETFPurchase**
-- **ETFPurchaseConfirmation**
-- **ETFPurchaseSuccess**
-- **ETFSell**
-- **ETFSellConfirmation**
-- **ETFSellSuccess**
-
-### Deposit Flow
-- **DepositWithBank**
-- **DepositCrypto**
-
-### KYC Verification
-- **KYCPreview**
-- **KYCProvider**
-- **KYCSuccess**
-
-### Onboarding
-- **OnBoarding**
-
-### Order Management
-- **OrderHistory**
-- **OrderHistoryDetail**
-
-## 4. State Management
+## 3. State Management Architecture
 
 ### Global State (Zustand)
-| Store | Purpose |
-|-------|---------|
-| **userStore** | Manages user authentication state |
-| **assetsStore** | Manages asset data |
-| **kycStatusStore** | Manages KYC verification status |
-| **chainStore** | Manages blockchain network selection |
-| **marketHourStore** | Manages market hours information |
-| **loginStore** | Manages login state |
-| **quoteStore** | Manages quote data |
-| **recipientStore** | Manages recipient information |
-| **transferStore** | Manages transfer data |
 
-### API State (React Query)
-- Uses TanStack Query for server state management
-- Implements persistence with AsyncStorage
+- **userStore**: Authentication and user profile
+- **kycStatusStore**: KYC verification status
+- **assetsStore**: Asset management
+- **marketHourStore**: Market operation hours
+- **transferStore**: Transfer operations
+- **chainStore**: Blockchain network selection
 
-## 5. Authentication & Security
+### Server State (React Query)
 
-- Uses Privy for authentication and wallet management
-- Implements secure storage with expo-secure-store
-- Supports email login with OTP verification
-- Integrates with blockchain wallets
+- Automatic caching and revalidation
+- Optimistic updates
+- Background polling
+- Error handling and retries
 
-## 6. Key Features
+## 5. Security Architecture
 
-- ✅ **ETF Trading**: Purchase and sell ETFs
-- 💰 **Crypto Deposits**: Deposit cryptocurrency
-- 🏦 **Bank Deposits**: Deposit via bank transfers
-- 🔐 **KYC Verification**: User identity verification
-- 📊 **Portfolio Management**: View and manage investments
-- 📜 **Order History**: Track transaction history
+### Authentication
 
-## 7. Development & Deployment
+- Multi-factor authentication
+- Email OTP verification
+- OAuth integration
+- Session management
 
-- Uses Expo for development and building
-- Implements ESLint and Prettier for code quality
-- Uses Husky and lint-staged for pre-commit hooks
-- Supports multiple environments (development, preview, production)
-- Uses Expo Updates for over-the-air updates
+### Data Protection
+
+- MMKV encrypted storage
+- Secure key management
+- Protected routes
+- Input validation with Zod
+
+## 6. Performance Optimizations
+
+### React Optimizations
+
+- Component memoization
+- Lazy loading
+- Code splitting
+- Virtual list rendering
+
+### Asset Optimization
+
+- Image optimization
+- Font preloading
+- Bundle size optimization
+- Cache management
+
+## 7. Development Workflow
+
+### Code Quality
+
+- TypeScript strict mode
+- ESLint configuration
+- Prettier formatting
+- Husky pre-commit hooks
+
+### Testing Strategy
+
+- Unit testing with Jest
+- Component testing with React Native Testing Library
+- E2E testing capabilities
+- Performance testing
+
+## 8. Key Features
+
+### Authentication & Onboarding
+
+- Social and email authentication
+- KYC verification flow
+- Wallet creation and management
+- User profile management
+
+### Asset Management
+
+- ETF trading
+- Crypto deposits
+- Bank transfers
+- Order history tracking
+
+### Security Features
+
+- Biometric authentication
+- PIN protection
+- Transaction signing
+- Session management
+
+## 9. Scalability Considerations
+
+### Performance
+
+- Optimized bundle size
+- Efficient state management
+- Lazy loading strategies
+- Caching mechanisms
+
+### Maintainability
+
+- Modular architecture
+- Clear separation of concerns
+- Consistent coding patterns
+- Comprehensive documentation
+
+### Future Extensibility
+
+- Pluggable authentication providers
+- Extensible blockchain support
+- Modular feature architecture
+- API versioning support
 
 ---
 
-This architecture provides a robust foundation for a mobile application focused on cryptocurrency and ETF trading, with strong security features, modern UI components, and comprehensive state management.
+This architecture provides a robust foundation for a mobile application focused on cryptocurrency and ETF trading, with strong security features, modern UI components, and comprehensive state management. The use of modern technologies and best practices ensures scalability and maintainability as the application grows.

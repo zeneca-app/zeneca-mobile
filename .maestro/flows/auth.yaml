@@ -1,0 +1,16 @@
+appId: app.zeneca.prod
+---
+- launchApp
+- assertVisible: "Invierte en la bolsa de valores de EEUU"
+- assertVisible: "¡Abrir mi cuenta!"
+- assertVisible: "Iniciar sesión"
+- tapOn: "Iniciar sesión"
+- assertVisible: "Email"
+- tapOn: "Email"
+- inputText: "test@example.com"
+- assertVisible: "Contraseña"
+- tapOn: "Contraseña"
+- inputText: "password123"
+- tapOn: "Iniciar sesión"
+- waitForAnimationToEnd
+- assertVisible: "Dashboard" 

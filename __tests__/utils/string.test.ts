@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter } from '../../src/utils/string';
+import { capitalizeFirstLetter } from '@/utils/string';
 
 describe('String Utils', () => {
   describe('capitalizeFirstLetter', () => {
