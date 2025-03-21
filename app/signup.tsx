@@ -6,23 +6,35 @@ import {
   View,
   Alert,
 } from "react-native";
-import { useSignUp, isClerkAPIResponseError, useSSO } from "@clerk/clerk-expo";
+import { useSignUp, isClerkAPIResponseError, useSSO, useUser } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import LoggedLayout from "@/components/LoggedLayout";
 import LoginButton from "@/components/login/button";
 import { useLocalCredentials } from '@clerk/clerk-expo/local-credentials'
 import * as AuthSession from 'expo-auth-session'
+import { loginLoginOrCreate } from "@/client";
+import { loginLoginOrCreateMutation } from "@/client/@tanstack/react-query.gen";
+import { useMutation } from "@tanstack/react-query";
+
 
 const SignUp = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const { isLoaded } = useSignUp();
   const { startSSOFlow } = useSSO()
+  const { user } = useUser()
 
   const { hasCredentials, setCredentials, authenticate, biometricType } = useLocalCredentials()
 
   const [isEmailLoading, setIsEmailLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+
+  const { mutate: loginOrCreate, isPending } = useMutation({
+    ...loginLoginOrCreateMutation(),
+    onSuccess: (data) => {
+      console.log('loginOrCreate', data);
+    },
+  });
 
   const onEmailSignUpPress = useCallback(async () => {
     if (!isLoaded) return;
@@ -41,17 +53,22 @@ const SignUp = () => {
     }
   }, []);
 
+
   const onGoogleSignUpPress = useCallback(async () => {
     try {
       setIsGoogleLoading(true);
 
       const { createdSessionId, setActive, signIn, signUp } = await startSSOFlow({
         strategy: 'oauth_google',
-        // Defaults to current path
         redirectUrl: AuthSession.makeRedirectUri(),
       })
 
+      console.log('signUp', signUp?.emailAddress);
+      console.log('signIn', signIn?.userData);
+      console.log('user', user);
+      
       if (createdSessionId) {
+        // Set the active session
         setActive!({ session: createdSessionId });
       }
     } catch (err: any) {
@@ -70,7 +87,10 @@ const SignUp = () => {
         <View className="flex-1 px-layout pb-layout">
           {/* Header Section */}
           <View className="pt-12">
-            <Text className="heading-s text-dark-content-white mb-layout-s">
+            <Text
+              testID="signup-title"
+              className="heading-s text-dark-content-white mb-layout-s"
+            >
               {t("loginOptions.title")}
             </Text>
           </View>
@@ -79,6 +99,7 @@ const SignUp = () => {
           <View className="flex-1">
             <View className="space-y-4">
               <LoginButton
+                testID="email-signup-button"
                 icon="mail"
                 text={t("loginOptions.emailOption")}
                 onPress={onEmailSignUpPress}
@@ -87,6 +108,7 @@ const SignUp = () => {
                 disabled={isEmailLoading || !isLoaded}
               />
               <LoginButton
+                testID="google-signup-button"
                 icon="logo-google"
                 text={t("loginOptions.googleOption")}
                 onPress={onGoogleSignUpPress}
@@ -99,7 +121,10 @@ const SignUp = () => {
 
           {/* Footer Section */}
           <View className="pb-safe mb-6">
-            <Text className="text-dark-content-white caption-l text-center">
+            <Text
+              testID="terms-text"
+              className="text-dark-content-white caption-l text-center"
+            >
               {t("loginOptions.terms")}{" "}
               <Text className="text-dark-content-white caption-l font-medium underline">
                 {t("loginOptions.termsLink")}

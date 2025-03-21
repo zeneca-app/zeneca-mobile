@@ -4,7 +4,6 @@ import React from "react";
 import {
   ActivityIndicator,
   Pressable,
-  StyleSheet,
   Text,
   View,
 } from "react-native";
@@ -16,6 +15,8 @@ interface LoginButtonProps {
   isPrimary?: boolean;
   isLoading?: boolean;
   disabled?: boolean;
+  testID?: string;
+  className?: string;
 }
 
 const LoginButton: React.FC<LoginButtonProps> = ({
@@ -25,14 +26,18 @@ const LoginButton: React.FC<LoginButtonProps> = ({
   isPrimary = true,
   isLoading = false,
   disabled = false,
+  testID,
+  className,
 }) => {
   return (
     <Pressable
-      style={[
-        styles.commonButton,
-        isPrimary ? styles.primaryButton : styles.secondaryButton,
-        disabled && styles.disabledButton,
-      ]}
+      testID={testID}
+      className={`
+        flex-row w-full h-[55px] rounded-full justify-center items-center mb-6
+        ${isPrimary ? 'bg-white' : 'bg-dark-background-80'}
+        ${disabled ? 'opacity-50' : ''}
+        ${className || ''}
+      `}
       onPress={onPress}
       disabled={disabled || isLoading}
     >
@@ -46,16 +51,16 @@ const LoginButton: React.FC<LoginButtonProps> = ({
           name={icon}
           size={24}
           color={isPrimary ? colors.darkHighlight : "white"}
-          style={styles.buttonIcon}
+          className="mr-2.5"
         />
       )}
-      <View style={styles.textContainer}>
+      <View className="ml-4">
         <Text
-          style={[
-            styles.buttonText,
-            isPrimary ? styles.primaryText : styles.secondaryText,
-            disabled && styles.disabledText,
-          ]}
+          className={`
+            text-body-s font-medium
+            ${isPrimary ? 'text-dark-content-dark' : 'text-white'}
+            ${disabled ? 'text-dark-content-disabled' : ''}
+          `}
         >
           {text}
         </Text>
@@ -63,45 +68,5 @@ const LoginButton: React.FC<LoginButtonProps> = ({
     </Pressable>
   );
 };
-
-const styles = StyleSheet.create({
-  commonButton: {
-    flexDirection: "row",
-    width: "100%",
-    height: 55,
-    borderRadius: 25,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 25,
-  },
-  primaryButton: {
-    backgroundColor: "white",
-  },
-  secondaryButton: {
-    backgroundColor: "#252328",
-  },
-  disabledButton: {
-    opacity: 0.5,
-  },
-  buttonIcon: {
-    marginRight: 10,
-  },
-  textContainer: {
-    marginLeft: 15,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontFamily: "Manrope_500Medium",
-  },
-  primaryText: {
-    color: colors.darkHighlight,
-  },
-  secondaryText: {
-    color: "white",
-  },
-  disabledText: {
-    color: "#999",
-  },
-});
 
 export default LoginButton;

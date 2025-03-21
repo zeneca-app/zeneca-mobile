@@ -11,6 +11,14 @@ import { useRouter } from "expo-router";
 import LoggedLayout from "@/components/LoggedLayout";
 import LoginButton from "@/components/login/button";
 
+
+enum SignInType {
+  Phone,
+  Email,
+  Google,
+  Apple,
+}
+
 const Login = () => {
   const { t } = useTranslation();
   const router = useRouter();
@@ -45,7 +53,7 @@ const Login = () => {
 
       if (createdSessionId) {
         setActive!({ session: createdSessionId });
-        
+
       }
     } catch (err: any) {
       Alert.alert(

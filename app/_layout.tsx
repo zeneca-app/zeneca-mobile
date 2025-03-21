@@ -34,6 +34,7 @@ import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 import tokenCache from "@/utils/token";
 import { UserInactivityProvider } from "@/context/UserInactivity";
 import screenConfigs from "@/components/screenOptions";
+import { useAuthRedirect } from '@/hooks/useAuthRedirect';
 
 // Sentry Configuration
 const navigationIntegration = new Sentry.ReactNavigationInstrumentation({
@@ -112,37 +113,10 @@ const InitialLayout = () => {
     }, [loaded]);
 
 
-    const { user } = useUserStore();
-    const { isLoaded, isSignedIn } = useAuth();
-    const segments = useSegments();
-    const router = useRouter();
-    console.log("isLoaded", isLoaded);
-    console.log("isSignedIn", isSignedIn);
-    console.log("user", user);
-    console.log("segments", segments);
-
-    useEffect(() => {
-        if (!isLoaded) return;
-
-        const inAuthGroup = segments[0] === '(authenticated)';
-        const isAuthenticated = isSignedIn;
-        console.log("isAuthenticated", isAuthenticated);
-        console.log("inAuthGroup", inAuthGroup);
-
-        if (isAuthenticated && !inAuthGroup) {
-            router.replace('/(authenticated)/modals/lock');
-        } else if (!isAuthenticated && inAuthGroup) {
-            router.replace('/');
-        }
-    }, [isSignedIn]);
-
-    console.log("isLoaded", isLoaded);
-    console.log("isSignedIn", isSignedIn);
-    console.log("user", user);
-    console.log("segments", segments);
+    const { isLoaded: authLoaded } = useAuthRedirect();
 
 
-    if (!loaded || !isLoaded) {
+    if (!loaded || !authLoaded) {
         return (
             <IntroAnimation />
         );
