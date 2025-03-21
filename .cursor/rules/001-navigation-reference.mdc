@@ -1,0 +1,40 @@
+---
+description: 
+globs: **/*.tsx
+alwaysApply: false
+---
+# Navigation Structure Reference Rule
+
+<version>1.0.0</version>
+
+## Context
+- When answering questions about app navigation, routing, or screen organization
+- When modifications to navigation structure are requested
+- When new screens or routes need to be added
+
+## Requirements
+- Always consult docs/navigation-structure.md before providing navigation-related answers
+- Verify route groups and their purposes (authenticated, onboarding, etc.)
+- Check existing navigation patterns and hierarchy
+- Confirm dynamic routes and their parameter requirements
+- Validate modal screen implementations
+- Ensure layout file (_layout.tsx) implications are considered
+
+## Examples
+
+<example>
+Question: "How do I add a new screen for transaction history?"
+Response: "According to navigation-structure.md, authenticated screens are in the (authenticated) route group. Transaction-related screens follow a pattern similar to order-history. We should add it under (authenticated)/transactions/_layout.tsx..."
+</example>
+
+<example type="invalid">
+Question: "Where should I put the new settings screen?"
+Response: "You can just create a settings.tsx file in the app folder"
+Explanation: Failed to consult navigation-structure.md which would show proper organization under (authenticated) group
+</example>
+
+<critical>
+- NEVER suggest navigation changes without checking navigation-structure.md
+- ALWAYS verify route group organization before providing guidance
+- ENSURE new routes follow existing patterns and hierarchy
+</critical>

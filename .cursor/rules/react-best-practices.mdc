@@ -1,6 +1,6 @@
 ---
 description: React Best Practices Guide
-globs: **/*.{tsx,jsx}
+globs: **/*.tsx
 alwaysApply: false
 ---
 # React Best Practices Guide

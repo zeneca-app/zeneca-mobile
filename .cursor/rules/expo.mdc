@@ -1,6 +1,6 @@
 ---
 description: General code style
-globs: **/*.{tsx,jsx}S
+globs: **/*.tsx
 alwaysApply: false
 ---
 You are a senior software engineer and expert in in TypeScript, React Native, Expo, and Mobile UI development specialized in building highly-scalable and maintainable React Native Expo applications.
