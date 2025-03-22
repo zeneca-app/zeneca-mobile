@@ -8,11 +8,11 @@ import React from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
 import AssetLogo from '@/components/AssetLogo';
-import { router, useLocalSearchParams } from "expo-router";
-
+import { router } from "expo-router";
+import { useTransactionStore } from "@/storage/transactionStore";
 
 const PurchaseSuccess = () => {
-  const { asset, amount = 0, quote } = useLocalSearchParams();
+  const { asset, amount = 0, quote } = useTransactionStore((state) => state);
 
   const { t } = useTranslation();
 
@@ -25,7 +25,7 @@ const PurchaseSuccess = () => {
   const amountToOrder = formatNumber(amount, 2, 6);
 
   const etfAmount = new BigNumber(amountToOrder)
-    .dividedBy(asset.price)
+    .dividedBy(asset!.price)
     .precision(4)
     .toString();
 
@@ -36,7 +36,7 @@ const PurchaseSuccess = () => {
           <GradientCircle className="relative" />
           <View className="absolute flex justify-center items-center">
             <View className="w-16 h-16 bg-gray-90 rounded-full overflow-hidden">
-              <AssetLogo symbol={asset.symbol} size="lg" />
+              <AssetLogo symbol={asset!.symbol} size="lg" />
             </View>
           </View>
           <View className="absolute flex flex-1 bottom-1 pt-24">
@@ -48,11 +48,11 @@ const PurchaseSuccess = () => {
                 i18nKey="etfPurchase.success.summary"
                 values={{
                   etf_amount: etfAmount,
-                  etf_symbol: asset.symbol,
-                  display_name: asset.name,
-                  symbol: asset.symbol,
+                  etf_symbol: asset!.symbol,
+                  display_name: asset!.name,
+                  symbol: asset!.symbol,
                   amount: amountToOrder,
-                  etf_price: quote.asset_price,
+                  etf_price: quote?.asset_price || asset!.price,
                 }}
                 components={[
                   <Text

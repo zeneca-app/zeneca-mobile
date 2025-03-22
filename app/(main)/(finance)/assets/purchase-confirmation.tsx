@@ -4,7 +4,6 @@ import Button from "@/components/Button";
 import { SkeletonView } from "@/components/Loading/SkeletonLoadingView";
 import LoggedLayout from "@/components/LoggedLayout";
 import Text from "@/components/Text";
-import { useChainStore } from "@/storage/chainStore";
 import { currencyFormatter, formatNumber } from "@/utils/currencyUtils";
 import { useNavigation } from "@react-navigation/native";
 import * as Sentry from '@sentry/react-native';
@@ -14,17 +13,17 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
 import AssetLogo from '@/components/AssetLogo';
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
+import { useTransactionStore } from "@/storage/transactionStore";
 
 
 const PurchaseConfirmation = () => {
   const {
-    asset_id,
-    display_name,
-    symbol,
+    asset,
     amount,
-    price
-  } = useLocalSearchParams();
+    setQuote: setCurrentQuote,
+  } = useTransactionStore((state) => state);
+
   const [quote, setQuote] = useState<OrderQuote | null>(null);
 
   const navigation = useNavigation();
@@ -32,10 +31,9 @@ const PurchaseConfirmation = () => {
 
   const { t } = useTranslation();
 
-  const { chain } = useChainStore();
   const [transactionInitiated, setTransactionInitiated] = useState(false);
 
-  const currentPrice = quote?.asset_price || price as string;
+  const currentPrice = quote?.asset_price || asset!.price;
 
   const [timeLeft, setTimeLeft] = useState(0);
 
@@ -56,18 +54,19 @@ const PurchaseConfirmation = () => {
     },
   });
 
-
   const executeTransaction = async () => {
     try {
+      if (!quote) return;
+      
       setTransactionInitiated(true);
 
+      setCurrentQuote(quote!);
 
       router.replace({
-        pathname: "/etf/purchase/success",
+        pathname: "/assets/purchase-success",
         params: {
-          symbol: symbol as string,
+          symbol: asset!.symbol,
           amount: amount as string,
-          quote: JSON.stringify(quote),
         },
       });
 
@@ -75,7 +74,7 @@ const PurchaseConfirmation = () => {
       console.error("Error during transaction:", error);
       Sentry.captureException(error, {
         extra: {
-          symbol: symbol as string,
+          symbol: asset!.symbol,
           amount: amount as string,
           quoteId: quote?.id,
         },
@@ -98,13 +97,13 @@ const PurchaseConfirmation = () => {
   const fetchQuote = useCallback(() => {
     createQuote({
       body: {
-        asset_id: asset_id as string,
+        asset_id: asset!.id,
         side: "BUY",
         order_type: "MARKET",
         amount: Number(amount as string),
       },
     });
-  }, [createQuote, asset_id, amount]);
+  }, [createQuote, asset!.id, amount]);
 
   // Initial quote fetch
   useEffect(() => {
@@ -164,10 +163,10 @@ const PurchaseConfirmation = () => {
       <View className="flex pb-layout">
         <View className="flex-row gap-s pt-layout-s pb-layout-s items-center justify-start px-layout">
           <View className="w-12 h-12 bg-gray-90 rounded-full overflow-hidden">
-            <AssetLogo symbol={symbol as string} size="md" />
+            <AssetLogo symbol={asset!.symbol} size="md" />
           </View>
           <Text className="text-gray-50 caption-xl flex-1">
-            {symbol as string}
+            {asset!.symbol}
           </Text>
         </View>
         <Text className="heading-l text-gray-10 px-layout">
@@ -175,7 +174,7 @@ const PurchaseConfirmation = () => {
         </Text>
         <View className="flex flex-row items-center justify-start gap-s px-layout">
           <Text className="caption-xl text-gray-50">{etfAmount}</Text>
-          <Text className="caption-xl text-gray-50">{symbol as string}</Text>
+          <Text className="caption-xl text-gray-50">{asset!.symbol}</Text>
         </View>
       </View>
       <View className="px-layout pb-layout flex justify-start items-stretch gap flex-1">
@@ -221,9 +220,9 @@ const PurchaseConfirmation = () => {
             i18nKey="etfPurchase.disclaimer"
             values={{
               etf_amount: etfAmount,
-              etf_symbol: symbol as string,
-              display_name: display_name as string,
-              symbol: symbol as string,
+              etf_symbol: asset!.symbol,
+              display_name: asset!.display_name,
+              symbol: asset!.symbol,
               amount: amountToOrder,
               etf_price: currentPrice,
             }}
@@ -254,7 +253,7 @@ const PurchaseConfirmation = () => {
       <View className="px-layout">
         {showButtonConfirmation ? (
           <Button
-            className=""
+            
             onPress={executeTransaction}
             disabled={isDisabled}
             isLoading={isLoading}

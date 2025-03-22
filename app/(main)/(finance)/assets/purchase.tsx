@@ -13,14 +13,15 @@ import SkeletonLoadingView, {
   SkeletonView,
 } from "@/components/Loading/SkeletonLoadingView";
 import AssetLogo from '@/components/AssetLogo';
-import { router, useLocalSearchParams } from "expo-router";
-
+import { router } from "expo-router";
+import { useTransactionStore } from "@/storage/transactionStore";
 
 
 const Purchase = () => {
   const { t } = useTranslation();
-  const { symbol, price } = useLocalSearchParams();
+
   const [amount, setAmount] = useState<string>("0");
+  const { asset, setData: setTransactionData } = useTransactionStore((state) => state);
 
   const {
     isPending: isBalancePending,
@@ -40,7 +41,7 @@ const Purchase = () => {
 
 
   const amountInEtf = new BigNumber(amount)
-    .dividedBy(price as string)
+    .dividedBy(asset!.price)
     .precision(4)
     .toString();
 
@@ -54,13 +55,16 @@ const Purchase = () => {
       ? new BigNumber(balance?.available || 0).toString()
       : new BigNumber(amount).multipliedBy(1_000_000).toString();
 
+    setTransactionData(
+      asset!,
+      amountToBuy,
+      null,
+      "BUY",
+    );
     router.push({
       pathname: "/assets/purchase-confirmation",
       params: {
-        symbol: symbol as string,
-        amount: amountToBuy,
-        price: price as string,
-        display_name: asset.display_name as string,
+        symbol: asset!.symbol,
       },
     });
   };
@@ -70,9 +74,9 @@ const Purchase = () => {
       navCenter={
         <View className="flex-row items-center justify-center gap-s p-2 bg-gray-100 rounded-full">
           <View className="w-6 h-6 bg-gray-90 rounded-full overflow-hidden">
-            <AssetLogo symbol={symbol as string} size="sm" />
+            <AssetLogo symbol={asset!.symbol} size="sm" />
           </View>
-          <Text className="text-gray-50 caption-xl">{symbol as string}</Text>
+          <Text className="text-gray-50 caption-xl">{asset!.symbol}</Text>
         </View>
       }
     >
@@ -96,7 +100,7 @@ const Purchase = () => {
           </Text>
         </View>
         <Text className="caption-l text-center text-gray-50">
-          {amountInEtf} {symbol as string}
+          {amountInEtf} {asset!.symbol}
         </Text>
       </View>
       <Keypad

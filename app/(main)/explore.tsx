@@ -18,12 +18,14 @@ import MarketHours from "@/components/MarketHours";
 import useMarketHourStore from "@/storage/marketHourStore";
 import BottomActions from "@/components/BottomActions";
 import Config from "@/config";
-
+import { router } from "expo-router";
+import { useTransactionStore } from "@/storage/transactionStore";
 
 const Explore = () => {
   cssInterop(CopyIcon, { className: "style" });
 
   const { setIsMarketOpen } = useMarketHourStore((state) => state);
+  const { setData } = useTransactionStore((state) => state);
 
   const {
     isPending,
@@ -45,7 +47,7 @@ const Explore = () => {
     data: marketHours,
   } = useQuery({
     ...assetsGetMarketHoursOptions(),
-  });  
+  });
 
   const isMarketOpen = marketHours?.is_market_open || false;
 
@@ -53,7 +55,18 @@ const Explore = () => {
     if (!item) {
       return null;
     }
-    return <AssetListItem asset={item} />;
+    return (
+      <AssetListItem
+        asset={item}
+        handlePress={() => {
+          setData(item, "0", null, "NOT_SET");
+          router.push({
+            pathname: "/assets/[id]",
+            params: { id: item.id },
+          });
+        }}
+      />
+    );
   };
 
   const assets = allAssets || [];

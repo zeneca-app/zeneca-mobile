@@ -1,25 +1,13 @@
 import { Text, TouchableOpacity, View } from "react-native";
 import { AssetPrice } from "@/client/";
 import AssetLogo from "@/components/AssetLogo";
-import { useRouter } from "expo-router";
 
 export type AssetListItemProps = {
   asset: AssetPrice;
+  handlePress: () => void;
 };
 
-const AssetListItem = ({ asset }: AssetListItemProps) => {
-  const router = useRouter();
-
-  const handlePress = () => {
-    router.push({
-      pathname: "/assets/[id]",
-      params: { 
-        id: asset.id,
-        serialized_asset: JSON.stringify(asset)
-      },
-    });
-  };
-
+const AssetListItem = ({ asset, handlePress }: AssetListItemProps) => {
   return (
     <TouchableOpacity className="flex-row gap-3" onPress={handlePress}>
       <View className="w-12 h-12 bg-gray-90 rounded-full overflow-hidden">
