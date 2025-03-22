@@ -44,7 +44,7 @@ const ProfileScreen = () => {
     cssInterop(Avatar, { className: "style" });
 
     const handleHistory = () => {
-        router.push("/order-history");
+        router.push("/orders");
     }
 
     return (

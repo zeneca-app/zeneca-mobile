@@ -34,30 +34,29 @@ Main tabs/screens:
 
 ### Asset Management
 
-- **/asset/detail.tsx** - Asset details screen
+- **/assets/[id].tsx** - Asset details screen
 
 #### Asset Purchase Flow
 
-- **/asset/purchase/purchase.tsx** - Initial purchase screen
-- **/asset/purchase/confirmation.tsx** - Purchase confirmation
-- **/asset/purchase/success.tsx** - Purchase success
+- **/assets/purchase.tsx** - Initial purchase screen
+- **/assets/purchase-confirmation.tsx** - Purchase confirmation
+- **/assets/purchase-success.tsx** - Purchase success
 
 #### Asset Sell Flow
 
-- **/asset/sell/sell.tsx** - Initial sell screen
-- **/asset/sell/confirmation.tsx** - Sell confirmation
-- **/asset/sell/success.tsx** - Sell success
+- **/assets/sell.tsx** - Initial sell screen
+- **/assets/sell-confirmation.tsx** - Sell confirmation
+- **/assets/sell-success.tsx** - Sell success
 
 ### Order History
 
-- **/order-history/index.tsx** - Orders list
-- **/order-history/[id].tsx** - Detailed order view (dynamic route with order ID)
+- **/orders/index.tsx** - Orders list
+- **/orders/[id].tsx** - Detailed order view (dynamic route with order ID)
 
 ### Modals
 
 - **/(modals)/lock.tsx** - App lock screen
 - **/(modals)/pin-setup.tsx** - PIN setup modal
-
 
 ## App Hierarchy
 
@@ -98,7 +97,7 @@ app/
     │       ├── sell.tsx          # Sell screen
     │       ├── confirmation.tsx  # Confirmation screen
     │       └── success.tsx       # Success screen
-    ├── order-history/            # Order history
+    ├── orders/            # Order history
     │   ├── _layout.tsx           # Order history layout
     │   ├── index.tsx             # Orders list
     │   └── [id].tsx              # Order details
@@ -144,4 +143,3 @@ app/
 4. **Modal Screens**: The `(modals)/` directory contains screens that are presented modally over the main interface.
 
 5. **Authentication Flow**: The app implements a protection system that redirects unauthenticated users away from protected routes.
-

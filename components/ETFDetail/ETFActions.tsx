@@ -1,7 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
 import Button from '@/components/Button';
 import Text from '@/components/Text';
 import BottomActions from '@/components/BottomActions';
@@ -12,38 +11,33 @@ interface ETFActionsProps {
   price: string;
   isMarketOpen: boolean;
   isSellAvailable: boolean;
+  onBuyPress: () => void;
+  onSellPress: () => void;
 }
 
 const ETFActions: React.FC<ETFActionsProps> = ({
   asset,
   price,
   isMarketOpen,
-  isSellAvailable
+  isSellAvailable,
+  onBuyPress,
+  onSellPress
 }) => {
   const { t } = useTranslation();
-  const navigation = useNavigation();
 
   return (
     <BottomActions>
       <View className="flex-row gap-s px-layout">
         <Button
           className="flex-1"
-          onPress={() =>
-            navigation.navigate('ETFPurchase', {
-              asset,
-            })
-          }
+          onPress={onBuyPress}
         >
           <Text className="button-m">{t("etfDetail.buy")}</Text>
         </Button>
         {isSellAvailable && (
           <Button
             className="flex-1"
-            onPress={() =>
-              navigation.navigate('ETFSell', {
-                asset,
-              })
-            }
+            onPress={onSellPress}
           >
             <Text className="button-m">{t("etfDetail.sell")}</Text>
           </Button>

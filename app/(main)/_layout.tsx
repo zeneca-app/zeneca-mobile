@@ -5,10 +5,9 @@ export default function Layout() {
   return (
     <Stack>
       <Stack.Screen name="index" options={screenConfigs.homeHeader} />
-
       <Stack.Screen
-        name="deposit"
-        options={screenConfigs.defaultHeader}
+        name="(finance)"
+        options={screenConfigs.noHeader}
       />
       <Stack.Screen
         name="explore"
@@ -21,14 +20,7 @@ export default function Layout() {
           animation: 'fade',
         }}
       />
-      <Stack.Screen
-        name="asset"
-        options={screenConfigs.noHeader}
-      />
-      <Stack.Screen
-        name="order-history"
-        options={screenConfigs.defaultHeader}
-      />
+
     </Stack>
   );
 }

@@ -54,7 +54,7 @@ const ETFSellConfirmation = () => {
 
 
       router.push({
-        pathname: "/asset/sell/success",
+        pathname: "/assets/sell-success",
         params: {
           asset: asset.symbol,
           amount: quote?.total_amount.toString(),

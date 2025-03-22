@@ -179,7 +179,7 @@ The current implementation includes the following screens:
 
 - Use Clerk to check if the user is signed in (useAuth)
 - Redirect unauthenticated users from authenticated routes to the welcome screen
-- Redirect authenticated users to (main)/(modals)/lock if not already in an authenticated route
+- Redirect authenticated users to /(modals)/lock if not already in an authenticated route
 - Load fonts and hide splash screen when ready
 
 **Behavior**:

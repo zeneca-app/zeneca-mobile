@@ -12,9 +12,9 @@ const AssetListItem = ({ asset }: AssetListItemProps) => {
 
   const handlePress = () => {
     router.push({
-      pathname: "/asset/detail",
+      pathname: "/assets/[id]",
       params: { 
-        asset_id: asset.id,
+        id: asset.id,
         serialized_asset: JSON.stringify(asset)
       },
     });

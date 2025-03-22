@@ -1,73 +1,66 @@
-import { usersMyBalanceOptions } from "@/client/@tanstack/react-query.gen";
+import { assetsGetAssetDetailOptions, usersMyBalanceOptions } from "@/client/@tanstack/react-query.gen";
 import Button from "@/components/Button";
 import Keypad from "@/components/Keypad";
 import LoggedLayout from "@/components/LoggedLayout";
 import Text from "@/components/Text";
-import { STOCKS } from "@/constants/stocks";
-import { currencyFormatter, formatNumber } from "@/utils/currencyUtils";
+import { formatNumber } from "@/utils/currencyUtils";
 import { useNavigation } from "@react-navigation/native";
-import { useQuery } from "@tanstack/react-query";
 import BigNumber from "bignumber.js";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
-import SkeletonLoadingView, {
-  SkeletonView,
-} from "@/components/Loading/SkeletonLoadingView";
+import useAssetsStore from "@/storage/assetsStore";
 import AssetLogo from '@/components/AssetLogo';
-import { AssetPrice } from "@/client/";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
-type PurchaseScreenProps = {
-  route: {
-    params: {
-      asset: AssetPrice;
-    };
-  };
-};
 
-const Purchase = ({ route }: PurchaseScreenProps) => {
+
+const ETFSell = () => {
   const { t } = useTranslation();
-  const { asset } = route.params;
+
+  const { asset } = useLocalSearchParams();
+
+  const navigation = useNavigation();
+
   const [amount, setAmount] = useState<string>("0");
 
-  const {
-    isPending: isBalancePending,
-    error: balanceError,
-    data: balance,
-  } = useQuery({
-    ...usersMyBalanceOptions(),
-  });
+  const { assets } = useAssetsStore((state) => state);
 
-  const available = balance?.available
-    ? formatNumber(balance?.available, 2, balance?.precision || 6, true)
+  const currentAsset = assets?.find((currentAsset) => currentAsset.symbol === asset.symbol);
+
+  const assetPrice = asset.price;
+
+  const quantity = currentAsset?.quantity_in_wei
+    ? formatNumber(currentAsset?.quantity_in_wei, 9, 18, true)
     : "0.00";
 
-  const availableDisplayed = balance?.available
-    ? currencyFormatter(balance?.available, 2, balance?.precision || 6, true)
-    : "0.00";
-
-
-  const amountInEtf = new BigNumber(amount)
-    .dividedBy(asset.price)
-    .precision(4)
-    .toString();
+  const totalAmount = quantity
+    ? new BigNumber(quantity)
+      .multipliedBy(assetPrice)
+      .decimalPlaces(2, BigNumber.ROUND_DOWN)
+      .toString()
+    : "0";
 
   const hasNumber = Number(amount) > 0;
-  const isLessThanAvailable = Number(amount) <= Number(available);
-  const canContinue = !isBalancePending && hasNumber && isLessThanAvailable;
+  const isLessThanAvailable = Number(amount) <= Number(totalAmount);
+  const canContinue = hasNumber && isLessThanAvailable;
 
   const goToConfirmation = () => {
-    const isMaxAmount = Number(amount) === Number(available);
-    const amountToBuy = isMaxAmount
-      ? new BigNumber(balance?.available || 0).toString()
-      : new BigNumber(amount).multipliedBy(1_000_000).toString();
+    const adjustedPrice = formatNumber(assetPrice, 2, 0, true)
+
+    const quantityToSell = new BigNumber(amount)
+      .dividedBy(adjustedPrice)  // Convert dollar amount to ETF units
+      .multipliedBy('1000000000000000000')  // Convert to wei (18 decimals)
+      .decimalPlaces(0, BigNumber.ROUND_DOWN)  // Round down to ensure it's a whole number
+      .toString();
+
 
     router.push({
-      pathname: "/asset/purchase/confirmation",
+      pathname: "/assets/sell-confirmation",
       params: {
         asset: asset.symbol,
-        amount: amountToBuy,
+        amount,
+        quantity: quantityToSell,
       },
     });
   };
@@ -86,13 +79,7 @@ const Purchase = ({ route }: PurchaseScreenProps) => {
       <View className="px-layout flex justify-center items-stretch gap-s flex-1">
         <Text className="caption-l text-center text-gray-50">
           {t("etfPurchase.available")}{" "}
-          {isBalancePending ? (
-            <SkeletonLoadingView className="flex-1">
-              <SkeletonView className="w-20 h-4" />
-            </SkeletonLoadingView>
-          ) : (
-            availableDisplayed
-          )}
+          {totalAmount}
         </Text>
         <View className="flex-row items-center justify-center gap-s">
           <Text className="body-l text-center text-gray-10 leading-tight">
@@ -103,16 +90,15 @@ const Purchase = ({ route }: PurchaseScreenProps) => {
           </Text>
         </View>
         <Text className="caption-l text-center text-gray-50">
-          {amountInEtf} {asset.symbol}
+          {quantity} {asset.symbol}
         </Text>
       </View>
       <Keypad
         value={amount}
         onChange={setAmount}
-        maximun={Number(available)}
+        maximun={Number(totalAmount)}
       />
       <View className="px-layout">
-
         <Button className="" disabled={!canContinue} onPress={goToConfirmation}>
           <Text
             className={`button-m ${!canContinue ? "text-dark-content-30" : "text-dark-content-dark"}`}
@@ -126,6 +112,6 @@ const Purchase = ({ route }: PurchaseScreenProps) => {
   );
 };
 
-Purchase.displayName = "Purchase";
+ETFSell.displayName = "ETFSell";
 
-export default Purchase;
+export default ETFSell;

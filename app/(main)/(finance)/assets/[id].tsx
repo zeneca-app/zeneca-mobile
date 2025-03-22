@@ -21,7 +21,7 @@ import ETFChart from "@/components/ETFDetail/ETFChart";
 import ETFActions from "@/components/ETFDetail/ETFActions";
 import ETFDescription from "@/components/ETFDetail/ETFDescription";
 import { normalizeStockPointsData, getChartChange } from "@/components/ETFDetail/ETFChartUtils";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
 
 const Detail = () => {
@@ -120,6 +120,18 @@ const Detail = () => {
         price={price}
         isMarketOpen={isMarketOpen}
         isSellAvailable={true}
+        onBuyPress={() => {
+          router.push({
+            pathname: "/assets/purchase",
+            params: { asset: asset.symbol },
+          });
+        }}
+        onSellPress={() => {
+          router.push({
+            pathname: "/assets/sell",
+            params: { asset: asset.symbol },
+          });
+        }}
       />
     </LoggedLayout>
   );

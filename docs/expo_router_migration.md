@@ -141,7 +141,7 @@ app/
 │   │   ├── purchase.tsx
 │   │   ├── sell.tsx
 │   │   └── _layout.tsx
-│   └── order-history/
+│   └── orders/
 │       ├── index.tsx
 │       └── [id].tsx
 ├── (public)/

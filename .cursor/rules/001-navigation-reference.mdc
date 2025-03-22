@@ -24,7 +24,7 @@ globs: **/*.tsx
 
 <example>
 Question: "How do I add a new screen for transaction history?"
-Response: "According to navigation-structure.md, authenticated screens are in the (main) route group. Transaction-related screens follow a pattern similar to order-history. We should add it under (main)/transactions/_layout.tsx..."
+Response: "According to navigation-structure.md, authenticated screens are in the (main) route group. Transaction-related screens follow a pattern similar to orders. We should add it under (main)/transactions/_layout.tsx..."
 </example>
 
 <example type="invalid">

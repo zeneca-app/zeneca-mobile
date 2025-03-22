@@ -25,14 +25,14 @@ const HomeActions = () => {
   const handleDepositCrypto = () => {
     depositBottomMenuRef.current?.dismiss();
     router.push({
-      pathname: "/(main)/deposit/crypto",
+      pathname: "/(main)/(finance)/deposit/crypto",
     });
   };
 
   const handleDepositBank = () => {
     depositBottomMenuRef.current?.dismiss();
     router.push({
-      pathname: "/(main)/deposit/bank",
+      pathname: "/(main)/(finance)/deposit/bank",
     });
   };
 
