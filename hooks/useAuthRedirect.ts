@@ -3,6 +3,7 @@ import { useUserStore } from "@/storage";
 import { useAuth } from "@clerk/clerk-expo";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter, useSegments } from "expo-router";
+import { useEffect } from "react";
 
 export const useAuthRedirect = () => {
   const { isLoaded, isSignedIn, getToken } = useAuth();
@@ -14,7 +15,15 @@ export const useAuthRedirect = () => {
     user: state.user,
   }));
 
-  const inAuthGroup = segments[0] === "(authenticated)";
+  const inAuthGroup = segments[0] === "(main)";
+  const inPublicGroup = segments[0] === undefined || segments[0] === "(public)";
+
+  // Immediate redirect for authenticated users on public routes
+  useEffect(() => {
+    if (isLoaded && isSignedIn && inPublicGroup) {
+      router.replace("/(modals)/lock");
+    }
+  }, [isLoaded, isSignedIn, inPublicGroup]);
 
   const { isLoading } = useQuery({
     queryKey: ["user", isSignedIn],
@@ -27,18 +36,23 @@ export const useAuthRedirect = () => {
       });
       if (response?.data) {
         setUser(response.data);
-        router.replace("/(authenticated)/modals/lock");
+        // Only redirect if not already on lock screen
+        if (!segments.includes("lock")) {
+          router.replace("/(modals)/lock");
+        }
       }
       return response;
     },
     retry: false,
-    enabled: isLoaded && isSignedIn && !inAuthGroup,
+    enabled: isLoaded && isSignedIn,
   });
 
   // Handle unauthenticated access to protected routes
-  if (!isSignedIn && inAuthGroup) {
-    router.replace("/");
-  }
+  useEffect(() => {
+    if (isLoaded && !isSignedIn && inAuthGroup) {
+      router.replace("/");
+    }
+  }, [isLoaded, isSignedIn, inAuthGroup]);
 
   return {
     isLoaded,
