@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Animated, Dimensions, PanResponder } from 'react-native';
+import React from 'react';
+import { View, Animated, Dimensions } from 'react-native';
 import { LineChart } from 'react-native-wagmi-charts';
 import Text from '@/components/Text';
 import PillButtonProps from '@/components/Buttons/PillButton';
@@ -12,21 +12,24 @@ const windowHeight = Dimensions.get("window").height;
 const chartWidth = windowWidth - 48;
 const chartHeight = windowHeight * 0.24;
 
+interface ChartDataPoint {
+  timestamp: number;
+  value: number;
+}
+
 interface ETFChartProps {
-  chartData: Array<{ timestamp: number; value: number }>;
+  chartData: ChartDataPoint[];
   timeframe: keyof typeof CHART_TIMEFRAMES;
   setTimeframe: (timeframe: keyof typeof CHART_TIMEFRAMES) => void;
   lineColor: string;
-  stockPointsData: any;
   onCursorChange?: (value: string | null) => void;
 }
 
 const ETFChart: React.FC<ETFChartProps> = ({
-  chartData,
   timeframe,
   setTimeframe,
   lineColor,
-  stockPointsData,
+  chartData,
   onCursorChange
 }) => {
   return (
@@ -36,7 +39,7 @@ const ETFChart: React.FC<ETFChartProps> = ({
           className="relative w-full"
           style={{ height: chartHeight + 24, width: chartWidth }}
         >
-          {stockPointsData && stockPointsData.length > 0 ? (
+          {chartData && chartData.length > 0 ? (
             <LineChart.Provider data={chartData}>
               <LineChart height={chartHeight}>
                 <LineChart.Path

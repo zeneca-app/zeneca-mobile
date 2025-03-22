@@ -2,14 +2,14 @@ import React from 'react';
 import { View } from 'react-native';
 import Text from '@/components/Text';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { STOCKS } from '@/constants/stocks';
 import { currencyFormatter, percentageFormatter } from '@/utils/currencyUtils';
 import { SkeletonView } from '@/components/Loading/SkeletonLoadingView';
 import COLORS from '@/constants/colors';
-import { AssetPrice } from '@/client';
+import AssetLogo from '@/components/AssetLogo';
 
 interface ETFHeaderProps {
-  asset: AssetPrice;
+  symbol: string;
+  display_name: string;
   price: string;
   chartLoading: boolean;
   change: {
@@ -20,42 +20,13 @@ interface ETFHeaderProps {
 }
 
 const ETFHeader: React.FC<ETFHeaderProps> = ({
-  asset,
+  symbol,
+  display_name,
   price,
   chartLoading,
   change,
   isCursorActive = false
 }) => {
-  const stockLogoExists = asset?.symbol &&
-    STOCKS &&
-    STOCKS[asset.symbol as keyof typeof STOCKS]?.logo;
-  const renderLogo = () => {
-    if (stockLogoExists) {
-      // Use the stock logo from constants
-      const Logo = STOCKS[asset.symbol as keyof typeof STOCKS].logo;
-      return <Logo style={{ height: "100%", width: "100%" }} />;
-    } /* else if (hasLogoUrl) {
-      // Use the logo URL from the asset
-      return (
-        <Image
-          source={{ uri: asset.logo_url }}
-          style={{ height: "100%", width: "100%" }}
-          resizeMode="contain"
-          // Add error handling for image loading failures
-          onError={() => console.log(`Failed to load image for ${asset.symbol}`)}
-        />
-      );
-    } */ else {
-      // Fallback when no logo is available
-      return (
-        <View className="items-center justify-center w-full h-full bg-gray-80">
-          <Text className="text-gray-40 text-lg font-bold">
-            {asset.symbol?.[0] || "?"}
-          </Text>
-        </View>
-      );
-    }
-  };
 
   const priceDisplayed = price
     ? currencyFormatter(price, 2, 0, true)
@@ -65,10 +36,10 @@ const ETFHeader: React.FC<ETFHeaderProps> = ({
     <>
       <View className="flex-row gap-s pt-layout-s pb-layout-s items-center justify-start px-layout">
         <View className="w-12 h-12 bg-gray-90 rounded-full overflow-hidden">
-          {renderLogo()}
+          <AssetLogo symbol={symbol} size="sm" />
         </View>
         <Text className="text-gray-50 caption-xl flex-1">
-          {asset.symbol}
+          {symbol}
         </Text>
       </View>
       <Text
@@ -76,7 +47,7 @@ const ETFHeader: React.FC<ETFHeaderProps> = ({
         numberOfLines={2}
         ellipsizeMode="tail"
       >
-        {asset.display_name}
+        {display_name}
       </Text>
       <Text className={`heading-m text-gray-10 px-layout ${isCursorActive ? "text-blue-50" : ""}`}>
         {priceDisplayed}

@@ -56,9 +56,9 @@ const ETFSellConfirmation = () => {
       router.push({
         pathname: "/assets/sell-success",
         params: {
-          asset: asset.symbol,
+          symbol: symbol as string,
           amount: quote?.total_amount.toString(),
-          quote,
+          quote: JSON.stringify(quote),
         },
       });
 
@@ -66,7 +66,7 @@ const ETFSellConfirmation = () => {
       console.error("Error during transaction:", error);
       Sentry.captureException(error, {
         extra: {
-          etfSymbol: asset.symbol,
+          symbol: symbol as string,
           quantity,
           quoteId: quote?.id,
         },

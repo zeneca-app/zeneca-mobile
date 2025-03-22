@@ -10,17 +10,22 @@ import { useNavigation } from "@react-navigation/native";
 import * as Sentry from '@sentry/react-native';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import BigNumber from "bignumber.js";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
 import AssetLogo from '@/components/AssetLogo';
 import { router, useLocalSearchParams } from "expo-router";
 
 
-
-
 const PurchaseConfirmation = () => {
-  const { asset, amount } = useLocalSearchParams();
+  const {
+    asset_id,
+    display_name,
+    symbol,
+    amount,
+    price
+  } = useLocalSearchParams();
+  const [quote, setQuote] = useState<OrderQuote | null>(null);
 
   const navigation = useNavigation();
   const queryClient = useQueryClient();
@@ -30,15 +35,15 @@ const PurchaseConfirmation = () => {
   const { chain } = useChainStore();
   const [transactionInitiated, setTransactionInitiated] = useState(false);
 
-  const [quote, setQuote] = useState<OrderQuote | null>(null);
+  const currentPrice = quote?.asset_price || price as string;
 
   const [timeLeft, setTimeLeft] = useState(0);
 
   const amountDisplayed = amount
-    ? currencyFormatter(amount, 2, 6, true)
+    ? currencyFormatter(amount as string, 2, 6, true)
     : "0.00";
 
-  const amountToOrder = formatNumber(amount, 2, 6, true);
+  const amountToOrder = formatNumber(amount as string, 2, 6, true);
 
 
   const { mutate: createQuote, isPending: isQuotePending } = useMutation({
@@ -60,8 +65,8 @@ const PurchaseConfirmation = () => {
       router.replace({
         pathname: "/etf/purchase/success",
         params: {
-          asset: JSON.stringify(asset),
-          amount,
+          symbol: symbol as string,
+          amount: amount as string,
           quote: JSON.stringify(quote),
         },
       });
@@ -70,8 +75,8 @@ const PurchaseConfirmation = () => {
       console.error("Error during transaction:", error);
       Sentry.captureException(error, {
         extra: {
-          symbol: asset.symbol,
-          amount,
+          symbol: symbol as string,
+          amount: amount as string,
           quoteId: quote?.id,
         },
       });
@@ -90,16 +95,16 @@ const PurchaseConfirmation = () => {
     return timeLeft > 0 ? timeLeft : 0;
   };
 
-  const fetchQuote = React.useCallback(() => {
+  const fetchQuote = useCallback(() => {
     createQuote({
       body: {
-        asset_id: asset.id,
+        asset_id: asset_id as string,
         side: "BUY",
         order_type: "MARKET",
-        amount: amount.toString(),
+        amount: Number(amount as string),
       },
     });
-  }, [createQuote, asset.id, amount]);
+  }, [createQuote, asset_id, amount]);
 
   // Initial quote fetch
   useEffect(() => {
@@ -138,7 +143,7 @@ const PurchaseConfirmation = () => {
   const minLeft = formatTimeLeft(timeLeft);
 
   const etfAmount = new BigNumber(amountToOrder)
-    .dividedBy(asset.price)
+    .dividedBy(currentPrice)
     .precision(4)
     .toString();
 
@@ -159,10 +164,10 @@ const PurchaseConfirmation = () => {
       <View className="flex pb-layout">
         <View className="flex-row gap-s pt-layout-s pb-layout-s items-center justify-start px-layout">
           <View className="w-12 h-12 bg-gray-90 rounded-full overflow-hidden">
-            <AssetLogo symbol={asset.symbol} size="md" />
+            <AssetLogo symbol={symbol as string} size="md" />
           </View>
           <Text className="text-gray-50 caption-xl flex-1">
-            {asset.symbol}
+            {symbol as string}
           </Text>
         </View>
         <Text className="heading-l text-gray-10 px-layout">
@@ -170,7 +175,7 @@ const PurchaseConfirmation = () => {
         </Text>
         <View className="flex flex-row items-center justify-start gap-s px-layout">
           <Text className="caption-xl text-gray-50">{etfAmount}</Text>
-          <Text className="caption-xl text-gray-50">{asset.symbol}</Text>
+          <Text className="caption-xl text-gray-50">{symbol as string}</Text>
         </View>
       </View>
       <View className="px-layout pb-layout flex justify-start items-stretch gap flex-1">
@@ -182,7 +187,7 @@ const PurchaseConfirmation = () => {
             {isQuotePending ? (
               <SkeletonView className="w-20 h-4" />
             ) : (
-              <>${quote?.asset_price}</>
+              <>${currentPrice}</>
             )}
           </Text>
         </View>
@@ -216,11 +221,11 @@ const PurchaseConfirmation = () => {
             i18nKey="etfPurchase.disclaimer"
             values={{
               etf_amount: etfAmount,
-              etf_symbol: asset.symbol,
-              display_name: asset.name,
-              symbol: asset.symbol,
+              etf_symbol: symbol as string,
+              display_name: display_name as string,
+              symbol: symbol as string,
               amount: amountToOrder,
-              etf_price: asset.price,
+              etf_price: currentPrice,
             }}
             components={[
               <Text className="caption-l text-white font-bold"></Text>,

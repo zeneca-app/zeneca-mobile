@@ -3,9 +3,7 @@ import Button from "@/components/Button";
 import Keypad from "@/components/Keypad";
 import LoggedLayout from "@/components/LoggedLayout";
 import Text from "@/components/Text";
-import { STOCKS } from "@/constants/stocks";
 import { currencyFormatter, formatNumber } from "@/utils/currencyUtils";
-import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import BigNumber from "bignumber.js";
 import React, { useState } from "react";
@@ -15,20 +13,13 @@ import SkeletonLoadingView, {
   SkeletonView,
 } from "@/components/Loading/SkeletonLoadingView";
 import AssetLogo from '@/components/AssetLogo';
-import { AssetPrice } from "@/client/";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
-type PurchaseScreenProps = {
-  route: {
-    params: {
-      asset: AssetPrice;
-    };
-  };
-};
 
-const Purchase = ({ route }: PurchaseScreenProps) => {
+
+const Purchase = () => {
   const { t } = useTranslation();
-  const { asset } = route.params;
+  const { symbol, price } = useLocalSearchParams();
   const [amount, setAmount] = useState<string>("0");
 
   const {
@@ -49,7 +40,7 @@ const Purchase = ({ route }: PurchaseScreenProps) => {
 
 
   const amountInEtf = new BigNumber(amount)
-    .dividedBy(asset.price)
+    .dividedBy(price as string)
     .precision(4)
     .toString();
 
@@ -66,8 +57,10 @@ const Purchase = ({ route }: PurchaseScreenProps) => {
     router.push({
       pathname: "/assets/purchase-confirmation",
       params: {
-        asset: asset.symbol,
+        symbol: symbol as string,
         amount: amountToBuy,
+        price: price as string,
+        display_name: asset.display_name as string,
       },
     });
   };
@@ -77,9 +70,9 @@ const Purchase = ({ route }: PurchaseScreenProps) => {
       navCenter={
         <View className="flex-row items-center justify-center gap-s p-2 bg-gray-100 rounded-full">
           <View className="w-6 h-6 bg-gray-90 rounded-full overflow-hidden">
-            <AssetLogo symbol={asset.symbol} size="sm" />
+            <AssetLogo symbol={symbol as string} size="sm" />
           </View>
-          <Text className="text-gray-50 caption-xl">{asset.symbol}</Text>
+          <Text className="text-gray-50 caption-xl">{symbol as string}</Text>
         </View>
       }
     >
@@ -103,7 +96,7 @@ const Purchase = ({ route }: PurchaseScreenProps) => {
           </Text>
         </View>
         <Text className="caption-l text-center text-gray-50">
-          {amountInEtf} {asset.symbol}
+          {amountInEtf} {symbol as string}
         </Text>
       </View>
       <Keypad

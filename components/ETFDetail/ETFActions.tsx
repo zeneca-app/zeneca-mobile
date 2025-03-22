@@ -4,21 +4,14 @@ import { useTranslation } from 'react-i18next';
 import Button from '@/components/Button';
 import Text from '@/components/Text';
 import BottomActions from '@/components/BottomActions';
-import { AssetPrice } from '@/client';
 
 interface ETFActionsProps {
-  asset: AssetPrice;
-  price: string;
-  isMarketOpen: boolean;
   isSellAvailable: boolean;
   onBuyPress: () => void;
   onSellPress: () => void;
 }
 
 const ETFActions: React.FC<ETFActionsProps> = ({
-  asset,
-  price,
-  isMarketOpen,
   isSellAvailable,
   onBuyPress,
   onSellPress
