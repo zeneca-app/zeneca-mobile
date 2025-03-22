@@ -129,7 +129,7 @@ const InitialLayout = () => {
                 options={screenConfigs.noHeader}
             />
             <Stack.Screen
-                name="(authenticated)"
+                name="(main)"
                 options={screenConfigs.noHeader}
             />
 

@@ -15,7 +15,7 @@ const KYCSuccess = () => {
   const { t } = useTranslation();
 
   const goHome = async () => {
-    router.replace("/(authenticated)/home");
+    router.replace("/(main)/home");
   };
 
   return (

@@ -370,7 +370,7 @@ sequenceDiagram
         alt Backend Fetch Success
             Backend-->>AwaitPrivyProvider: userData = {id, ...}
             AwaitPrivyProvider->>UserStore: setUser(userData)
-            AwaitPrivyProvider-->>App: isReady = true (authenticated)
+            AwaitPrivyProvider-->>App: isReady = true (main)
             App-->>User: Display Home Screen
         else Backend Fetch Error
             Backend-->>AwaitPrivyProvider: error
@@ -383,7 +383,7 @@ sequenceDiagram
         PrivyProvider-->>AwaitPrivyProvider: privyUser = {id, ...}
         AwaitPrivyProvider->>UserStore: Check for user
         UserStore-->>AwaitPrivyProvider: user = {id, ...}
-        AwaitPrivyProvider-->>App: isReady = true (authenticated)
+        AwaitPrivyProvider-->>App: isReady = true (main)
         App-->>User: Display Home Screen
     end
 ```

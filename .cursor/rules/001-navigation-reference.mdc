@@ -1,8 +1,8 @@
 ---
-description: 
+description: REFERENCE navigation-structure.md when ANSWERING questions about app navigation to ENSURE accurate routing guidance
 globs: **/*.tsx
-alwaysApply: false
 ---
+
 # Navigation Structure Reference Rule
 
 <version>1.0.0</version>
@@ -24,17 +24,17 @@ alwaysApply: false
 
 <example>
 Question: "How do I add a new screen for transaction history?"
-Response: "According to navigation-structure.md, authenticated screens are in the (authenticated) route group. Transaction-related screens follow a pattern similar to order-history. We should add it under (authenticated)/transactions/_layout.tsx..."
+Response: "According to navigation-structure.md, authenticated screens are in the (main) route group. Transaction-related screens follow a pattern similar to order-history. We should add it under (main)/transactions/_layout.tsx..."
 </example>
 
 <example type="invalid">
 Question: "Where should I put the new settings screen?"
 Response: "You can just create a settings.tsx file in the app folder"
-Explanation: Failed to consult navigation-structure.md which would show proper organization under (authenticated) group
+Explanation: Failed to consult navigation-structure.md which would show proper organization under (main) group
 </example>
 
 <critical>
 - NEVER suggest navigation changes without checking navigation-structure.md
 - ALWAYS verify route group organization before providing guidance
 - ENSURE new routes follow existing patterns and hierarchy
-</critical>
+</critical> 

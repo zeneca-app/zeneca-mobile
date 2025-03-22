@@ -19,7 +19,7 @@ The Zeneca mobile app uses Expo Router for navigation, which implements file-bas
 - **/kyc-provider.tsx** - KYC provider integration
 - **/success.tsx** - Onboarding completion
 
-## Authenticated Area - (authenticated)
+## Authenticated Area - (main)
 
 Main tabs/screens:
 
@@ -76,7 +76,7 @@ app/
 │   ├── kyc-preview.tsx           # KYC preview
 │   ├── kyc-provider.tsx          # KYC provider
 │   └── success.tsx               # Onboarding success
-└── (authenticated)/              # Authenticated route group
+└── (main)/              # Authenticated route group
     ├── _layout.tsx               # Authenticated layout
     ├── home.tsx                  # Home screen
     ├── explore.tsx               # Explore screen
@@ -135,7 +135,7 @@ app/
 
 ## Navigation Patterns
 
-1. **Route Groups**: Parentheses in folder names `(authenticated)`, `(onboarding)` indicate route groups that share common layouts and navigation behavior.
+1. **Route Groups**: Parentheses in folder names `(main)`, `(onboarding)` indicate route groups that share common layouts and navigation behavior.
 
 2. **Dynamic Routes**: Square brackets in filenames like `[email].tsx`, `[id].tsx` indicate dynamic routes that accept parameters.
 

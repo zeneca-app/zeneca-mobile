@@ -18,7 +18,7 @@ const PurchaseSuccess = () => {
 
   const handleContinue = () => {
     router.replace({
-      pathname: "/(authenticated)/(tabs)/home",
+      pathname: "/(main)/(tabs)/home",
     });
   };
 

@@ -1,12 +1,8 @@
-import COLORS from '@/constants/colors';
-import { useUser } from '@clerk/clerk-expo';
-import { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Stack, useRouter } from 'expo-router';
-import * as LocalAuthentication from 'expo-local-authentication';
 import Animated, {
     useAnimatedStyle,
     useSharedValue,
@@ -14,16 +10,17 @@ import Animated, {
     withSequence,
     withTiming,
 } from 'react-native-reanimated';
+import { useState } from 'react';
 import { MMKV } from 'react-native-mmkv';
 
 const storage = new MMKV({
     id: 'pin-storage',
 });
 
-const Lock = () => {
-    const { user } = useUser();
-    const [firstName, setFirstName] = useState(user?.firstName);
-    const [code, setCode] = useState<number[]>([]);
+const PinSetup = () => {
+    const [step, setStep] = useState<'first' | 'confirm'>('first');
+    const [firstPin, setFirstPin] = useState<number[]>([]);
+    const [confirmPin, setConfirmPin] = useState<number[]>([]);
     const codeLength = Array(6).fill(0);
     const router = useRouter();
 
@@ -38,82 +35,72 @@ const Lock = () => {
     const OFFSET = 20;
     const TIME = 80;
 
-    const authenticateWithBiometrics = async () => {
-        const { success } = await LocalAuthentication.authenticateAsync({
-            promptMessage: 'Authenticate to access your account',
-            fallbackLabel: 'Use PIN instead'
-        });
-        if (success) {
-            router.replace('/(authenticated)/home');
+    const handlePinComplete = (pin: number[]) => {
+        if (step === 'first') {
+            setFirstPin(pin);
+            setStep('confirm');
         } else {
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-        }
-    };
-
-    // Check for PIN and trigger biometric auth on mount
-    useEffect(() => {
-        const checkPinAndAuthenticate = async () => {
-            const storedPin = storage.getString('user-pin');
-            if (!storedPin) {
-                router.replace('/(authenticated)/modals/pin-setup');
-                return;
-            }
-
-            // Check if device supports biometric authentication
-            const hasHardware = await LocalAuthentication.hasHardwareAsync();
-            const isEnrolled = await LocalAuthentication.isEnrolledAsync();
-            
-            if (hasHardware && isEnrolled) {
-                authenticateWithBiometrics();
-            }
-        };
-
-        checkPinAndAuthenticate();
-    }, []);
-
-    useEffect(() => {
-        if (code.length === 6) {
-            if (code.join('') === storage.getString('user-pin')) {
-                router.replace('/(authenticated)/home');
-                setCode([]);
+            if (pin.join('') === firstPin.join('')) {
+                // Store PIN
+                storage.set('user-pin', pin.join(''));
+                // Navigate to home
+                router.replace('/(main)/home');
             } else {
+                // Show error animation
                 offset.value = withSequence(
                     withTiming(-OFFSET, { duration: TIME / 2 }),
                     withRepeat(withTiming(OFFSET, { duration: TIME }), 4, true),
                     withTiming(0, { duration: TIME / 2 })
                 );
                 Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-                setCode([]);
+                setConfirmPin([]);
             }
         }
-    }, [code]);
+    };
 
     const onNumberPress = (number: number) => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        setCode([...code, number]);
+        const currentPin = step === 'first' ? firstPin : confirmPin;
+        const newPin = [...currentPin, number];
+
+        if (step === 'first') {
+            setFirstPin(newPin);
+        } else {
+            setConfirmPin(newPin);
+        }
+
+        if (newPin.length === 6) {
+            handlePinComplete(newPin);
+        }
     };
 
     const numberBackspace = () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        setCode(code.slice(0, -1));
+        if (step === 'first') {
+            setFirstPin(firstPin.slice(0, -1));
+        } else {
+            setConfirmPin(confirmPin.slice(0, -1));
+        }
     };
+
+    const currentPin = step === 'first' ? firstPin : confirmPin;
 
     return (
         <SafeAreaView className="flex-1 bg-basic-black">
-            <Stack.Screen options={{ 
+            <Stack.Screen options={{
                 presentation: 'modal',
                 animation: 'none',
-                headerShown: false 
+                headerShown: false
             }} />
             <Text className="text-2xl font-bold mt-20 text-white self-center">
-                Welcome back, {firstName}
+                {step === 'first' ? 'Set your PIN' : 'Confirm your PIN'}
             </Text>
 
             <Animated.View className="flex-row justify-center items-center gap-5 my-24" style={style}>
                 {codeLength.map((_, index) => (
                     <View
                         key={index}
-                        className={`w-5 h-5 rounded-full ${code[index] ? 'bg-electric-40' : 'bg-white'}`}
+                        className={`w-5 h-5 rounded-full ${currentPin[index] ? 'bg-electric-40' : 'bg-dark-gray-alpha-3'}`}
                     />
                 ))}
             </Animated.View>
@@ -142,16 +129,12 @@ const Lock = () => {
                     ))}
                 </View>
                 <View className="flex-row justify-between items-center">
-                    <TouchableOpacity onPress={authenticateWithBiometrics}>
-                        <MaterialCommunityIcons name="face-recognition" size={26} color="white" />
-                    </TouchableOpacity>
-
+                    <View className="min-w-[30px]" />
                     <TouchableOpacity onPress={() => onNumberPress(0)}>
                         <Text className="text-3xl text-white">0</Text>
                     </TouchableOpacity>
-
                     <View className="min-w-[30px]">
-                        {code.length > 0 && (
+                        {currentPin.length > 0 && (
                             <TouchableOpacity onPress={numberBackspace}>
                                 <Text className="text-3xl text-white">
                                     <MaterialCommunityIcons name="backspace-outline" size={26} color="white" />
@@ -160,14 +143,9 @@ const Lock = () => {
                         )}
                     </View>
                 </View>
-                <TouchableOpacity onPress={() => router.replace('/(authenticated)/(modals)/pin-setup')}>
-                    <Text className="text-lg font-medium text-electric-40 self-center mt-5">
-                        Reset your PIN
-                    </Text>
-                </TouchableOpacity>
             </View>
         </SafeAreaView>
     );
 };
 
-export default Lock;
+export default PinSetup; 

@@ -37,7 +37,7 @@
 
 ```
 app/                      # Main application (Expo Router)
-├── (authenticated)/      # Protected routes
+├── (main)/      # Protected routes
 ├── (onboarding)/        # Onboarding flow
 ├── (public)/            # Public routes
 ├── _layout.tsx          # Root layout

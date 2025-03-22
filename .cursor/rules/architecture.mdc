@@ -30,7 +30,7 @@ alwaysApply: false
      - `_layout.tsx` for feature-specific layouts
      - `components/` for feature-specific components
      - `hooks/` for feature-specific hooks
-     - `client/` for API integration code
+     - `api/` for API integration code
      - `types.ts` for feature-specific types
 
 3. **Naming Conventions**
@@ -40,7 +40,7 @@ alwaysApply: false
    - Utilities use camelCase (e.g., `formatCurrency.ts`)
    - Zustand stores use camelCase with "Store" suffix (e.g., `userStore.ts`)
    - Test files use the format `[filename].test.tsx`
-   - Route groups use parentheses (e.g., `(authenticated)`)
+   - Route groups use parentheses (e.g., `(main)`)
    - Dynamic routes use square brackets (e.g., `[id].tsx`)
    - Modal routes should be placed in `modals/` directory
 
@@ -118,7 +118,7 @@ alwaysApply: false
 1. **Expo Router**
    - Use file-based routing structure in the `app/` directory
    - Organize routes using directory groups:
-     - `(authenticated)/` for protected routes
+     - `(main)/` for protected routes
      - `(onboarding)/` for onboarding flow
      - `modals/` for modal screens
    - Use `_layout` files for shared layouts and navigation configuration
@@ -243,5 +243,5 @@ alwaysApply: false
    - Validate all user inputs
    - Implement proper authentication guards for protected routes
 
-<version>1.0.0</version>
+
    - 
