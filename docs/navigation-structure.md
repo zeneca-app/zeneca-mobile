@@ -55,8 +55,8 @@ Main tabs/screens:
 
 ### Modals
 
-- **/modals/lock.tsx** - App lock screen
-- **/modals/pin-setup.tsx** - PIN setup modal
+- **/(modals)/lock.tsx** - App lock screen
+- **/(modals)/pin-setup.tsx** - PIN setup modal
 
 
 ## App Hierarchy
@@ -141,7 +141,7 @@ app/
 
 3. **Layouts**: Each section has a `_layout.tsx` file that defines the navigation container and screen options for that section.
 
-4. **Modal Screens**: The `modals/` directory contains screens that are presented modally over the main interface.
+4. **Modal Screens**: The `(modals)/` directory contains screens that are presented modally over the main interface.
 
 5. **Authentication Flow**: The app implements a protection system that redirects unauthenticated users away from protected routes.
 

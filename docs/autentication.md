@@ -44,13 +44,13 @@ The current implementation includes the following screens:
 #### Google OAuth Flow:
 
 - Clerk handles Google OAuth authentication
-- Upon success, the backend creates or fetches the user, and the app navigates to (main)/home
+- Upon success, the backend creates or fetches the user, and the app navigates to (main)/
 
 #### Email Flow:
 
 - Users enter their email in email-signup.tsx
 - Users verify their email via OTP in verify/[email].tsx
-- Upon success, the backend creates or fetches the user, and the app navigates to (main)/home
+- Upon success, the backend creates or fetches the user, and the app navigates to (main)/
 
 ## 3. Requirements
 
@@ -87,7 +87,7 @@ The current implementation includes the following screens:
 - Offer two signup options: Email and Google OAuth
 - Handle loading states for each option
 - Navigate to email-signup.tsx for email signup
-- Initiate Google OAuth flow via Clerk and navigate to (main)/home upon success
+- Initiate Google OAuth flow via Clerk and navigate to (main)/ upon success
 
 **UI Elements**:
 
@@ -109,7 +109,7 @@ The current implementation includes the following screens:
 - Offer two login options: Email and Google OAuth
 - Handle loading states for each option
 - Navigate to /email-login for email login
-- Initiate Google OAuth flow via Clerk and navigate to (main)/home upon success
+- Initiate Google OAuth flow via Clerk and navigate to (main)/ upon success
 
 **UI Elements**:
 
@@ -156,7 +156,7 @@ The current implementation includes the following screens:
 - Accept a 6-digit OTP code
 - Automatically verify the code when 6 digits are entered
 - Support both signup and sign-in flows (determined by signin param)
-- Navigate to (main)/home upon successful verification
+- Navigate to (main)/ upon successful verification
 
 **UI Elements**:
 
@@ -179,7 +179,7 @@ The current implementation includes the following screens:
 
 - Use Clerk to check if the user is signed in (useAuth)
 - Redirect unauthenticated users from authenticated routes to the welcome screen
-- Redirect authenticated users to (main)/modals/lock if not already in an authenticated route
+- Redirect authenticated users to (main)/(modals)/lock if not already in an authenticated route
 - Load fonts and hide splash screen when ready
 
 **Behavior**:
@@ -203,13 +203,13 @@ The current implementation includes the following screens:
 2. Navigates to SignUp → Selects "Email"
 3. Navigates to EmailSignUp → Enters email → Clicks "Continue"
 4. Navigates to VerifyEmail → Enters OTP → Auto-submits when complete
-5. Backend creates user → Navigates to (main)/home
+5. Backend creates user → Navigates to (main)/
 
 ### 4.2 New User Signup (Google OAuth)
 
 1. User lands on WelcomeScreen → Clicks "Sign Up"
 2. Navigates to SignUp → Selects "Google"
-3. Clerk initiates OAuth → Backend creates user → Navigates to (main)/home
+3. Clerk initiates OAuth → Backend creates user → Navigates to (main)/
 
 ### 4.3 Returning User Login (Email)
 
@@ -217,13 +217,13 @@ The current implementation includes the following screens:
 2. Navigates to Login → Selects "Email"
 3. Navigates to /email-login → Enters email → Proceeds to OTP
 4. Navigates to VerifyEmail → Enters OTP → Auto-submits when complete
-5. Backend fetches user → Navigates to (main)/home
+5. Backend fetches user → Navigates to (main)/
 
 ### 4.4 Returning User Login (Google OAuth)
 
 1. User lands on WelcomeScreen → Clicks "Sign In"
 2. Navigates to Login → Selects "Google"
-3. Clerk initiates OAuth → Backend fetches user → Navigates to (main)/home
+3. Clerk initiates OAuth → Backend fetches user → Navigates to (main)/
 
 ## 5. Technical Requirements
 

@@ -19,7 +19,7 @@ const ETFSellSuccess = () => {
   const handleContinue = () => {
     //reset go back action
     router.replace({
-      pathname: "/(main)/home",
+      pathname: "/(main)/",
     });
   };
 

@@ -17,7 +17,7 @@ export const UserInactivityProvider = ({ children }: any) => {
         // Check if app was killed while in background
         const wasInBackground = storage.getBoolean('was_in_background');
         if (wasInBackground && isSignedIn) {
-            router.replace('/(main)/modals/lock');
+            router.replace('/(modals)/lock');
             storage.set('was_in_background', false);
         }
 
@@ -34,7 +34,7 @@ export const UserInactivityProvider = ({ children }: any) => {
         if (nextAppState === 'background') {
             if (isSignedIn) {
                 storage.set('was_in_background', true);
-                router.replace('/(main)/modals/lock');
+                router.replace('/(modals)/lock');
             }
         } else if (nextAppState === 'active') {
             storage.set('was_in_background', false);

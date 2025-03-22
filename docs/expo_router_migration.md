@@ -196,7 +196,7 @@ export function AuthGuard() {
     const isAuthenticated = privyUser && user;
 
     if (isAuthenticated && !inAuthGroup) {
-      router.replace('/(auth)/home');
+      router.replace('/(main)/');
     } else if (!isAuthenticated && inAuthGroup) {
       router.replace('/');
     }

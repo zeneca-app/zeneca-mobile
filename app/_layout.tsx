@@ -132,6 +132,10 @@ const InitialLayout = () => {
                 name="(main)"
                 options={screenConfigs.noHeader}
             />
+            <Stack.Screen
+                name="(modals)"
+                options={screenConfigs.noHeader}
+            />
 
             <Stack.Screen
                 name="signup"
