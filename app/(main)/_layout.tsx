@@ -1,10 +1,10 @@
 import { Stack } from 'expo-router';
 import screenConfigs from '@/components/screenOptions';
 
-export default function Layout() {
+export default function MainLayout() {
   return (
     <Stack>
-      <Stack.Screen name="index" options={screenConfigs.homeHeader} />
+      <Stack.Screen name="home" options={screenConfigs.homeHeader} />
       <Stack.Screen
         name="(finance)"
         options={screenConfigs.noHeader}
@@ -23,5 +23,3 @@ export default function Layout() {
     </Stack>
   );
 }
-
-Layout.displayName = "Layout";

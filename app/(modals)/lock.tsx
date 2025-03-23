@@ -38,13 +38,21 @@ const Lock = () => {
     const OFFSET = 20;
     const TIME = 80;
 
+    const goToHome = () => {
+        router.replace('/(main)/home');
+    }
+
+    const goToPinSetup = () => {
+        router.replace('/(modals)/pin-setup');
+    }
+
     const authenticateWithBiometrics = async () => {
         const { success } = await LocalAuthentication.authenticateAsync({
             promptMessage: 'Authenticate to access your account',
             fallbackLabel: 'Use PIN instead'
         });
         if (success) {
-            router.replace('/(main)/');
+            goToHome();
         } else {
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
         }
@@ -55,14 +63,14 @@ const Lock = () => {
         const checkPinAndAuthenticate = async () => {
             const storedPin = storage.getString('user-pin');
             if (!storedPin) {
-                router.replace('/(modals)/pin-setup');
+                goToPinSetup();
                 return;
             }
 
             // Check if device supports biometric authentication
             const hasHardware = await LocalAuthentication.hasHardwareAsync();
             const isEnrolled = await LocalAuthentication.isEnrolledAsync();
-            
+
             if (hasHardware && isEnrolled) {
                 authenticateWithBiometrics();
             }
@@ -74,7 +82,7 @@ const Lock = () => {
     useEffect(() => {
         if (code.length === 6) {
             if (code.join('') === storage.getString('user-pin')) {
-                router.replace('/(main)/');
+                goToHome();
                 setCode([]);
             } else {
                 offset.value = withSequence(
@@ -100,10 +108,10 @@ const Lock = () => {
 
     return (
         <SafeAreaView className="flex-1 bg-basic-black">
-            <Stack.Screen options={{ 
+            <Stack.Screen options={{
                 presentation: 'modal',
                 animation: 'none',
-                headerShown: false 
+                headerShown: false
             }} />
             <Text className="text-2xl font-bold mt-20 text-white self-center">
                 Welcome back, {firstName}
@@ -160,7 +168,7 @@ const Lock = () => {
                         )}
                     </View>
                 </View>
-                <TouchableOpacity onPress={() => router.replace('/(modals)/pin-setup')}>
+                <TouchableOpacity onPress={goToPinSetup}>
                     <Text className="text-lg font-medium text-electric-40 self-center mt-5">
                         Reset your PIN
                     </Text>

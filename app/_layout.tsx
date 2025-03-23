@@ -2,7 +2,7 @@ import "@/lib/polyfills";
 import "@/i18n";
 import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack, useRouter, useSegments } from 'expo-router';
+import { SplashScreen, Stack } from 'expo-router';
 import { StatusBar, LogBox } from 'react-native';
 import {
     Manrope_300Light,
@@ -11,7 +11,6 @@ import {
     Manrope_600SemiBold,
     Manrope_700Bold
 } from '@expo-google-fonts/manrope';
-import { useUserStore } from '@/storage';
 import { useCheckUpdate } from '@/hooks/useCheckUpdate';
 import { onlineManager } from '@tanstack/react-query';
 import NetInfo from '@react-native-community/netinfo';
@@ -22,15 +21,13 @@ import {
 import { PostHogProvider } from "posthog-react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { createConfig, http, WagmiProvider } from "wagmi";
-import { base, baseSepolia, sepolia } from "wagmi/chains";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import env from "@/config/env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
 import IntroAnimation from "@/components/IntroAnimation";
 import * as Sentry from "@sentry/react-native";
-import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
+import { ClerkProvider } from "@clerk/clerk-expo";
 import tokenCache from "@/utils/token";
 import { UserInactivityProvider } from "@/context/UserInactivity";
 import screenConfigs from "@/components/screenOptions";
@@ -60,14 +57,6 @@ const asyncStoragePersister = createAsyncStoragePersister({
     throttleTime: 1000,
 });
 
-const wagmiConfig = createConfig({
-    chains: [sepolia, baseSepolia, base],
-    transports: {
-        [sepolia.id]: http(),
-        [baseSepolia.id]: http(),
-        [base.id]: http(),
-    },
-});
 
 export {
     // Catch any errors thrown by the Layout component.
@@ -115,7 +104,6 @@ const InitialLayout = () => {
 
     const { isLoaded: authLoaded } = useAuthRedirect();
 
-
     if (!loaded || !authLoaded) {
         return (
             <IntroAnimation />
@@ -128,20 +116,15 @@ const InitialLayout = () => {
                 name="index"
                 options={screenConfigs.noHeader}
             />
-            <Stack.Screen
-                name="(main)"
-                options={screenConfigs.noHeader}
-            />
-            <Stack.Screen
-                name="(modals)"
-                options={screenConfigs.noHeader}
-            />
+
+            <Stack.Screen name="(main)" options={screenConfigs.noHeader} />
+            <Stack.Screen name="(onboarding)" options={screenConfigs.noHeader} />
+            <Stack.Screen name="(modals)" options={{ headerShown: false }} />
 
             <Stack.Screen
                 name="signup"
                 options={screenConfigs.defaultHeader}
             />
-
             <Stack.Screen
                 name="email-signup"
                 options={screenConfigs.defaultHeader}
@@ -153,10 +136,6 @@ const InitialLayout = () => {
             <Stack.Screen
                 name="verify/[email]"
                 options={screenConfigs.defaultHeader}
-            />
-            <Stack.Screen
-                name="(onboarding)"
-                options={screenConfigs.noHeader}
             />
         </Stack>
     )
@@ -176,17 +155,15 @@ const RootLayout = () => {
                     <SafeAreaProvider>
                         <BottomSheetModalProvider>
                             <UserInactivityProvider>
-                                <WagmiProvider config={wagmiConfig}>
-                                    <PostHogProvider
-                                        apiKey={env.POSTHOG_API_KEY}
-                                        options={{
-                                            host: env.POSTHOG_HOST,
-                                        }}
-                                    >
-                                        <StatusBar />
-                                        <InitialLayout />
-                                    </PostHogProvider>
-                                </WagmiProvider>
+                                <PostHogProvider
+                                    apiKey={env.POSTHOG_API_KEY}
+                                    options={{
+                                        host: env.POSTHOG_HOST,
+                                    }}
+                                >
+                                    <StatusBar />
+                                    <InitialLayout />
+                                </PostHogProvider>
                             </UserInactivityProvider>
                         </BottomSheetModalProvider>
                     </SafeAreaProvider>

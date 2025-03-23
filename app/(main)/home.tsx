@@ -4,6 +4,7 @@ import HomeActions from "@/components/HomeScreen/HomeActions";
 import PositionsList from "@/components/HomeScreen/PositionsList";
 
 const HomeScreen = () => {
+  console.log('HomeScreen');
   usePrefetchData();
 
   return (
@@ -14,5 +15,4 @@ const HomeScreen = () => {
   );
 };
 
-HomeScreen.displayName = "HomeScreen";
 export default HomeScreen;

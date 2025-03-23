@@ -16,6 +16,7 @@ import { ScrollView } from "react-native-gesture-handler";
 
 
 const DepositCrypto = () => {
+  console.log('DepositCrypto');
   const { t } = useTranslation();
   const { user } = useUserStore((state) => state);
 

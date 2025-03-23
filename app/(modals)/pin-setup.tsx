@@ -34,6 +34,9 @@ const PinSetup = () => {
 
     const OFFSET = 20;
     const TIME = 80;
+    const goToHome = () => {
+        router.replace('/(main)/home');
+    }
 
     const handlePinComplete = (pin: number[]) => {
         if (step === 'first') {
@@ -44,7 +47,7 @@ const PinSetup = () => {
                 // Store PIN
                 storage.set('user-pin', pin.join(''));
                 // Navigate to home
-                router.replace('/(main)/');
+                goToHome();
             } else {
                 // Show error animation
                 offset.value = withSequence(

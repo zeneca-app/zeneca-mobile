@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router';
 import screenConfigs from '@/components/screenOptions';
 
-export default function Layout() {
+export default function DepositLayout() {
     return (
         <Stack
             screenOptions={screenConfigs.defaultHeader}
@@ -17,5 +17,3 @@ export default function Layout() {
         </Stack>
     );
 }
-
-Layout.displayName = "Layout";

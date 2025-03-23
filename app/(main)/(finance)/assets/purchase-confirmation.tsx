@@ -79,11 +79,6 @@ const PurchaseConfirmation = () => {
           quoteId: quote?.id,
         },
       });
-    } finally {
-      /* navigation.navigate("ETFPurchaseSuccess", {
-        etf,
-        amount,
-      }); */
     }
   };
 
