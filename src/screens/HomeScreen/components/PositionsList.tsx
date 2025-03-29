@@ -80,7 +80,7 @@ const PositionsList = () => {
 
   const HomeHeader = () => (
     <View className="flex-1">
-      <View className="pt-12 pb-6">
+      <View className="pt-safe pb-6">
         <Balance isRefetching={isRefetching} />
       </View>
       <VerifyCtaCard />
