@@ -32,6 +32,8 @@ module.exports = {
         "layout-s": 16,
         "layout-l": 32,
         "bottom-actions": 110,
+        safe: "max(env(safe-area-inset-top, 12px), 12px)",
+        "safe-bottom": "max(env(safe-area-inset-bottom, 16px), 16px)",
       },
       gap: {
         xs: 4,

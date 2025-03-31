@@ -7,7 +7,8 @@ import Config from "@/config";
 import { currencyFormatter } from "@/utils/currencyUtils";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { Text, View } from "react-native";
+import { Text, View, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export type balanceProps = {
   displayCurrencyName?: boolean;
@@ -23,6 +24,7 @@ const Balance = ({
   isRefetching = false,
 }: balanceProps) => {
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
 
   const { isPending, error, data: balance, refetch: refetchBalance } = useQuery({
     ...usersMyBalanceOptions(),
@@ -64,7 +66,11 @@ const Balance = ({
   )
   return (
     <View
-      className={`w-full flex h-44 justify-start items-stretch px-layout ${containerClasses ? " " + containerClasses : ""}`}
+      className={`w-full flex justify-start items-stretch px-layout ${containerClasses ? " " + containerClasses : ""}`}
+      style={{
+        minHeight: 176, // h-44 equivalent
+        paddingTop: Platform.OS === 'ios' ? Math.max(insets.top * 0.3, 8) : 8,
+      }}
     >
       <Text
         className={`caption-l text-gray-50 pb-3 ${captionClasses ? " " + captionClasses : ""}`}
