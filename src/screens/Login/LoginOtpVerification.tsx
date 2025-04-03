@@ -103,7 +103,7 @@ const LoginOtpScreen = () => {
         return;
       }
 
-      await loginLoginOrCreate({
+      const userData = await loginLoginOrCreate({
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -117,26 +117,15 @@ const LoginOtpScreen = () => {
           },
         },
       });
-      
-      const userData = await fetchUserData(accessToken!);
-      
-      setUser({ ...userData, token: accessToken! } as DBUser);
 
-      await SecureStore.setItemAsync(`token-${address}`, accessToken!);
+      setUser({ ...userData.data } as DBUser);
+
       setModalState("dismissed");
       goToNextScreen();
     },
     [user, wallet],
   );
 
-  const fetchUserData = async (token: string) => {
-    const userData = await usersMe({
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((data) => data.data);
-    return userData;
-  };
 
   const goToNextScreen = () => {
     navigation.navigate("Home");

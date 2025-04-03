@@ -35,7 +35,7 @@ const LoginOptions = () => {
   const wallet = useEmbeddedWallet();
 
   const chain = useChainStore((state) => state.chain);
-  
+
   const [loginStatus, setLoginStatus] = useState<LoginStatus>(
     LoginStatus.INITIAL,
   );
@@ -90,7 +90,7 @@ const LoginOptions = () => {
       }
 
       // create user on the backend
-      await loginLoginOrCreate({
+      const userData = await loginLoginOrCreate({
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -105,24 +105,11 @@ const LoginOptions = () => {
         },
       });
 
-      const userData = await fetchUserData(accessToken!);
-
-      setUser({ ...userData, token: accessToken! } as DBUser);
-
-      await SecureStore.setItemAsync(`token-${userAddress}`, accessToken!);
+      setUser({ ...userData.data } as DBUser);
       setIsLoading(false);
     },
     [user, wallet],
   );
-
-  const fetchUserData = async (token: string) => {
-    const userData = await usersMe({
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((data) => data.data);
-    return userData;
-  };
 
   useEffect(() => {
     if (state.status === "done" && user) {
