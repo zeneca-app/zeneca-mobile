@@ -40,15 +40,7 @@ Sentry.init({
 
 LogBox.ignoreLogs([new RegExp("TypeError:.*")]);
 
-const IntroScreen = ({ children }: { children: React.ReactNode }) => {
-  const { isReady } = usePrivy();
 
-  if (!isReady) {
-    return <LogoAnimation />;
-  }
-  return children;
-
-}
 const AppIndex = () => {
   const [loaded] = useFonts({
     Manrope_300Light: Manrope_300Light,
@@ -68,10 +60,8 @@ const AppIndex = () => {
   return (
     <NavigationContainer>
       <Providers>
-        <IntroScreen>
           <StatusBar />
           <MainNavigation />
-        </IntroScreen>
       </Providers>
     </NavigationContainer>
   );

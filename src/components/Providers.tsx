@@ -9,6 +9,7 @@ import { PostHogProvider } from "posthog-react-native";
 import React, { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { AuthService } from "@/hooks/authService";
 import { createConfig, http, WagmiProvider } from "wagmi";
 import { base, baseSepolia, sepolia } from "wagmi/chains";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
@@ -58,7 +59,9 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
                       .then(() => queryClient.invalidateQueries());
                   }}
                   persistOptions={{ persister: asyncStoragePersister }}>
-                  {children}
+                  <AuthService>
+                    {children}
+                  </AuthService>
                 </PersistQueryClientProvider>
               </WagmiProvider>
             </BottomSheetModalProvider>
