@@ -32,10 +32,13 @@ import ETFSellConfirmation from "@/screens/ETF/ETFSellConfirmation";
 import ETFSellSuccess from "@/screens/ETF/ETFSellSuccess";
 import NetInfo from '@react-native-community/netinfo';
 import { onlineManager } from "@tanstack/react-query";
+import { usePrivy } from "@privy-io/expo";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const MainNavigation = () => {
+  const { user: privyUser } = usePrivy();
+
   const navigation = useNavigation();
   const { user } = useUserStore();
   const { checkUpdate } = useCheckUpdate();
@@ -68,7 +71,6 @@ const MainNavigation = () => {
     headerLeft: backButton,
   };
 
-
   // Screen configurations
   const screenConfigs = {
     noHeader: { headerShown: false },
@@ -86,7 +88,7 @@ const MainNavigation = () => {
   };
 
   return (
-    <Stack.Navigator initialRouteName={!user ? "Welcome" : "Home"}>
+    <Stack.Navigator initialRouteName={!privyUser ? "Welcome" : "Home"}>
       {/* Home Screens */}
       <Stack.Screen name="Home" component={HomeScreen} options={screenConfigs.homeHeader} />
       <Stack.Screen name="Profile" component={ProfileScreen} options={screenConfigs.profileScreen} />
