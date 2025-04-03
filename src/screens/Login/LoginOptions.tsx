@@ -107,9 +107,14 @@ const LoginOptions = () => {
 
       setUser({ ...userData.data } as DBUser);
       setIsLoading(false);
+      goToNextScreen();
     },
     [user, wallet],
   );
+
+  const goToNextScreen = () => {
+    navigation.navigate("Home");
+  };
 
   useEffect(() => {
     if (state.status === "done" && user) {
@@ -118,8 +123,6 @@ const LoginOptions = () => {
         handleConnection(user)
           .then(() => {
             setIsLoading(false);
-            console.log("success");
-            navigation.navigate("Home");
           })
           .catch((e) => {
             console.error("Error Handling Connection", e);

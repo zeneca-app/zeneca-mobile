@@ -17,7 +17,8 @@ import "./styles/global.css";
 import MainNavigation from "@/screens/MainNavigation";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-
+import { usePrivy } from "@privy-io/expo";
+import LogoAnimation from "@/components/IntroAnimation";
 
 const navigationIntegration = new Sentry.ReactNavigationInstrumentation({
   enableTimeToInitialDisplay: true,
@@ -39,6 +40,7 @@ Sentry.init({
 
 LogBox.ignoreLogs([new RegExp("TypeError:.*")]);
 
+
 const AppIndex = () => {
   const [loaded] = useFonts({
     Manrope_300Light: Manrope_300Light,
@@ -53,12 +55,13 @@ const AppIndex = () => {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
-  
+
+
   return (
     <NavigationContainer>
       <Providers>
-        <StatusBar />
-        <MainNavigation />
+          <StatusBar />
+          <MainNavigation />
       </Providers>
     </NavigationContainer>
   );
