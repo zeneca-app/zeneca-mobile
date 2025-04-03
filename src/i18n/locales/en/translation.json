@@ -187,6 +187,11 @@
     "logout": "Logout",
     "version": "VERSION"
   },
+  "kycProvider": {
+    "title": "Camera permission is required for identity verification",
+    "subtitle": "Please grant permission to continue",
+    "grantPermissionButton": "Grant Permission"
+  },
   "orderHistory": {
     "title": "Order history",
     "buy": "Buy of",

@@ -41,6 +41,11 @@
     "wait": "Te avisaremos cuando la verificación esté completa.",
     "doneButton": "Terminado"
   },
+  "kycProvider": {
+    "title": "Permiso de cámara requerido para la verificación de identidad",
+    "subtitle": "Por favor, otorgue el permiso para continuar",
+    "grantPermissionButton": "Otorgar permiso"
+  },
   "marketClosed": "El mercado está cerrado",
   "home": {
     "depositActionText": "Depositar",
