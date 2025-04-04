@@ -15,8 +15,6 @@ import { useCamera } from "@/hooks/useCamera";
 import Text from "@/components/Text";
 import Button from "@/components/Button";
 import { useTranslation } from "react-i18next";
-import { RootStackParamList } from "@/navigation/types";
-import { RouteProp } from "@react-navigation/native";
 
 
 const AI_PRISE_THEME = {

@@ -33,7 +33,11 @@
       "channel": "production",
       "android": {
         "buildType": "app-bundle",
-        "gradleCommand": ":app:bundleRelease"
+        "gradleCommand": ":app:bundleRelease",
+        "extraGradleProperties": {
+          "android.enableR8.fullMode": "true",
+          "android.enableR8": "true"
+        }
       },
       "ios": {
         "distribution": "store"
