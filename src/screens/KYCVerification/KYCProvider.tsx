@@ -15,6 +15,8 @@ import { useCamera } from "@/hooks/useCamera";
 import Text from "@/components/Text";
 import Button from "@/components/Button";
 import { useTranslation } from "react-i18next";
+import { RootStackParamList } from "@/navigation/types";
+import { RouteProp } from "@react-navigation/native";
 
 
 const AI_PRISE_THEME = {
@@ -28,8 +30,18 @@ const AI_PRISE_THEME = {
 } as const;
 
 
-const KYCProvider = ({ route }) => {
-  const { permission, getPermission } = useCamera();
+
+
+type KYCProviderProps = {
+  route: {
+    params: {
+      country_code: string;
+    };
+  };
+};
+
+const KYCProvider = ({ route }: KYCProviderProps) => {
+  const { permission, getPermission, isRequesting } = useCamera();
   const { t } = useTranslation();
   const { country_code } = route.params;
   const navigation = useNavigation();
@@ -61,16 +73,20 @@ const KYCProvider = ({ route }) => {
 
   const country = country_code || user?.account?.country;
 
-  useEffect(() => {
-    // Request camera permission when component mounts
-    getPermission();
-  }, []);
-
   // Show loading or permission request UI if permission isn't granted
-  if (!permission || !permission.granted) {
+  if (isRequesting) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text>{t("kycProvider.title")}</Text>
+        <Text>{t("kycProvider.requestingPermission")}</Text>
+      </View>
+    );
+  }
+
+  if (!permission?.granted) {
+    return (
+      <View className="flex-1 justify-center items-center bg-dark-background-100">
+        <Text className="text-white text-center mb-4">{t("kycProvider.cameraPermissionRequired")}</Text>
+        <Text className="text-gray-400 text-center mb-8 px-4">{t("kycProvider.cameraPermissionExplanation")}</Text>
         <Button onPress={getPermission}>{t("kycProvider.grantPermissionButton")}</Button>
       </View>
     );
