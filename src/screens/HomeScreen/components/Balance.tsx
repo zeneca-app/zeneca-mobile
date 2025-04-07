@@ -7,7 +7,7 @@ import Config from "@/config";
 import { currencyFormatter } from "@/utils/currencyUtils";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { Text, View, Platform } from "react-native";
+import { Text, View, Platform, Dimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export type balanceProps = {
@@ -25,6 +25,11 @@ const Balance = ({
 }: balanceProps) => {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
+  const { height: screenHeight } = Dimensions.get('window');
+
+  // Calculate dynamic padding based on screen height
+  const dynamicTopPadding = Math.min(screenHeight * 0.08, 80); // 8% of screen height, max 80px
+  const dynamicMinHeight = Math.min(screenHeight * 0.22, 176); // 22% of screen height, max 176px
 
   const { isPending, error, data: balance, refetch: refetchBalance } = useQuery({
     ...usersMyBalanceOptions(),
@@ -68,8 +73,10 @@ const Balance = ({
     <View
       className={`w-full flex justify-start items-stretch px-layout ${containerClasses ? " " + containerClasses : ""}`}
       style={{
-        minHeight: 176, // h-44 equivalent
-        paddingTop: Platform.OS === 'ios' ? Math.max(insets.top * 0.3, 8) : 8,
+        minHeight: dynamicMinHeight,
+        paddingTop: Platform.OS === 'ios' 
+          ? Math.max(insets.top + dynamicTopPadding, dynamicTopPadding * 1.5)
+          : dynamicTopPadding,
       }}
     >
       <Text
@@ -82,34 +89,44 @@ const Balance = ({
           <LoadingTotalBalance />
         ) : (
           <>
-            <Text className="heading-l text-white">
+            <Text 
+              className="heading-l text-white"
+              style={{
+                fontSize: Math.min(screenHeight * 0.045, 36), // Dynamic font size
+              }}
+            >
               {balance?.equity_in_usd}
             </Text>
             {displayCurrencyName && (
-              <Text className="text-white text-base font-semibold">
+              <Text 
+                className="text-white font-semibold"
+                style={{
+                  fontSize: Math.min(screenHeight * 0.02, 16), // Dynamic font size
+                }}
+              >
                 {t("home.currency")}
               </Text>
             )}
           </>
-        )
-        }
+        )}
       </View>
       <Text
         className={`caption-l text-gray-50 pb-2 ${captionClasses ? " " + captionClasses : ""}`}
       >
         {t("balance.available_funds")}
       </Text>
-      {
-        isPending ? (
-          <LoadingAvailable />
-        ) : (
-          <Text
-            className={`caption-xl text-white pb-3 ${captionClasses ? " " + captionClasses : ""}`}
-          >
-            {available}
-          </Text>
-        )
-      }
+      {isPending ? (
+        <LoadingAvailable />
+      ) : (
+        <Text
+          className={`caption-xl text-white pb-3 ${captionClasses ? " " + captionClasses : ""}`}
+          style={{
+            fontSize: Math.min(screenHeight * 0.025, 20), // Dynamic font size
+          }}
+        >
+          {available}
+        </Text>
+      )}
     </View>
   );
 };
