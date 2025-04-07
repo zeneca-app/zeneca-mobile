@@ -228,6 +228,9 @@
       },
       "step_3": {
         "subtitle": "Ingresa tu dirección completa"
+      },
+      "step_4": {
+        "subtitle": "Confirma tu identidad"
       }
     },
     "title": "Completa tu \ninformación",

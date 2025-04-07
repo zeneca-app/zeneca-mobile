@@ -227,6 +227,9 @@
       },
       "step_3": {
         "subtitle": "Enter your complete address"
+      },
+      "step_4": {
+        "subtitle": "Confirm your identity"
       }
     },
     "title": "Complete your \ninformation",
