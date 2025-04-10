@@ -2,7 +2,7 @@
   "expo": {
     "name": "Zeneca",
     "slug": "zeneca",
-    "version": "0.0.2",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
@@ -16,9 +16,7 @@
       "supportsTablet": false,
       "bundleIdentifier": "app.zeneca.prod",
       "usesAppleSignIn": true,
-      "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
-      }
+      "infoPlist": { "ITSAppUsesNonExemptEncryption": false }
     },
     "android": {
       "adaptiveIcon": {
@@ -31,9 +29,7 @@
         "android.permission.RECORD_AUDIO"
       ]
     },
-    "web": {
-      "favicon": "./assets/icon.png"
-    },
+    "web": { "favicon": "./assets/icon.png" },
     "scheme": "app.zeneca.prod",
     "plugins": [
       "expo-localization",
@@ -51,9 +47,7 @@
       ],
       [
         "expo-camera",
-        {
-          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
-        }
+        { "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera." }
       ],
       "expo-secure-store",
       "expo-apple-authentication",
@@ -65,9 +59,7 @@
             "targetSdkVersion": 34,
             "buildToolsVersion": "34.0.0"
           },
-          "ios": {
-            "deploymentTarget": "13.4"
-          }
+          "ios": { "deploymentTarget": "13.4" }
         }
       ],
       [
@@ -80,19 +72,13 @@
         }
       ]
     ],
-    "extra": {
-      "eas": {
-        "projectId": "07db86a6-53e9-40e0-b3f5-84d401b54213"
-      }
-    },
+    "extra": { "eas": { "projectId": "07db86a6-53e9-40e0-b3f5-84d401b54213" } },
     "owner": "zeneca",
     "updates": {
       "enabled": true,
       "fallbackToCacheTimeout": 0,
       "url": "https://u.expo.dev/07db86a6-53e9-40e0-b3f5-84d401b54213"
     },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    }
+    "runtimeVersion": { "policy": "appVersion" }
   }
 }

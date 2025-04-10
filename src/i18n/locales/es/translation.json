@@ -41,6 +41,12 @@
     "wait": "Te avisaremos cuando la verificación esté completa.",
     "doneButton": "Terminado"
   },
+  "kycProvider": {
+    "requestingPermission": "Solicitando permiso...",
+    "cameraPermissionRequired": "Permiso de cámara requerido para la verificación de identidad",
+    "cameraPermissionExplanation": "Por favor, otorgue el permiso para continuar",
+    "grantPermissionButton": "Otorgar permiso"
+  },
   "marketClosed": "El mercado está cerrado",
   "home": {
     "depositActionText": "Depositar",
@@ -223,6 +229,9 @@
       },
       "step_3": {
         "subtitle": "Ingresa tu dirección completa"
+      },
+      "step_4": {
+        "subtitle": "Confirma tu identidad"
       }
     },
     "title": "Completa tu \ninformación",

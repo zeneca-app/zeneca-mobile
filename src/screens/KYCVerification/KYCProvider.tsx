@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { AiPriseFrame } from "aiprise-react-native-sdk";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Dimensions,
   SafeAreaView,
@@ -11,7 +11,11 @@ import { useKYCStatusStore, useUserStore } from "@/storage/";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { onboardingOnboardingKycStepMutation, usersGetKycStatusOptions } from "@/client/@tanstack/react-query.gen";
 import client from "@/client/client";
-
+import { useCamera } from "@/hooks/useCamera";
+import Text from "@/components/Text";
+import Button from "@/components/Button";
+import { useTranslation } from "react-i18next";
+import * as Sentry from '@sentry/react-native';
 
 const AI_PRISE_THEME = {
   background: "dark",
@@ -24,7 +28,19 @@ const AI_PRISE_THEME = {
 } as const;
 
 
-const KYCProvider = ({ route }) => {
+
+
+type KYCProviderProps = {
+  route: {
+    params: {
+      country_code: string;
+    };
+  };
+};
+
+const KYCProvider = ({ route }: KYCProviderProps) => {
+  const { permission, getPermission, isRequesting } = useCamera();
+  const { t } = useTranslation();
   const { country_code } = route.params;
   const navigation = useNavigation();
   const { height, width } = Dimensions.get("window");
@@ -37,8 +53,8 @@ const KYCProvider = ({ route }) => {
   const { mutate: updateKycStep } = useMutation({
     ...onboardingOnboardingKycStepMutation(),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ 
-        queryKey: usersGetKycStatusOptions().queryKey 
+      await queryClient.invalidateQueries({
+        queryKey: usersGetKycStatusOptions().queryKey
       });
       setObStatus("KYC_PROVIDER_STEP");
       navigation.navigate("KYCSuccess");
@@ -54,6 +70,25 @@ const KYCProvider = ({ route }) => {
   const { user } = useUserStore();
 
   const country = country_code || user?.account?.country;
+
+  // Show loading or permission request UI if permission isn't granted
+  if (isRequesting) {
+    return (
+      <View className="flex-1 justify-center items-center bg-dark-background-100">
+        <Text>{t("kycProvider.requestingPermission")}</Text>
+      </View>
+    );
+  }
+
+  if (!permission?.granted) {
+    return (
+      <View className="flex-1 justify-center items-center bg-dark-background-100">
+        <Text className="text-white text-center mb-4">{t("kycProvider.cameraPermissionRequired")}</Text>
+        <Text className="text-gray-400 text-center mb-8 px-4">{t("kycProvider.cameraPermissionExplanation")}</Text>
+        <Button onPress={getPermission}>{t("kycProvider.grantPermissionButton")}</Button>
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-dark-background-100 pb-4">
@@ -74,6 +109,13 @@ const KYCProvider = ({ route }) => {
             allowed_country_code: country,
           }
         }}
+        onStart={(sessionID) => {
+          console.log("Session started with ID: " + sessionID);
+          // Save the session ID in this step. Give it back to the component when you want to resume
+        }}
+        onResume={(sessionID) => {
+          console.log("Session resumed with ID: " + sessionID);
+        }}
         /* userData={{
           address: full_address,
         }} */
@@ -81,7 +123,14 @@ const KYCProvider = ({ route }) => {
         onSuccess={handleOnComplete}
         onComplete={handleOnComplete}
         onError={(errorCode) => {
-          alert("Error: " + errorCode);
+          //alert("Error: " + errorCode);
+          console.log("Error: " + errorCode);
+          Sentry.captureException(errorCode, {
+            tags: {
+              component: "KYCProvider",
+              action: "onError",
+            },
+          });
         }}
       />
     </SafeAreaView>

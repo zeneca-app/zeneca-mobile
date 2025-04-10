@@ -187,6 +187,12 @@
     "logout": "Logout",
     "version": "VERSION"
   },
+  "kycProvider": {
+    "requestingPermission": "Requesting permission...",
+    "cameraPermissionRequired": "Camera permission is required for identity verification",
+    "cameraPermissionExplanation": "Please grant permission to continue",
+    "grantPermissionButton": "Grant Permission"
+  },
   "orderHistory": {
     "title": "Order history",
     "buy": "Buy of",
@@ -222,6 +228,9 @@
       },
       "step_3": {
         "subtitle": "Enter your complete address"
+      },
+      "step_4": {
+        "subtitle": "Confirm your identity"
       }
     },
     "title": "Complete your \ninformation",
