@@ -15,7 +15,7 @@ import { useCamera } from "@/hooks/useCamera";
 import Text from "@/components/Text";
 import Button from "@/components/Button";
 import { useTranslation } from "react-i18next";
-
+import * as Sentry from '@sentry/react-native';
 
 const AI_PRISE_THEME = {
   background: "dark",
@@ -74,7 +74,7 @@ const KYCProvider = ({ route }: KYCProviderProps) => {
   // Show loading or permission request UI if permission isn't granted
   if (isRequesting) {
     return (
-      <View className="flex-1 justify-center items-center">
+      <View className="flex-1 justify-center items-center bg-dark-background-100">
         <Text>{t("kycProvider.requestingPermission")}</Text>
       </View>
     );
@@ -109,6 +109,13 @@ const KYCProvider = ({ route }: KYCProviderProps) => {
             allowed_country_code: country,
           }
         }}
+        onStart={(sessionID) => {
+          console.log("Session started with ID: " + sessionID);
+          // Save the session ID in this step. Give it back to the component when you want to resume
+        }}
+        onResume={(sessionID) => {
+          console.log("Session resumed with ID: " + sessionID);
+        }}
         /* userData={{
           address: full_address,
         }} */
@@ -116,7 +123,14 @@ const KYCProvider = ({ route }: KYCProviderProps) => {
         onSuccess={handleOnComplete}
         onComplete={handleOnComplete}
         onError={(errorCode) => {
-          alert("Error: " + errorCode);
+          //alert("Error: " + errorCode);
+          console.log("Error: " + errorCode);
+          Sentry.captureException(errorCode, {
+            tags: {
+              component: "KYCProvider",
+              action: "onError",
+            },
+          });
         }}
       />
     </SafeAreaView>

@@ -188,8 +188,9 @@
     "version": "VERSION"
   },
   "kycProvider": {
-    "title": "Camera permission is required for identity verification",
-    "subtitle": "Please grant permission to continue",
+    "requestingPermission": "Requesting permission...",
+    "cameraPermissionRequired": "Camera permission is required for identity verification",
+    "cameraPermissionExplanation": "Please grant permission to continue",
     "grantPermissionButton": "Grant Permission"
   },
   "orderHistory": {

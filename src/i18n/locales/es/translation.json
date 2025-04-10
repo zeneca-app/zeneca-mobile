@@ -42,8 +42,9 @@
     "doneButton": "Terminado"
   },
   "kycProvider": {
-    "title": "Permiso de cámara requerido para la verificación de identidad",
-    "subtitle": "Por favor, otorgue el permiso para continuar",
+    "requestingPermission": "Solicitando permiso...",
+    "cameraPermissionRequired": "Permiso de cámara requerido para la verificación de identidad",
+    "cameraPermissionExplanation": "Por favor, otorgue el permiso para continuar",
     "grantPermissionButton": "Otorgar permiso"
   },
   "marketClosed": "El mercado está cerrado",

@@ -83,7 +83,7 @@ const VerifyCTACard = () => {
   }, [OBKYCStatus, setKycStatus, setObStatus, error]);
 
 
-  if (isVerified) return null;
+  //if (isVerified) return null;
 
 
   if (isVerifying) {
