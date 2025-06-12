@@ -1,15 +1,15 @@
-import Keypad from "@/components/KeypadOld";
-import client from "@/client/client";
 import { usersMyBalanceOptions } from "@/client/@tanstack/react-query.gen";
-import { useQuery } from "@tanstack/react-query";
+import client from "@/client/client";
+import Keypad from "@/components/KeypadOld";
+import { useUserStore } from "@/storage/";
 import useRecipientStore from "@/storage/recipientStore";
 import useTransferStore from "@/storage/transferStore";
-import { useUserStore } from "@/storage/";
 import { colors } from "@/styles/colors";
 import { shortenAddress } from "@/utils/address";
 import { formatCurrency } from "@/utils/currencyUtils";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {

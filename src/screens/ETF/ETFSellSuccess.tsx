@@ -1,4 +1,6 @@
 import GradientCircle from "@/assets/green-gradient-circle.svg";
+import { AssetPrice, OrderQuote } from "@/client";
+import AssetLogo from "@/components/AssetLogo";
 import Button from "@/components/Button";
 import LoggedLayout from "@/components/LoggedLayout";
 import Text from "@/components/Text";
@@ -9,8 +11,6 @@ import BigNumber from "bignumber.js";
 import React from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
-import AssetLogo from '@/components/AssetLogo';
-import { AssetPrice, OrderQuote } from "@/client";
 
 type ETFSellSuccessScreenProps = {
   route: {
@@ -100,9 +100,7 @@ const ETFSellSuccess = ({ route }: ETFSellSuccessScreenProps) => {
 
         <View className="px-layout">
           <Button className="" onPress={handleContinue}>
-            <Text className="button-m">
-              {t("etfSell.success.done_button")}
-            </Text>
+            <Text className="button-m">{t("etfSell.success.done_button")}</Text>
           </Button>
         </View>
       </View>

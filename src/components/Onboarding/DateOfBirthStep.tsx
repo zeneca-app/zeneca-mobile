@@ -1,11 +1,9 @@
-import { useState, useEffect, useRef } from "react";
-import { z } from "zod";
 import InputWrapper from "@/components/Forms/InputWrapper";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Text, View, TextInput } from "react-native";
+import { Text, TextInput, View } from "react-native";
+import { z } from "zod";
 import { OnBoardingStepProps } from "./config";
-
-
 
 const DateOfBirthStep = ({
   formValues,
@@ -14,7 +12,7 @@ const DateOfBirthStep = ({
   handleFocus,
   touchedFields,
   handleBlur,
-  onValidationChange
+  onValidationChange,
 }: OnBoardingStepProps) => {
   const { t } = useTranslation();
 
@@ -55,10 +53,11 @@ const DateOfBirthStep = ({
     return "";
   };
 
-
   useEffect(() => {
     if (isDateValid) {
-      const date = new Date(`${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`);
+      const date = new Date(
+        `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`,
+      );
       handleChange("birth_date", date);
     }
   }, [month, day, year, isDateValid]);
@@ -72,28 +71,28 @@ const DateOfBirthStep = ({
   }, [month, day, year]);
 
   const handleInputChange = (field: string, value: string) => {
-    const numericValue = value.replace(/[^0-9]/g, '');
+    const numericValue = value.replace(/[^0-9]/g, "");
 
     switch (field) {
-      case 'day':
+      case "day":
         if (numericValue.length <= 2) {
           const num = parseInt(numericValue);
-          if (numericValue === '' || (num > 0 && num <= 31)) {
+          if (numericValue === "" || (num > 0 && num <= 31)) {
             setDay(numericValue);
             if (numericValue.length === 2) monthRef.current?.focus();
           }
         }
         break;
-      case 'month':
+      case "month":
         if (numericValue.length <= 2) {
           const num = parseInt(numericValue);
-          if (numericValue === '' || (num > 0 && num <= 12)) {
+          if (numericValue === "" || (num > 0 && num <= 12)) {
             setMonth(numericValue);
             if (numericValue.length === 2) yearRef.current?.focus();
           }
         }
         break;
-      case 'year':
+      case "year":
         if (numericValue.length <= 4) {
           setYear(numericValue);
           // Only validate if year has exactly 4 digits
@@ -124,13 +123,17 @@ const DateOfBirthStep = ({
     <>
       <InputWrapper
         label={""}
-        isFocused={focused === "birth_date" || Boolean(touchedFields?.birth_date)}
+        isFocused={
+          focused === "birth_date" || Boolean(touchedFields?.birth_date)
+        }
         error={getError("birth_date")}
         required={true}
       >
         <View className="flex-row justify-between space-x-4 pb-1.5">
           <View className="flex-1 rounded-lg px-4 py-2">
-            <Text className="text-gray-400 text-s mb-1">{t("onBoarding.birth_date_field.day")}</Text>
+            <Text className="text-gray-400 text-s mb-1">
+              {t("onBoarding.birth_date_field.day")}
+            </Text>
             <TextInput
               ref={dayRef}
               className="text-white text-lg"
@@ -139,11 +142,13 @@ const DateOfBirthStep = ({
               placeholder="DD"
               placeholderTextColor="#666"
               value={day}
-              onChangeText={(value) => handleInputChange('day', value)}
+              onChangeText={(value) => handleInputChange("day", value)}
             />
           </View>
           <View className="flex-1 rounded-lg px-4 py-2">
-            <Text className="text-gray-400 text-s mb-1">{t("onBoarding.birth_date_field.month")}</Text>
+            <Text className="text-gray-400 text-s mb-1">
+              {t("onBoarding.birth_date_field.month")}
+            </Text>
             <TextInput
               ref={monthRef}
               className="text-white text-lg"
@@ -152,11 +157,13 @@ const DateOfBirthStep = ({
               placeholder="MM"
               placeholderTextColor="#666"
               value={month}
-              onChangeText={(value) => handleInputChange('month', value)}
+              onChangeText={(value) => handleInputChange("month", value)}
             />
           </View>
           <View className="flex-1  rounded-lg px-4 py-2">
-            <Text className="text-gray-400 text-s mb-1">{t("onBoarding.birth_date_field.year")}</Text>
+            <Text className="text-gray-400 text-s mb-1">
+              {t("onBoarding.birth_date_field.year")}
+            </Text>
             <TextInput
               ref={yearRef}
               className="text-white text-lg"
@@ -165,7 +172,7 @@ const DateOfBirthStep = ({
               placeholder="YYYY"
               placeholderTextColor="#666"
               value={year}
-              onChangeText={(value) => handleInputChange('year', value)}
+              onChangeText={(value) => handleInputChange("year", value)}
             />
           </View>
         </View>

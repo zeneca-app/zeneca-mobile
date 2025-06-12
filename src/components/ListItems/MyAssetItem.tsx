@@ -1,7 +1,6 @@
-import { Text, View } from "react-native";
 import { MyAsset } from "@/client/";
-import AssetLogo from '@/components/AssetLogo';
-
+import AssetLogo from "@/components/AssetLogo";
+import { Text, View } from "react-native";
 
 export type MyAssetItemProps = {
   asset: MyAsset;
@@ -20,8 +19,7 @@ const MyAssetItem = ({ asset }: MyAssetItemProps) => {
       </View>
       {/* Price container with fixed width */}
       <View className="flex-shrink-0 justify-center items-end">
-        <Text className="text-gray-10 caption-xl"
-          numberOfLines={1}>
+        <Text className="text-gray-10 caption-xl" numberOfLines={1}>
           ${asset.equity_in_usd}
         </Text>
       </View>

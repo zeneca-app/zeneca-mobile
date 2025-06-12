@@ -1,12 +1,11 @@
-import { useNavigation } from "@react-navigation/native";
-import { Text, TouchableOpacity, View } from "react-native";
 import { AssetPrice } from "@/client/";
 import AssetLogo from "@/components/AssetLogo";
+import { useNavigation } from "@react-navigation/native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 export type AssetListItemProps = {
   asset: AssetPrice;
 };
-
 
 const AssetListItem = ({ asset }: AssetListItemProps) => {
   const navigation = useNavigation();
@@ -24,8 +23,7 @@ const AssetListItem = ({ asset }: AssetListItemProps) => {
         <Text className="text-gray-10 caption-xl">{asset.display_name}</Text>
         <Text className="text-gray-50 caption-xl">{asset.symbol}</Text>
       </View>
-      <View className="flex-1 flex justify-center items-end">
-      </View>
+      <View className="flex-1 flex justify-center items-end"></View>
     </TouchableOpacity>
   );
 };

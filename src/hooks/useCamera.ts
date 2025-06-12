@@ -15,7 +15,7 @@ const useCamera = () => {
       }
       return permission.granted;
     } catch (error) {
-      console.error('Error requesting camera permission:', error);
+      console.error("Error requesting camera permission:", error);
       return false;
     } finally {
       setIsRequesting(false);
@@ -24,7 +24,7 @@ const useCamera = () => {
 
   // Request permission on mount for Android
   useEffect(() => {
-    if (Platform.OS === 'android' && !permission?.granted && !isRequesting) {
+    if (Platform.OS === "android" && !permission?.granted && !isRequesting) {
       getPermission();
     }
   }, [permission?.granted]);
@@ -32,7 +32,7 @@ const useCamera = () => {
   return {
     permission,
     getPermission,
-    isRequesting
+    isRequesting,
   };
 };
 

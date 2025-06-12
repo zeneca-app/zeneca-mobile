@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Animated, Dimensions, PanResponder } from 'react-native';
-import { LineChart } from 'react-native-wagmi-charts';
-import Text from '@/components/Text';
-import PillButtonProps from '@/components/Buttons/PillButton';
-import { CHART_TIMEFRAMES } from '@/constants/stocks';
-import AnimatedWavyLine from '@/components/Loading/AnimatedWavyLine';
+import PillButtonProps from "@/components/Buttons/PillButton";
+import AnimatedWavyLine from "@/components/Loading/AnimatedWavyLine";
+import Text from "@/components/Text";
+import { CHART_TIMEFRAMES } from "@/constants/stocks";
+import React, { useEffect, useRef } from "react";
+import { Animated, Dimensions, PanResponder, View } from "react-native";
+import { LineChart } from "react-native-wagmi-charts";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -13,7 +13,7 @@ const chartWidth = windowWidth - 48;
 const chartHeight = windowHeight * 0.24;
 
 interface ETFChartProps {
-  chartData: Array<{ timestamp: number; value: number }>;
+  chartData: { timestamp: number; value: number }[];
   timeframe: keyof typeof CHART_TIMEFRAMES;
   setTimeframe: (timeframe: keyof typeof CHART_TIMEFRAMES) => void;
   lineColor: string;
@@ -27,7 +27,7 @@ const ETFChart: React.FC<ETFChartProps> = ({
   setTimeframe,
   lineColor,
   stockPointsData,
-  onCursorChange
+  onCursorChange,
 }) => {
   return (
     <View className="flex flex-1 gap-l">
@@ -39,10 +39,7 @@ const ETFChart: React.FC<ETFChartProps> = ({
           {stockPointsData && stockPointsData.length > 0 ? (
             <LineChart.Provider data={chartData}>
               <LineChart height={chartHeight}>
-                <LineChart.Path
-                  color={lineColor}
-                  width={2}
-                >
+                <LineChart.Path color={lineColor} width={2}>
                   <LineChart.Gradient />
                 </LineChart.Path>
                 <LineChart.CursorLine />
@@ -56,7 +53,6 @@ const ETFChart: React.FC<ETFChartProps> = ({
                       padding: 4,
                     }}
                   />
-
                 </LineChart.CursorCrosshair>
               </LineChart>
             </LineChart.Provider>
@@ -76,9 +72,7 @@ const ETFChart: React.FC<ETFChartProps> = ({
           {Object.entries(CHART_TIMEFRAMES).map(([key, value]) => (
             <PillButtonProps
               key={key}
-              onPress={() =>
-                setTimeframe(key as keyof typeof CHART_TIMEFRAMES)
-              }
+              onPress={() => setTimeframe(key as keyof typeof CHART_TIMEFRAMES)}
               activeClasses="!bg-gray-90"
               isActive={timeframe === key}
             >

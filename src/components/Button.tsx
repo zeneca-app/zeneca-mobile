@@ -30,20 +30,21 @@ const Button = ({
       "py-4 px-6 flex-row justify-center items-center rounded-full gap-2 transition-colors duration-500",
       disabled ? "bg-dark-content-disabled" : "bg-white",
     ].join(" "),
-    outline: "py-4 px-6 flex-row justify-center items-center border border-white text-white rounded-full gap-2",
+    outline:
+      "py-4 px-6 flex-row justify-center items-center border border-white text-white rounded-full gap-2",
     link: "py-4 px-6 flex-row justify-center items-center text-white gap-2",
   };
 
   const defaultContentClasses = {
     solid: "text-dark-content-dark",
-    outline: "text-white", 
-    link: "text-white"
+    outline: "text-white",
+    link: "text-white",
   };
 
   const defaultContentDisabledClasses = {
     solid: "text-dark-content-30",
     outline: "text-white",
-    link: "text-white"
+    link: "text-white",
   };
 
   const conditionalContentClasses = disabled
@@ -65,12 +66,13 @@ const Button = ({
       className={`${defaultClasses[variant]} ${className}`}
     >
       <Text className={conditionalContentClasses}>
-        {isLoading && (loadingSlot || (
-          <ActivityIndicator
-            size="small"
-            colorClass={defaultContentClasses[variant]}
-          />
-        ))}
+        {isLoading &&
+          (loadingSlot || (
+            <ActivityIndicator
+              size="small"
+              colorClass={defaultContentClasses[variant]}
+            />
+          ))}
         {children}
       </Text>
     </Pressable>

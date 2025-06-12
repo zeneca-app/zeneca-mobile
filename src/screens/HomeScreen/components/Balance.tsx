@@ -7,7 +7,7 @@ import Config from "@/config";
 import { currencyFormatter } from "@/utils/currencyUtils";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { Text, View, Platform, Dimensions } from "react-native";
+import { Dimensions, Platform, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export type balanceProps = {
@@ -25,13 +25,18 @@ const Balance = ({
 }: balanceProps) => {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
-  const { height: screenHeight } = Dimensions.get('window');
+  const { height: screenHeight } = Dimensions.get("window");
 
   // Calculate dynamic padding based on screen height
   const dynamicTopPadding = Math.min(screenHeight * 0.08, 80); // 8% of screen height, max 80px
   const dynamicMinHeight = Math.min(screenHeight * 0.22, 176); // 22% of screen height, max 176px
 
-  const { isPending, error, data: balance, refetch: refetchBalance } = useQuery({
+  const {
+    isPending,
+    error,
+    data: balance,
+    refetch: refetchBalance,
+  } = useQuery({
     ...usersMyBalanceOptions(),
     refetchInterval: Config.REFETCH_INTERVAL,
     staleTime: Infinity, // Consider data stale immediately
@@ -51,7 +56,9 @@ const Balance = ({
     ? currencyFormatter(balance?.available, 2, balance?.precision || 6, true)
     : "0.00";
 
-  const balancePending = balance?.pending ? currencyFormatter(balance?.pending) : "0.00";
+  const balancePending = balance?.pending
+    ? currencyFormatter(balance?.pending)
+    : "0.00";
 
   const LoadingTotalBalance = () => (
     <SkeletonLoadingView className="flex-1 flex-row gap-1 h-16">
@@ -63,20 +70,21 @@ const Balance = ({
       <SkeletonView className="w-10 h-16" />
       <SkeletonView className="w-10 h-16" />
     </SkeletonLoadingView>
-  )
+  );
   const LoadingAvailable = () => (
     <SkeletonLoadingView className="flex-1">
       <SkeletonView className="w-20 h-4" />
     </SkeletonLoadingView>
-  )
+  );
   return (
     <View
       className={`w-full flex justify-start items-stretch px-layout ${containerClasses ? " " + containerClasses : ""}`}
       style={{
         minHeight: dynamicMinHeight,
-        paddingTop: Platform.OS === 'ios' 
-          ? Math.max(insets.top + dynamicTopPadding, dynamicTopPadding * 1.5)
-          : dynamicTopPadding,
+        paddingTop:
+          Platform.OS === "ios"
+            ? Math.max(insets.top + dynamicTopPadding, dynamicTopPadding * 1.5)
+            : dynamicTopPadding,
       }}
     >
       <Text
@@ -89,7 +97,7 @@ const Balance = ({
           <LoadingTotalBalance />
         ) : (
           <>
-            <Text 
+            <Text
               className="heading-l text-white"
               style={{
                 fontSize: Math.min(screenHeight * 0.045, 36), // Dynamic font size
@@ -98,7 +106,7 @@ const Balance = ({
               {balance?.equity_in_usd}
             </Text>
             {displayCurrencyName && (
-              <Text 
+              <Text
                 className="text-white font-semibold"
                 style={{
                   fontSize: Math.min(screenHeight * 0.02, 16), // Dynamic font size

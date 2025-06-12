@@ -1,11 +1,11 @@
-import React from 'react';
-import { View } from 'react-native';
-import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
-import Button from '@/components/Button';
-import Text from '@/components/Text';
-import BottomActions from '@/components/BottomActions';
-import { AssetPrice } from '@/client';
+import { AssetPrice } from "@/client";
+import BottomActions from "@/components/BottomActions";
+import Button from "@/components/Button";
+import Text from "@/components/Text";
+import { useNavigation } from "@react-navigation/native";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { View } from "react-native";
 
 interface ETFActionsProps {
   asset: AssetPrice;
@@ -18,7 +18,7 @@ const ETFActions: React.FC<ETFActionsProps> = ({
   asset,
   price,
   isMarketOpen,
-  isSellAvailable
+  isSellAvailable,
 }) => {
   const { t } = useTranslation();
   const navigation = useNavigation();
@@ -29,7 +29,7 @@ const ETFActions: React.FC<ETFActionsProps> = ({
         <Button
           className="flex-1"
           onPress={() =>
-            navigation.navigate('ETFPurchase', {
+            navigation.navigate("ETFPurchase", {
               asset,
             })
           }
@@ -40,7 +40,7 @@ const ETFActions: React.FC<ETFActionsProps> = ({
           <Button
             className="flex-1"
             onPress={() =>
-              navigation.navigate('ETFSell', {
+              navigation.navigate("ETFSell", {
                 asset,
               })
             }
@@ -53,4 +53,4 @@ const ETFActions: React.FC<ETFActionsProps> = ({
   );
 };
 
-export default ETFActions; 
+export default ETFActions;

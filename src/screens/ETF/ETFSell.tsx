@@ -1,9 +1,19 @@
-import { assetsGetAssetDetailOptions, usersMyBalanceOptions } from "@/client/@tanstack/react-query.gen";
+import { AssetPrice } from "@/client";
+import {
+  assetsGetAssetDetailOptions,
+  usersMyBalanceOptions,
+} from "@/client/@tanstack/react-query.gen";
+import AssetLogo from "@/components/AssetLogo";
 import Button from "@/components/Button";
 import Keypad from "@/components/Keypad";
+import SkeletonLoadingView, {
+  SkeletonView,
+} from "@/components/Loading/SkeletonLoadingView";
 import LoggedLayout from "@/components/LoggedLayout";
 import Text from "@/components/Text";
+import Config from "@/config";
 import { STOCKS } from "@/constants/stocks";
+import useAssetsStore from "@/storage/assetsStore";
 import { currencyFormatter, formatNumber } from "@/utils/currencyUtils";
 import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
@@ -11,13 +21,6 @@ import BigNumber from "bignumber.js";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
-import SkeletonLoadingView, {
-  SkeletonView,
-} from "@/components/Loading/SkeletonLoadingView";
-import useAssetsStore from "@/storage/assetsStore";
-import Config from "@/config";
-import AssetLogo from '@/components/AssetLogo';
-import { AssetPrice } from "@/client";
 
 type ETFSellScreenProps = {
   route: {
@@ -38,7 +41,9 @@ const ETFSell = ({ route }: ETFSellScreenProps) => {
 
   const { assets } = useAssetsStore((state) => state);
 
-  const currentAsset = assets?.find((currentAsset) => currentAsset.symbol === asset.symbol);
+  const currentAsset = assets?.find(
+    (currentAsset) => currentAsset.symbol === asset.symbol,
+  );
 
   const assetPrice = asset.price;
 
@@ -48,9 +53,9 @@ const ETFSell = ({ route }: ETFSellScreenProps) => {
 
   const totalAmount = quantity
     ? new BigNumber(quantity)
-      .multipliedBy(assetPrice)
-      .decimalPlaces(2, BigNumber.ROUND_DOWN)
-      .toString()
+        .multipliedBy(assetPrice)
+        .decimalPlaces(2, BigNumber.ROUND_DOWN)
+        .toString()
     : "0";
 
   const hasNumber = Number(amount) > 0;
@@ -58,20 +63,18 @@ const ETFSell = ({ route }: ETFSellScreenProps) => {
   const canContinue = hasNumber && isLessThanAvailable;
 
   const goToConfirmation = () => {
-    const adjustedPrice = formatNumber(assetPrice, 2, 0, true)
+    const adjustedPrice = formatNumber(assetPrice, 2, 0, true);
 
     const quantityToSell = new BigNumber(amount)
-      .dividedBy(adjustedPrice)  // Convert dollar amount to ETF units
-      .multipliedBy('1000000000000000000')  // Convert to wei (18 decimals)
-      .decimalPlaces(0, BigNumber.ROUND_DOWN)  // Round down to ensure it's a whole number
+      .dividedBy(adjustedPrice) // Convert dollar amount to ETF units
+      .multipliedBy("1000000000000000000") // Convert to wei (18 decimals)
+      .decimalPlaces(0, BigNumber.ROUND_DOWN) // Round down to ensure it's a whole number
       .toString();
-
 
     navigation.navigate("ETFSellConfirmation", {
       asset,
       amount,
       quantity: quantityToSell,
-
     });
   };
 
@@ -88,16 +91,13 @@ const ETFSell = ({ route }: ETFSellScreenProps) => {
     >
       <View className="px-layout flex justify-center items-stretch gap-s flex-1">
         <Text className="caption-l text-center text-gray-50">
-          {t("etfPurchase.available")}{" "}
-          {totalAmount}
+          {t("etfPurchase.available")} {totalAmount}
         </Text>
         <View className="flex-row items-center justify-center gap-s">
           <Text className="body-l text-center text-gray-10 leading-tight">
             $
           </Text>
-          <Text className="heading-l text-center text-gray-10">
-            {amount}
-          </Text>
+          <Text className="heading-l text-center text-gray-10">{amount}</Text>
         </View>
         <Text className="caption-l text-center text-gray-50">
           {quantity} {asset.symbol}
@@ -116,7 +116,6 @@ const ETFSell = ({ route }: ETFSellScreenProps) => {
             {t("etfPurchase.continue")}
           </Text>
         </Button>
-
       </View>
     </LoggedLayout>
   );

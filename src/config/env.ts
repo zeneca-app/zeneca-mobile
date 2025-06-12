@@ -26,7 +26,6 @@ const envSchema = z.object({
   // KYC
   AIPRISE_TEMPLATE_ID: z.string(),
   AI_PRISE_MODE: z.union([z.literal("SANDBOX"), z.literal("PRODUCTION")]),
-
 });
 
 // Parse and validate environment variables
@@ -55,7 +54,6 @@ const env = envSchema.parse({
   // KYC
   AIPRISE_TEMPLATE_ID: process.env.EXPO_PUBLIC_AIPRISE_TEMPLATE_ID,
   AI_PRISE_MODE: process.env.EXPO_PUBLIC_AI_PRISE_MODE,
-
 });
 
 export default env;

@@ -1,12 +1,12 @@
-import React from 'react';
-import { View } from 'react-native';
-import Text from '@/components/Text';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { STOCKS } from '@/constants/stocks';
-import { currencyFormatter, percentageFormatter } from '@/utils/currencyUtils';
-import { SkeletonView } from '@/components/Loading/SkeletonLoadingView';
-import COLORS from '@/constants/colors';
-import { AssetPrice } from '@/client';
+import { AssetPrice } from "@/client";
+import { SkeletonView } from "@/components/Loading/SkeletonLoadingView";
+import Text from "@/components/Text";
+import COLORS from "@/constants/colors";
+import { STOCKS } from "@/constants/stocks";
+import { currencyFormatter, percentageFormatter } from "@/utils/currencyUtils";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import React from "react";
+import { View } from "react-native";
 
 interface ETFHeaderProps {
   asset: AssetPrice;
@@ -24,9 +24,10 @@ const ETFHeader: React.FC<ETFHeaderProps> = ({
   price,
   chartLoading,
   change,
-  isCursorActive = false
+  isCursorActive = false,
 }) => {
-  const stockLogoExists = asset?.symbol &&
+  const stockLogoExists =
+    asset?.symbol &&
     STOCKS &&
     STOCKS[asset.symbol as keyof typeof STOCKS]?.logo;
   const renderLogo = () => {
@@ -57,9 +58,7 @@ const ETFHeader: React.FC<ETFHeaderProps> = ({
     }
   };
 
-  const priceDisplayed = price
-    ? currencyFormatter(price, 2, 0, true)
-    : "0.00";
+  const priceDisplayed = price ? currencyFormatter(price, 2, 0, true) : "0.00";
 
   return (
     <>
@@ -67,9 +66,7 @@ const ETFHeader: React.FC<ETFHeaderProps> = ({
         <View className="w-12 h-12 bg-gray-90 rounded-full overflow-hidden">
           {renderLogo()}
         </View>
-        <Text className="text-gray-50 caption-xl flex-1">
-          {asset.symbol}
-        </Text>
+        <Text className="text-gray-50 caption-xl flex-1">{asset.symbol}</Text>
       </View>
       <Text
         className="heading-m text-gray-10 px-layout"
@@ -78,7 +75,9 @@ const ETFHeader: React.FC<ETFHeaderProps> = ({
       >
         {asset.display_name}
       </Text>
-      <Text className={`heading-m text-gray-10 px-layout ${isCursorActive ? "text-blue-50" : ""}`}>
+      <Text
+        className={`heading-m text-gray-10 px-layout ${isCursorActive ? "text-blue-50" : ""}`}
+      >
         {priceDisplayed}
       </Text>
       <View className="flex-row gap-s pt-layout-s items-center justify-end px-layout">
@@ -89,7 +88,9 @@ const ETFHeader: React.FC<ETFHeaderProps> = ({
             <Ionicons
               name={change.increase ? "arrow-up" : "arrow-down"}
               size={16}
-              color={change.increase ? COLORS.semantic.success : COLORS.gray[30]}
+              color={
+                change.increase ? COLORS.semantic.success : COLORS.gray[30]
+              }
             />
             <Text
               className={`caption-xl ${change.increase ? "text-semantic-success" : "text-gray-30"}`}
@@ -103,4 +104,4 @@ const ETFHeader: React.FC<ETFHeaderProps> = ({
   );
 };
 
-export default ETFHeader; 
+export default ETFHeader;

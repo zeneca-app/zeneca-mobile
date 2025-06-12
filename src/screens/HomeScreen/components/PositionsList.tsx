@@ -1,28 +1,33 @@
-import { useEffect, useState } from "react";
 import ChartArrowUp from "@/assets/chart-arrow-up.svg";
+import { MyAsset } from "@/client/";
 import { usersMyAssetsOptions } from "@/client/@tanstack/react-query.gen";
+import CardFooter from "@/components/CardFooter";
 import CardHeader from "@/components/CardHeader";
 import MyAssetItem from "@/components/ListItems/MyAssetItem";
 import Separator from "@/components/ListItems/Separator";
-import Config from "@/config";
-import { useQuery } from "@tanstack/react-query";
-import { useTranslation } from "react-i18next";
-import { FlatList, Text, View } from "react-native";
 import SkeletonLoadingView, {
   SkeletonOrderListItem,
 } from "@/components/Loading/SkeletonLoadingView";
+import Config from "@/config";
 import Balance from "@/screens/HomeScreen/components/Balance";
 import VerifyCtaCard from "@/screens/HomeScreen/components/VerifyCtaCard";
-import CardFooter from "@/components/CardFooter";
-import { MyAsset } from "@/client/";
 import useAssetsStore from "@/storage/assetsStore";
-
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { FlatList, Text, View } from "react-native";
 
 const PositionsList = () => {
   const { t } = useTranslation();
   const { setAssets } = useAssetsStore((state) => state);
 
-  const { isPending: myAssetsPending, error: myAssetsError, data: my_assets, refetch, isRefetching } = useQuery({
+  const {
+    isPending: myAssetsPending,
+    error: myAssetsError,
+    data: my_assets,
+    refetch,
+    isRefetching,
+  } = useQuery({
     ...usersMyAssetsOptions(),
     refetchInterval: Config.REFETCH_INTERVAL,
     staleTime: Infinity, // Consider data stale immediately
@@ -76,7 +81,7 @@ const PositionsList = () => {
         <SkeletonOrderListItem />
       </SkeletonLoadingView>
     </View>
-  )
+  );
 
   const HomeHeader = () => (
     <View className="flex-1">
@@ -92,7 +97,7 @@ const PositionsList = () => {
       {myAssetsPending && !my_assets && <LoadingMyAssets />}
       {!myAssetsPending && !hasAssets && <Empty canTrade={true} />}
     </View>
-  )
+  );
 
   const HomeFooter = () => (
     <CardFooter>
@@ -100,7 +105,7 @@ const PositionsList = () => {
       <Text className="caption-xl"></Text>
       <Text className="caption-xl"></Text>
     </CardFooter>
-  )
+  );
 
   return (
     <View className="flex-1">
@@ -114,7 +119,6 @@ const PositionsList = () => {
         showsVerticalScrollIndicator={false}
         onRefresh={refetch}
         refreshing={myAssetsPending}
-
         // Add these props for better update handling
         extraData={my_assets} // Re-render when my_assets changes
         maxToRenderPerBatch={10} // Limit batch rendering for better performance

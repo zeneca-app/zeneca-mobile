@@ -1,26 +1,26 @@
 import CopyIcon from "@/assets/copy.svg";
 import { Timespan } from "@/client";
+import { AssetPrice } from "@/client/";
 import {
   assetsGetAssetDetailOptions,
   assetsGetAssetTicksOptions,
 } from "@/client/@tanstack/react-query.gen";
 import client from "@/client/client";
-import LoggedLayout from "@/components/LoggedLayout";
+import ETFActions from "@/components/ETFDetail/ETFActions";
+import ETFChart from "@/components/ETFDetail/ETFChart";
 import {
-  CHART_TIMEFRAMES,
-  TIMEFRAME_DEFAULT,
-} from "@/constants/stocks";
+  getChartChange,
+  normalizeStockPointsData,
+} from "@/components/ETFDetail/ETFChartUtils";
+import ETFDescription from "@/components/ETFDetail/ETFDescription";
+import ETFHeader from "@/components/ETFDetail/ETFHeader";
+import LoggedLayout from "@/components/LoggedLayout";
+import { CHART_TIMEFRAMES, TIMEFRAME_DEFAULT } from "@/constants/stocks";
+import useMarketHourStore from "@/storage/marketHourStore";
+import { useQuery } from "@tanstack/react-query";
 import { cssInterop } from "nativewind";
 import React from "react";
 import { ScrollView } from "react-native";
-import { AssetPrice } from "@/client/";
-import useMarketHourStore from "@/storage/marketHourStore";
-import { useQuery } from "@tanstack/react-query";
-import ETFHeader from "@/components/ETFDetail/ETFHeader";
-import ETFChart from "@/components/ETFDetail/ETFChart";
-import ETFActions from "@/components/ETFDetail/ETFActions";
-import ETFDescription from "@/components/ETFDetail/ETFDescription";
-import { normalizeStockPointsData, getChartChange } from "@/components/ETFDetail/ETFChartUtils";
 
 type ETFDetailScreenProps = {
   route: {
@@ -84,7 +84,6 @@ const ETFDetail = ({ route }: ETFDetailScreenProps) => {
   const grayColor = "#d5deec"; // oklch(0.707 0.022 261.325)
 
   const lineColor = change.increase ? greenColor : grayColor;
-
 
   // Handle cursor movement on chart
   const handleCursorChange = (value: string | null) => {

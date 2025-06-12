@@ -1,21 +1,18 @@
+import env from "@/config/env";
+import { AuthService } from "@/hooks/authService";
 import { MyPermissiveSecureStorageAdapter } from "@/lib/storage-adapter";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { PrivyProvider } from "@privy-io/expo";
-import {
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { PostHogProvider } from "posthog-react-native";
 import React, { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { AuthService } from "@/hooks/authService";
 import { createConfig, http, WagmiProvider } from "wagmi";
 import { base, baseSepolia, sepolia } from "wagmi/chains";
-import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import env from "@/config/env";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
 
 const queryClient = new QueryClient();
 
@@ -32,7 +29,6 @@ const wagmiConfig = createConfig({
     [base.id]: http(),
   },
 });
-
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -52,16 +48,16 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
           <SafeAreaProvider>
             <BottomSheetModalProvider>
               <WagmiProvider config={wagmiConfig}>
-                <PersistQueryClientProvider client={queryClient}
+                <PersistQueryClientProvider
+                  client={queryClient}
                   onSuccess={() => {
                     queryClient
                       .resumePausedMutations()
                       .then(() => queryClient.invalidateQueries());
                   }}
-                  persistOptions={{ persister: asyncStoragePersister }}>
-                  <AuthService>
-                    {children}
-                  </AuthService>
+                  persistOptions={{ persister: asyncStoragePersister }}
+                >
+                  <AuthService>{children}</AuthService>
                 </PersistQueryClientProvider>
               </WagmiProvider>
             </BottomSheetModalProvider>

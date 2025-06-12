@@ -42,3 +42,7 @@ yarn ios
 ```bash
 yarn android
 ```
+
+```
+
+```

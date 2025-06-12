@@ -1,6 +1,11 @@
+import { AssetPrice } from "@/client/";
 import { usersMyBalanceOptions } from "@/client/@tanstack/react-query.gen";
+import AssetLogo from "@/components/AssetLogo";
 import Button from "@/components/Button";
 import Keypad from "@/components/Keypad";
+import SkeletonLoadingView, {
+  SkeletonView,
+} from "@/components/Loading/SkeletonLoadingView";
 import LoggedLayout from "@/components/LoggedLayout";
 import Text from "@/components/Text";
 import { STOCKS } from "@/constants/stocks";
@@ -11,11 +16,6 @@ import BigNumber from "bignumber.js";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
-import SkeletonLoadingView, {
-  SkeletonView,
-} from "@/components/Loading/SkeletonLoadingView";
-import AssetLogo from '@/components/AssetLogo';
-import { AssetPrice } from "@/client/";
 
 type ETFPurchaseScreenProps = {
   route: {
@@ -49,7 +49,6 @@ const ETFPurchase = ({ route }: ETFPurchaseScreenProps) => {
   const availableDisplayed = balance?.available
     ? currencyFormatter(balance?.available, 2, balance?.precision || 6, true)
     : "0.00";
-
 
   const amountInEtf = new BigNumber(amount)
     .dividedBy(asset.price)
@@ -98,21 +97,14 @@ const ETFPurchase = ({ route }: ETFPurchaseScreenProps) => {
           <Text className="body-l text-center text-gray-10 leading-tight">
             $
           </Text>
-          <Text className="heading-l text-center text-gray-10">
-            {amount}
-          </Text>
+          <Text className="heading-l text-center text-gray-10">{amount}</Text>
         </View>
         <Text className="caption-l text-center text-gray-50">
           {amountInEtf} {asset.symbol}
         </Text>
       </View>
-      <Keypad
-        value={amount}
-        onChange={setAmount}
-        maximun={Number(available)}
-      />
+      <Keypad value={amount} onChange={setAmount} maximun={Number(available)} />
       <View className="px-layout">
-
         <Button className="" disabled={!canContinue} onPress={goToConfirmation}>
           <Text
             className={`button-m ${!canContinue ? "text-dark-content-30" : "text-dark-content-dark"}`}
@@ -120,7 +112,6 @@ const ETFPurchase = ({ route }: ETFPurchaseScreenProps) => {
             {t("etfPurchase.continue")}
           </Text>
         </Button>
-
       </View>
     </LoggedLayout>
   );

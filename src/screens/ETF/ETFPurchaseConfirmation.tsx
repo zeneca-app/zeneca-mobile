@@ -1,5 +1,6 @@
 import { AssetPrice, OrderQuote } from "@/client";
 import { ordersCreateQuoteOrderMutation } from "@/client/@tanstack/react-query.gen";
+import AssetLogo from "@/components/AssetLogo";
 import Button from "@/components/Button";
 import { SkeletonView } from "@/components/Loading/SkeletonLoadingView";
 import LoggedLayout from "@/components/LoggedLayout";
@@ -11,14 +12,13 @@ import { useChainStore } from "@/storage/chainStore";
 import { currencyFormatter, formatNumber } from "@/utils/currencyUtils";
 import { useEmbeddedWallet } from "@privy-io/expo";
 import { useNavigation } from "@react-navigation/native";
-import * as Sentry from '@sentry/react-native';
+import * as Sentry from "@sentry/react-native";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import BigNumber from "bignumber.js";
 import React, { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { Address } from "viem";
-import AssetLogo from '@/components/AssetLogo';
 
 type ETFPurchaseConfirmationScreenProps = {
   route: {
@@ -28,7 +28,9 @@ type ETFPurchaseConfirmationScreenProps = {
     };
   };
 };
-const ETFPurchaseConfirmation = ({ route }: ETFPurchaseConfirmationScreenProps) => {
+const ETFPurchaseConfirmation = ({
+  route,
+}: ETFPurchaseConfirmationScreenProps) => {
   const { asset, amount } = route.params;
 
   const navigation = useNavigation();
@@ -49,7 +51,6 @@ const ETFPurchaseConfirmation = ({ route }: ETFPurchaseConfirmationScreenProps) 
 
   const amountToOrder = formatNumber(amount, 2, 6, true);
 
-
   const { mutate: createQuote, isPending: isQuotePending } = useMutation({
     ...ordersCreateQuoteOrderMutation(),
     onError: (error) => {
@@ -59,7 +60,6 @@ const ETFPurchaseConfirmation = ({ route }: ETFPurchaseConfirmationScreenProps) 
       setQuote(data);
     },
   });
-
 
   const executeTransaction = async () => {
     try {
@@ -100,7 +100,6 @@ const ETFPurchaseConfirmation = ({ route }: ETFPurchaseConfirmationScreenProps) 
         amount,
         quote,
       });
-
     } catch (error) {
       console.error("Error during transaction:", error);
       Sentry.captureException(error, {
@@ -141,7 +140,6 @@ const ETFPurchaseConfirmation = ({ route }: ETFPurchaseConfirmationScreenProps) 
     fetchQuote();
   }, [fetchQuote]); // Add fetchQuote to dependencies
 
-
   // Timer management
   useEffect(() => {
     if (!quote) return;
@@ -164,10 +162,10 @@ const ETFPurchaseConfirmation = ({ route }: ETFPurchaseConfirmationScreenProps) 
   }, [quote, fetchQuote]);
 
   const formatTimeLeft = (seconds: number): string => {
-    if (seconds <= 0) return '0:00';
+    if (seconds <= 0) return "0:00";
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes}:${String(remainingSeconds).padStart(2, '0')}`;
+    return `${minutes}:${String(remainingSeconds).padStart(2, "0")}`;
   };
 
   const minLeft = formatTimeLeft(timeLeft);
@@ -196,9 +194,7 @@ const ETFPurchaseConfirmation = ({ route }: ETFPurchaseConfirmationScreenProps) 
           <View className="w-12 h-12 bg-gray-90 rounded-full overflow-hidden">
             <AssetLogo symbol={asset.symbol} size="md" />
           </View>
-          <Text className="text-gray-50 caption-xl flex-1">
-            {asset.symbol}
-          </Text>
+          <Text className="text-gray-50 caption-xl flex-1">{asset.symbol}</Text>
         </View>
         <Text className="heading-l text-gray-10 px-layout">
           {amountDisplayed}
@@ -222,9 +218,7 @@ const ETFPurchaseConfirmation = ({ route }: ETFPurchaseConfirmationScreenProps) 
           </Text>
         </View>
         <View className="flex-row items-center justify-between gap-s">
-          <Text className="caption-l text-gray-50">
-            {t("etfPurchase.fee")}
-          </Text>
+          <Text className="caption-l text-gray-50">{t("etfPurchase.fee")}</Text>
           <Text className="caption-xl text-dark-content-white">
             {isQuotePending ? (
               <SkeletonView className="w-20 h-4" />
@@ -259,15 +253,9 @@ const ETFPurchaseConfirmation = ({ route }: ETFPurchaseConfirmationScreenProps) 
             }}
             components={[
               <Text className="caption-l text-white font-bold"></Text>,
-              <Text className="caption-l text-white font-bold">
-                segment2
-              </Text>,
-              <Text className="caption-l text-white font-bold">
-                segment3
-              </Text>,
-              <Text className="caption-l text-white font-bold">
-                segment3
-              </Text>,
+              <Text className="caption-l text-white font-bold">segment2</Text>,
+              <Text className="caption-l text-white font-bold">segment3</Text>,
+              <Text className="caption-l text-white font-bold">segment3</Text>,
             ]}
           />
         </Text>
@@ -279,7 +267,6 @@ const ETFPurchaseConfirmation = ({ route }: ETFPurchaseConfirmationScreenProps) 
             {t("etfPurchase.timeLeft", { time: minLeft })}
           </Text>
         )}
-
       </View>
       <View className="px-layout">
         {showButtonConfirmation ? (

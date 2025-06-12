@@ -1,5 +1,8 @@
 import CopyIcon from "@/assets/copy.svg";
-import { assetsGetAssetsOptions, assetsGetMarketHoursOptions } from "@/client/@tanstack/react-query.gen";
+import {
+  assetsGetAssetsOptions,
+  assetsGetMarketHoursOptions,
+} from "@/client/@tanstack/react-query.gen";
 import client from "@/client/client";
 import AssetListItem from "@/components/ListItems/AssetListItem";
 import LoggedLayout from "@/components/LoggedLayout";
@@ -9,16 +12,15 @@ import React, { useEffect } from "react";
 import { Trans } from "react-i18next";
 import { FlatList, Text, View } from "react-native";
 import "@/client";
+import { AssetPrice } from "@/client/";
+import BottomActions from "@/components/BottomActions";
 import Separator from "@/components/ListItems/Separator";
 import SkeletonLoadingView, {
   SkeletonStockListItem,
 } from "@/components/Loading/SkeletonLoadingView";
-import { AssetPrice } from "@/client/";
 import MarketHours from "@/components/MarketHours";
-import useMarketHourStore from "@/storage/marketHourStore";
-import BottomActions from "@/components/BottomActions";
 import Config from "@/config";
-
+import useMarketHourStore from "@/storage/marketHourStore";
 
 const ExploreAssets = () => {
   cssInterop(CopyIcon, { className: "style" });
@@ -66,7 +68,7 @@ const ExploreAssets = () => {
       <View className="pb-layout-l" />
       <View className="pb-layout-l" />
     </View>
-  )
+  );
 
   useEffect(() => {
     if (marketHours) {
@@ -77,10 +79,7 @@ const ExploreAssets = () => {
   return (
     <LoggedLayout>
       <Text className="heading-s text-gray-10 px-layout pt-layout-s pb-layout-l">
-        <Trans
-          i18nKey="explore.title"
-          components={[]}
-        />
+        <Trans i18nKey="explore.title" components={[]} />
       </Text>
       <View className="flex-1 px-layout">
         {isPending ? (

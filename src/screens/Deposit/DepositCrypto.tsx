@@ -1,6 +1,6 @@
 import BaseLogo from "@/assets/base-logo.svg";
-import USDCLogo from "@/assets/usdc.svg";
 import CopyIcon from "@/assets/copy.svg";
+import USDCLogo from "@/assets/usdc.svg";
 import CryptoNetworkButton from "@/components/Buttons/CryptoNetworkButton";
 import Card from "@/components/Card";
 import LoggedLayout from "@/components/LoggedLayout";
@@ -13,8 +13,6 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Text, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-
-
 
 const DepositCrypto = () => {
   const { t } = useTranslation();
@@ -45,14 +43,14 @@ const DepositCrypto = () => {
             <CryptoNetworkButton
               token="USDC"
               iconSlot={<USDCLogo width={40} height={40} />}
-              onPress={() => { }}
+              onPress={() => {}}
             />
           </Card>
           <Card className="py-layout-s">
             <CryptoNetworkButton
               token="BASE"
               iconSlot={<BaseLogo width={40} height={40} />}
-              onPress={() => { }}
+              onPress={() => {}}
             />
           </Card>
 

@@ -13,10 +13,9 @@ export default defineConfig({
   // headers: {
   //   'Content-Type': 'application/json',
   // },
-  
+
   plugins: [
     // ...other plugins
     "@tanstack/react-query",
-   
   ],
 });
