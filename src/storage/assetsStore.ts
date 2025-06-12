@@ -13,4 +13,4 @@ const useAssetsStore = create<AssetsState>((set) => ({
   clearAssets: () => set({ assets: [] }),
 }));
 
-export default useAssetsStore; 
+export default useAssetsStore;

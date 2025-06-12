@@ -1,10 +1,11 @@
 import { loginLoginOrCreate, usersMe } from "@/client/";
+import LoggedLayout from "@/components/LoggedLayout";
 import LoginButton from "@/components/login/button";
 import { getPimlicoSmartAccountClient } from "@/lib/pimlico";
 import { LoginStatus } from "@/lib/types/login";
+import { useUserStore } from "@/storage/";
 import { useChainStore } from "@/storage/chainStore";
 import { DBUser } from "@/storage/interfaces";
-import { useUserStore } from "@/storage/";
 import {
   getUserEmbeddedEthereumWallet,
   isNotCreated,
@@ -16,13 +17,7 @@ import { useNavigation } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  SafeAreaView,
-  Text,
-  View,
-} from "react-native";
-import LoggedLayout from "@/components/LoggedLayout";
-
+import { SafeAreaView, Text, View } from "react-native";
 
 const LoginOptions = () => {
   const { t } = useTranslation();

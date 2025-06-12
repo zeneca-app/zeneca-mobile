@@ -16,7 +16,10 @@
       "supportsTablet": false,
       "bundleIdentifier": "app.zeneca.prod",
       "usesAppleSignIn": true,
-      "infoPlist": { "ITSAppUsesNonExemptEncryption": false }
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "appleTeamId": "9668AZ7LUT"
     },
     "android": {
       "adaptiveIcon": {
@@ -29,7 +32,9 @@
         "android.permission.RECORD_AUDIO"
       ]
     },
-    "web": { "favicon": "./assets/icon.png" },
+    "web": {
+      "favicon": "./assets/icon.png"
+    },
     "scheme": "app.zeneca.prod",
     "plugins": [
       "expo-localization",
@@ -48,7 +53,7 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera." 
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
         }
       ],
       "expo-secure-store",
@@ -61,8 +66,8 @@
             "targetSdkVersion": 34,
             "buildToolsVersion": "34.0.0"
           },
-          "ios": { 
-            "deploymentTarget": "15.1" 
+          "ios": {
+            "deploymentTarget": "15.1"
           }
         }
       ],

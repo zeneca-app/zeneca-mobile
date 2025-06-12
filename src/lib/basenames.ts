@@ -1,6 +1,5 @@
 import { RESOLVER_ADDRESSES_BY_CHAIN_ID } from "@/constants/basenames";
 import L2ResolverAbi from "@/lib/abis/L2ResolverAbi";
-
 import {
   Basename,
   GetAddress,

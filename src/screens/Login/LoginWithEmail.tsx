@@ -1,4 +1,6 @@
+import Button from "@/components/Button";
 import LoadingScreen from "@/components/Loading";
+import LoggedLayout from "@/components/LoggedLayout";
 import { LoginStatus } from "@/lib/types/login";
 import { useLoginStore } from "@/storage/loginStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -16,10 +18,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import LoggedLayout from "@/components/LoggedLayout";
-import Button from "@/components/Button";
-
-
 
 const LoginWithEmail = () => {
   const TEST_EMAIL = "tester@zeneca.app";
@@ -112,8 +110,9 @@ const LoginWithEmail = () => {
               />
 
               <View
-                className={`h-[1px] bg-dark-border-80 mt-2 ${!isEmailValid && "border-semantic-danger"
-                  }`}
+                className={`h-[1px] bg-dark-border-80 mt-2 ${
+                  !isEmailValid && "border-semantic-danger"
+                }`}
               />
               {!isEmailValid && (
                 <Text className="text-semantic-danger text-xs mt-1 font-Manrope_300Light">
@@ -123,10 +122,7 @@ const LoginWithEmail = () => {
             </View>
           </View>
           <View className="p-5 mt-auto">
-            <Button
-              disabled={email?.length === 0}
-              onPress={onSubmit}
-            >
+            <Button disabled={email?.length === 0} onPress={onSubmit}>
               <Text className="text-lg text-basic-black font-Manrope_500Medium">
                 {t("loginWithEmail.continueButton")}
               </Text>
@@ -136,7 +132,6 @@ const LoginWithEmail = () => {
         </SafeAreaView>
       </LoggedLayout>
     </KeyboardAvoidingView>
-
   );
 };
 

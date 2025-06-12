@@ -24,7 +24,11 @@ export const SkeletonOrderListItem = () => {
   );
 };
 
-export const SkeletonStockListItem = ({ className }: { className?: string }) => {
+export const SkeletonStockListItem = ({
+  className,
+}: {
+  className?: string;
+}) => {
   return (
     <>
       <View className={`flex-row gap-3 ${className}`}>

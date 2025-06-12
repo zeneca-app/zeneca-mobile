@@ -1,12 +1,14 @@
 import { usersMe } from "@/client";
 import { loginLoginOrCreate } from "@/client/";
+import Button from "@/components/Button";
+import LoggedLayout from "@/components/LoggedLayout";
 import StatusModal, { ModalState } from "@/components/status-modal";
 import { getPimlicoSmartAccountClient } from "@/lib/pimlico";
 import { LoginStatus } from "@/lib/types/login";
+import { useUserStore } from "@/storage/";
 import { useChainStore } from "@/storage/chainStore";
 import { DBUser } from "@/storage/interfaces";
 import { useLoginStore } from "@/storage/loginStore";
-import { useUserStore } from "@/storage/";
 import {
   getUserEmbeddedEthereumWallet,
   isNotCreated,
@@ -28,15 +30,12 @@ import {
   View,
 } from "react-native";
 import { OtpInput } from "react-native-otp-entry";
-import LoggedLayout from "@/components/LoggedLayout";
-import Button from "@/components/Button";
-
 
 const LoginOtpScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { setUser } = useUserStore((state) => ({
-    setUser: state.setUser
+    setUser: state.setUser,
   }));
   const { email } = useLoginStore((state) => ({
     email: state.email,
@@ -74,7 +73,7 @@ const LoginOtpScreen = () => {
   const handleConnection = useCallback(
     async (user: PrivyUser): Promise<void> => {
       setModalState("loading");
-      let address = getUserEmbeddedEthereumWallet(user)?.address;
+      const address = getUserEmbeddedEthereumWallet(user)?.address;
       const accessToken = await getAccessToken();
 
       if (isNotCreated(wallet)) {
@@ -126,7 +125,6 @@ const LoginOtpScreen = () => {
     [user, wallet],
   );
 
-
   const goToNextScreen = () => {
     navigation.navigate("Home");
   };
@@ -177,7 +175,6 @@ const LoginOtpScreen = () => {
     }
   };
 
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -205,19 +202,18 @@ const LoginOtpScreen = () => {
                   pinCodeContainerStyle: styles.otpPinCodeContainer,
                   pinCodeTextStyle: styles.otpPinCodeText,
                   focusStickStyle: styles.otpFocusStick,
-                  focusedPinCodeContainerStyle: styles.otpActivePinCodeContainer,
+                  focusedPinCodeContainerStyle:
+                    styles.otpActivePinCodeContainer,
                 }}
               />
             </View>
           </View>
           <View className="p-layout mt-auto">
-            <Button
-              disabled={!isCodeFilled}
-              onPress={handleConfirmCode}
-            >
+            <Button disabled={!isCodeFilled} onPress={handleConfirmCode}>
               <Text
-                className={`text-[18px] font-Manrope_500Medium ${!isCodeFilled ? "text-dark-content-30" : "text-black"
-                  }`}
+                className={`text-[18px] font-Manrope_500Medium ${
+                  !isCodeFilled ? "text-dark-content-30" : "text-black"
+                }`}
               >
                 {t("emailOtpValidation.continueButton")}
               </Text>

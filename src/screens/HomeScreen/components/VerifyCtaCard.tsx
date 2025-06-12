@@ -1,47 +1,60 @@
-import { useEffect, useCallback } from "react";
 import VerifyIcon from "@/assets/id-card.svg";
-import Card from "@/components/Card";
-import AntDesign from "@expo/vector-icons/AntDesign";
-import { useNavigation } from "@react-navigation/native";
-import { useTranslation } from "react-i18next";
-import { Text, TouchableOpacity, View } from "react-native";
-import { useQuery } from "@tanstack/react-query";
+import { OnboardingStatus } from "@/client";
 import { usersGetKycStatusOptions } from "@/client/@tanstack/react-query.gen";
-import Config from "@/config";
+import Card from "@/components/Card";
 import SkeletonLoadingView, {
   SkeletonView,
 } from "@/components/Loading/SkeletonLoadingView";
+import Config from "@/config";
 import { useKYCStatusStore, useUserStore } from "@/storage/";
-import { OnboardingStatus } from "@/client";
-import * as Sentry from '@sentry/react-native';
-
+import AntDesign from "@expo/vector-icons/AntDesign";
+import { useNavigation } from "@react-navigation/native";
+import * as Sentry from "@sentry/react-native";
+import { useQuery } from "@tanstack/react-query";
+import { useCallback, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { Text, TouchableOpacity, View } from "react-native";
 
 const VerifyCTACard = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { user, isLoading: isUserLoading } = useUserStore();
 
-  const { kycStatus, obStatus, isVerifying, isVerified, setKycStatus, setObStatus } = useKYCStatusStore(
-    useCallback(state => ({
-      kycStatus: state.kycStatus,
-      obStatus: state.obStatus,
-      isVerifying: state.isVerifying,
-      isVerified: state.isVerified,
-      setKycStatus: state.setKycStatus,
-      setObStatus: state.setObStatus,
-    }), [])
+  const {
+    kycStatus,
+    obStatus,
+    isVerifying,
+    isVerified,
+    setKycStatus,
+    setObStatus,
+  } = useKYCStatusStore(
+    useCallback(
+      (state) => ({
+        kycStatus: state.kycStatus,
+        obStatus: state.obStatus,
+        isVerifying: state.isVerifying,
+        isVerified: state.isVerified,
+        setKycStatus: state.setKycStatus,
+        setObStatus: state.setObStatus,
+      }),
+      [],
+    ),
   );
 
-  const { data: OBKYCStatus, isPending: isKycPending, error } = useQuery({
+  const {
+    data: OBKYCStatus,
+    isPending: isKycPending,
+    error,
+  } = useQuery({
     ...usersGetKycStatusOptions(),
     staleTime: 0,
     gcTime: 0,
     onError: (err) => {
       Sentry.captureException(err, {
-        tags: { component: 'VerifyCtaCard', action: 'fetchKYCStatus' },
-        extra: { kycStatus, obStatus }
+        tags: { component: "VerifyCtaCard", action: "fetchKYCStatus" },
+        extra: { kycStatus, obStatus },
       });
-    }
+    },
   });
 
   const isLoading = isKycPending || isUserLoading;
@@ -79,12 +92,12 @@ const VerifyCTACard = () => {
 
     handleStatusUpdate();
 
-    return () => { cleanup = true; };
+    return () => {
+      cleanup = true;
+    };
   }, [OBKYCStatus, setKycStatus, setObStatus, error]);
 
-
   //if (isVerified) return null;
-
 
   if (isVerifying) {
     return (
@@ -117,7 +130,6 @@ const VerifyCTACard = () => {
       </Card>
     );
   }
-
 
   if (obStatus === "NOT_STARTED") {
     return (
@@ -168,7 +180,6 @@ const VerifyCTACard = () => {
       </View>
     </Card>
   );
-
 };
 
 VerifyCTACard.displayName = "VerifyCTACard";

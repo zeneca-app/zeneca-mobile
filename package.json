@@ -82,6 +82,7 @@
     "react-native-get-random-values": "^1.11.0",
     "react-native-mmkv": "^2.12.2",
     "react-native-otp-entry": "^1.7.2",
+    "react-native-passkeys": "^0.3.3",
     "react-native-reanimated": "~3.16.1",
     "react-native-safe-area-context": "4.12.0",
     "react-native-screens": "~4.4.0",
@@ -115,6 +116,7 @@
     "eslint-config-expo": "~8.0.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-universe": "^13.0.0",
+    "eslint-import-resolver-typescript": "^4.4.3",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-prettier": "^5.2.1",
@@ -129,6 +131,33 @@
     "reactotron-plugin-zustand": "^2.0.3",
     "reactotron-react-native": "^5.1.7",
     "typescript": "~5.3.3"
+  },
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "exclude": [
+          "@ethersproject/shims",
+          "@hey-api/client-fetch",
+          "@privy-io/expo",
+          "@privy-io/expo-native-extensions",
+          "@tanstack/query-async-storage-persister",
+          "@tanstack/react-query-persist-client",
+          "@trustedshops-public/js-iso3166-converter",
+          "aiprise-react-native-sdk",
+          "bignumber.js",
+          "country-code-to-flag-emoji",
+          "country-state-city",
+          "fast-text-encoding",
+          "fix",
+          "lodash",
+          "numeral",
+          "permissionless",
+          "react-native-wagmi-charts",
+          "viem",
+          "wagmi"
+        ]
+      }
+    }
   },
   "private": true,
   "lint-staged": {

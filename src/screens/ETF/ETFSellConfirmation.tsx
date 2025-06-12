@@ -1,5 +1,6 @@
-import { OrderQuote } from "@/client";
+import { AssetPrice, OrderQuote } from "@/client";
 import { ordersCreateQuoteOrderMutation } from "@/client/@tanstack/react-query.gen";
+import AssetLogo from "@/components/AssetLogo";
 import Button from "@/components/Button";
 import { SkeletonView } from "@/components/Loading/SkeletonLoadingView";
 import LoggedLayout from "@/components/LoggedLayout";
@@ -11,16 +12,13 @@ import { useChainStore } from "@/storage/chainStore";
 import { currencyFormatter, formatNumber } from "@/utils/currencyUtils";
 import { useEmbeddedWallet } from "@privy-io/expo";
 import { useNavigation } from "@react-navigation/native";
-import * as Sentry from '@sentry/react-native';
+import * as Sentry from "@sentry/react-native";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import BigNumber from "bignumber.js";
 import React, { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { Address } from "viem";
-import AssetLogo from '@/components/AssetLogo';
-import { AssetPrice } from "@/client";
-
 
 type ETFSellConfirmationScreenProps = {
   route: {
@@ -61,7 +59,6 @@ const ETFSellConfirmation = ({ route }: ETFSellConfirmationScreenProps) => {
     },
   });
 
-
   const executeTransaction = async () => {
     try {
       setTransactionInitiated(true);
@@ -101,7 +98,6 @@ const ETFSellConfirmation = ({ route }: ETFSellConfirmationScreenProps) => {
         amount: quote?.total_amount.toString(),
         quote,
       });
-
     } catch (error) {
       console.error("Error during transaction:", error);
       Sentry.captureException(error, {
@@ -139,7 +135,6 @@ const ETFSellConfirmation = ({ route }: ETFSellConfirmationScreenProps) => {
     fetchQuote();
   }, [fetchQuote]); // Add fetchQuote to dependencies
 
-
   // Timer management
   useEffect(() => {
     if (!quote) return;
@@ -162,17 +157,17 @@ const ETFSellConfirmation = ({ route }: ETFSellConfirmationScreenProps) => {
   }, [quote, fetchQuote]);
 
   const formatTimeLeft = (seconds: number): string => {
-    if (seconds <= 0) return '0:00';
+    if (seconds <= 0) return "0:00";
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes}:${String(remainingSeconds).padStart(2, '0')}`;
+    return `${minutes}:${String(remainingSeconds).padStart(2, "0")}`;
   };
 
   const minLeft = formatTimeLeft(timeLeft);
 
   const etfAmount = new BigNumber(quantity)
-    .dividedBy('1000000000000000000')  // Divide by 10^18 to get to base units
-    .toFormat(9)  // Format to exactly 9 decimal places
+    .dividedBy("1000000000000000000") // Divide by 10^18 to get to base units
+    .toFormat(9) // Format to exactly 9 decimal places
     .toString();
 
   const isLoading = isQuotePending || transactionInitiated;
@@ -194,9 +189,7 @@ const ETFSellConfirmation = ({ route }: ETFSellConfirmationScreenProps) => {
           <View className="w-12 h-12 bg-gray-90 rounded-full overflow-hidden">
             <AssetLogo symbol={asset.symbol} size="md" />
           </View>
-          <Text className="text-gray-50 caption-xl flex-1">
-            {asset.symbol}
-          </Text>
+          <Text className="text-gray-50 caption-xl flex-1">{asset.symbol}</Text>
         </View>
         <Text className="heading-l text-gray-10 px-layout">
           {amountDisplayed}
@@ -208,9 +201,7 @@ const ETFSellConfirmation = ({ route }: ETFSellConfirmationScreenProps) => {
       </View>
       <View className="px-layout pb-layout flex justify-start items-stretch gap flex-1">
         <View className="flex-row items-center justify-between gap-s">
-          <Text className="caption-l text-gray-50">
-            {t("etfSell.price")}
-          </Text>
+          <Text className="caption-l text-gray-50">{t("etfSell.price")}</Text>
           <Text className="caption-xl text-dark-content-white">
             {isQuotePending ? (
               <SkeletonView className="w-20 h-4" />
@@ -220,9 +211,7 @@ const ETFSellConfirmation = ({ route }: ETFSellConfirmationScreenProps) => {
           </Text>
         </View>
         <View className="flex-row items-center justify-between gap-s">
-          <Text className="caption-l text-gray-50">
-            {t("etfSell.fee")}
-          </Text>
+          <Text className="caption-l text-gray-50">{t("etfSell.fee")}</Text>
           <Text className="caption-xl text-dark-content-white">
             {isQuotePending ? (
               <SkeletonView className="w-20 h-4" />
@@ -232,9 +221,7 @@ const ETFSellConfirmation = ({ route }: ETFSellConfirmationScreenProps) => {
           </Text>
         </View>
         <View className="flex-row items-center justify-between gap-s">
-          <Text className="caption-l text-gray-50">
-            {t("etfSell.total")}
-          </Text>
+          <Text className="caption-l text-gray-50">{t("etfSell.total")}</Text>
           <Text className="caption-xl text-dark-content-white">
             {isQuotePending ? (
               <SkeletonView className="w-20 h-4" />
@@ -257,15 +244,9 @@ const ETFSellConfirmation = ({ route }: ETFSellConfirmationScreenProps) => {
             }}
             components={[
               <Text className="caption-l text-white font-bold"></Text>,
-              <Text className="caption-l text-white font-bold">
-                segment2
-              </Text>,
-              <Text className="caption-l text-white font-bold">
-                segment3
-              </Text>,
-              <Text className="caption-l text-white font-bold">
-                segment3
-              </Text>,
+              <Text className="caption-l text-white font-bold">segment2</Text>,
+              <Text className="caption-l text-white font-bold">segment3</Text>,
+              <Text className="caption-l text-white font-bold">segment3</Text>,
             ]}
           />
         </Text>
@@ -277,7 +258,6 @@ const ETFSellConfirmation = ({ route }: ETFSellConfirmationScreenProps) => {
             {t("etfSell.timeLeft", { time: minLeft })}
           </Text>
         )}
-
       </View>
       <View className="px-layout">
         {showButtonConfirmation ? (

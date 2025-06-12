@@ -3,8 +3,6 @@ import FullAddressStep from "@/components/Onboarding/FullAddressStep";
 import FullNameStep from "@/components/Onboarding/FullNameStep";
 import KYCRedirectStep from "@/components/Onboarding/KYCRedirectStep";
 
-
-
 export const steps = [
   FullNameStep,
   CountryStep,

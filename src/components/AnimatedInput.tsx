@@ -58,14 +58,14 @@ export default function AnimatedInput({
     return formatNumberWithCommas(formatter, parseFloat(String(amount) || "0"));
   }, [amount, formatter]);
 
-
   return (
     <Animated.View
       style={{
         height: fontSize * 1.2,
         width: "100%",
         marginBottom: 100,
-      }}>
+      }}
+    >
       {/*
         We are using a dummy Text to let React Native do the math for the font size,
         in case the text will not fit on a single line.
@@ -90,7 +90,8 @@ export default function AnimatedInput({
         }}
         onTextLayout={(e) => {
           setFontSize(e.nativeEvent.lines[0].capHeight);
-        }}>
+        }}
+      >
         {formattedNumbers.map((x) => x.value).join("")}
       </Text>
       <Animated.View
@@ -99,24 +100,26 @@ export default function AnimatedInput({
           width: "100%",
           justifyContent: "center",
           overflow: "hidden",
-        }}>
+        }}
+      >
         {formattedNumbers.map((formattedNumber, idx) => {
           return (
             <Animated.Text
               layout={LinearTransition.duration(animationDuration)}
               key={formattedNumber.key}
               entering={SlideInDown.duration(
-                animationDuration
+                animationDuration,
               ).withInitialValues({
                 originY: initialFontSize / 2,
               })}
               exiting={SlideOutDown.duration(
-                animationDuration
+                animationDuration,
               ).withInitialValues({
                 transform: [{ translateY: -initialFontSize / 2 }],
               })}
               className="text-white font-bold text-center"
-              style={[style, { fontSize }]}>
+              style={[style, { fontSize }]}
+            >
               {formattedNumber.value}
             </Animated.Text>
           );
@@ -128,9 +131,9 @@ export default function AnimatedInput({
          */}
         <TextInput
           ref={inputRef}
-          returnKeyType='default'
-          selectionColor='black'
-          keyboardType='numeric'
+          returnKeyType="default"
+          selectionColor="black"
+          keyboardType="numeric"
           defaultValue={String(initialValue)}
           style={[
             StyleSheet.absoluteFillObject,

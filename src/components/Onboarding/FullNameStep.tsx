@@ -1,10 +1,9 @@
-import { useEffect } from "react";
 import InputWrapper from "@/components/Forms/InputWrapper";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { TextInput } from "react-native";
 import { z } from "zod";
 import { OnBoardingStepProps } from "./config";
-
 
 const FullNameStep = ({
   formValues,
@@ -18,8 +17,12 @@ const FullNameStep = ({
   const { t } = useTranslation();
 
   const validationSchema = z.object({
-    first_name: z.string().min(1, t("onBoarding.first_name_field.error_required")),
-    last_name: z.string().min(1, t("onBoarding.last_name_field.error_required")),
+    first_name: z
+      .string()
+      .min(1, t("onBoarding.first_name_field.error_required")),
+    last_name: z
+      .string()
+      .min(1, t("onBoarding.last_name_field.error_required")),
   });
 
   const formErrors = validationSchema.safeParse(formValues);
@@ -41,7 +44,6 @@ const FullNameStep = ({
     }
     return "";
   };
-
 
   return (
     <>
@@ -67,9 +69,7 @@ const FullNameStep = ({
 
       <InputWrapper
         label={t("onBoarding.last_name_field.label")}
-        isFocused={
-          focused === "last_name" || Boolean(formValues.last_name)
-        }
+        isFocused={focused === "last_name" || Boolean(formValues.last_name)}
         required={true}
         error={getError("last_name")}
       >

@@ -16,7 +16,6 @@ const KYCSuccess = () => {
   const navigation = useNavigation();
 
   const goHome = async () => {
-    
     navigation.navigate("Home");
   };
 
@@ -44,6 +43,5 @@ const KYCSuccess = () => {
     </SafeAreaView>
   );
 };
-
 
 export default KYCSuccess;

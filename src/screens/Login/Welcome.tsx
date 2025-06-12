@@ -5,20 +5,16 @@ import Button from "@/components/Button";
 import { useNavigation } from "@react-navigation/native";
 import { cssInterop } from "nativewind";
 import { useTranslation } from "react-i18next";
-import {
-  SafeAreaView,
-  Text,
-  View,
-} from "react-native";
+import { SafeAreaView, Text, View } from "react-native";
 
 /**
  * Login Screen Component
- * 
+ *
  * Pure entry point for the authentication flow:
  * - Displays app branding
  * - Provides access to login options
  * - No authentication logic (moved to LoginOptions)
- * 
+ *
  * This simplification:
  * 1. Makes the component more focused
  * 2. Removes potential race conditions

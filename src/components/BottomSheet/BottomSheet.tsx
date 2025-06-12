@@ -27,7 +27,11 @@ export type BottomSheetProps = {
   backdropClasses?: string;
   snapPoints?: (number | `${number}%`)[];
   enablePanDownToClose?: boolean;
-  keyboardBehavior?: "extend" | "interactive" | "fillParent" | "fillParentIgnoreKeyboard";
+  keyboardBehavior?:
+    | "extend"
+    | "interactive"
+    | "fillParent"
+    | "fillParentIgnoreKeyboard";
   keyboardBlurBehavior?: "none" | "restore";
   android_keyboardInputMode?: "adjustPan" | "adjustResize";
 };

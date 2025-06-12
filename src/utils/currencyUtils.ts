@@ -35,7 +35,7 @@ export const formatNumber = (
   const parsedPrecision =
     typeof precision === "string" ? parseInt(precision) : precision;
 
-    const parsedValue = BigNumber(value)
+  const parsedValue = BigNumber(value)
     .dividedBy(Math.pow(10, parsedPrecision))
     .toString();
 

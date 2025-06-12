@@ -2,14 +2,12 @@ import BottomSheet, {
   BottomSheetModal,
   BottomSheetView,
 } from "@/components/BottomSheet/BottomSheet";
-
 import Ionicons from "@expo/vector-icons//Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TouchableOpacity } from "react-native";
 import FullScreenLoader from "./FullScreenLoader";
-
 
 export type ProfileButtonProps = {
   children?: React.ReactNode;
