@@ -128,6 +128,7 @@
     "lint-staged": "15.2.9",
     "prettier": "^3.3.3",
     "react-native-svg-transformer": "^1.5.0",
+    "react-test-renderer": "18.3.1",
     "reactotron-plugin-zustand": "^2.0.3",
     "reactotron-react-native": "^5.1.7",
     "typescript": "~5.3.3"
