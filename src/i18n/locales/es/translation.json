@@ -109,18 +109,15 @@
     "pending": "Procesando..."
   },
   "sendCrypto": {
-    "title": "Enviar",
-    "recipientLabel": "A",
+    "title": "Retirar a mi cuenta",
     "availableLabel": "Disponible",
     "continueButton": "Continuar",
     "errorText": "No tienes suficiente saldo"
   },
   "sendConfirmation": {
-    "title": "Confirmar",
-    "to": "A",
+    "title": "Confirmar retiro",
     "accountNumber": "Dirección",
-    "send": "Enviar",
-    "chain": "Red",
+    "send": "Retirar",
     "fee": "Comisión",
     "total": "Total",
     "disclaimer": "Una vez confirmada, la transacción no se puede deshacer",
