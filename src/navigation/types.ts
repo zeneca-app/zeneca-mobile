@@ -35,8 +35,9 @@ export type RootStackParamList = {
   OnBoarding: undefined;
   DepositWithBank: undefined;
   DepositCrypto: undefined;
-  Send: undefined;
-  SendConfirmation: undefined;
+  Withdrawl: undefined;
+  WithdrawlConfirmation: undefined;
+  WithdrawlSuccess: undefined;
   Profile: undefined;
   OrderHistory: undefined;
   OrderHistoryDetail: undefined;

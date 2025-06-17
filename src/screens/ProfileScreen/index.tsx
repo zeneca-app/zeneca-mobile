@@ -87,7 +87,7 @@ const ProfileScreen = () => {
           </TouchableOpacity>
           <TouchableOpacity
             key={"withdraw"}
-            //onPress={() => navigation.navigate('Withdrawal')}
+            onPress={() => navigation.navigate("Withdrawl")}
             className="flex-row items-center bg-[#19181B] rounded-[40px] px-8 py-14 my-0.5"
           >
             <Ionicons name={"cash"} size={24} color="white" className="mr-3" />

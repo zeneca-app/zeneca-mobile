@@ -103,8 +103,7 @@
     "pending": "Processing..."
   },
   "sendCrypto": {
-    "title": "Send",
-    "recipientLabel": "To",
+    "title": "Withdrawl to my account",
     "availableLabel": "Available",
     "continueButton": "Continue",
     "errorText": "Not enough balance"
@@ -116,11 +115,9 @@
     "viewReceiptButton": "View receipt"
   },
   "sendConfirmation": {
-    "title": "Confirm",
-    "to": "To",
+    "title": "Confirm Withdrawl",
     "accountNumber": "Address",
-    "send": "Send",
-    "chain": "Chain",
+    "send": "Withdrawl",
     "fee": "Fee",
     "total": "Total",
     "disclaimer": "Once confirmed, the transaction cannot be undone",

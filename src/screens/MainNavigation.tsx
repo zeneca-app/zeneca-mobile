@@ -23,7 +23,9 @@ import OnBoarding from "@/screens/Onboarding/OnBoarding";
 import OrderHistory from "@/screens/OrderHistory/OrderHistory";
 import OrderHistoryDetail from "@/screens/OrderHistory/OrderHistoryDetail";
 import ProfileScreen from "@/screens/ProfileScreen";
-import { useUserStore } from "@/storage/";
+import WithdrawlScreen from "@/screens/Widthdrawl";
+import WithdrawlConfirmation from "@/screens/WithdrawlConfirmation";
+import WithdrawlSuccess from "@/screens/WithdrawlSuccess";
 import { Ionicons } from "@expo/vector-icons";
 import { usePrivy } from "@privy-io/expo";
 import NetInfo from "@react-native-community/netinfo";
@@ -40,7 +42,7 @@ const MainNavigation = () => {
   const { user: privyUser } = usePrivy();
 
   const navigation = useNavigation();
-  const { user } = useUserStore();
+  
   const { checkUpdate } = useCheckUpdate();
 
   useEffect(() => {
@@ -100,6 +102,22 @@ const MainNavigation = () => {
         component={ProfileScreen}
         options={screenConfigs.profileScreen}
       />
+      <Stack.Screen
+        name="Withdrawl"
+        component={WithdrawlScreen}
+        options={screenConfigs.defaultHeader}
+      />
+      <Stack.Screen
+        name="WithdrawlConfirmation"
+        component={WithdrawlConfirmation}
+        options={screenConfigs.defaultHeader}
+      />
+      <Stack.Screen
+        name="WithdrawlSuccess"
+        component={WithdrawlSuccess}
+        options={screenConfigs.defaultHeader}
+      />
+  
       <Stack.Screen
         name="OrderHistory"
         component={OrderHistory}
